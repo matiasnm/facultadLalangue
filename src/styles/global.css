@@ -44,6 +44,14 @@
 @layer base {
   /* Reset mínimo propio (reemplaza al preflight de Tailwind):
      solo lo imprescindible, declarado explícitamente. */
+
+  /* Reservar siempre el espacio de la barra de scroll (gutter estable).
+     Así el viewport no cambia de ancho entre páginas con y sin scroll
+     (p. ej. home largo vs 404 corto) y el header sticky no se desplaza. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   *,
   *::before,
   *::after {
