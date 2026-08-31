@@ -33,13 +33,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # configure-pages define BASE_PATH (p. ej. /facultadLalangue),
-      # que astro.config.mjs usa como `base` para las sub-rutas de Pages.
+      # configure-pages expone la base del sitio como output base_path
+      # (p. ej. /facultadLalangue). Se la pasamos al build como BASE_PATH
+      # para que astro.config.mjs la use como `base` (sub-ruta de Pages).
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v5
 
       - name: Build
         run: npm run build
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
