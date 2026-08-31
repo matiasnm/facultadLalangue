@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+
+		<!-- Tipografías: DM Sans (cuerpo), Montserrat (h1), Poppins (h2–h6), Roboto Condensed (menú) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Roboto+Condensed:wght@400;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Paleta en vivo (ver /roadmap).
+		     Al cargar cualquier página, se leen los colores guardados en
+		     localStorage y se sobreescriben los tokens en :root, de modo que
+		     el sitio entero (incluido el header y el isotipo) se repinta. -->
+		<script is:inline>
+			(() => {
+				const KEY = 'lalangue-paleta';
+				// Tokens expuestos al editor de paleta y su valor por defecto.
+				const TOKENS = {
+					brand: '#8c1c3f',
+					'accent': '#d5673f',
+					indigo: '#45426d',
+					night: '#14141a',
+					background: '#ffffff',
+					surface: '#f6f6f8',
+					divider: '#e4e4ec',
+					'ink': '#2b2b34',
+					muted: '#6f6f7c',
+				};
+				window.__LALANGUE_PALETA = { KEY, TOKENS };
+				try {
+					const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+					if (saved) {
+						for (const key of Object.keys(TOKENS)) {
+							if (saved[key]) {
+								document.documentElement.style.setProperty(`--color-${key}`, saved[key]);
+							}
+						}
+					}
+				} catch (e) {
+					/* paleta dañada: ignorar y usar defaults */
+				}
+			})();
+		</script>
+	</head>
+	<body class="min-h-screen bg-background text-ink">
+		<Header />
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,267 @@
+/*
+ * Design tokens globales — Facultad LaLagüe
+ * Paleta definitiva: vino / naranja cálido + escala noche (ver /roadmap).
+ * Convención: todos los tamaños usan rem (1rem = 16px).
+ *
+ * Se importa Tailwind SIN preflight: el inspector solo muestra lo que
+ * declaramos acá más las utilidades usadas. El reset mínimo está
+ * declarado explícitamente al inicio de @layer base.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  /* Paleta definitiva — ver /roadmap → Paleta de colores.
+     Base en blanco: fondo y superficies claras con tinta oscura.
+     brand / accent / escala de vino a azul / night no cambian. */
+  --color-brand: #8c1c3f; /* vino — acentos, enlaces, bordes, selección */
+  --color-brand-dark: #5b1133; /* vino profundo — variante oscura */
+  --color-accent: #d5673f; /* naranja cálido — hover del menú, highlight */
+  --color-surface: #f6f6f8; /* humo claro — header, cards, superficies */
+  --color-background: #ffffff; /* blanco — fondo del sitio */
+  --color-divider: #e4e4ec; /* gris perla — bordes y separadores */
+  --color-ink: #2b2b34; /* tinta — texto de párrafo */
+  --color-ink-strong: #14141a; /* tinta fuerte — títulos */
+  --color-muted: #6f6f7c; /* gris medio — textos secundarios */
+  --color-dim: #8e8e9c; /* gris perla — textos de apoyo */
+  --color-malbec: #7b2a5a; /* malbec — escala principal */
+  --color-ciruela: #61386a; /* ciruela — escala principal */
+  --color-indigo: #45426d; /* índigo — escala principal */
+  --color-azul-acero: #324765; /* azul acero — escala principal */
+  --color-azul-petroleo: #2f4858; /* azul petróleo — escala principal */
+  --color-night: #14141a; /* negro noche — texto sobre superficies claras */
+  --header-h: 6.25rem; /* altura del header — 100px con base de 16px */
+
+  /* Tipografías de Google Fonts */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif; /* p, span, texto general */
+  --font-heading: "Montserrat", ui-sans-serif, system-ui, sans-serif; /* h1 */
+  --font-subheading: "Poppins", ui-sans-serif, system-ui, sans-serif; /* h2–h6 */
+  --font-display: "Roboto Condensed", ui-sans-serif, system-ui, sans-serif; /* menú y destacados */
+  --font-serif: "Roboto Serif", Georgia, serif;
+}
+
+@layer base {
+  /* Reset mínimo propio (reemplaza al preflight de Tailwind):
+     solo lo imprescindible, declarado explícitamente. */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  /* Isotipo — recolor en vivo (roadmap).
+     Los 3 grupos del SVG llevan data-c 1/2/3 y se pintan con CSS
+     variables --iso-c1/2/3. Son la llave del "color picker" del roadmap. */
+  .isotipo [data-c="1"],
+  .isotipo [data-c="1"] path,
+  .isotipo [data-c="1"] > path {
+    fill: var(--iso-c1, #8c1c3f) !important;
+    stroke: var(--iso-c1, #8c1c3f) !important;
+  }
+  .isotipo [data-c="2"],
+  .isotipo [data-c="2"] path,
+  .isotipo [data-c="2"] > path {
+    fill: var(--iso-c2, #d5673f) !important;
+    stroke: var(--iso-c2, #d5673f) !important;
+  }
+  .isotipo [data-c="3"],
+  .isotipo [data-c="3"] path,
+  .isotipo [data-c="3"] > path {
+    fill: var(--iso-c3, #45426d) !important;
+    stroke: var(--iso-c3, #45426d) !important;
+  }
+
+  /* Base: p, span y textos generales en DM Sans, 14px, line-height 1.6 */
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.6;
+    color: var(--color-ink);
+    background-color: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Títulos: h1 Montserrat, h2–h6 Poppins */
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 1.875rem; /* 30px */
+  }
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-subheading);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-ink-strong);
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  h2 {
+    font-size: 1.625rem; /* 26px */
+  }
+  h3 {
+    font-size: 1.375rem; /* 22px */
+  }
+  h4 {
+    font-size: 1.125rem; /* 18px */
+  }
+  h5 {
+    font-size: 1rem; /* 16px */
+  }
+  h6 {
+    font-size: 0.875rem; /* 14px */
+  }
+
+  a {
+    color: var(--color-brand);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  /* Citado — proporciones del tema original */
+  blockquote {
+    margin: 1.25rem 0 1.875rem;
+    padding-left: 1.25rem;
+    border-left: 0.3125rem solid var(--color-brand); /* 5px */
+  }
+
+  /* Listas */
+  ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Navegación: sin bullets, márgenes ni padding heredados.
+     La alineación se resuelve con flex, no con márgenes. */
+  nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  dt {
+    font-weight: 700;
+  }
+  dd {
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Tablas */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+  }
+  caption {
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--color-ink);
+    padding-bottom: 0.5rem;
+  }
+  th {
+    font-weight: 700;
+    color: var(--color-muted);
+    text-align: left;
+    padding: 0.5rem 1.5rem;
+    border-top: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
+  }
+  td {
+    padding: 0.4rem 1.5rem;
+    border-top: 1px solid var(--color-divider);
+  }
+
+  /* Código y teclas */
+  code,
+  kbd,
+  samp {
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--color-surface);
+    padding: 0.125rem 0.35rem;
+    border-radius: 0.25rem;
+  }
+  pre {
+    background: var(--color-surface);
+    padding: 1rem;
+    overflow: auto;
+    font-size: 0.9em;
+    margin-bottom: 1rem;
+  }
+  kbd {
+    border: 1px solid var(--color-divider);
+    box-shadow: 0 1px 0 var(--color-divider);
+  }
+
+  /* Formularios — estado base provisional */
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-divider);
+    padding: 0.45rem 0.6rem;
+    width: 100%;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--color-brand);
+    outline: none;
+  }
+  button {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+}

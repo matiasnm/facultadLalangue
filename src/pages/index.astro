@@ -1,0 +1,629 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * Secciones construidas a partir de docs/home-content.md.
+ * Cada sección lleva un título (h2) y organiza su bloque del documento.
+ */
+
+const visionTopics = [
+	'Transformaciones en los vínculos sociales',
+	'Impacto de los entornos digitales en la subjetividad',
+	'Nuevas configuraciones del deseo y del goce',
+	'Dinámicas familiares contemporáneas',
+	'Procesos psicopatológicos emergentes',
+];
+
+const modelPillars = [
+	{
+		title: 'Formación teórica sistemática',
+		desc: 'Estudio riguroso de diversos modelos teóricos de la psicología moderna, integrando aportes de las ciencias.',
+	},
+	{
+		title: 'Práctica clínica supervisada',
+		desc: 'Acompañamiento de casos clínicos bajo la orientación de docentes con experiencia.',
+	},
+	{
+		title: 'Salida laboral internacional',
+		desc: 'Inserción profesional mediante redes clínicas internacionales y plataformas de consulta online.',
+	},
+];
+
+const communitySpaces = [
+	{
+		title: 'Supervisiones clínicas grupales',
+		desc: 'Acompañamiento de casos clínicos para profesionales y estudiantes bajo la orientación de docentes con experiencia.',
+	},
+	{
+		title: 'Aulas Libres',
+		desc: 'Talleres abiertos a la comunidad sobre contenidos de interés general desde la perspectiva de nuestros docentes.',
+	},
+	{
+		title: 'Jornadas Internacionales',
+		desc: 'Congresos académicos especializados vinculados a la psicología, el psicoanálisis y las ciencias humanas.',
+	},
+	{
+		title: 'Grupos de Estudio',
+		desc: 'Seminarios de trabajo teórico coordinados por docentes para profundizar la lectura de textos fundamentales.',
+	},
+];
+
+const clinicInitiatives = [
+	'Colaboración con plataformas internacionales de psicoterapia',
+	'Participación en directorios profesionales',
+	'Desarrollo de redes clínicas supervisadas',
+];
+
+const diplomas = [
+	'Psicopatología Infanto-Juvenil',
+	'Subjetividad Digital',
+	'Terapia de Parejas y Erotismo Relacional',
+	'Abordaje del Ataque de Pánico',
+	'Terapias Breves',
+];
+
+const featuredFormaciones = [
+	{
+		name: 'Diplomado Internacional en Psicoterapia con Enfoque Psicoanalítico Lalangue',
+		desc: 'Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.',
+		duration: '2 años (72 clases)',
+		modalidad: '100% online con clases grabadas y encuentros sincrónicos',
+	},
+	{
+		name: 'Máster Internacional en Psicoanálisis Aplicado Lalangue',
+		desc: 'Formación avanzada orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.',
+		duration: '2 años (144 clases)',
+		modalidad: '100% online con clases grabadas y encuentros sincrónicos',
+	},
+];
+
+const featuredIncludes = [
+	'Supervisión clínica grupal',
+	'Participación en espacios comunitarios',
+	'Acceso a directorios profesionales internacionales',
+	'Certificación europea bajo régimen francés de formación profesionalizante',
+];
+
+const closingPillars = [
+	'Estudio teórico riguroso',
+	'Práctica clínica supervisada',
+	'Trabajo colectivo en una comunidad académica internacional',
+];
+
+/* ---- Imitación del home real (facultadlalangue.com) — placeholders ---- */
+
+const novedades = [
+	{
+		kicker: 'Últimas Novedades',
+		title: 'Únete a nuestra comunidad',
+		desc: 'Accedé al nuevo grupo de WhatsApp de Facultad Lalangue. Noticias, eventos y oportunidades de formación en psicoanálisis y psicoterapia.',
+		cta: 'Súmate aquí',
+		badge: 'Comunidad de WhatsApp',
+	},
+	{
+		kicker: 'Últimas Novedades',
+		title: 'Solicitá información sobre becas',
+		desc: 'Accedé a orientación personalizada para conocer los requisitos, disponibilidad y beneficios de nuestras becas. Un asesor te guiará paso a paso para que puedas postular sin vueltas.',
+		cta: 'Quiero información',
+		badge: 'Becas en psicoanálisis y psicoterapia',
+	},
+];
+
+const excellencePillars = [
+	{
+		title: 'Formaciones Flexibles',
+		desc: 'Estudia desde cualquier lugar con programas adaptados a tu ritmo.',
+	},
+	{
+		title: 'Docentes de Renombre',
+		desc: 'Expertos con una sólida trayectoria en sus respectivas disciplinas.',
+	},
+	{
+		title: 'Certificación Internacional',
+		desc: 'Obtén una titulación reconocida con respaldo académico de excelencia.',
+	},
+	{
+		title: 'Pasantías Rentadas',
+		desc: 'Aplicá conocimientos en entornos clínicos supervisados desde el primer año.',
+	},
+];
+
+const filosofiaBlocks = [
+	{
+		title: 'Excelencia y Flexibilidad',
+		body: 'En FIPP Lalangue combinamos excelencia académica con flexibilidad para ofrecer formaciones certificadas en psicoterapia y psicoanálisis. Todos nuestros programas están disponibles en modalidad online, adaptándose a las necesidades de cada estudiante. Además, ofrecemos una experiencia única con pasantías rentadas.',
+	},
+	{
+		title: 'Formadores Expertos y Reconocidos',
+		body: 'Nuestros formadores, expertos en su campo, brindan seguimiento personalizado, guiando el desarrollo académico y profesional de los estudiantes. Con un enfoque interdisciplinario y ético, promovemos una enseñanza innovadora que responde a las demandas actuales del psicoanálisis.',
+	},
+];
+
+const whyPillars = [
+	{
+		label: 'Excelencia Académica',
+		body: 'Tanto nuestros fundadores como el plantel académico son expertos de reconocido prestigio, con una sólida trayectoria en psicoterapia y psicoanálisis. Se destacan por su capacidad de transmitir conocimientos de manera clara y accesible, sin comprometer la profundidad académica.',
+	},
+	{
+		label: 'Práctica desde el primer año',
+		body: 'Nuestro programa de pasantías rentadas permite a los estudiantes aplicar sus conocimientos teóricos en entornos clínicos supervisados, adquiriendo experiencia profesional desde el primer año y garantizando una formación práctica y completa.',
+	},
+];
+
+const programas = [
+	{
+		title: 'Diplomatura en Psicoterapia Psicoanalítica',
+		desc: 'Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.',
+		cta: 'Conocé más',
+	},
+	{
+		title: 'Máster en Psicoanálisis',
+		desc: 'Programa avanzado basado en el pensamiento de Freud y Lacan, con docentes internacionales y titulación desde cualquier lugar del mundo.',
+		cta: 'Conocé más',
+	},
+	{
+		title: 'Pasantías Rentadas',
+		desc: 'Aplicá tus conocimientos teóricos en entornos clínicos supervisados desde el primer año.',
+		cta: 'Conocé más',
+	},
+];
+---
+
+<Layout title="Facultad Internacional de Psicología y Psicoanálisis Lalangue">
+	<!-- ==================== Hero vh100 ==================== -->
+	<section class="relative flex min-h-[100dvh] items-center overflow-hidden bg-background">
+		<img
+			src="/hero_bg.webp"
+			alt=""
+			aria-hidden="true"
+			class="absolute inset-0 h-full w-full object-cover"
+		/>
+		<div class="absolute inset-0 bg-black/55"></div>
+
+		<div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+			<p class="text-sm font-medium uppercase tracking-widest text-accent">
+				Facultad Internacional de Psicología y Psicoanálisis
+			</p>
+			<h1 class="mt-4 font-semibold text-white text-5xl sm:text-7xl lg:text-8xl">
+				Lalangue
+			</h1>
+			<p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
+				Institución académica francesa dedicada a la formación clínica y al
+				desarrollo del pensamiento contemporáneo en psicología y
+				psicoanálisis. Extensión hispanohablante de la{' '}
+				<strong class="font-semibold text-white">E-Faculté de Psychologie et
+				Psychanalyse</strong>{' '}
+				(EFPP – Francia), con más de 25 años de trayectoria en la formación
+				clínica y en la transmisión del psicoanálisis en Europa. Una clínica
+				rigurosa, ética, internacional y plural, para toda la comunidad
+				hispanohablante global.
+			</p>
+			<div class="mt-10 flex flex-wrap gap-4">
+				<a
+					href="/landing-master-en-psicoanalisis/"
+					class="rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
+				>
+					Explorar formaciones
+				</a>
+				<a
+					href="/nuestra-biblioteca/"
+					class="rounded-md border border-white/40 px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:border-white hover:bg-white/10 hover:no-underline"
+				>
+					Conocé Lalangue
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<!-- ==================== Identidad ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Identidad</p>
+			<h2 class="mt-2">Una formación clínica francesa, con alcance global</h2>
+			<div class="mt-6 grid gap-8 lg:grid-cols-2">
+				<div class="space-y-4 text-ink/80 leading-relaxed">
+					<p>
+						Lalangue es una institución académica francesa dedicada a la
+						formación clínica y al desarrollo del pensamiento contemporáneo
+						en psicología y psicoanálisis.
+					</p>
+					<p>
+						Constituye la extensión hispanohablante de la E-Faculté de
+						Psychologie et Psychanalyse (EFPP – Francia), con más de 25 años
+						de trayectoria en formación clínica y transmisión del
+						psicoanálisis en Europa. Está reconocida como organismo de
+						formación profesionalizante por la DREETS (Dirección regional
+						de economía, empleo, trabajo y solidaridades — Gobierno
+						Francés), dentro del régimen francés de formación profesional
+						continua.
+					</p>
+					<p>
+						Nuestra actividad académica cuenta con el aval de instituciones
+						europeas del campo clínico y educativo.
+					</p>
+				</div>
+				<div class="space-y-4">
+					<div class="rounded-lg border border-divider/30 bg-surface p-5">
+						<p class="text-xs font-semibold uppercase tracking-widest text-muted">
+							Avales europeos
+						</p>
+						<ul class="mt-3 space-y-1">
+							<li class="flex items-start gap-2 text-sm text-ink">
+								<span class="mt-1.5 size-2 shrink-0 rounded-full bg-accent"></span>
+								<strong class="font-semibold text-night">APE</strong>
+								<span>— Asociación de Psicoanalistas Europeos</span>
+							</li>
+							<li class="flex items-start gap-2 text-sm text-ink">
+								<span class="mt-1.5 size-2 shrink-0 rounded-full bg-brand"></span>
+								<strong class="font-semibold text-night">FEDE</strong>
+								<span>— Federación Europea de Escuelas</span>
+							</li>
+						</ul>
+					</div>
+					<blockquote class="text-sm italic text-ink/70 leading-relaxed">
+						Desarrollamos programas formativos dirigidos a la comunidad
+						hispanohablante global, promoviendo una clínica rigurosa,
+						ética, internacional y plural.
+					</blockquote>
+				</div>
+			</div>
+		</section>
+
+		<!-- ==================== Visión ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Visión</p>
+			<h2 class="mt-2">El modelo educativo francés, en diálogo con la clínica contemporánea</h2>
+			<div class="mt-6 max-w-3xl space-y-4 text-ink/80 leading-relaxed">
+				<p>
+					Desde su origen, el proyecto académico se ha orientado a construir
+					un espacio de formación global que articule el modelo educativo
+					francés con las realidades clínicas contemporáneas del mundo
+					hispanohablante, impulsando nuevos formatos que prioricen el
+					acceso del deseo vocacional a la calidad educativa.
+				</p>
+				<p>
+					Bajo esta inspiración, Lalangue propone el estudio riguroso de
+					diversos modelos teóricos de la psicología moderna, integrando
+					aportes de las ciencias y favoreciendo el diálogo entre las
+					diversas corrientes de la psicoterapia.
+				</p>
+			</div>
+			<p class="mt-8 text-sm font-semibold uppercase tracking-wide text-muted">
+				Problemáticas de la subjetividad contemporánea
+			</p>
+			<ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				{
+					visionTopics.map((t) => (
+						<li class="rounded-lg border border-divider/30 bg-surface px-4 py-3 text-sm text-ink">
+							{t}
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<!-- ==================== Modelo ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Modelo</p>
+			<h2 class="mt-2">Formaciones profesionalizantes bajo el régimen francés</h2>
+			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+				La propuesta formativa de Lalangue se estructura bajo el régimen
+				francés de formaciones profesionalizantes ({' '}
+				<em class="text-ink">formations professionnalisantes</em> ). El modelo
+				pedagógico articula tres pilares.
+			</p>
+			<div class="mt-8 grid gap-6 md:grid-cols-3">
+				{
+					modelPillars.map((p, i) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-6">
+							<span class="font-display text-3xl font-semibold text-accent">
+								{i + 1}
+							</span>
+							<p class="mt-3 font-medium text-night">{p.title}</p>
+							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+						</article>
+					))
+				}
+			</div>
+			<blockquote class="mt-8 max-w-3xl text-lg italic leading-relaxed text-ink/85">
+				Sostener el desarrollo de profesionales capaces de osar una práctica
+				clínica ética y rigurosa, en diálogo con los desafíos contemporáneos
+				y en comunidad.
+			</blockquote>
+		</section>
+
+		<!-- ==================== Comunidad ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Comunidad</p>
+			<h2 class="mt-2">Una comunidad internacional de más de 15 países</h2>
+			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+				Lalangue reúne a docentes, estudiantes y profesionales de Europa y
+				América Latina, promoviendo el intercambio plural como fuente de
+				nuevos espacios académicos.
+			</p>
+			<div class="mt-8 grid gap-6 sm:grid-cols-2">
+				{
+					communitySpaces.map((s) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+							<p class="font-medium text-night">{s.title}</p>
+							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{s.desc}</p>
+						</article>
+					))
+				}
+			</div>
+			<p class="mt-8 rounded-lg border border-accent/30 bg-accent/10 px-5 py-4 text-sm font-medium text-ink">
+				En los últimos meses, estas actividades han convocado a más de
+				<strong class="text-night"> 30.000 participantes</strong> en nuestros
+				eventos online.
+			</p>
+		</section>
+
+		<!-- ==================== Clínica ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Clínica</p>
+			<h2 class="mt-2">Inserción profesional y redes clínicas internacionales</h2>
+			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+				Lalangue promueve la inserción profesional de sus estudiantes
+				mediante la participación en redes clínicas internacionales y
+				plataformas de consulta online.
+			</p>
+			<ul class="mt-6 space-y-3">
+				{
+					clinicInitiatives.map((c) => (
+						<li class="flex items-center gap-3 text-ink">
+							<span class="size-2 shrink-0 rounded-full bg-accent"></span>
+							{c}
+						</li>
+					))
+				}
+			</ul>
+			<div class="mt-8 rounded-lg border border-divider/30 bg-surface p-5">
+				<p class="text-sm font-semibold uppercase tracking-wide text-accent">
+					Supervisiones Clínicas Lalangue
+				</p>
+			</div>
+		</section>
+
+		<!-- ==================== Formaciones ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Formaciones</p>
+			<h2 class="mt-2">Diplomados Internacionales especializados</h2>
+			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+				El cuerpo docente de Lalangue está integrado por profesionales con
+				trayectoria académica y clínica en universidades, centros de formación
+				y asociaciones profesionales de diversos marcos teóricos del campo de
+				la psicología y del psicoanálisis.
+			</p>
+			<p class="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">
+				Áreas de especialización
+			</p>
+			<ul class="mt-3 flex flex-wrap gap-2.5">
+				{
+					diplomas.map((d) => (
+						<li class="rounded-full border border-divider/40 bg-surface px-4 py-1.5 text-sm text-ink">
+							{d}
+						</li>
+					))
+				}
+			</ul>
+
+			<div class="mt-12 grid gap-6 lg:grid-cols-2">
+				{
+					featuredFormaciones.map((f) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-6">
+							<p class="text-base font-semibold leading-snug text-night">
+								{f.name}
+							</p>
+							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{f.desc}</p>
+							<ul class="mt-4 space-y-1 text-sm text-ink/80">
+								<li>
+									<span class="text-accent">Duración:</span> {f.duration}
+								</li>
+								<li>
+									<span class="text-accent">Modalidad:</span> {f.modalidad}
+								</li>
+							</ul>
+							<p class="mt-3 text-xs font-semibold uppercase tracking-wide text-muted">
+								Incluye
+							</p>
+							<ul class="mt-2 space-y-1 text-sm text-ink/80">
+								{
+									featuredIncludes.slice(0, 4).map((inc) => (
+										<li class="flex items-start gap-2">
+											<span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent"></span>
+											{inc}
+										</li>
+									))
+								}
+							</ul>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ==================== Cierre ==================== -->
+		<section class="py-20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Cierre</p>
+			<h2 class="mt-2">Tender puentes</h2>
+			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+				Lalangue busca contribuir al desarrollo del pensamiento clínico
+				contemporáneo que aborde los desafíos culturales, sociales y
+				tecnológicos de nuestro tiempo, estableciendo la formación clínica
+				como un proceso que combina:
+			</p>
+			<div class="mt-8 grid gap-4 sm:grid-cols-3">
+				{
+					closingPillars.map((c) => (
+						<div class="rounded-lg border border-divider/30 bg-surface p-5 text-center">
+							<span class="size-3 mx-auto mb-3 block rounded-full bg-accent"></span>
+							<p class="text-sm font-medium text-night">{c}</p>
+						</div>
+					))
+				}
+			</div>
+			<p class="mt-10 max-w-3xl text-lg italic leading-relaxed text-ink/85">
+				Escuchando las inquietudes de la época, optando por desempeñar un
+				papel protagónico en una era profundamente tecnificada e
+				individualizada, para tender puentes.
+			</p>
+		</section>
+
+		<!-- ==================== Novedades ==================== -->
+		<!-- BORRADOR: a partir de aquí, secciones copiadas de la web actual (facultadlalangue.com) -->
+		<div class="border-y border-dashed border-accent/40 bg-accent/5 px-4 py-3 text-center">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
+				Borrador — secciones copiadas de la web actual
+			</p>
+		</div>
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
+				Últimas Novedades
+			</p>
+			<h2 class="mt-2">Lo que está pasando en la comunidad</h2>
+			<div class="mt-8 grid gap-6 md:grid-cols-2">
+				{
+					novedades.map((n) => (
+						<article class="group flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
+							<div class="flex h-44 items-center justify-center bg-gradient-to-br from-brand/20 to-accent/20 text-3xl">
+								<span class="font-display font-semibold text-brand/50">IMG</span>
+							</div>
+							<div class="flex flex-1 flex-col p-6">
+								<span class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">
+									{n.badge}
+								</span>
+								<p class="mt-3 text-lg font-semibold leading-snug text-night">
+									{n.title}
+								</p>
+								<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{n.desc}</p>
+								<a
+									href="#"
+									class="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
+								>
+									{n.cta}
+									<span aria-hidden="true">→</span>
+								</a>
+							</div>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ==================== Excelencia ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">efpp</p>
+			<h2 class="mt-2">Más de 20 años de Excelencia en Psicoterapia y Psicoanálisis</h2>
+			<p class="mt-4 max-w-3xl text-ink/80 leading-relaxed">
+				La Facultad Internacional de Psicología y Psicoanálisis Lalangue abre
+				sus puertas e invita a los estudiantes hispanoparlantes, expandiendo
+				su prestigiosa formación en psicoterapia y psicoanálisis a nuevas
+				fronteras.
+			</p>
+			<div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+				{
+					excellencePillars.map((p) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+							<span class="block size-8 rounded-md bg-gradient-to-br from-brand to-accent"></span>
+							<p class="mt-4 font-medium text-night">{p.title}</p>
+							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ==================== Filosofía ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">
+				Nuestra Filosofía
+			</p>
+			<h2 class="mt-2">Enfoque de Enseñanza Único</h2>
+			<div class="mt-8 grid gap-6 lg:grid-cols-2">
+				<div class="space-y-6">
+					{
+						filosofiaBlocks.map((f, i) => (
+							<article class="rounded-lg border border-divider/30 bg-surface p-6">
+								<span class="font-display text-2xl font-semibold text-accent">
+									{i + 1}
+								</span>
+								<p class="mt-3 text-lg font-semibold text-night">{f.title}</p>
+								<p class="mt-2 text-sm text-ink/75 leading-relaxed">{f.body}</p>
+							</article>
+						))
+					}
+				</div>
+				<div class="grid grid-cols-2 gap-3">
+					<div class="flex aspect-[3/4] items-center justify-center rounded-xl bg-gradient-to-br from-brand/20 to-accent/20 text-sm font-semibold text-brand/60">
+						IMG
+					</div>
+					<div class="flex aspect-[3/4] items-center justify-center rounded-xl bg-gradient-to-br from-accent/20 to-brand/20 text-sm font-semibold text-accent/60">
+						IMG
+					</div>
+					<div class="flex aspect-[3/4] items-center justify-center rounded-xl bg-gradient-to-br from-accent/20 to-brand/20 text-sm font-semibold text-accent/60">
+						IMG
+					</div>
+					<div class="flex aspect-[3/4] items-center justify-center rounded-xl bg-gradient-to-br from-brand/20 to-accent/20 text-sm font-semibold text-brand/60">
+						IMG
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ==================== ¿Por qué elegir? ==================== -->
+		<section class="py-20 border-b border-divider/20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
+				Por qué elegirnos
+			</p>
+			<h2 class="mt-2">¿Por qué elegir nuestros programas de formación?</h2>
+			<div class="mt-8 grid gap-5 lg:grid-cols-2">
+				{
+					whyPillars.map((w) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-6">
+							<p class="font-semibold text-night">{w.label}</p>
+							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{w.body}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ==================== Programas Certificados ==================== -->
+		<section class="py-20">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
+				Programas
+			</p>
+			<h2 class="mt-2">Programas de Formación Certificada</h2>
+			<p class="mt-4 max-w-3xl text-ink/80 leading-relaxed">
+				Descubrí nuestros programas de formación psicoanalítica online
+				certificados, basados en el pensamiento de Freud y Lacan. Estudiá con
+				docentes internacionales y obtené tu titulación desde cualquier lugar
+				del mundo.
+			</p>
+			<div class="mt-8 grid gap-6 md:grid-cols-3">
+				{
+					programas.map((p) => (
+						<article class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
+							<div class="flex h-36 items-center justify-center bg-gradient-to-br from-brand/20 to-accent/20">
+								<span class="font-display font-semibold text-brand/50">IMG</span>
+							</div>
+							<div class="flex flex-1 flex-col p-6">
+								<p class="text-base font-semibold leading-snug text-night">
+									{p.title}
+								</p>
+								<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+								<a
+									href="#"
+									class="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
+								>
+									{p.cta}
+									<span aria-hidden="true">→</span>
+								</a>
+							</div>
+						</article>
+					))
+				}
+			</div>
+		</section>
+	</main>
+</Layout>

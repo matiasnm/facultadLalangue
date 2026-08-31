@@ -1,0 +1,18 @@
+---
+interface Props {
+	html?: string;
+	/** Marcá cuando la muestra replica estilos sobre fondos claros (header blanco). */
+	onLight?: boolean;
+}
+const { html = '', onLight = false } = Astro.props;
+---
+
+<div
+	class:list={[
+		'mt-4 overflow-x-auto rounded-md border p-4',
+		onLight
+			? 'border-divider/30 bg-white'
+			: 'border-divider/30 bg-surface',
+	]}
+	set:html={html}
+></div>

@@ -1,0 +1,254 @@
+---
+/**
+ * Header — navbar minimalista con proporciones estándar de la industria.
+ *
+ * Estilo conservado del sitio original (colores de marca, menú en Roboto
+ * Condensed uppercase, hover #d5673f), pero con HTML limpio y mínimo:
+ *  - Alto: 3.5rem (56px) móvil / 4rem (64px) desktop.
+ *  - Container: max 80rem (1280px), centrado, padding lateral 1rem → 2rem.
+ *  - Logo: Isotipo (SVG) + texto HTML — "FACULTAD" (Montserrat, encaja el
+ *    ancho de "Lalangue") / "Lalangue" (Montserrat).
+ *  - Escala: todo el header escalado a factor 0.9375 (menú 16px → 15px)
+ *    para la proporción buscada en el navbar.
+ *  - Links del menú centrados verticalmente, gap de 30px entre ítems.
+ *  - Dropdown: tarjeta blanca con sombra y borde redondeado.
+ *  - Mobile/tablet: hamburguesa + panel deslizante con acordeón <details>
+ *    (sin JavaScript salvo el toggle).
+ */
+
+import Isotipo from './Isotipo.astro';
+
+type NavChild = { label: string; href: string };
+type NavItem = {
+  label: string;
+  href: string;
+  external?: boolean;
+  children?: NavChild[];
+};
+
+const navItems: NavItem[] = [
+  {
+    label: 'Conócenos',
+    href: '#',
+    children: [
+      { label: 'Facultad', href: '/formaciones-facultad/' },
+      { label: 'Plantel académico', href: '/plantel-academico/' },
+    ],
+  },
+  {
+    label: 'Formaciones',
+    href: '#',
+    children: [
+      { label: 'Mtr. Psicoanálisis', href: '/landing-master-en-psicoanalisis/' },
+      { label: 'Dip. Psicoterapia', href: '/psicoterapia-psicoanalitica/' },
+      { label: 'Dip. Subjetividad Digital', href: '/subjetividad-digital/' },
+      { label: 'Dip. Clínica Parejas', href: '/clinica-de-parejas/' },
+      { label: 'Dip. Psicopatología Infanto-Juvenil', href: '/psicopatologia-infanto-juvenil/' },
+      { label: 'Dip. Metapsicología', href: '/introduccion-al-psicoanalisis/' },
+    ],
+  },
+  { label: 'Mediateca', href: '/nuestra-biblioteca/' },
+  {
+    label: 'Campus',
+    href: 'https://campus.facultadlalangue.com/cursos/',
+    external: true,
+  },
+];
+
+const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="size-[13.125px]" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+---
+
+<header class="sticky top-0 z-50 bg-white border-b border-divider/40">
+	<div
+		class="relative mx-auto flex h-[var(--header-h)] max-w-7xl items-center px-4 sm:px-6 lg:px-8"
+	>
+		<!-- Logo (flex-start) -->
+		<a
+			href="/"
+			class="flex shrink-0 items-center gap-[1.4063rem] hover:no-underline"
+			aria-label="Inicio — Facultad Lalangue"
+		>
+			<Isotipo
+				class="h-11 w-auto"
+				wine="var(--color-brand)"
+				accent="var(--color-accent)"
+				indigo="var(--color-indigo)"
+			/>
+			<span class="flex flex-col leading-none">
+				<!-- "FACULTAD" en Montserrat (sin deformar), con el ancho
+				     repartido letra por letra para encajar exactamente
+				     con el ancho de "Lalangue" -->
+				<span
+					class="flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none text-night/70"
+				>
+					<span>F</span><span>A</span><span>C</span><span>U</span
+					><span>L</span><span>T</span><span>A</span><span>D</span>
+				</span>
+				<span
+					class="-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none text-night"
+				>
+					Lalangue
+				</span>
+			</span>
+		</a>
+
+		<!-- Divider vertical de 1px separando el logo del menú -->
+		<div class="ml-[1.4063rem] h-[30px] w-px shrink-0 bg-divider"></div>
+
+		<!-- Navegación desktop: alineada a la izquierda (tras el divider),
+		     ya no está centrada respecto del ancho total -->
+		<nav class="ml-[1.4063rem] hidden items-center lg:flex" aria-label="Principal">
+			<ul class="flex items-center gap-[30px] whitespace-nowrap">
+				{
+					navItems.map((item) =>
+						item.children ? (
+							<li class="relative group">
+								<a
+									href={item.href}
+									class="flex items-center gap-1 py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors group-hover:text-accent hover:no-underline"
+								>
+									{item.label}
+									<span set:html={chevron} />
+								</a>
+								<ul
+									class="invisible absolute left-0 top-full z-10 min-w-48 rounded-lg border border-divider/30 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100"
+								>
+									{
+										item.children.map((child) => (
+											<li>
+											<a
+												href={child.href}
+												class="block px-4 py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors hover:bg-brand/5 hover:text-accent hover:no-underline"
+											>
+													{child.label}
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</li>
+						) : (
+							<li>
+								<a
+									href={item.href}
+									{...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+									class="block py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors hover:text-accent hover:no-underline"
+								>
+									{item.label}
+								</a>
+							</li>
+						),
+					)
+				}
+				{/* BOTÓN TEMPORAL DE DESARROLLO — quitar en producción.
+				    Acceso al roadmap de estilos. Se muestra en gris para
+				    diferenciarlo de los ítems reales del menú. */}
+				<li>
+					<a
+						href="/roadmap/"
+						class="block py-2 font-display text-[15px] font-normal uppercase tracking-wide text-muted transition-colors hover:text-ink hover:no-underline"
+					>
+						Roadmap
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Toggle menú móvil / tablet -->
+		<button
+			id="menu-toggle"
+			type="button"
+			class="-mr-2 ml-auto rounded-lg p-2 text-accent transition-colors hover:bg-black/5 lg:hidden"
+			aria-label="Abrir menú"
+			aria-expanded="false"
+			aria-controls="mobile-menu"
+		>
+			<svg
+				aria-hidden="true"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				class="size-6"
+			>
+				<line x1="4" y1="7" x2="20" y2="7"></line>
+				<line x1="4" y1="12" x2="20" y2="12"></line>
+				<line x1="4" y1="17" x2="20" y2="17"></line>
+			</svg>
+		</button>
+	</div>
+
+	<!-- Panel menú móvil / tablet -->
+	<nav
+		id="mobile-menu"
+		class="hidden max-h-[calc(100dvh_-_var(--header-h))] overflow-y-auto border-t border-divider/40 bg-white lg:hidden"
+		aria-label="Principal (móvil)"
+	>
+		<ul class="divide-y divide-divider/20 px-4 sm:px-6">
+			{
+				navItems.map((item) =>
+					item.children ? (
+						<li>
+							<details class="group">
+								<summary
+									class="flex cursor-pointer list-none items-center justify-between py-3 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors [&::-webkit-details-marker]:hidden"
+								>
+									{item.label}
+									<span
+										class="text-accent transition-transform group-open:rotate-180"
+										set:html={chevron}
+									/>
+								</summary>
+								<ul class="pb-2 pl-4">
+									{
+										item.children.map((child) => (
+											<li>
+												<a
+													href={child.href}
+													class="block py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night/80 transition-colors hover:text-accent hover:no-underline"
+												>
+													{child.label}
+												</a>
+											</li>
+										))
+									}
+								</ul>
+							</details>
+						</li>
+					) : (
+						<li>
+							<a
+								href={item.href}
+								{...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+								class="block py-3 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors hover:text-accent hover:no-underline"
+							>
+								{item.label}
+							</a>
+						</li>
+					),
+				)
+			}
+			{/* BOTÓN TEMPORAL DE DESARROLLO — quitar en producción. */}
+			<li>
+				<a
+					href="/roadmap/"
+					class="block py-3 font-display text-[15px] font-normal uppercase tracking-wide text-muted transition-colors hover:text-ink hover:no-underline"
+				>
+					Roadmap
+				</a>
+			</li>
+		</ul>
+	</nav>
+</header>
+
+<script>
+	const toggle = document.getElementById('menu-toggle');
+	const panel = document.getElementById('mobile-menu');
+
+	toggle.addEventListener('click', () => {
+		const isOpen = panel.classList.toggle('hidden');
+		toggle.setAttribute('aria-expanded', String(!isOpen));
+		toggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
+	});
+</script>
