@@ -176,7 +176,12 @@ const programas = [
 
 <Layout title="Facultad Internacional de Psicología y Psicoanálisis Lalangue">
 	<!-- ==================== Hero vh100 ==================== -->
-	<section class="relative flex min-h-[100dvh] items-center overflow-hidden bg-background">
+	<!-- El header es sticky y ocupa var(--header-h); el hero mide lo que
+	     resta de los 100dvh para que section+navbar calcen exactamente una
+	     pantalla. El contenido queda centrado verticalmente con items-center. -->
+	<section
+		class="relative flex min-h-[calc(100dvh-var(--header-h))] items-center overflow-hidden bg-background"
+	>
 		<img
 			src={base + 'hero_bg.webp'}
 			alt=""
@@ -185,12 +190,14 @@ const programas = [
 		/>
 		<div class="absolute inset-0 bg-black/55"></div>
 
-		<div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+		<div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 			<p class="text-sm font-medium uppercase tracking-widest text-accent">
-				Facultad Internacional de Psicología y Psicoanálisis
+				Institución académica francesa · formación clínica y psicoanálisis
 			</p>
-			<h1 class="mt-4 font-semibold text-white text-5xl sm:text-7xl lg:text-8xl">
-				Lalangue
+			<h1
+				class="mt-4 max-w-5xl font-semibold leading-[1.05] text-white text-7xl"
+			>
+				Facultad Internacional de Psicología y Psicoanálisis Lalangue
 			</h1>
 			<p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
 				Institución académica francesa dedicada a la formación clínica y al
