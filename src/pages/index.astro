@@ -6,6 +6,11 @@ import Layout from '../layouts/Layout.astro';
  * Cada sección lleva un título (h2) y organiza su bloque del documento.
  */
 
+// Base pública (GitHub Pages sub-ruta). Prefija rutas internas con la base.
+const base = import.meta.env.BASE_URL;
+const link = (href: string) =>
+	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
 const visionTopics = [
 	'Transformaciones en los vínculos sociales',
 	'Impacto de los entornos digitales en la subjetividad',
@@ -173,7 +178,7 @@ const programas = [
 	<!-- ==================== Hero vh100 ==================== -->
 	<section class="relative flex min-h-[100dvh] items-center overflow-hidden bg-background">
 		<img
-			src="/hero_bg.webp"
+			src={base + 'hero_bg.webp'}
 			alt=""
 			aria-hidden="true"
 			class="absolute inset-0 h-full w-full object-cover"
@@ -200,13 +205,13 @@ const programas = [
 			</p>
 			<div class="mt-10 flex flex-wrap gap-4">
 				<a
-					href="/landing-master-en-psicoanalisis/"
+					href={link('/landing-master-en-psicoanalisis/')}
 					class="rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
 				>
 					Explorar formaciones
 				</a>
 				<a
-					href="/nuestra-biblioteca/"
+					href={link('/nuestra-biblioteca/')}
 					class="rounded-md border border-white/40 px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:border-white hover:bg-white/10 hover:no-underline"
 				>
 					Conocé Lalangue
