@@ -1,0 +1,44 @@
+---
+/**
+ * Rico — render de texto enriquecido (formato del doc de contenidos).
+ *
+ * Sintaxis soportada, en este orden:
+ *   1. [etiqueta](url)      → enlace; las urls externas abren en otra pestaña,
+ *      las internas ("/…") reciben la base pública (BASE_URL).
+ *   2. **texto**            → <strong>
+ *   3. *texto*              → <em>  (un `*` suelto queda literal: notas *Diploma…)
+ *
+ * El texto es contenido no confiable del doc de contenidos: se escapa HTML
+ * ANTES de aplicar el formato, de modo que no se puede inyectar markup.
+ */
+interface Props {
+	texto: string;
+	class?: string;
+}
+
+const { texto, class: cls = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const esc = (s: string) =>
+	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const enlazar = (s: string) =>
+	s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m: string, label: string, url: string) => {
+		let href = url;
+		let extra = '';
+		if (url.startsWith('/') && url.length > 1 && !url.startsWith('//')) {
+			// Ruta interna: se le antepone la base pública
+			// (ej. GitHub Pages: /facultadLalangue/master-en-psicoanalisis/).
+			href = base + url.slice(1);
+		} else if (/^https?:\/\//.test(url)) {
+			extra = ' target="_blank" rel="noopener noreferrer"';
+		}
+		return `<a href="${href}"${extra} class="font-medium text-brand underline underline-offset-4 transition-colors hover:text-accent">${label}</a>`;
+	});
+
+const html = enlazar(esc(texto))
+	.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+	.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+---
+
+<p class={cls} set:html={html} />

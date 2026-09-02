@@ -1,0 +1,24 @@
+---
+/**
+ * ComponenteComun — render de un componente común por su id.
+ *
+ * Resuelve el nombre contra el catálogo (src/data/componentes.ts) y renderiza
+ * sus bloques con BloqueRender. El texto de cada componente se define UNA vez
+ * en los datos; aquí solo se enruta al diseño.
+ */
+import { componentePorId, type ComponenteId } from '../../data/componentes';
+import BloqueRender from './BloqueRender.astro';
+
+interface Props {
+	nombre: ComponenteId;
+}
+
+const { nombre } = Astro.props;
+
+const componente = componentePorId[nombre];
+if (!componente) {
+	throw new Error(`Componente desconocido: ${nombre}`);
+}
+---
+
+{componente.bloques.map((bloque) => <BloqueRender bloque={bloque} />)}

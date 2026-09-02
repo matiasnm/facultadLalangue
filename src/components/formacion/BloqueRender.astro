@@ -1,0 +1,210 @@
+---
+/**
+ * BloqueRender — diseño de cada tipo de bloque.
+ *
+ * Este es EL ÚNICO lugar donde se define el estilo de los bloques que usan las
+ * páginas de formación. Si mañana cambia el diseño de una tarjeta de beneficio,
+ * un chip, una cita o un CTA, se cambia acá y todas las páginas se actualizan.
+ * Las páginas no llevan diseño propio: solo declaran datos (componentes.ts +
+ * formaciones.ts) y los renderizan a través de este componente.
+ */
+import Rico from './Rico.astro';
+import type { Bloque } from '../../data/componentes';
+
+interface Props {
+	bloque: Bloque;
+}
+
+const { bloque: b } = Astro.props;
+
+const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-accent transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>`;
+---
+
+{/* Título — h2/h3/h4 con kicker opcional (p. ej. "Incluido en tu formación") */}
+{b.tipo === 'titulo' && (
+	<>
+		{b.kicker && (
+			<p class="mt-14 text-xs font-semibold uppercase tracking-widest text-accent">{b.kicker}</p>
+		)}
+		{b.nivel === 3 ? (
+			<h3 class="mt-10 scroll-mt-24">{b.texto}</h3>
+		) : b.nivel === 4 ? (
+			<h4 class="mt-6 scroll-mt-24">{b.texto}</h4>
+		) : (
+			<h2 class="mt-14 scroll-mt-24 first:mt-0">{b.texto}</h2>
+		)}
+	</>
+)}
+
+{/* Texto — uno o varios párrafos */}
+{b.tipo === 'texto' && (
+	<div class="mt-6 space-y-3">
+		{b.parrafos.map((p) => (
+			<Rico texto={p} class="max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85" />
+		))}
+	</div>
+)}
+
+{/* Lista — numerada o con bullets */}
+{b.tipo === 'lista' &&
+	(b.ordenada ? (
+		<ol class="mt-6 max-w-3xl space-y-2 text-[0.9375rem] leading-relaxed text-ink/85">
+			{b.items.map((it) => (
+				<li>
+					<Rico texto={it} />
+				</li>
+			))}
+		</ol>
+	) : (
+		<ul class="mt-6 max-w-3xl space-y-2 text-[0.9375rem] leading-relaxed text-ink/85">
+			{b.items.map((it) => (
+				<li>
+					<Rico texto={it} />
+				</li>
+			))}
+		</ul>
+	))}
+
+{/* Chips — insignias, sellos o lemas */}
+{b.tipo === 'chips' && (
+	<ul class="mt-6 flex list-none flex-wrap gap-2 p-0">
+		{b.items.map((it) => (
+			<li
+				class:list={[
+					'rounded-full border px-4 py-1.5 text-sm font-medium',
+					b.variante === 'lema'
+						? 'border-brand/20 bg-brand/5 font-semibold text-brand'
+						: 'border-divider/60 bg-surface text-ink',
+				]}
+			>
+				{it}
+			</li>
+		))}
+	</ul>
+)}
+
+{/* Contadores — valores animados del sitio original (por ahora en 0) */}
+{b.tipo === 'contadores' && (
+	<ul class="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
+		{b.items.map((c) => (
+			<li class="rounded-xl border border-divider/30 bg-surface p-5 text-center">
+				<span class="block font-display text-3xl font-semibold text-brand">{c.valor}</span>
+				<span class="mt-1 block text-sm text-muted">{c.etiqueta}</span>
+			</li>
+		))}
+	</ul>
+)}
+
+{/* Beneficio — tarjeta de valor con precio */}
+{b.tipo === 'beneficio' && (
+	<article class="mt-6 rounded-2xl border border-divider/30 bg-surface p-6">
+		<div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
+			<h4 class="text-lg font-semibold text-ink-strong">{b.titulo}</h4>
+			<span class="font-display text-2xl font-semibold text-brand">{b.precio}</span>
+		</div>
+		<p class="mt-1 text-sm font-medium text-muted">{b.subtitulo}</p>
+		<p class="mt-2 max-w-3xl text-[0.9375rem] leading-relaxed text-ink/80">{b.descripcion}</p>
+	</article>
+)}
+
+{/* Total de beneficios — tarjeta destacada */}
+{b.tipo === 'total-beneficios' && (
+	<div class="mt-6 rounded-2xl border border-dashed border-accent/50 bg-accent/5 p-6 text-center">
+		<p class="text-xs font-semibold uppercase tracking-widest text-muted">{b.titulo}</p>
+		<p class="mt-1 font-display text-4xl font-semibold text-brand">{b.valor}</p>
+		<p class="mt-2 text-sm text-ink/70">{b.nota}</p>
+	</div>
+)}
+
+{/* Cita — blockquote con autor */}
+{b.tipo === 'cita' && (
+	<figure class="mt-8 max-w-3xl">
+		<blockquote class="my-0 text-[0.9375rem] leading-relaxed text-ink-strong/90">
+			{b.lineas.map((l) => (
+				<p class="mb-2 last:mb-0">{l}</p>
+			))}
+		</blockquote>
+		<figcaption class="mt-3 text-sm font-medium text-muted">— {b.autor}</figcaption>
+	</figure>
+)}
+
+{/* Estadísticas de inserción */}
+{b.tipo === 'stats' && (
+	<div class="mt-8 rounded-2xl border border-divider/30 bg-surface p-6 sm:p-8">
+		<ul class="list-none divide-y divide-divider/50 p-0">
+			{b.filas.map((f) => (
+				<li class="flex items-center justify-between gap-4 py-3">
+					<span class="shrink-0 text-sm font-medium text-ink/80">{f.region}</span>
+					<div class="flex flex-1 items-center gap-3 pl-4">
+						<div class="h-2 flex-1 overflow-hidden rounded-full bg-divider/60">
+							<div class="h-full rounded-full bg-brand" style={`width:${f.pct}`}></div>
+						</div>
+						<span class="w-10 text-right font-display font-semibold text-brand">{f.pct}</span>
+					</div>
+				</li>
+			))}
+		</ul>
+		<div class="mt-6 space-y-4">
+			{b.frases.map((fr) => (
+				<p class="text-lg font-medium leading-snug text-ink-strong">{fr}</p>
+			))}
+		</div>
+		<Rico texto={b.referencia} class="mt-6 text-xs leading-relaxed text-muted" />
+	</div>
+)}
+
+{/* FAQ — acordeón sin JavaScript (<details>) */}
+{b.tipo === 'faq' && (
+	<details class="group mt-4 rounded-xl border border-divider/40 bg-surface">
+		<summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold text-ink-strong [&::-webkit-details-marker]:hidden">
+			<span>{b.pregunta}</span>
+			<span set:html={chevron} />
+		</summary>
+		<div class="px-5 pb-5">
+			{b.respuesta.map((p) => (
+				<Rico texto={p} class="text-[0.9375rem] leading-relaxed text-ink/85" />
+			))}
+			{b.lista && (
+				<ul class="mt-3 space-y-1.5 text-[0.9375rem] leading-relaxed text-ink/85">
+					{b.lista.map((it) => (
+						<li>
+							<Rico texto={it} />
+						</li>
+					))}
+				</ul>
+			)}
+			{b.cierre?.map((p) => (
+				<Rico texto={p} class="mt-3 text-[0.9375rem] leading-relaxed text-ink/85" />
+			))}
+		</div>
+	</details>
+)}
+
+{/* CTA — panel de marca con acciones */}
+{b.tipo === 'cta' && (
+	<div class="mt-12 rounded-2xl bg-brand px-6 py-12 text-center sm:px-10">
+		<h2 class="text-white">{b.titulo}</h2>
+		{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
+		{b.acciones.map((a) => (
+			<a
+				href={a.href}
+				class="mt-6 inline-block rounded-md bg-white px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-brand transition-colors hover:bg-accent hover:text-white hover:no-underline"
+			>
+				{a.etiqueta}
+			</a>
+		))}
+	</div>
+)}
+
+{/* Enlace — link destacado del cuerpo (programa, checkout, entrevista…) */}
+{b.tipo === 'enlace' && (
+	<p class="mt-6">
+		<a
+			href={b.href}
+			class="font-semibold text-brand underline underline-offset-4 transition-colors hover:text-accent"
+			{...(/^https?:\/\//.test(b.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+		>
+			{b.etiqueta}
+		</a>
+	</p>
+)}
