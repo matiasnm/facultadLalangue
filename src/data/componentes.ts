@@ -69,6 +69,7 @@ export type BloquePersona = {
 	titulo?: string;
 	bio: string[];
 	foto?: string;
+	boton?: { etiqueta: string; href: string };
 };
 export type BloqueEquipo = {
 	tipo: 'equipo';
@@ -134,8 +135,15 @@ export const faq = (pregunta, respuesta, lista, cierre) =>
 export const cta = ({ titulo, subtitulo, acciones }) =>
 	({ tipo: 'cta', titulo, subtitulo, acciones }) as BloqueCta;
 export const enlace = (etiqueta, href) => ({ tipo: 'enlace', etiqueta, href }) as BloqueEnlace;
-export const persona = (nombre, titulo, bio, foto?) =>
-	({ tipo: 'persona', nombre, titulo, bio: Array.isArray(bio) ? bio : [bio], foto }) as BloquePersona;
+export const persona = (nombre, titulo, bio, foto?, boton?) =>
+	({
+		tipo: 'persona',
+		nombre,
+		titulo,
+		bio: Array.isArray(bio) ? bio : [bio],
+		foto,
+		boton,
+	}) as BloquePersona;
 export const equipo = (personas, columnas = 3) =>
 	({ tipo: 'equipo', personas, columnas }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;

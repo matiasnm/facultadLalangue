@@ -1,0 +1,49 @@
+---
+/**
+ * Página /nuestra-biblioteca — Biblioteca Académica Especializada.
+ *
+ * Declara el encabezado (E-Book destacado "Psicosis y sus vertientes") y
+ * renderiza los bloques de src/data/biblioteca.ts a través de
+ * BloqueRender / ComponenteComun. Cualquier cambio de diseño se hace UNA vez
+ * en BloqueRender.
+ */
+import Layout from '../layouts/Layout.astro';
+import { bibliotecaSecciones } from '../data/biblioteca';
+import BloqueRender from '../components/formacion/BloqueRender.astro';
+import ComponenteComun from '../components/formacion/ComponenteComun.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Nuestra Biblioteca — Facultad Internacional de Psicología y Psicoanálisis Lalangue">
+	<main class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+		<!-- Volver al inicio -->
+		<a
+			href={base || '/'}
+			class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
+		>
+			<span aria-hidden="true">←</span> Volver al inicio
+		</a>
+
+		<!-- Encabezado -->
+		<header class="mt-6">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
+				Nuevo E-Book · Biblioteca Académica Especializada
+			</p>
+			<h1 class="mt-2 max-w-4xl text-4xl font-semibold leading-tight sm:text-5xl">
+				Psicosis y sus vertientes
+			</h1>
+		</header>
+
+		<!-- Contenido -->
+		<div class="mt-12">
+			{bibliotecaSecciones.map((seccion) =>
+				seccion.tipo === 'componente' ? (
+					<ComponenteComun nombre={seccion.nombre} />
+				) : (
+					<BloqueRender bloque={seccion} />
+				),
+			)}
+		</div>
+	</main>
+</Layout>
