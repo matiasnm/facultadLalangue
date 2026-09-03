@@ -1,0 +1,52 @@
+---
+/**
+ * Página /facultad — Institución.
+ *
+ * Declara el encabezado y renderiza los bloques de src/data/facultad.ts
+ * (identidad, origen, visión, modelo, comunidad, clínica, formaciones,
+ * metodología, modelo académico, admisión, supervisión y FAQs) a través de
+ * BloqueRender / ComponenteComun. Cualquier cambio de diseño se hace UNA vez
+ * en BloqueRender.
+ */
+import Layout from '../layouts/Layout.astro';
+import { facultadSecciones } from '../data/facultad';
+import BloqueRender from '../components/formacion/BloqueRender.astro';
+import ComponenteComun from '../components/formacion/ComponenteComun.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Facultad — Facultad Internacional de Psicología y Psicoanálisis Lalangue">
+	<main class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+		<!-- Volver al inicio -->
+		<a
+			href={base || '/'}
+			class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
+		>
+			<span aria-hidden="true">←</span> Volver al inicio
+		</a>
+
+		<!-- Encabezado -->
+		<header class="mt-6">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Institución</p>
+			<h1 class="mt-2 max-w-4xl text-4xl font-semibold leading-tight sm:text-5xl">
+				Facultad Internacional de Psicología y Psicoanálisis Lalangue
+			</h1>
+			<p class="mt-4 max-w-3xl text-lg leading-relaxed text-ink/80">
+				Institución académica francesa dedicada a la formación clínica y al
+				desarrollo del pensamiento contemporáneo en psicología y psicoanálisis.
+			</p>
+		</header>
+
+		<!-- Contenido -->
+		<div class="mt-12">
+			{facultadSecciones.map((seccion) =>
+				seccion.tipo === 'componente' ? (
+					<ComponenteComun nombre={seccion.nombre} />
+				) : (
+					<BloqueRender bloque={seccion} />
+				),
+			)}
+		</div>
+	</main>
+</Layout>

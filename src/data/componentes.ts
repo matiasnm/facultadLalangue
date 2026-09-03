@@ -63,6 +63,22 @@ export type BloqueCta = {
 	acciones: { etiqueta: string; href: string }[];
 };
 export type BloqueEnlace = { tipo: 'enlace'; etiqueta: string; href: string };
+export type BloquePersona = {
+	tipo: 'persona';
+	nombre: string;
+	titulo?: string;
+	bio: string[];
+	foto?: string;
+};
+export type BloqueEquipo = {
+	tipo: 'equipo';
+	personas: { nombre: string; titulo?: string; bio?: string[]; foto?: string }[];
+	columnas?: 2 | 3 | 4;
+};
+export type BloqueTarjetas = {
+	tipo: 'tarjetas';
+	items: { titulo: string; descripcion?: string; href?: string; imagen?: string }[];
+};
 
 export type Bloque =
 	| BloqueTitulo
@@ -76,7 +92,10 @@ export type Bloque =
 	| BloqueStats
 	| BloqueFaq
 	| BloqueCta
-	| BloqueEnlace;
+	| BloqueEnlace
+	| BloquePersona
+	| BloqueEquipo
+	| BloqueTarjetas;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -115,6 +134,11 @@ export const faq = (pregunta, respuesta, lista, cierre) =>
 export const cta = ({ titulo, subtitulo, acciones }) =>
 	({ tipo: 'cta', titulo, subtitulo, acciones }) as BloqueCta;
 export const enlace = (etiqueta, href) => ({ tipo: 'enlace', etiqueta, href }) as BloqueEnlace;
+export const persona = (nombre, titulo, bio, foto?) =>
+	({ tipo: 'persona', nombre, titulo, bio: Array.isArray(bio) ? bio : [bio], foto }) as BloquePersona;
+export const equipo = (personas, columnas = 3) =>
+	({ tipo: 'equipo', personas, columnas }) as BloqueEquipo;
+export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */

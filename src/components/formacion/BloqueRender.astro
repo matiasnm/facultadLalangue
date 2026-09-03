@@ -11,6 +11,11 @@
 import Rico from './Rico.astro';
 import type { Bloque } from '../../data/componentes';
 
+const base = import.meta.env.BASE_URL;
+// Prefija rutas internas con la base; deja intactas "#", anclas y URLs absolutas.
+const link = (href: string) =>
+	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
 interface Props {
 	bloque: Bloque;
 }
@@ -187,7 +192,7 @@ const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke=
 		{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
 		{b.acciones.map((a) => (
 			<a
-				href={a.href}
+				href={link(a.href)}
 				class="mt-6 inline-block rounded-md bg-white px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-brand transition-colors hover:bg-accent hover:text-white hover:no-underline"
 			>
 				{a.etiqueta}
@@ -200,11 +205,82 @@ const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke=
 {b.tipo === 'enlace' && (
 	<p class="mt-6">
 		<a
-			href={b.href}
+			href={link(b.href)}
 			class="font-semibold text-brand underline underline-offset-4 transition-colors hover:text-accent"
 			{...(/^https?:\/\//.test(b.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 		>
 			{b.etiqueta}
 		</a>
 	</p>
+)}
+
+{/* Persona — perfil de docente/comité con foto, nombre, título y bio */}
+{b.tipo === 'persona' && (
+	<article class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-start">
+		{b.foto && (
+			<img src={b.foto} alt={b.nombre} class="h-24 w-24 shrink-0 rounded-full object-cover" loading="lazy" />
+		)}
+		<div>
+			<h4 class="text-lg font-semibold text-ink-strong">{b.nombre}</h4>
+			{b.titulo && <p class="text-sm font-medium text-muted">{b.titulo}</p>}
+			<div class="mt-2 space-y-2">
+				{b.bio.map((p) => (
+					<Rico texto={p} class="text-[0.9375rem] leading-relaxed text-ink/80" />
+				))}
+			</div>
+		</div>
+	</article>
+)}
+
+{/* Equipo — grid de personas (decana, directores, comité, plantel) */}
+{b.tipo === 'equipo' && (
+	<ul class="mt-6 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
+		{b.personas.map((p) => (
+			<li class="flex flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5">
+				<div class="flex items-center gap-4">
+					{p.foto && (
+						<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
+					)}
+					<div>
+						<p class="font-semibold text-ink-strong">{p.nombre}</p>
+						{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+					</div>
+				</div>
+				{p.bio && (
+					<div class="space-y-2">
+						{p.bio.map((linea) => (
+							<Rico texto={linea} class="text-sm leading-relaxed text-ink/75" />
+						))}
+					</div>
+				)}
+			</li>
+		))}
+	</ul>
+)}
+
+{/* Tarjetas — cards con imagen, título, descripción y link (formaciones, etc.) */}
+{b.tipo === 'tarjetas' && (
+	<ul class="mt-6 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
+		{b.items.map((t) => (
+			<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
+				{t.imagen && (
+					<img src={t.imagen} alt={t.titulo} class="h-40 w-full object-cover" loading="lazy" />
+				)}
+				<div class="flex flex-1 flex-col p-5">
+					<p class="font-semibold text-ink-strong">{t.titulo}</p>
+					{t.descripcion && (
+						<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{t.descripcion}</p>
+					)}
+					{t.href && (
+						<a
+							href={link(t.href)}
+							class="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
+						>
+							Conocé más <span aria-hidden="true">→</span>
+						</a>
+					)}
+				</div>
+			</li>
+		))}
+	</ul>
 )}
