@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
+import IsotipoBandera from '../components/IsotipoBandera.astro';
 const lastUpdated = '2026-08-28';
 
 // Base pública (GitHub Pages sub-ruta). Prefija rutas internas con la base.
@@ -876,17 +877,29 @@ const samples: Record<string, string> = {
 			<div
 				class="mt-8 grid gap-8 overflow-hidden rounded-xl border border-divider/30 bg-surface p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
 			>
-				<!-- Preview del isotipo sobre blanco -->
+				<!-- Preview del isotipo sobre blanco: el clásico + la bandera -->
 				<div
 					id="isotipo-live"
-					class="flex items-center justify-center rounded-xl bg-white p-10"
+					class="flex flex-wrap items-center justify-center gap-10 rounded-xl bg-white p-10"
 				>
-					<Isotipo
-						class="h-40 w-auto"
-						wine="var(--color-brand)"
-						accent="var(--color-accent)"
-						indigo="var(--color-indigo)"
-					/>
+					<div class="flex flex-col items-center gap-3">
+						<Isotipo
+							class="h-40 w-auto"
+							wine="var(--color-brand)"
+							accent="var(--color-accent)"
+							indigo="var(--color-indigo)"
+						/>
+						<span class="text-xs text-muted">Isotipo</span>
+					</div>
+					<div class="flex flex-col items-center gap-3">
+						<IsotipoBandera
+							class="h-40 w-auto"
+							wine="var(--color-brand)"
+							accent="var(--color-accent)"
+							indigo="var(--color-indigo)"
+						/>
+						<span class="text-xs text-muted">Bandera</span>
+					</div>
 				</div>
 
 				<!-- Pickers de color -->
@@ -920,18 +933,24 @@ const samples: Record<string, string> = {
 						))
 					}
 					<p class="text-xs leading-relaxed text-muted">
-						El isotipo se repinta en el momento: los tres grupos del
-						SVG se pintan con las variables CSS seleccionadas
-						(<code class="text-brand">--iso-c1/c2/c3</code>).
+						Ambos isotipos se repintan en el momento: los tres grupos
+						del SVG se pintan con las variables CSS seleccionadas
+						(<code class="text-brand">--iso-c1/c2/c3</code>). En la
+						bandera un solo isotipo se parte por franjas diagonales
+						de color — vino a la izquierda, índigo al centro, accent
+						a la derecha — reconstruido 1:1 desde el export plano de
+						Inkscape (<code>docs/isologo_bandera.svg</code>).
 					</p>
 				</div>
 			</div>
 			<script>
-				const iso = document.querySelector('#isotipo-live .isotipo');
-				if (iso) {
+				const isos = document.querySelectorAll('#isotipo-live .isotipo');
+				if (isos.length) {
 					document.querySelectorAll('[data-iso-slot]').forEach((sel) => {
 						sel.addEventListener('change', () => {
-							iso.style.setProperty(`--iso-${sel.dataset.isoSlot}`, sel.value);
+							isos.forEach((iso) => {
+								iso.style.setProperty(`--iso-${sel.dataset.isoSlot}`, sel.value);
+							});
 						});
 					});
 				}
