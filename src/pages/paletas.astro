@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { paletas } from '../data/paletas';
+
+const base = import.meta.env.BASE_URL;
+const link = (href: string) =>
+	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
+// Datos para el script (se inyectan con define:vars).
+const defaultTokens = {
+	'accent': '#d5673f',
+	background: '#ffffff',
+	surface: '#f6f6f8',
+	divider: '#e4e4ec',
+	'ink': '#2b2b34',
+	'ink-strong': '#14141a',
+	muted: '#6f6f7c',
+};
+
+// Swatch de marca común a todas las paletas (no se toca).
+const marcas = [
+	{ hex: '#8c1c3f', nombre: 'Vino' },
+	{ hex: '#5b1133', nombre: 'Vino profundo' },
+];
+---
+
+<Layout title="Paletas — Lalangue">
+	<main class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6">
+		<a href={link('/roadmap/')} class="text-sm text-brand hover:underline"
+			>← Volver al roadmap de estilos</a
+		>
+		<h1 class="mt-4">Paletas candidatas</h1>
+		<p class="mt-2 max-w-2xl text-ink/80">
+			La paleta <strong>Actual</strong> es la vigente. Las otras cuatro son
+			propuestas para renovar la identidad. Todas mantienen el vino
+			(<code>#8c1c3f</code>) y el vino profundo (<code>#5b1133</code>).
+			Elegí una para <em>previsualizarla en vivo</em> sobre todo el sitio:
+			se guarda en tu navegador y se repinta en cada página (incluido el
+			isotipo del header y del footer).
+		</p>
+
+		<!-- Selector de paletas -->
+		<section class="mt-10">
+			<div
+				id="paleta-grid"
+				class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+			></div>
+		</section>
+
+		<!-- Marcas inmutables -->
+		<section class="mt-12 rounded-xl border border-divider/30 bg-surface p-6">
+			<p class="text-xs font-semibold uppercase tracking-widest text-muted">
+				Rojos de marca (fijos en todas las paletas)
+			</p>
+			<div class="mt-4 flex flex-wrap gap-2.5">
+				{
+					marcas.map((c) => (
+						<div
+							class="flex h-[104px] w-[112px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-[11px] text-white"
+							style={`background:${c.hex}`}
+						>
+							<span class="font-mono">{c.hex}</span>
+							<span class="mt-0.5 text-[10px] opacity-80">{c.nombre}</span>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- Cómo aplicar -->
+		<section class="mt-10">
+			<h2>Cómo usar esto</h2>
+			<ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-ink/80">
+				<li>Hacé clic en una paleta para aplicarla a todo el sitio.</li>
+				<li>Navegá por el sitio: el cambio persiste entre páginas.</li>
+				<li>
+					Usá <strong>Restaurar actual</strong> para volver a los colores
+					vigentes (o el botón del editor en el roadmap).
+				</li>
+			</ul>
+		</section>
+	</main>
+
+	<script
+		define:vars={{
+			paletasData: paletas,
+			defaultsData: defaultTokens,
+		}}
+	>
+		// Paletas y tokens por defecto, inyectados por define:vars.
+		const PALETAS = paletasData;
+		const DEFAULT_TOKENS = defaultsData;
+		const KEY = window.__LALANGUE_PALETA.KEY;
+
+		const grid = document.getElementById('paleta-grid');
+
+		// Aplica una paleta: pinta :root y persiste (sitio completo).
+		const applyPalette = (paleta) => {
+			const state = {};
+			for (const key of Object.keys(DEFAULT_TOKENS)) state[key] = DEFAULT_TOKENS[key];
+			Object.assign(state, paleta.tokens);
+			// brand / brand-dark se mantienen fijos en todas.
+			state['brand'] = '#8c1c3f';
+			state['brand-dark'] = '#5b1133';
+			localStorage.setItem(KEY, JSON.stringify(state));
+			for (const [k, v] of Object.entries(state)) {
+				document.documentElement.style.setProperty(`--color-${k}`, v);
+			}
+			render();
+		};
+
+		const card = (paleta) => {
+			const active = paleta.__active;
+			const el = document.createElement('button');
+			el.type = 'button';
+			el.className =
+				'group flex flex-col rounded-xl border p-5 text-left transition-all ' +
+				(active
+					? 'border-brand bg-brand/5 shadow-[0_0_0_1px_#8c1c3f]'
+					: 'border-divider bg-surface hover:border-brand/40 hover:shadow-md');
+
+			const head = document.createElement('div');
+			head.className = 'flex items-center justify-between gap-2';
+			const name = document.createElement('p');
+			name.className = 'text-base font-semibold text-ink-strong';
+			name.textContent = paleta.nombre;
+			head.appendChild(name);
+			if (active) {
+				const tag = document.createElement('span');
+				tag.className =
+					'rounded-full bg-brand px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white';
+				tag.textContent = 'Activa';
+				head.appendChild(tag);
+			}
+			el.appendChild(head);
+
+			const desc = document.createElement('p');
+			desc.className = 'mt-1 text-xs leading-relaxed text-ink/70';
+			desc.textContent = paleta.desc;
+			el.appendChild(desc);
+
+			const swatches = document.createElement('div');
+			swatches.className = 'mt-4 flex items-center gap-1.5';
+			paleta.swatches.forEach((sw) => {
+				const chip = document.createElement('span');
+				chip.title = `${sw.nombre} ${sw.hex}`;
+				chip.className = 'h-7 w-7 rounded-full shadow-[inset_0_0_0_1px_rgba(20,20,26,0.12)]';
+				chip.style.background = sw.hex;
+				swatches.appendChild(chip);
+			});
+			el.appendChild(swatches);
+
+			const hexLine = document.createElement('p');
+			hexLine.className =
+				'mt-3 truncate font-mono text-[0.6875rem] text-muted';
+			hexLine.textContent = paleta.swatches.map((s) => s.hex).join(' · ');
+			el.appendChild(hexLine);
+
+			const action = document.createElement('span');
+			action.className =
+				'mt-4 inline-flex w-fit items-center gap-1 text-sm font-semibold ' +
+				(active ? 'text-brand' : 'text-brand group-hover:text-brand');
+			action.textContent = active ? 'Aplicada ✓' : 'Aplicar esta paleta';
+			el.appendChild(action);
+
+			el.addEventListener('click', () => applyPalette(paleta));
+			return el;
+		};
+
+		const render = () => {
+			// Re-evalúa la paleta activa a partir del estado persistido.
+			let saved = {};
+			try { saved = JSON.parse(localStorage.getItem(KEY) || 'null') || {}; } catch (e) {}
+			const activeAccent = saved['accent'] || DEFAULT_TOKENS['accent'];
+			PALETAS.forEach((p) => {
+				p.__active = p.id === 'actual'
+					? activeAccent === DEFAULT_TOKENS['accent']
+					: activeAccent === p.tokens['accent'];
+			});
+			grid.replaceChildren(...PALETAS.map(card));
+		};
+
+		render();
+	</script>
+</Layout>

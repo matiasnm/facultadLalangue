@@ -27,7 +27,7 @@ const { title } = Astro.props;
 			rel="stylesheet"
 		/>
 
-		<!-- Paleta en vivo (ver /roadmap).
+		<!-- Paleta en vivo (ver /roadmap y /paletas).
 		     Al cargar cualquier página, se leen los colores guardados en
 		     localStorage y se sobreescriben los tokens en :root, de modo que
 		     el sitio entero (incluido el header y el isotipo) se repinta. -->
@@ -35,6 +35,8 @@ const { title } = Astro.props;
 			(() => {
 				const KEY = 'lalangue-paleta';
 				// Tokens expuestos al editor de paleta y su valor por defecto.
+				// (El editor de /roadmap toca solo estos; /paletas puede guardar
+				//  cualquier token, y acá se aplican todos los que haya.)
 				const TOKENS = {
 					brand: '#8c1c3f',
 					'accent': '#d5673f',
@@ -50,9 +52,9 @@ const { title } = Astro.props;
 				try {
 					const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
 					if (saved) {
-						for (const key of Object.keys(TOKENS)) {
-							if (saved[key]) {
-								document.documentElement.style.setProperty(`--color-${key}`, saved[key]);
+						for (const [k, v] of Object.entries(saved)) {
+							if (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v)) {
+								document.documentElement.style.setProperty(`--color-${k}`, v);
 							}
 						}
 					}

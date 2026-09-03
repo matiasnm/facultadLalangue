@@ -760,7 +760,15 @@ const samples: Record<string, string> = {
 
 		<!-- ================= Paleta de colores ================= -->
 		<section class="mt-16">
-			<h2>Paleta de colores</h2>
+			<div class="flex flex-wrap items-end justify-between gap-3">
+				<h2>Paleta de colores</h2>
+				<a
+					href={link('/paletas/')}
+					class="inline-flex items-center gap-1 rounded-md border border-divider bg-white px-3 py-1.5 text-sm font-semibold text-brand transition-colors hover:border-brand hover:no-underline"
+				>
+					Explorar paletas candidatas →
+				</a>
+			</div>
 			<p class="text-ink/80">
 				Paleta definitiva: un acento cálido y una escala de vino a azul,
 				más la sub-paleta <em>vino profundo</em> y los neutros.
