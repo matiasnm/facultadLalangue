@@ -60,11 +60,12 @@ const clinicInitiatives = [
 ];
 
 const diplomas = [
-	'Psicopatología Infanto-Juvenil',
-	'Subjetividad Digital',
-	'Terapia de Parejas y Erotismo Relacional',
-	'Abordaje del Ataque de Pánico',
-	'Terapias Breves',
+	{ label: 'Psicopatología Infanto-Juvenil', href: '/psicopatologia-infanto-juvenil/' },
+	{ label: 'Subjetividad Digital', href: '/subjetividad-digital/' },
+	{ label: 'Terapia de Parejas y Erotismo Relacional', href: '/clinica-de-parejas/' },
+	// Sin página dedicada aún: quedan como chip, sin enlace.
+	{ label: 'Abordaje del Ataque de Pánico' },
+	{ label: 'Terapias Breves' },
 ];
 
 const featuredFormaciones = [
@@ -73,12 +74,14 @@ const featuredFormaciones = [
 		desc: 'Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.',
 		duration: '2 años (72 clases)',
 		modalidad: '100% online con clases grabadas y encuentros sincrónicos',
+		href: '/psicoterapia-psicoanalitica/',
 	},
 	{
 		name: 'Máster Internacional en Psicoanálisis Aplicado Lalangue',
 		desc: 'Formación avanzada orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.',
 		duration: '2 años (144 clases)',
 		modalidad: '100% online con clases grabadas y encuentros sincrónicos',
+		href: '/master-en-psicoanalisis/',
 	},
 ];
 
@@ -195,28 +198,26 @@ const programas = [
 				Institución académica francesa dedicada a la formación clínica y al
 				desarrollo del pensamiento contemporáneo en psicología y
 				psicoanálisis. Extensión hispanohablante de la{' '}
-				<strong class="font-semibold text-ink">E-Faculté de Psychologie et
-				Psychanalyse</strong>{' '}
-				(<a
+				<a
 					href="https://efpp.org/"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="font-semibold text-brand underline decoration-brand/40 underline-offset-2 transition-colors hover:text-accent hover:decoration-accent/40"
-				>EFPP – Francia</a
-				>), con más de 25 años de trayectoria en la formación
+					class="cursor-pointer font-semibold text-ink transition-colors hover:text-accent"
+				>E-Faculté de Psychologie et Psychanalyse (EFPP – Francia)</a
+				>, con más de 25 años de trayectoria en la formación
 				clínica y en la transmisión del psicoanálisis en Europa. Una clínica
 				rigurosa, ética, internacional y plural, para toda la comunidad
 				hispanohablante global.
 			</p>
 			<div class="mt-10 flex flex-wrap gap-4">
 				<a
-					href={link('/master-en-psicoanalisis/')}
+					href="#Formaciones"
 					class="rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
 				>
 					Explorar formaciones
 				</a>
 				<a
-					href={link('/nuestra-biblioteca/')}
+					href={link('/facultad/')}
 					class="rounded-md border border-ink/30 px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-ink transition-colors hover:border-ink hover:bg-ink/5 hover:no-underline"
 				>
 					Conocé Lalangue
@@ -416,7 +417,7 @@ const programas = [
 		</section>
 
 		<!-- ==================== Formaciones ==================== -->
-		<section class="py-20 border-b border-divider/20">
+		<section id="Formaciones" class="py-20 border-b border-divider/20 scroll-mt-24">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Formaciones</p>
 			<h2 class="mt-2">Diplomados Internacionales especializados</h2>
 			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
@@ -430,18 +431,35 @@ const programas = [
 			</p>
 			<ul class="mt-3 flex flex-wrap gap-2.5">
 				{
-					diplomas.map((d) => (
-						<li class="rounded-full border border-divider/40 bg-surface px-4 py-1.5 text-sm text-ink">
-							{d}
-						</li>
-					))
+					diplomas.map((d) => {
+						if (d.href) {
+							return (
+								<li>
+									<a
+										href={link(d.href)}
+										class="inline-block rounded-full border border-divider/40 bg-surface px-4 py-1.5 text-sm text-ink transition-colors hover:border-brand hover:bg-brand/5 hover:text-brand hover:no-underline"
+									>
+										{d.label}
+									</a>
+								</li>
+							);
+						}
+						return (
+							<li class="rounded-full border border-divider/40 bg-surface px-4 py-1.5 text-sm text-ink">
+								{d.label}
+							</li>
+						);
+					})
 				}
 			</ul>
 
 			<div class="mt-12 grid gap-6 lg:grid-cols-2">
 				{
 					featuredFormaciones.map((f) => (
-						<article class="rounded-lg border border-divider/30 bg-surface p-6">
+						<a
+							href={link(f.href)}
+							class="group block rounded-lg border border-divider/30 bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-red-600 hover:shadow-lg hover:no-underline"
+						>
 							<p class="text-base font-semibold leading-snug text-night">
 								{f.name}
 							</p>
@@ -467,7 +485,12 @@ const programas = [
 									))
 								}
 							</ul>
-						</article>
+							<p
+								class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors group-hover:text-red-600"
+							>
+								Ver formación <span aria-hidden="true">→</span>
+							</p>
+						</a>
 					))
 				}
 			</div>

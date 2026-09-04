@@ -1,0 +1,109 @@
+---
+/**
+ * Página /textos — inventario consolidado de todos los textos del sitio.
+ *
+ * Muestra, agrupado por página, cada bloque de contenido en texto plano con su
+ * etiqueta (h1, h2, h3, h4, p, li, blockquote, …) a la izquierda. Es una
+ * herramienta de revisión editorial: sirve para chequear títulos y secciones.
+ *
+ * Las páginas que viven en el sistema de bloques se derivan automáticamente
+ * (src/data/inventario.ts); el home y las legales se declaran en textos.ts.
+ */
+import Layout from '../layouts/Layout.astro';
+import { textos } from '../data/textos';
+
+const base = import.meta.env.BASE_URL;
+const link = (href: string) =>
+	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
+const totalPaginas = textos.length;
+const totalItems = textos.reduce((acc, p) => acc + p.secciones.length, 0);
+---
+
+<Layout title="Textos — Inventario de contenidos · Facultad Lalangue">
+	<main class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+		<a
+			href={base || '/'}
+			class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
+		>
+			<span aria-hidden="true">←</span> Volver al inicio
+		</a>
+
+		<header class="mt-6">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Herramienta editorial</p>
+			<h1 class="mt-2 max-w-4xl text-3xl font-semibold leading-tight sm:text-4xl">
+				Inventario de textos
+			</h1>
+			<p class="mt-4 max-w-3xl text-lg leading-relaxed text-ink/80">
+				Todos los textos del sitio en texto plano, con su etiqueta
+				(<code class="text-brand">h1</code>, <code class="text-brand">h2</code>,
+				<code class="text-brand">p</code>, <code class="text-brand">li</code>, …) a la
+				izquierda de cada bloque, para revisar fácilmente cada página con sus títulos y
+				secciones.
+			</p>
+			<p class="mt-3 text-sm text-muted">
+				{totalPaginas} páginas · {totalItems} bloques de texto
+			</p>
+		</header>
+
+		<!-- Índice de páginas -->
+		<nav class="mt-10 rounded-xl border border-divider/30 bg-surface p-5" aria-label="Índice de páginas">
+			<p class="text-xs font-semibold uppercase tracking-widest text-muted">En esta página</p>
+			<ul class="mt-3 flex flex-wrap gap-2">
+				{textos.map((p) => (
+					<li key={p.ruta}>
+						<a
+							href={`#${p.ruta.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'inicio'}`}
+							class="rounded-full border border-divider/30 bg-white px-3 py-1 text-sm text-ink transition-colors hover:border-brand hover:text-brand hover:no-underline"
+						>
+							{p.titulo}
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+
+		<!-- Páginas con su inventario -->
+		{textos.map((pagina) => {
+			const id =
+				pagina.ruta.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'inicio';
+			return (
+				<section id={id} class="mt-16 scroll-mt-28 border-t border-divider/30 pt-10">
+					<div class="flex flex-wrap items-baseline justify-between gap-3">
+						<h2 class="text-2xl font-semibold leading-tight">{pagina.titulo}</h2>
+						<a
+							href={link(pagina.ruta)}
+							class="font-mono text-xs text-brand transition-colors hover:text-accent hover:no-underline"
+						>
+							{pagina.ruta}
+						</a>
+					</div>
+					<p class="mt-1 text-sm text-muted">{pagina.secciones.length} bloques</p>
+
+					<div class="mt-6 overflow-hidden rounded-xl border border-divider/30 bg-white">
+						<div class="grid grid-cols-[7.5rem_minmax(0,1fr)]">
+							<div class="border-b border-r border-divider/30 bg-surface/60 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted">
+								Etiqueta
+							</div>
+							<div class="border-b border-divider/30 bg-surface/60 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-muted">
+								Texto
+							</div>
+						</div>
+						{pagina.secciones.map((item) => (
+							<div class="grid grid-cols-[7.5rem_minmax(0,1fr)] border-b border-divider/20 last:border-b-0">
+								<div class="border-r border-divider/20 px-3 py-2 align-top">
+									<span class="inline-block rounded bg-accent/10 px-1.5 py-0.5 font-mono text-[0.7rem] font-medium leading-tight text-accent">
+										{item.etiqueta}
+									</span>
+								</div>
+								<div class="px-4 py-2 text-sm leading-relaxed text-ink/90">
+									{item.texto || <span class="italic text-muted">(vacío)</span>}
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+			);
+		})}
+	</main>
+</Layout>
