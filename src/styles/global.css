@@ -19,7 +19,7 @@
   --color-brand-dark: #5b1133; /* vino profundo — variante oscura */
   --color-accent: #d5673f; /* naranja cálido — hover del menú, highlight */
   --color-surface: #f6f6f8; /* humo claro — header, cards, superficies */
-  --color-background: #ffffff; /* blanco — fondo del sitio */
+  --color-background: #faf8f6; /* humo cálido — fondo del sitio (no blanco puro) */
   --color-divider: #e4e4ec; /* gris perla — bordes y separadores */
   --color-ink: #2b2b34; /* tinta — texto de párrafo */
   --color-ink-strong: #14141a; /* tinta fuerte — títulos */

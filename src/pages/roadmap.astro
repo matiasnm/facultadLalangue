@@ -131,6 +131,18 @@ const isotipoSlots = [
 ];
 
 /**
+ * Color de fondo del sitio — opciones "no blanco puro" que se ajustan a la
+ * paleta. El picker guarda la clave `background` en lalangue-paleta, de modo
+ * que se repinta el body de todas las páginas (mismo mecanismo que el resto).
+ */
+const backgroundOptions = [
+	{ hex: '#faf8f6', name: 'A · Humo cálido (recomendado)' },
+	{ hex: '#f7f6f8', name: 'B · Humo neutro' },
+	{ hex: '#f5f4f6', name: 'C · Perla fría' },
+	{ hex: '#f6f1f2', name: 'D · Vaina clara' },
+];
+
+/**
  * Estilos globales — cada etiqueta con su especificación completa.
  * Margen y padding se indican siempre (0 cuando no aplican).
  */
@@ -143,7 +155,7 @@ const globalStyles = [
 			['Tamaño', '0.875rem (14px)'],
 			['Interlineado', '1.6'],
 			['Color', '#2b2b34 (ink)'],
-			['Fondo', '#ffffff (background)'],
+			['Fondo', '#faf8f6 (background)'],
 			['Margen', '0 (reset preflight)'],
 			['Padding', '0'],
 		],
@@ -953,6 +965,82 @@ const samples: Record<string, string> = {
 							});
 						});
 					});
+				}
+			</script>
+		</section>
+
+		<!-- ================= Color de fondo ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Fondo</p>
+			<h2>Color de fondo</h2>
+			<p class="mt-2 max-w-2xl text-ink/80">
+				El fondo del sitio ya no es blanco puro. Elegí entre estas opciones,
+				todas ajustadas a la paleta (humo cálido → vaina clara). El cambio se
+				guarda en tu navegador y se repinta en todas las páginas.
+			</p>
+
+			<div
+				class="mt-8 grid gap-8 overflow-hidden rounded-xl border border-divider/30 bg-white p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
+			>
+				<!-- Preview: el fondo sobre el body real -->
+				<div class="flex flex-col items-center justify-center gap-4 rounded-xl p-10" id="bg-preview">
+					<p class="text-sm text-ink/80">
+						Esta tarjeta ilustra el fondo del sitio. Las superficies
+						<span class="inline-block h-3 w-3 translate-y-0.5 rounded-sm align-middle" style="background:var(--color-surface)"></span>
+						y el blanco siguen iguales para que el contraste se mantenga.
+					</p>
+				</div>
+
+				<!-- Selector -->
+				<div class="flex flex-col justify-center gap-5">
+					<div>
+						<label class="sr-only" for="bg-picker">Color de fondo</label>
+						<select
+							id="bg-picker"
+							data-bg-slot
+							class="w-full rounded-md border border-divider bg-white px-3 py-2 text-sm text-ink"
+						>
+							{backgroundOptions.map((opt) => (
+								<option value={opt.hex}>{opt.name}</option>
+							))}
+						</select>
+					</div>
+					<p class="text-xs leading-relaxed text-muted">
+						La opción <strong>A · Humo cálido (#faf8f6)</strong> es la
+						recomendada por defecto. Las superficies ({'{'}
+						<code class="text-brand">--color-surface</code> #f6f6f8{'{'})
+						y el blanco de las cards no cambian.
+					</p>
+				</div>
+			</div>
+
+			<script>
+				const BG_KEY = 'lalangue-paleta';
+				const BG_OPTIONS = ['#faf8f6', '#f7f6f8', '#f5f4f6', '#f6f1f2'];
+				const bgPreview = document.getElementById('bg-preview');
+				const bgPicker = document.getElementById('bg-picker');
+				const applyBg = (hex) => {
+					document.documentElement.style.setProperty('--color-background', hex);
+					if (bgPreview) bgPreview.style.backgroundColor = hex;
+					// Persistir en la paleta (mismo storage que /paletas y Layout).
+					try {
+						const saved = JSON.parse(localStorage.getItem(BG_KEY) || '{}');
+						saved['background'] = hex;
+						localStorage.setItem(BG_KEY, JSON.stringify(saved));
+					} catch (e) {
+						/* ignorar */
+					}
+				};
+				// Sincronizar el select con el fondo actual.
+				if (bgPicker && bgPreview) {
+					const current = getComputedStyle(document.documentElement)
+						.getPropertyValue('--color-background')
+						.trim();
+					bgPicker.value = BG_OPTIONS.includes(current)
+						? current
+						: '#faf8f6';
+					applyBg(bgPicker.value);
+					bgPicker.addEventListener('change', () => applyBg(bgPicker.value));
 				}
 			</script>
 		</section>

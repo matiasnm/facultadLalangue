@@ -1,0 +1,39 @@
+---
+/**
+ * LegalPage — contenedor para páginas legales (aviso legal, privacidad,
+ * términos). Encabezado + breadcrumb "volver al inicio" + contenido como
+ * slot. Los bloques del contenido se escriben con la clase utilitaria
+ * `prose` (ver global.css) para una tipografía legible sin dependencias.
+ */
+interface Props {
+	title: string;
+	/** Etiqueta corta del tipo de documento (p. ej. "Legal"). */
+	eyebrow?: string;
+	/** Fecha de última actualización a mostrar en el encabezado. */
+	updated?: string;
+}
+const { title, eyebrow = 'Legal', updated } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+
+<main class="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+	<a
+		href={base || '/'}
+		class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
+	>
+		<span aria-hidden="true">←</span> Volver al inicio
+	</a>
+
+	<header class="mt-6 border-b border-divider/40 pb-6">
+		<p class="text-xs font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>
+		<h1 class="mt-2 text-3xl font-semibold leading-tight sm:text-4xl">{title}</h1>
+		{updated && (
+			<p class="mt-3 text-sm text-muted">Última actualización: {updated}</p>
+		)}
+	</header>
+
+	<div class="mt-10 space-y-10 text-[0.9375rem] leading-relaxed text-ink/90">
+		<slot />
+	</div>
+</main>
