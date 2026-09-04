@@ -13,12 +13,12 @@ export const facultadSecciones: BloquePagina[] = [
 	titulo('Una formación clínica francesa, con alcance global'),
 	texto([
 		'Lalangue es una institución académica francesa dedicada a la formación clínica y al desarrollo del pensamiento contemporáneo en psicología y psicoanálisis.',
-		'Constituye la extensión hispanohablante de la **E-Faculté de Psychologie et Psychanalyse (EFPP – Francia)**, con más de 25 años de trayectoria en formación clínica y transmisión del psicoanálisis en Europa. Está reconocida como **organismo de formación profesionalizante** por la *DREETS (Dirección regional de economía, empleo, trabajo y solidaridades — Gobierno Francés)*, dentro del régimen francés de formación profesional continua.',
+		'Constituye la extensión hispanohablante de la **E-Faculté de Psychologie et Psychanalyse** ([EFPP – Francia](https://efpp.org/)), con más de 25 años de trayectoria en formación clínica y transmisión del psicoanálisis en Europa. Está reconocida como **organismo de formación profesionalizante** por la *DREETS (Dirección regional de economía, empleo, trabajo y solidaridades — Gobierno Francés)*, dentro del régimen francés de formación profesional continua.',
 		'Nuestra actividad académica cuenta con el aval de instituciones europeas del campo clínico y educativo.',
 	]),
 	lista([
-		'**APE** — Asociación de Psicoanalistas Europeos',
-		'**FEDE** — Federación Europea de Escuelas',
+		'**APE** — [Asociación de Psicoanalistas Europeos](https://www.ape-psychanalyse.com/)',
+		'**FEDE** — [Federación Europea de Escuelas](https://www.fede.education/ecoles/esage-paris/)',
 	]),
 	texto('Desarrollamos programas formativos dirigidos principalmente a la comunidad hispanohablante global, promoviendo una **clínica rigurosa, ética, internacional y plural.**'),
 
@@ -161,7 +161,7 @@ export const facultadSecciones: BloquePagina[] = [
 	/* ── Certificación ─────────────────────────────────────────────────── */
 	titulo('Certificación'),
 	texto([
-		'La **Facultad Internacional de Psicología y Psicoanálisis Lalangue** es una institución francesa reconocida como organismo de formación profesionalizante por la *DREETS (Gobierno Francés)*, avalada por la *Asociación de Psicoanalistas Europeos (APE)* y la *Federación Europea de Escuelas (FEDE)*, orientada a la práctica clínica real, al trabajo en comunidad y a la inserción en redes profesionales internacionales.',
+		'La **Facultad Internacional de Psicología y Psicoanálisis Lalangue** es una institución francesa reconocida como organismo de formación profesionalizante por la *DREETS (Gobierno Francés)*, avalada por la [Asociación de Psicoanalistas Europeos (APE)](https://www.ape-psychanalyse.com/) y la [Federación Europea de Escuelas (FEDE)](https://www.fede.education/ecoles/esage-paris/), orientada a la práctica clínica real, al trabajo en comunidad y a la inserción en redes profesionales internacionales.',
 	]),
 	lista([
 		'Certificación internacional con reconocimiento académico y clínico.',
