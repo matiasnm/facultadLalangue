@@ -625,11 +625,14 @@ const samples: Record<string, string> = {
 				<div>
 					<p class="text-lg font-semibold text-night">Editor de paleta en vivo</p>
 					<p class="mt-1 text-sm text-ink/70">
-						Elegí un <em>tema</em> (una de las paletas derivadas de las 5
-						familias de color) o afiná cada color manualmente. El cambio se
-						aplica en el momento a todo el sitio —y a este roadmap— y se
-						guarda en tu navegador (localStorage). Usá <em>Restaurar</em> para
-						volver a los colores oficiales.
+						Elegí un <em>tema</em>: las candidatas clásicas (Actual y las
+						propuestas A–D, que mantienen la marca vino) más dos duplas
+						<strong>rojo + verde</strong> construidas con la escala original
+						(bordeaux noche, verde petróleo, cereza, pacífico y marfil).
+						También podés afinar cada color manualmente. El cambio se aplica
+						en el momento a todo el sitio —y a este roadmap— y se guarda en
+						tu navegador (localStorage). Usá <em>Restaurar</em> para volver
+						a los colores oficiales.
 					</p>
 				</div>
 				<button
@@ -716,10 +719,15 @@ const samples: Record<string, string> = {
 							}
 						}
 					};
-					// Tema activo = la paleta cuyo `brand` coincide con el guardado.
+					// Tema activo = la paleta cuyo `brand` Y `accent` coinciden
+					// con lo guardado (varias clásicas comparten la marca vino).
 					// Si no hay paleta (default o ajustes manuales) → null.
 					const findActive = (state) =>
-						PALETAS.find((p) => p.tokens['brand'] === state['brand']) || null;
+						PALETAS.find(
+							(p) =>
+								p.tokens['brand'] === state['brand'] &&
+								p.tokens['accent'] === state['accent'],
+						) || null;
 
 					// ── Tarjetas de temas ──────────────────────────────────────────
 					const grid = $('roadmap-palette-grid');
@@ -977,15 +985,7 @@ const samples: Record<string, string> = {
 
 		<!-- ================= Paleta de colores ================= -->
 		<section class="mt-16">
-			<div class="flex flex-wrap items-end justify-between gap-3">
-				<h2>Paleta de colores</h2>
-				<a
-					href={link('/paletas/')}
-					class="inline-flex items-center gap-1 rounded-md border border-divider bg-white px-3 py-1.5 text-sm font-semibold text-brand transition-colors hover:border-brand hover:no-underline"
-				>
-					Explorar y comparar temas →
-				</a>
-			</div>
+			<h2>Paleta de colores</h2>
 			<p class="text-ink/80">
 				Este bloque muestra los swatches del <strong>tema activo</strong>:
 				cambian al instante cuando elegís una paleta en el editor de arriba.
@@ -1000,8 +1000,7 @@ const samples: Record<string, string> = {
 				<div id="palette-deck" class="mt-4 flex flex-wrap gap-2.5"></div>
 				<p class="mt-6 border-t border-divider/60 pt-4 text-xs leading-relaxed text-muted">
 					Los detalles finos (variación entre brand y brand-dark, neutros de
-					texto, fondos) se eligen desde el editor de arriba o desde
-					<a href={link('/paletas/')} class="text-brand hover:underline">/paletas</a>.
+					texto, fondos) se eligen desde el editor de arriba.
 				</p>
 			</div>
 		</section>

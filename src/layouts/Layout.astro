@@ -27,7 +27,7 @@ const { title } = Astro.props;
 			rel="stylesheet"
 		/>
 
-		<!-- Paleta en vivo (ver /roadmap y /paletas).
+		<!-- Paleta en vivo (selector en /roadmap → "Editor de paleta en vivo").
 		     Al cargar cualquier página, se leen los colores guardados en
 		     localStorage y se sobreescriben los tokens en :root, de modo que
 		     el sitio entero (incluido el header y el isotipo) se repinta. -->
@@ -35,10 +35,9 @@ const { title } = Astro.props;
 			(() => {
 				const KEY = 'lalangue-paleta';
 				// Tokens de la paleta por defecto (los oficiales de global.css).
-				// (El editor de /roadmap toca algunos tokens manualmente; /paletas
-				//  puede guardar cualquier token, y acá se aplican todos los que
-				//  haya en localStorage: la elección de tema repinta el sitio
-				//  entero, incluido el isotipo del header y el footer.)
+				// (El editor de /roadmap guarda cualquier token en localStorage;
+				//  acá se aplican todos los que haya: la elección de tema repinta
+				//  el sitio entero, incluido el isotipo del header y el footer.)
 				const TOKENS = {
 					brand: '#8c1c3f',
 					'brand-dark': '#5b1133',
