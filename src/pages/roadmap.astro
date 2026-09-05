@@ -3,43 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
+import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-08-28';
 
 // Base pública (GitHub Pages sub-ruta). Prefija rutas internas con la base.
 const base = import.meta.env.BASE_URL;
 const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
-
-/**
- * Paleta de colores definitiva (ver paleta-preview.html).
- */
-const paletteMain = [
-	{ hex: '#d5673f', name: 'Naranja cálido', highlight: true },
-	{ hex: '#8c1c3f', name: 'Vino' },
-	{ hex: '#7b2a5a', name: 'Malbec' },
-	{ hex: '#61386a', name: 'Ciruela' },
-	{ hex: '#45426d', name: 'Índigo' },
-	{ hex: '#324765', name: 'Azul acero' },
-	{ hex: '#2f4858', name: 'Azul petróleo' },
-];
-
-const paletteWine = [
-	{ hex: '#5b1133', name: 'Tal cual (21%)' },
-	{ hex: '#6d1539', name: 'Variación A (25%)' },
-	{ hex: '#7a1a41', name: 'Variación B (29%)' },
-];
-
-const paletteNeutrals = [
-	{ hex: '#ffffff', name: 'Blanco · fondo', darkText: true },
-	{ hex: '#f6f6f8', name: 'Humo · superficies', darkText: true },
-	{ hex: '#e4e4ec', name: 'Gris perla · bordes', darkText: true },
-	{ hex: '#8e8e9c', name: 'Gris claro · sec.', darkText: true },
-	{ hex: '#6f6f7c', name: 'Gris medio · títulos', darkText: false },
-	{ hex: '#2b2b34', name: 'Tinta · texto', darkText: false },
-];
-
-const paletteOrder =
-	'#d5673f → #8c1c3f → #7b2a5a → #61386a → #45426d → #324765 → #2f4858';
 
 /**
  * Isotipo — colección mixta.
@@ -87,60 +57,34 @@ const isotipoMarks = [
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
- * Tiene 3 colores originales; cada slot se elige SOLO entre los colores
- * ya conocidos de la paleta + la escala de grises.
+ * Los 3 slots permiten recolorear el logo; las opciones disponibles para
+ * cada slot se cargan dinámicamente desde la paleta activa (ver el editor
+ * de paleta en vivo). Estos datos solo mantienen etiqueta y nota.
  */
-const isotipoOptions = [
-	{ hex: '#d5673f', name: 'Naranja cálido · principal' },
-	{ hex: '#8c1c3f', name: 'Vino · principal' },
-	{ hex: '#7b2a5a', name: 'Malbec · principal' },
-	{ hex: '#61386a', name: 'Ciruela · principal' },
-	{ hex: '#45426d', name: 'Índigo · principal' },
-	{ hex: '#324765', name: 'Azul acero · principal' },
-	{ hex: '#2f4858', name: 'Azul petróleo · principal' },
-	{ hex: '#5b1133', name: 'Vino profundo · sub-paleta' },
-	{ hex: '#6d1539', name: 'Variación A · sub-paleta' },
-	{ hex: '#7a1a41', name: 'Variación B · sub-paleta' },
-	{ hex: '#14141a', name: 'Negro noche · greyscale' },
-	{ hex: '#1b1b24', name: 'Negro elevado · greyscale' },
-	{ hex: '#454560', name: 'Gris pizarra · greyscale' },
-	{ hex: '#8e8e9c', name: 'Gris perla · greyscale' },
-	{ hex: '#9b9ba8', name: 'Gris claro · greyscale' },
-	{ hex: '#ececef', name: 'Blanco humo · greyscale' },
-];
-
 const isotipoSlots = [
 	{
 		id: 'c1',
 		label: 'Color 1 · Vino',
 		original: 'original #620f31',
-		default: '#8c1c3f',
 	},
 	{
 		id: 'c2',
 		label: 'Color 2 · Naranja',
 		original: 'original #d5653e',
-		default: '#d5673f',
 	},
 	{
 		id: 'c3',
 		label: 'Color 3 · Índigo',
 		original: 'original #4c3c6c',
-		default: '#45426d',
 	},
 ];
 
 /**
- * Color de fondo del sitio — opciones "no blanco puro" que se ajustan a la
- * paleta. El picker guarda la clave `background` en lalangue-paleta, de modo
+ * Color de fondo del sitio — las opciones dependen de la paleta activa.
+ * El picker guarda la clave `background` en lalangue-paleta, de modo
  * que se repinta el body de todas las páginas (mismo mecanismo que el resto).
+ * (Las opciones por paleta viven en src/data/paletas.ts → fondos.)
  */
-const backgroundOptions = [
-	{ hex: '#faf8f6', name: 'A · Humo cálido (recomendado)' },
-	{ hex: '#f7f6f8', name: 'B · Humo neutro' },
-	{ hex: '#f5f4f6', name: 'C · Perla fría' },
-	{ hex: '#f6f1f2', name: 'D · Vaina clara' },
-];
 
 /**
  * Estilos globales — cada etiqueta con su especificación completa.
@@ -681,9 +625,11 @@ const samples: Record<string, string> = {
 				<div>
 					<p class="text-lg font-semibold text-night">Editor de paleta en vivo</p>
 					<p class="mt-1 text-sm text-ink/70">
-						Cambiá un color y se repinta todo el sitio (también el isotipo del
-						header). Se guarda en tu navegador (localStorage) y sobrevive a las
-						recargas. Usá <em>Restaurar</em> para volver a la paleta oficial.
+						Elegí un <em>tema</em> (una de las paletas derivadas de las 5
+						familias de color) o afiná cada color manualmente. El cambio se
+						aplica en el momento a todo el sitio —y a este roadmap— y se
+						guarda en tu navegador (localStorage). Usá <em>Restaurar</em> para
+						volver a los colores oficiales.
 					</p>
 				</div>
 				<button
@@ -695,7 +641,15 @@ const samples: Record<string, string> = {
 				</button>
 			</div>
 
-			<div id="palette-pickers" class="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
+			<!-- Selector de tema (paleta) -->
+			<p class="mt-6 text-xs font-semibold uppercase tracking-widest text-muted">Tema</p>
+			<div
+				id="roadmap-palette-grid"
+				class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
+			></div>
+
+			<!-- Afinar por token -->
+			<div id="palette-pickers" class="mt-8 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
 				<p class="col-span-full text-xs font-semibold uppercase tracking-widest text-muted">
 					Marca y acentos
 				</p>
@@ -709,7 +663,7 @@ const samples: Record<string, string> = {
 								class="h-9 w-9 cursor-pointer rounded border border-divider bg-white p-0"
 							/>
 							<div class="min-w-0">
-								<p class="text-xs font-semibold text-ink-strong">{t === 'brand' ? 'Vino' : t === 'accent' ? 'Naranja' : t === 'indigo' ? 'Índigo' : t === 'night' ? 'Noche' : t}</p>
+								<p class="text-xs font-semibold text-ink-strong">{t === 'brand' ? 'Marca' : t === 'accent' ? 'Acento' : t === 'indigo' ? 'Índigo' : t === 'night' ? 'Noche' : t}</p>
 								<p class="truncate font-mono text-[0.6875rem] text-muted">--color-{t}</p>
 							</div>
 						</div>
@@ -736,45 +690,287 @@ const samples: Record<string, string> = {
 				}
 			</div>
 
-			<script>
+			<script
+				define:vars={{
+					paletasData: paletas,
+					dfltTokens: defaultTokens,
+				}}
+			>
 				(() => {
-					const { KEY, TOKENS } = window.__LALANGUE_PALETA;
+					// ── Estado compartido: lectura/escritura de la paleta ──────────
+					const { KEY } = window.__LALANGUE_PALETA;
+					const DEFAULTS = dfltTokens;
+					const PALETAS = paletasData;
+
+					const $ = (id) => document.getElementById(id);
+					const readState = () => {
+						try { return JSON.parse(localStorage.getItem(KEY) || 'null') || {}; } catch (e) { return {}; }
+					};
+					const writeState = (s) => {
+						try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* ignorar */ }
+					};
+					const applyTokens = (state) => {
+						for (const [k, v] of Object.entries(state)) {
+							if (typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v)) {
+								document.documentElement.style.setProperty(`--color-${k}`, v);
+							}
+						}
+					};
+					// Tema activo = la paleta cuyo `brand` coincide con el guardado.
+					// Si no hay paleta (default o ajustes manuales) → null.
+					const findActive = (state) =>
+						PALETAS.find((p) => p.tokens['brand'] === state['brand']) || null;
+
+					// ── Tarjetas de temas ──────────────────────────────────────────
+					const grid = $('roadmap-palette-grid');
+					const swatchChip = (hex, nombre) => {
+						const chip = document.createElement('span');
+						chip.title = `${nombre} ${hex}`;
+						chip.className = 'h-7 w-7 rounded-full shadow-[inset_0_0_0_1px_rgba(20,20,26,0.12)]';
+						chip.style.background = hex;
+						return chip;
+					};
+					const card = (p, isActive) => {
+						const el = document.createElement('button');
+						el.type = 'button';
+						el.className =
+							'group flex flex-col rounded-xl border p-4 text-left transition-all ' +
+							(isActive
+								? 'border-brand bg-brand/10 shadow-[0_0_0_1px_var(--color-brand)]'
+								: 'border-divider bg-white hover:border-brand/40 hover:shadow-md');
+						const head = document.createElement('div');
+						head.className = 'flex items-center justify-between gap-2';
+						const name = document.createElement('span');
+						name.className = 'text-sm font-semibold text-ink-strong';
+						name.textContent = p.nombre;
+						head.appendChild(name);
+						if (isActive) {
+							const tag = document.createElement('span');
+							tag.className =
+								'rounded-full bg-brand px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white';
+							tag.textContent = 'Activa';
+							head.appendChild(tag);
+						}
+						el.appendChild(head);
+						const desc = document.createElement('p');
+						desc.className = 'mt-1 text-[0.6875rem] leading-relaxed text-ink/70';
+						desc.textContent = p.desc;
+						el.appendChild(desc);
+						const chips = document.createElement('div');
+						chips.className = 'mt-3 flex items-center gap-1.5';
+						p.swatches.forEach((s) => chips.appendChild(swatchChip(s.hex, s.nombre)));
+						el.appendChild(chips);
+						const hex = document.createElement('p');
+						hex.className = 'mt-2 truncate font-mono text-[0.625rem] text-muted';
+						hex.textContent = p.swatches.map((s) => s.hex).join(' · ');
+						el.appendChild(hex);
+						el.addEventListener('click', () => applyPalette(p));
+						return el;
+					};
+					const renderCards = () => {
+						const active = findActive(readState());
+						grid.replaceChildren(
+							...PALETAS.map((p) => card(p, active !== null && active.id === p.id)),
+						);
+					};
+
+					// ── Aplicar / restaurar ────────────────────────────────────────
+					const applyPalette = (p) => {
+						const state = { ...DEFAULTS, ...p.tokens };
+						writeState(state);
+						applyTokens(state);
+						syncAll();
+					};
+					const resetPalette = () => {
+						try { localStorage.removeItem(KEY); } catch (e) { /* ignorar */ }
+						applyTokens(DEFAULTS);
+						syncAll();
+					};
+
+					// ── Inputs por token (ajuste fino) ─────────────────────────────
 					const inputs = Array.from(document.querySelectorAll('[data-palette-token]'));
-					const resetBtn = document.getElementById('palette-reset');
-
-					// Sincronizar cada input con el estado actual (guardado o default).
-					const sync = () => {
-						let saved = {};
-						try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+					const syncInputs = () => {
+						const saved = readState();
 						inputs.forEach((el) => {
-							el.value = saved[el.dataset.paletteToken] || TOKENS[el.dataset.paletteToken];
+							const t = el.dataset.paletteToken;
+							el.value = saved[t] || DEFAULTS[t];
 						});
 					};
-
-					const apply = (token, value) => {
-						document.documentElement.style.setProperty(`--color-${token}`, value);
-					};
-
-					const persist = () => {
-						const state = {};
-						inputs.forEach((el) => { state[el.dataset.paletteToken] = el.value; });
-						localStorage.setItem(KEY, JSON.stringify(state));
-					};
-
 					inputs.forEach((el) => {
-						el.addEventListener('input', () => apply(el.dataset.paletteToken, el.value));
-						el.addEventListener('change', persist);
-					});
-
-					resetBtn.addEventListener('click', () => {
-						localStorage.removeItem(KEY);
-						inputs.forEach((el) => {
-							el.value = TOKENS[el.dataset.paletteToken];
-							apply(el.dataset.paletteToken, TOKENS[el.dataset.paletteToken]);
+						const t = el.dataset.paletteToken;
+						el.addEventListener('input', () => {
+							document.documentElement.style.setProperty(`--color-${t}`, el.value);
+						});
+						el.addEventListener('change', () => {
+							const s = readState();
+							s[t] = el.value;
+							writeState(s);
+							// al ajustar a mano, el tema deja de estar "activo"
+							renderCards();
+							// y el isotipo de preview vuelve a pintarse con las
+							// variables CSS (para reflejar el token ajustado).
+							document.querySelectorAll('#isotipo-live .isotipo').forEach((iso) => {
+								isoSelects.forEach((sel) =>
+									iso.style.removeProperty(`--iso-${sel.dataset.isoSlot}`),
+								);
+							});
 						});
 					});
 
-					sync();
+					// ── Isotipo: selects de color por paleta activa ────────────────
+					const isoSelects = Array.from(document.querySelectorAll('[data-iso-slot]'));
+					const slotDefault = (slot) => {
+						const s = readState();
+						if (slot === 'c1') return s['brand'] || DEFAULTS['brand'];
+						if (slot === 'c2') return s['accent'] || DEFAULTS['accent'];
+						return s['indigo'] || DEFAULTS['indigo'];
+					};
+					const applyIsoFromSelects = () => {
+						document.querySelectorAll('#isotipo-live .isotipo').forEach((iso) => {
+							isoSelects.forEach((sel) => {
+								iso.style.setProperty(`--iso-${sel.dataset.isoSlot}`, sel.value);
+							});
+						});
+					};
+					const syncIsoSelects = () => {
+						const active = findActive(readState());
+						const logos = active ? active.logos : DEFAULTS_LOGOS;
+						isoSelects.forEach((sel) => {
+							const slot = sel.dataset.isoSlot;
+							const cur = slotDefault(slot);
+							sel.replaceChildren(
+								...logos.map((o) => {
+									const opt = document.createElement('option');
+									opt.value = o.hex;
+									opt.textContent = `${o.hex} — ${o.nombre}`;
+									if (o.hex === cur) opt.selected = true;
+									return opt;
+								}),
+							);
+							if (!logos.some((o) => o.hex === cur)) sel.selectedIndex = 0;
+						});
+						applyIsoFromSelects();
+					};
+					isoSelects.forEach((sel) => {
+						sel.addEventListener('change', applyIsoFromSelects);
+					});
+
+					// ── Fondo: opciones por paleta activa ─────────────────────────
+					const bgSelect = $('bg-picker');
+					const bgPreview = $('bg-preview');
+					const applyBg = (hex, persist = true) => {
+						document.documentElement.style.setProperty('--color-background', hex);
+						if (bgPreview) bgPreview.style.backgroundColor = hex;
+						if (persist) {
+							const s = readState();
+							s['background'] = hex;
+							writeState(s);
+						}
+					};
+					const syncBg = () => {
+						if (!bgSelect) return;
+						const active = findActive(readState());
+						const fondos = active ? active.fondos : DEFAULTS_FONDOS;
+						const cur = readState()['background'] || DEFAULTS['background'];
+						bgSelect.replaceChildren(
+							...fondos.map((o) => {
+								const opt = document.createElement('option');
+								opt.value = o.hex;
+								opt.textContent = o.nombre;
+								if (o.hex === cur) opt.selected = true;
+								return opt;
+							}),
+						);
+						applyBg(bgSelect.value, false);
+					};
+					if (bgSelect) {
+						bgSelect.addEventListener('change', () => applyBg(bgSelect.value));
+					}
+
+					// ── Sección "Paleta de colores": swatches del tema activo ──────
+					const deck = $('palette-deck');
+					const deckName = $('palette-deck-name');
+					const deckDesc = $('palette-deck-desc');
+					const swatchCard = (s) => {
+						const el = document.createElement('div');
+						el.className =
+							'relative flex h-[104px] w-[112px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-[11px] text-white';
+						el.style.background = s.hex;
+						const hexEl = document.createElement('span');
+						hexEl.className = 'font-mono';
+						hexEl.textContent = s.hex;
+						const nameEl = document.createElement('span');
+						nameEl.className = 'mt-0.5 text-[10px] opacity-80';
+						nameEl.textContent = s.nombre;
+						el.appendChild(hexEl);
+						el.appendChild(nameEl);
+						return el;
+					};
+					const renderDeck = () => {
+						const active = findActive(readState());
+						if (deckName) {
+							deckName.textContent = active
+								? `${active.nombre} (tema activo)`
+								: 'Colores oficiales (tema default)';
+						}
+						if (deckDesc) {
+							deckDesc.textContent = active
+								? active.desc
+								: 'La paleta vigente en global.css: vino + naranja cálido y la escala de vino a azul petróleo. Elegí un tema arriba para cambiar estos swatches.';
+						}
+						if (deck) {
+							deck.replaceChildren(
+								...(active ? active.swatches : DEFAULTS_SWATCHES).map(swatchCard),
+							);
+						}
+					};
+
+					// ── Sincronización completa ────────────────────────────────────
+					const syncAll = () => {
+						syncInputs();
+						renderCards();
+						syncBg();
+						syncIsoSelects();
+						renderDeck();
+					};
+
+					// Opciones por defecto para selects cuando está el tema oficial.
+					const DEFAULTS_LOGOS = [
+						{ hex: '#8c1c3f', nombre: 'Vino' },
+						{ hex: '#5b1133', nombre: 'Vino profundo' },
+						{ hex: '#d5673f', nombre: 'Naranja cálido' },
+						{ hex: '#7b2a5a', nombre: 'Malbec' },
+						{ hex: '#61386a', nombre: 'Ciruela' },
+						{ hex: '#45426d', nombre: 'Índigo' },
+						{ hex: '#324765', nombre: 'Azul acero' },
+						{ hex: '#2f4858', nombre: 'Azul petróleo' },
+						{ hex: '#14141a', nombre: 'Negro noche' },
+						{ hex: '#454560', nombre: 'Gris pizarra' },
+						{ hex: '#8e8e9c', nombre: 'Gris perla' },
+					];
+					const DEFAULTS_FONDOS = [
+						{ hex: '#faf8f6', nombre: 'A · Humo cálido' },
+						{ hex: '#f7f6f8', nombre: 'B · Humo neutro' },
+						{ hex: '#f5f4f6', nombre: 'C · Perla fría' },
+						{ hex: '#f6f1f2', nombre: 'D · Vaina clara' },
+					];
+					const DEFAULTS_SWATCHES = [
+						{ hex: '#8c1c3f', nombre: 'Vino' },
+						{ hex: '#5b1133', nombre: 'Vino profundo' },
+						{ hex: '#d5673f', nombre: 'Naranja cálido' },
+						{ hex: '#7b2a5a', nombre: 'Malbec' },
+						{ hex: '#61386a', nombre: 'Ciruela' },
+						{ hex: '#45426d', nombre: 'Índigo' },
+						{ hex: '#324765', nombre: 'Azul acero' },
+						{ hex: '#2f4858', nombre: 'Azul petróleo' },
+						{ hex: '#f6f6f8', nombre: 'Humo' },
+						{ hex: '#faf8f6', nombre: 'Humo cálido' },
+					];
+
+					$('palette-reset').addEventListener('click', resetPalette);
+
+					// Inicialización: dibujar el estado guardado (o el oficial).
+					syncAll();
 				})();
 			</script>
 		</section>
@@ -787,99 +983,25 @@ const samples: Record<string, string> = {
 					href={link('/paletas/')}
 					class="inline-flex items-center gap-1 rounded-md border border-divider bg-white px-3 py-1.5 text-sm font-semibold text-brand transition-colors hover:border-brand hover:no-underline"
 				>
-					Explorar paletas candidatas →
+					Explorar y comparar temas →
 				</a>
 			</div>
 			<p class="text-ink/80">
-				Paleta definitiva: un acento cálido y una escala de vino a azul,
-				más la sub-paleta <em>vino profundo</em> y los neutros.
+				Este bloque muestra los swatches del <strong>tema activo</strong>:
+				cambian al instante cuando elegís una paleta en el editor de arriba.
+				Cada tema lleva su propia marca (brand), su acento y su escala de
+				neutros, y repinta todo el sitio (incluido el isotipo del header).
 			</p>
-			<div
-				class="mt-8 overflow-x-auto rounded-xl border border-divider/30 bg-surface p-6"
-			>
-				<div class="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1fr]">
-					<!-- Paleta principal -->
-					<div>
-						<p class="text-xs font-medium uppercase tracking-widest text-muted">
-							Paleta principal
-						</p>
-						<div class="mt-4 flex flex-wrap gap-2.5">
-							{
-								paletteMain.map((c) => (
-									<div
-										class="relative flex h-[132px] w-[112px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-xs text-white"
-										style={`background:${c.hex}`}
-									>
-										{ c.highlight && (
-											<span class="absolute left-1/2 top-2 -translate-x-1/2 rounded-full bg-[#ffd27a] px-2 py-0.5 text-[9px] font-semibold text-[#3a2c00]">
-												HIGHLIGHT
-											</span>
-										) }
-										<span class="font-mono">{c.hex}</span>
-										<span class="mt-0.5 text-[10px] opacity-80">{c.name}</span>
-									</div>
-								))
-							}
-						</div>
-					</div>
-
-					<!-- Sub-paleta y neutros -->
-					<div class="space-y-6">
-						<div class="rounded-xl border border-dashed border-divider/60 bg-white p-4">
-							<p class="text-xs font-medium uppercase tracking-widest text-muted">
-								Sub-paleta — Vino profundo
-							</p>
-							<p class="mt-1 text-xs leading-relaxed text-ink/70">
-								Encajan entre el vino y el malbec (matiz ~332–335°).
-								«Tal cual» si querés nota oscura; A/B como puente
-								para gradiente continuo.
-							</p>
-							<div class="mt-3 flex flex-wrap gap-2.5">
-								{
-									paletteWine.map((c) => (
-										<div
-											class="flex h-[116px] w-[104px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-[11px] text-white"
-											style={`background:${c.hex}`}
-										>
-											<span class="font-mono">{c.hex}</span>
-											<span class="mt-0.5 text-[10px] opacity-80">{c.name}</span>
-										</div>
-									))
-								}
-							</div>
-						</div>
-
-						<div class="rounded-xl border border-dashed border-divider/60 bg-white p-4">
-							<p class="text-xs font-medium uppercase tracking-widest text-muted">
-								Escala neutra
-							</p>
-							<p class="mt-1 text-xs leading-relaxed text-ink/70">
-								Fondo, superficies, bordes y jerarquías de texto.
-							</p>
-							<div class="mt-3 flex flex-wrap gap-2.5">
-								{
-									paletteNeutrals.map((c) => (
-										<div
-											class:list={[
-												'flex h-[116px] w-[104px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-[11px]',
-												c.darkText ? 'text-[#14141a]' : 'text-white',
-												'shadow-[inset_0_0_0_1px_rgba(20,20,26,0.08)]',
-											]}
-											style={`background:${c.hex}`}
-										>
-											<span class="font-mono">{c.hex}</span>
-											<span class="mt-0.5 text-[10px] opacity-80">{c.name}</span>
-										</div>
-									))
-								}
-							</div>
-						</div>
-					</div>
-				</div>
-
+			<div class="mt-8 rounded-xl border border-divider/30 bg-surface p-6">
+				<p class="text-xs font-medium uppercase tracking-widest text-muted" id="palette-deck-name">
+					Tema —
+				</p>
+				<p class="mt-1 text-sm text-ink/70" id="palette-deck-desc">—</p>
+				<div id="palette-deck" class="mt-4 flex flex-wrap gap-2.5"></div>
 				<p class="mt-6 border-t border-divider/60 pt-4 text-xs leading-relaxed text-muted">
-					Orden final:{' '}
-					<code class="text-brand">{paletteOrder}</code>
+					Los detalles finos (variación entre brand y brand-dark, neutros de
+					texto, fondos) se eligen desde el editor de arriba o desde
+					<a href={link('/paletas/')} class="text-brand hover:underline">/paletas</a>.
 				</p>
 			</div>
 		</section>
@@ -890,8 +1012,9 @@ const samples: Record<string, string> = {
 			<p class="text-ink/80">
 				<code>docs/logo_indigo.svg</code> — el isotipo (solo el símbolo,
 				sin texto) tiene 3 colores (vino, naranja e índigo). Elegí para
-				cada uno de ellos uno de los colores ya conocidos de la paleta o
-				de la escala de grises y el recolor se aplica en vivo:
+				cada uno de ellos cualquiera de los colores disponibles de la
+				paleta activa (los que ves hecho en el editor de arriba) y el
+				recolor se aplica en vivo:
 			</p>
 
 			<div
@@ -940,19 +1063,15 @@ const samples: Record<string, string> = {
 										data-iso-slot={slot.id}
 										class="w-full rounded-md border border-divider bg-white px-3 py-2 text-sm text-ink"
 									>
-										{
-											isotipoOptions.map((opt) => (
-												<option value={opt.hex} selected={opt.hex === slot.default}>
-													{opt.hex} — {opt.name}
-												</option>
-											))
-										}
+										{/* Las opciones se cargan por JS desde la paleta activa. */}
 									</select>
 								</div>
 							</div>
 						))
 					}
 					<p class="text-xs leading-relaxed text-muted">
+						Las opciones de estos selects son las de la paleta activa
+						(campo <code class="text-brand">logos</code> de cada tema).
 						Ambos isotipos se repintan en el momento: los tres grupos
 						del SVG se pintan con las variables CSS seleccionadas
 						(<code class="text-brand">--iso-c1/c2/c3</code>). En la
@@ -963,18 +1082,6 @@ const samples: Record<string, string> = {
 					</p>
 				</div>
 			</div>
-			<script>
-				const isos = document.querySelectorAll('#isotipo-live .isotipo');
-				if (isos.length) {
-					document.querySelectorAll('[data-iso-slot]').forEach((sel) => {
-						sel.addEventListener('change', () => {
-							isos.forEach((iso) => {
-								iso.style.setProperty(`--iso-${sel.dataset.isoSlot}`, sel.value);
-							});
-						});
-					});
-				}
-			</script>
 		</section>
 
 		<!-- ================= Color de fondo ================= -->
@@ -1008,49 +1115,19 @@ const samples: Record<string, string> = {
 							data-bg-slot
 							class="w-full rounded-md border border-divider bg-white px-3 py-2 text-sm text-ink"
 						>
-							{backgroundOptions.map((opt) => (
-								<option value={opt.hex}>{opt.name}</option>
-							))}
+							{/* Las opciones se cargan por JS desde la paleta activa
+							    (campo `fondos` de cada tema). */}
 						</select>
 					</div>
 					<p class="text-xs leading-relaxed text-muted">
-						La opción <strong>A · Humo cálido (#faf8f6)</strong> es la
-						recomendada por defecto. Las superficies ({'{'}
-						<code class="text-brand">--color-surface</code> #f6f6f8{'{'})
-						y el blanco de las cards no cambian.
+						Las opciones de fondo son las de la paleta activa (campo
+						<code class="text-brand">fondos</code> de cada tema): suaves,
+						ajustadas a la familia de color. Las superficies (
+						<code class="text-brand">--color-surface</code>) y el blanco de
+						las cards no cambian.
 					</p>
 				</div>
 			</div>
-
-			<script>
-				const BG_KEY = 'lalangue-paleta';
-				const BG_OPTIONS = ['#faf8f6', '#f7f6f8', '#f5f4f6', '#f6f1f2'];
-				const bgPreview = document.getElementById('bg-preview');
-				const bgPicker = document.getElementById('bg-picker');
-				const applyBg = (hex) => {
-					document.documentElement.style.setProperty('--color-background', hex);
-					if (bgPreview) bgPreview.style.backgroundColor = hex;
-					// Persistir en la paleta (mismo storage que /paletas y Layout).
-					try {
-						const saved = JSON.parse(localStorage.getItem(BG_KEY) || '{}');
-						saved['background'] = hex;
-						localStorage.setItem(BG_KEY, JSON.stringify(saved));
-					} catch (e) {
-						/* ignorar */
-					}
-				};
-				// Sincronizar el select con el fondo actual.
-				if (bgPicker && bgPreview) {
-					const current = getComputedStyle(document.documentElement)
-						.getPropertyValue('--color-background')
-						.trim();
-					bgPicker.value = BG_OPTIONS.includes(current)
-						? current
-						: '#faf8f6';
-					applyBg(bgPicker.value);
-					bgPicker.addEventListener('change', () => applyBg(bgPicker.value));
-				}
-			</script>
 		</section>
 
 		<!-- ================= Navbar — Tamaño del logo ================= -->

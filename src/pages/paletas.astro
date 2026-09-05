@@ -1,27 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { paletas } from '../data/paletas';
+import { paletas, defaultTokens } from '../data/paletas';
 
 const base = import.meta.env.BASE_URL;
 const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 
 // Datos para el script (se inyectan con define:vars).
-const defaultTokens = {
-	'accent': '#d5673f',
-	background: '#ffffff',
-	surface: '#f6f6f8',
-	divider: '#e4e4ec',
-	'ink': '#2b2b34',
-	'ink-strong': '#14141a',
-	muted: '#6f6f7c',
-};
-
-// Swatch de marca común a todas las paletas (no se toca).
-const marcas = [
-	{ hex: '#8c1c3f', nombre: 'Vino' },
-	{ hex: '#5b1133', nombre: 'Vino profundo' },
-];
+const defaultsData = defaultTokens;
+const paletasData = paletas;
 ---
 
 <Layout title="Paletas — Lalangue">
@@ -31,12 +18,13 @@ const marcas = [
 		>
 		<h1 class="mt-4">Paletas candidatas</h1>
 		<p class="mt-2 max-w-2xl text-ink/80">
-			La paleta <strong>Actual</strong> es la vigente. Las otras cuatro son
-			propuestas para renovar la identidad. Todas mantienen el vino
-			(<code>#8c1c3f</code>) y el vino profundo (<code>#5b1133</code>).
-			Elegí una para <em>previsualizarla en vivo</em> sobre todo el sitio:
-			se guarda en tu navegador y se repinta en cada página (incluido el
-			isotipo del header y del footer).
+			Estas son las 5 paletas derivadas de las familias de color que
+			teníamos en mano (bordeaux, teal, rosa cereza, marfil y azul). Cada
+			una lleva <strong>su propia marca</strong> y repinta todo el sitio
+			en el momento — incluido el isotipo del header y del footer.
+			Elegí una para <em>previsualizarla en vivo</em>: se guarda en tu
+			navegador y persiste entre páginas. <em>Restaurar</em> vuelve a los
+			colores oficiales actuales.
 		</p>
 
 		<!-- Selector de paletas -->
@@ -47,26 +35,6 @@ const marcas = [
 			></div>
 		</section>
 
-		<!-- Marcas inmutables -->
-		<section class="mt-12 rounded-xl border border-divider/30 bg-surface p-6">
-			<p class="text-xs font-semibold uppercase tracking-widest text-muted">
-				Rojos de marca (fijos en todas las paletas)
-			</p>
-			<div class="mt-4 flex flex-wrap gap-2.5">
-				{
-					marcas.map((c) => (
-						<div
-							class="flex h-[104px] w-[112px] flex-col items-center justify-end rounded-[10px] p-2 text-center text-[11px] text-white"
-							style={`background:${c.hex}`}
-						>
-							<span class="font-mono">{c.hex}</span>
-							<span class="mt-0.5 text-[10px] opacity-80">{c.nombre}</span>
-						</div>
-					))
-				}
-			</div>
-		</section>
-
 		<!-- Cómo aplicar -->
 		<section class="mt-10">
 			<h2>Cómo usar esto</h2>
@@ -74,8 +42,12 @@ const marcas = [
 				<li>Hacé clic en una paleta para aplicarla a todo el sitio.</li>
 				<li>Navegá por el sitio: el cambio persiste entre páginas.</li>
 				<li>
-					Usá <strong>Restaurar actual</strong> para volver a los colores
-					vigentes (o el botón del editor en el roadmap).
+					El isotipo usa los colores de marca de la paleta activa
+					(<code>brand</code>, <code>accent</code> e <code>indigo</code>).
+				</li>
+				<li>
+					Usá <strong>Restaurar</strong> (en el roadmap o en la tarjeta
+					activa) para volver a los colores oficiales vigentes.
 				</li>
 			</ul>
 		</section>
@@ -83,8 +55,8 @@ const marcas = [
 
 	<script
 		define:vars={{
-			paletasData: paletas,
-			defaultsData: defaultTokens,
+			paletasData,
+			defaultsData,
 		}}
 	>
 		// Paletas y tokens por defecto, inyectados por define:vars.
@@ -96,14 +68,17 @@ const marcas = [
 
 		// Aplica una paleta: pinta :root y persiste (sitio completo).
 		const applyPalette = (paleta) => {
-			const state = {};
-			for (const key of Object.keys(DEFAULT_TOKENS)) state[key] = DEFAULT_TOKENS[key];
-			Object.assign(state, paleta.tokens);
-			// brand / brand-dark se mantienen fijos en todas.
-			state['brand'] = '#8c1c3f';
-			state['brand-dark'] = '#5b1133';
+			const state = { ...DEFAULT_TOKENS, ...paleta.tokens };
 			localStorage.setItem(KEY, JSON.stringify(state));
 			for (const [k, v] of Object.entries(state)) {
+				document.documentElement.style.setProperty(`--color-${k}`, v);
+			}
+			render();
+		};
+
+		const restoreDefault = () => {
+			localStorage.removeItem(KEY);
+			for (const [k, v] of Object.entries(DEFAULT_TOKENS)) {
 				document.documentElement.style.setProperty(`--color-${k}`, v);
 			}
 			render();
@@ -116,7 +91,7 @@ const marcas = [
 			el.className =
 				'group flex flex-col rounded-xl border p-5 text-left transition-all ' +
 				(active
-					? 'border-brand bg-brand/5 shadow-[0_0_0_1px_#8c1c3f]'
+					? 'border-brand bg-brand/5 shadow-[0_0_0_1px_var(--color-brand)]'
 					: 'border-divider bg-surface hover:border-brand/40 hover:shadow-md');
 
 			const head = document.createElement('div');
@@ -151,8 +126,7 @@ const marcas = [
 			el.appendChild(swatches);
 
 			const hexLine = document.createElement('p');
-			hexLine.className =
-				'mt-3 truncate font-mono text-[0.6875rem] text-muted';
+			hexLine.className = 'mt-3 truncate font-mono text-[0.6875rem] text-muted';
 			hexLine.textContent = paleta.swatches.map((s) => s.hex).join(' · ');
 			el.appendChild(hexLine);
 
@@ -160,22 +134,27 @@ const marcas = [
 			action.className =
 				'mt-4 inline-flex w-fit items-center gap-1 text-sm font-semibold ' +
 				(active ? 'text-brand' : 'text-brand group-hover:text-brand');
-			action.textContent = active ? 'Aplicada ✓' : 'Aplicar esta paleta';
+			action.textContent = active
+				? 'Activa — click para restaurar los colores oficiales'
+				: 'Aplicar esta paleta';
 			el.appendChild(action);
 
-			el.addEventListener('click', () => applyPalette(paleta));
+			el.addEventListener('click', () =>
+				active ? restoreDefault() : applyPalette(paleta),
+			);
 			return el;
 		};
 
 		const render = () => {
-			// Re-evalúa la paleta activa a partir del estado persistido.
+			// Re-evalúa la paleta activa a partir del estado persistido
+			// (cada paleta tiene un `brand` único).
 			let saved = {};
-			try { saved = JSON.parse(localStorage.getItem(KEY) || 'null') || {}; } catch (e) {}
-			const activeAccent = saved['accent'] || DEFAULT_TOKENS['accent'];
+			try {
+				saved = JSON.parse(localStorage.getItem(KEY) || 'null') || {};
+			} catch (e) {}
+			const activeBrand = saved['brand'];
 			PALETAS.forEach((p) => {
-				p.__active = p.id === 'actual'
-					? activeAccent === DEFAULT_TOKENS['accent']
-					: activeAccent === p.tokens['accent'];
+				p.__active = !!activeBrand && activeBrand === p.tokens['brand'];
 			});
 			grid.replaceChildren(...PALETAS.map(card));
 		};
