@@ -17,6 +17,7 @@
  */
 
 import Isotipo from './Isotipo.astro';
+import IsotipoBandera from './IsotipoBandera.astro';
 
 type NavChild = { label: string; href: string };
 type NavItem = {
@@ -68,18 +69,27 @@ const link = (href: string) =>
 	<div
 		class="relative mx-auto flex h-[var(--header-h)] max-w-7xl items-center px-4 sm:px-6 lg:px-8"
 	>
-		<!-- Logo (flex-start) -->
-		<a
-			href={base || '/'}
-			class="flex shrink-0 items-center gap-4 hover:no-underline"
-			aria-label="Inicio — Facultad Lalangue"
-		>
-			<Isotipo
-				class="h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
-				wine="var(--color-brand)"
-				accent="var(--color-accent)"
-				indigo="var(--color-indigo)"
-			/>
+<!-- Logo (flex-start): el clásico o la bandera, según la elección del
+		     roadmap (lalangue-logo-nav → data-logo-nav en <html>; el CSS de
+		     global.css muestra uno u otro). Ambos se repintan en vivo con
+		     var(--color-brand/accent/indigo). -->
+			<a
+				href={base || '/'}
+				class="flex shrink-0 items-center gap-4 hover:no-underline"
+				aria-label="Inicio — Facultad Lalangue"
+			>
+				<Isotipo
+					class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
+					wine="var(--color-brand)"
+					accent="var(--color-accent)"
+					indigo="var(--color-indigo)"
+				/>
+				<IsotipoBandera
+					class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
+					wine="var(--color-brand)"
+					accent="var(--color-accent)"
+					indigo="var(--color-indigo)"
+				/>
 			<span class="flex flex-col leading-none">
 				<!-- "FACULTAD" en Montserrat (sin deformar), con el ancho
 				     repartido letra por letra para encajar exactamente

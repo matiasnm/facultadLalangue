@@ -65,6 +65,17 @@ const { title } = Astro.props;
 				} catch (e) {
 					/* paleta dañada: ignorar y usar defaults */
 				}
+				// Logo del navbar: Isotipo (default) o Bandera. Se aplica como
+				// data-logo-nav en <html> para que el CSS muestre el SVG que
+				// corresponde (ver .logo-nav-* en global.css). El roadmap lo
+				// cambia en vivo con la misma key.
+				let logoNav = 'isotipo';
+				try {
+					if (localStorage.getItem('lalangue-logo-nav') === 'bandera') logoNav = 'bandera';
+				} catch (e) {
+					/* ignorar */
+				}
+				document.documentElement.dataset.logoNav = logoNav;
 			})();
 		</script>
 	</head>

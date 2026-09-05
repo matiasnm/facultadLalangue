@@ -20,9 +20,14 @@
  *
  * Además de los tokens, cada paleta declara:
  *   - swatches: los colores representativos (preview y tarjetas del editor).
- *   - fondos: opciones de fondo claras y coherentes con la familia.
  *   - logos: colores disponibles para recolorear el isotipo/logo cuando
  *     esta paleta está activa.
+ *
+ * NOTA: el color de fondo YA NO depende de la paleta. Se elige aparte
+ * (roadmap → "Color de fondo") entre blancos fijos próximos al blanco puro,
+ * para preservar la legibilidad. Aunque los tokens de cada paleta traen un
+ * `background`, aplicar una paleta no lo usa: applyPalette lo reemplaza por
+ * la elección vigente (ver script del editor en roadmap.astro).
  */
 export interface Paleta {
 	id: string;
@@ -33,8 +38,6 @@ export interface Paleta {
 	tokens: Record<string, string>;
 	/** Swatches para mostrar (etiqueta + hex). */
 	swatches: { hex: string; nombre: string }[];
-	/** Opciones de fondo del sitio dentro de esta paleta. */
-	fondos: { hex: string; nombre: string }[];
 	/** Opciones de color para el isotipo/logo dentro de esta paleta. */
 	logos: { hex: string; nombre: string }[];
 }
@@ -93,12 +96,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#2f4858', nombre: 'Azul petróleo' },
 			{ hex: '#f6f6f8', nombre: 'Humo' },
 		],
-		fondos: [
-			{ hex: '#faf8f6', nombre: 'A · Humo cálido' },
-			{ hex: '#f7f6f8', nombre: 'B · Humo neutro' },
-			{ hex: '#f5f4f6', nombre: 'C · Perla fría' },
-			{ hex: '#f6f1f2', nombre: 'D · Vaina clara' },
-		],
 		logos: [
 			{ hex: '#8c1c3f', nombre: 'Vino' },
 			{ hex: '#5b1133', nombre: 'Vino profundo' },
@@ -145,12 +142,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#faf7f2', nombre: 'Crema' },
 			{ hex: '#7a7163', nombre: 'Taupe cálido' },
 		],
-		fondos: [
-			{ hex: '#fffdf9', nombre: 'A · Marfil' },
-			{ hex: '#faf7f2', nombre: 'B · Crema' },
-			{ hex: '#f6f1e8', nombre: 'C · Arena' },
-			{ hex: '#f0e9db', nombre: 'D · Vaina' },
-		],
 		logos: [
 			{ hex: '#8c1c3f', nombre: 'Vino' },
 			{ hex: '#5b1133', nombre: 'Vino profundo' },
@@ -193,12 +184,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#3f4752', nombre: 'Pizarra' },
 			{ hex: '#f6f7f3', nombre: 'Humo verdoso' },
 			{ hex: '#697069', nombre: 'Topo' },
-		],
-		fondos: [
-			{ hex: '#fdfefb', nombre: 'A · Blanca' },
-			{ hex: '#f6f7f3', nombre: 'B · Humo verdoso' },
-			{ hex: '#f0f3ec', nombre: 'C · Salvia claro' },
-			{ hex: '#e9eee4', nombre: 'D · Vaina' },
 		],
 		logos: [
 			{ hex: '#8c1c3f', nombre: 'Vino' },
@@ -243,12 +228,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#f6f5f4', nombre: 'Humo cálido' },
 			{ hex: '#756a64', nombre: 'Taupe' },
 		],
-		fondos: [
-			{ hex: '#ffffff', nombre: 'A · Blanco' },
-			{ hex: '#faf7f5', nombre: 'B · Humo cálido' },
-			{ hex: '#f5f1ef', nombre: 'C · Arena' },
-			{ hex: '#efe9e5', nombre: 'D · Vaina' },
-		],
 		logos: [
 			{ hex: '#8c1c3f', nombre: 'Vino' },
 			{ hex: '#5b1133', nombre: 'Vino profundo' },
@@ -291,12 +270,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#45426d', nombre: 'Índigo' },
 			{ hex: '#2f4858', nombre: 'Azul petróleo' },
 			{ hex: '#f3f4f7', nombre: 'Acero' },
-		],
-		fondos: [
-			{ hex: '#ffffff', nombre: 'A · Blanco' },
-			{ hex: '#f7f8fa', nombre: 'B · Acero claro' },
-			{ hex: '#f1f2f6', nombre: 'C · Perla fría' },
-			{ hex: '#e9ebf1', nombre: 'D · Vaina' },
 		],
 		logos: [
 			{ hex: '#8c1c3f', nombre: 'Vino' },
@@ -343,12 +316,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#7eb2bc', nombre: 'Pacífico' },
 			{ hex: '#fff9e5', nombre: 'Marfil' },
 		],
-		fondos: [
-			{ hex: '#fff9e5', nombre: 'A · Marfil' },
-			{ hex: '#fcf4dc', nombre: 'B · Crema' },
-			{ hex: '#f7eed0', nombre: 'C · Arena' },
-			{ hex: '#f1e6c4', nombre: 'D · Vaina' },
-		],
 		logos: [
 			{ hex: '#4f1324', nombre: 'Bordeaux noche' },
 			{ hex: '#360d1a', nombre: 'Bordeaux oscuro' },
@@ -391,12 +358,6 @@ export const paletas: Paleta[] = [
 			{ hex: '#7eb2bc', nombre: 'Pacífico' },
 			{ hex: '#00495a', nombre: 'Verde petróleo' },
 			{ hex: '#fff9e5', nombre: 'Marfil' },
-		],
-		fondos: [
-			{ hex: '#fff9e5', nombre: 'A · Marfil' },
-			{ hex: '#fbf4e4', nombre: 'B · Crema' },
-			{ hex: '#f6eee1', nombre: 'C · Arena' },
-			{ hex: '#f0e6d6', nombre: 'D · Vaina' },
 		],
 		logos: [
 			{ hex: '#9d2a45', nombre: 'Cereza' },

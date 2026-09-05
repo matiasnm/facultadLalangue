@@ -92,6 +92,20 @@
     stroke: var(--iso-c3, #45426d) !important;
   }
 
+  /* Logo del navbar — elección Isotipo (default) vs Bandera.
+     El roadmap guarda la elección en 'lalangue-logo-nav' y el Layout la
+     aplica como data-logo-nav en <html> (ver Layout.astro y roadmap.astro).
+     El SVG alternativo se muestra solo cuando corresponde. */
+  .logo-nav-bandera {
+    display: none;
+  }
+  html[data-logo-nav='bandera'] .logo-nav-plain {
+    display: none;
+  }
+  html[data-logo-nav='bandera'] .logo-nav-bandera {
+    display: block;
+  }
+
   /* Base: p, span y textos generales en DM Sans, 14px, line-height 1.6 */
   body {
     margin: 0;
