@@ -1,0 +1,135 @@
+---
+/**
+ * ModalPersona — popup de perfil de un integrante del plantel.
+ *
+ * Se monta UNA vez por página (por ahora solo /plantel-academico). Las cards
+ * con [data-persona-card] que genera BloqueRender (bloques tipo 'equipo' con
+ * `modal`) exponen nombre, título, siglas y bio en atributos data-*. Este
+ * componente los lee al abrir, los pinta y se cierra con la X, tocando fuera
+ * del panel (backdrop/padding) o presionando Escape. En teléfonos el overlay
+ * ocupa toda la pantalla y el panel se centra con scroll interno.
+ */
+---
+
+<div
+	data-persona-root
+	hidden
+	class="fixed inset-0 z-[60] items-center justify-center overflow-y-auto bg-night/50 p-4 backdrop-blur-[2px] sm:p-6"
+>
+	<div
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="persona-modal-titulo"
+		class="relative m-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
+	>
+		<button
+			type="button"
+			data-persona-close
+			aria-label="Cerrar perfil"
+			class="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-divider/40 text-ink/70 transition-colors hover:bg-divider hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+		>
+			<svg
+				viewBox="0 0 24 24"
+				class="h-5 w-5"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				aria-hidden="true"
+			>
+				<path d="m6 6 12 12M18 6 6 18" />
+			</svg>
+		</button>
+
+		<div data-persona-avatar class="flex justify-center"></div>
+
+		<div class="mt-4 text-center">
+			<p data-persona-titulo class="text-xs font-semibold uppercase tracking-widest text-accent"></p>
+			<h3 data-persona-nombre id="persona-modal-titulo" class="mt-1 text-2xl font-semibold text-ink-strong"></h3>
+		</div>
+
+		<div data-persona-bio class="mt-5 space-y-3 text-[0.9375rem] leading-relaxed text-ink/80"></div>
+
+		<p
+			data-persona-sinbio
+			hidden
+			class="mt-5 rounded-lg border border-divider/30 bg-surface p-4 text-sm text-ink/75"
+		>
+			Todavía no tenemos publicada su bio. ¡La sumamos pronto!
+		</p>
+	</div>
+</div>
+
+<script>
+	const root = document.querySelector('[data-persona-root]');
+	if (!root) throw new Error('ModalPersona: no se encontró [data-persona-root]');
+
+	const titulo = root.querySelector('[data-persona-titulo]');
+	const nombre = root.querySelector('[data-persona-nombre]');
+	const avatar = root.querySelector('[data-persona-avatar]');
+	const bio = root.querySelector('[data-persona-bio]');
+	const sinBio = root.querySelector('[data-persona-sinbio]');
+	const closeBtn = root.querySelector('[data-persona-close]');
+	let ultimaCard = null;
+
+	const pintarAvatar = (siglas) => {
+		avatar.replaceChildren();
+		const d = document.createElement('div');
+		d.className =
+			'flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-brand/15 via-accent/10 to-indigo/15 text-2xl font-semibold text-brand ring-1 ring-brand/20';
+		const s = document.createElement('span');
+		s.textContent = siglas || '—';
+		d.appendChild(s);
+		avatar.appendChild(d);
+	};
+
+	const abrir = (card) => {
+		const siglas = card.dataset.personaSiglas || '';
+		const parrafos = JSON.parse(card.dataset.personaBio || '[]');
+
+		pintarAvatar(siglas);
+		titulo.textContent = card.dataset.personaTitulo || '';
+		titulo.hidden = !titulo.textContent;
+		nombre.textContent = card.dataset.personaNombre || '';
+		bio.replaceChildren(
+			...(Array.isArray(parrafos) ? parrafos : [parrafos]).map((p) => {
+				const el = document.createElement('p');
+				el.textContent = p;
+				return el;
+			}),
+		);
+		sinBio.hidden = parrafos.length > 0;
+
+		ultimaCard = card;
+		root.hidden = false;
+		root.style.display = 'flex';
+		document.body.style.overflow = 'hidden';
+		closeBtn.focus();
+	};
+
+	const cerrar = () => {
+		root.hidden = true;
+		root.style.display = '';
+		document.body.style.overflow = '';
+		if (ultimaCard) {
+			ultimaCard.focus();
+			ultimaCard = null;
+		}
+	};
+
+	// Click en una card del plantel con popup → abrir
+	document.querySelectorAll('[data-persona-card]').forEach((card) => {
+		card.addEventListener('click', () => abrir(card));
+	});
+
+	// Click fuera del panel (backdrop o padding) → cerrar
+	root.addEventListener('pointerdown', (e) => {
+		if (e.target === root) cerrar();
+	});
+
+	closeBtn.addEventListener('click', cerrar);
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && !root.hidden) cerrar();
+	});
+</script>

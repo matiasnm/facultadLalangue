@@ -75,6 +75,8 @@ export type BloqueEquipo = {
 	tipo: 'equipo';
 	personas: { nombre: string; titulo?: string; bio?: string[]; foto?: string }[];
 	columnas?: 2 | 3 | 4;
+	/** true → cada card abre un popup de perfil (ModalPersona). */
+	modal?: boolean;
 };
 export type BloqueTarjetas = {
 	tipo: 'tarjetas';
@@ -144,8 +146,8 @@ export const persona = (nombre, titulo, bio, foto?, boton?) =>
 		foto,
 		boton,
 	}) as BloquePersona;
-export const equipo = (personas, columnas = 3) =>
-	({ tipo: 'equipo', personas, columnas }) as BloqueEquipo;
+export const equipo = (personas, columnas = 3, modal = false) =>
+	({ tipo: 'equipo', personas, columnas, modal: modal || undefined }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 
 /* ------------------------------------------------------------------ */

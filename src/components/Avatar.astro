@@ -1,0 +1,26 @@
+---
+/**
+ * Avatar — placeholder de foto con las iniciales de la persona.
+ *
+ * Mientras no haya fotos del plantel, cada integrante se representa con un
+ * círculo en tonos de la marca y sus dos primeras iniciales. El tamaño se
+ * controla desde el uso con `class` (p. ej. "h-16 w-16 text-lg" en las cards
+ * del grid o "h-24 w-24 text-2xl" en la decana y en el popup).
+ */
+import { siglasDe } from '../data/docentes';
+
+interface Props {
+	name: string;
+	class?: string;
+}
+
+const { name, class: className = 'h-14 w-14 text-base' } = Astro.props;
+const siglas = siglasDe(name);
+---
+
+<div
+	class={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand/15 via-accent/10 to-indigo/15 font-semibold text-brand ring-1 ring-brand/20 ${className}`}
+	aria-hidden="true"
+>
+	<span>{siglas}</span>
+</div>

@@ -7,6 +7,7 @@
  * UNA VEZ en BloqueRender.
  */
 import { titulo, texto, persona, equipo, tarjetas } from './componentes';
+import { directores, docentes } from './docentes';
 import type { BloquePagina } from './componentes';
 
 export const plantelSecciones: BloquePagina[] = [
@@ -31,10 +32,7 @@ export const plantelSecciones: BloquePagina[] = [
 
 	/* ── Directores académicos ─────────────────────────────────────────── */
 	titulo('Directores Académicos'),
-	equipo([
-		{ nombre: 'Lic. Gabriela Artaza Toro', titulo: 'Directora Académica' },
-		{ nombre: 'Lic. Diego Núñez', titulo: 'Director Académico' },
-	]),
+	equipo(directores, 2, true),
 
 	/* ── Comité Científico ─────────────────────────────────────────────── */
 	titulo('Comité Científico'),
@@ -60,25 +58,7 @@ export const plantelSecciones: BloquePagina[] = [
 	texto([
 		'Nuestro equipo docente está compuesto por **profesionales de renombre** con amplia experiencia en psicoanálisis, psicoterapia e investigación. En Facultad Lalangue, no solo aprenderás teoría, sino que contarás con el acompañamiento de especialistas que te guiarán en cada etapa de tu formación.',
 	]),
-	equipo([
-		{ nombre: 'Dra. Marta Gerez Ambertín' },
-		{ nombre: 'Lic. Macarena Cao Gené' },
-		{ nombre: 'Lic. Fabiana Tomei' },
-		{ nombre: 'Lic. Lucas Vázquez Topssian' },
-		{ nombre: 'Lic. Ester Noemí Migrabi' },
-		{ nombre: 'Lic. Vanessa Carpaneto Sueldo' },
-		{ nombre: 'Lic. Juan Manuel Martínez' },
-		{ nombre: 'Lic. José Joaquín Valderrama' },
-		{ nombre: 'Dra. Verónica Molina Gerstner' },
-		{ nombre: 'Lic. Silvia Kargodorian' },
-		{ nombre: 'Lic. Juan Augusto Laplacette' },
-		{ nombre: 'Lic. Gisela Manero' },
-		{ nombre: 'Lic. Pía Martina' },
-		{ nombre: 'Lic. Yamila Coronel' },
-		{ nombre: 'Lic. Alejandra Giudice' },
-		{ nombre: 'Lic. Sebastián Mosquera' },
-		{ nombre: 'Lic. Noelia Benedetto' },
-	]),
+	equipo(docentes, 3, true),
 
 	/* ── Nuestras formaciones ──────────────────────────────────────────── */
 	titulo('Nuestras formaciones'),
