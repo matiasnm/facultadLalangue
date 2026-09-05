@@ -1,6 +1,6 @@
 /*
  * Design tokens globales — Facultad LaLagüe
- * Paleta definitiva: vino / naranja cálido + escala noche (ver /roadmap).
+ * Tema default: vino + terracota apagado + escala noche (ver /roadmap).
  * Convención: todos los tamaños usan rem (1rem = 16px).
  *
  * Se importa Tailwind SIN preflight: el inspector solo muestra lo que
@@ -12,25 +12,26 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @theme {
-  /* Paleta definitiva — ver /roadmap → Paleta de colores.
+  /* Tema default: Terracota apagado (ver /roadmap → Paleta de colores).
      Base en blanco: fondo y superficies claras con tinta oscura.
-     brand / accent / escala de vino a azul / night no cambian. */
+     El editor de /roadmap puede guardar otra paleta en localStorage y
+     repintar todo el sitio (--color-* en :root). */
   --color-brand: #8c1c3f; /* vino — acentos, enlaces, bordes, selección */
   --color-brand-dark: #5b1133; /* vino profundo — variante oscura */
-  --color-accent: #d5673f; /* naranja cálido — hover del menú, highlight */
-  --color-surface: #f6f6f8; /* humo claro — header, cards, superficies */
-  --color-background: #faf8f6; /* humo cálido — fondo del sitio (no blanco puro) */
-  --color-divider: #e4e4ec; /* gris perla — bordes y separadores */
-  --color-ink: #2b2b34; /* tinta — texto de párrafo */
-  --color-ink-strong: #14141a; /* tinta fuerte — títulos */
-  --color-muted: #6f6f7c; /* gris medio — textos secundarios */
-  --color-dim: #8e8e9c; /* gris perla — textos de apoyo */
+  --color-accent: #c96f5a; /* terracota apagado — hover del menú, highlight */
+  --color-surface: #f6f5f4; /* humo cálido — header, cards, superficies */
+  --color-background: #ffffff; /* blanco — fondo del sitio */
+  --color-divider: #e9e2dc; /* arena — bordes y separadores */
+  --color-ink: #332d2b; /* tinta — texto de párrafo */
+  --color-ink-strong: #1a1614; /* tinta fuerte — títulos */
+  --color-muted: #756a64; /* gris medio — textos secundarios */
+  --color-dim: #948b85; /* gris perla — textos de apoyo */
   --color-malbec: #7b2a5a; /* malbec — escala principal */
   --color-ciruela: #61386a; /* ciruela — escala principal */
   --color-indigo: #45426d; /* índigo — escala principal */
   --color-azul-acero: #324765; /* azul acero — escala principal */
   --color-azul-petroleo: #2f4858; /* azul petróleo — escala principal */
-  --color-night: #14141a; /* negro noche — texto sobre superficies claras */
+  --color-night: #191716; /* negro cálido — texto sobre superficies claras */
   --header-h: 6.25rem; /* altura del header — 100px con base de 16px */
 
   /* Tipografías de Google Fonts */
@@ -73,9 +74,9 @@
   /* Isotipo — recolor en vivo (roadmap).
      Los 3 grupos del SVG llevan data-c 1/2/3 y se pintan con CSS
      variables --iso-c1/2/3. Son la llave del "color picker" del roadmap.
-     El fallback apunta a la paleta activa (--color-*): por defecto el
-     isotipo sigue al tema; si el editor o el Layout fijan --iso-c* en
-     :root, el isotipo usa colores propios e independientes. */
+     El Layout fija siempre --iso-c* en :root — paleta "Original" por
+     defecto, o la que elija el usuario en el roadmap — independiente del
+     tema del sitio. Quedan como fallback de seguridad los var(--color-*). */
   .isotipo [data-c="1"],
   .isotipo [data-c="1"] path,
   .isotipo [data-c="1"] > path {

@@ -34,23 +34,23 @@ const { title } = Astro.props;
 		<script is:inline>
 			(() => {
 				const KEY = 'lalangue-paleta';
-				// Tokens de la paleta por defecto (los oficiales de global.css).
+				// Tokens del tema default (Terracota apagado — los de global.css).
 				// (El editor de /roadmap guarda cualquier token en localStorage;
 				//  acá se aplican todos los que haya: la elección de tema repinta
 				//  el sitio entero, incluido el isotipo del header y el footer.)
 				const TOKENS = {
 					brand: '#8c1c3f',
 					'brand-dark': '#5b1133',
-					'accent': '#d5673f',
+					'accent': '#c96f5a',
 					indigo: '#45426d',
-					night: '#14141a',
-					background: '#faf8f6',
-					surface: '#f6f6f8',
-					divider: '#e4e4ec',
-					'ink': '#2b2b34',
-					'ink-strong': '#14141a',
-					muted: '#6f6f7c',
-					dim: '#8e8e9c',
+					night: '#191716',
+					background: '#ffffff',
+					surface: '#f6f5f4',
+					divider: '#e9e2dc',
+					'ink': '#332d2b',
+					'ink-strong': '#1a1614',
+					muted: '#756a64',
+					dim: '#948b85',
 				};
 				window.__LALANGUE_PALETA = { KEY, TOKENS };
 				try {
@@ -66,29 +66,22 @@ const { title } = Astro.props;
 					/* paleta dañada: ignorar y usar defaults */
 				}
 				// Isotipo con colores propios, independientes de la paleta del
-				// sitio. La elección se guarda en 'lalangue-iso' por el editor
-				// de /roadmap:
-				//   - 'active' (o sin clave): el isotipo sigue al tema del sitio
-				//     (referencias a --color-brand/accent/indigo), como siempre.
-				//   - una paleta específica: literales fijos, aunque después
-				//     cambies el tema; todo el sitio usa esos colores.
+				// sitio. El editor de /roadmap guarda la elección en
+				// 'lalangue-iso' como { pal, c1, c2, c3 } — hex literales. Sin
+				// elección (o inválida), el isotipo usa la paleta "Original":
+				// vino / naranja cálido / índigo, los colores de siempre.
 				let iso = null;
 				try {
 					iso = JSON.parse(localStorage.getItem('lalangue-iso') || 'null');
 				} catch (e) {
 					iso = null;
 				}
-				if (iso && iso.pal && iso.pal !== 'active') {
-					const hex = (v, fb) =>
-						typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : fb;
-					document.documentElement.style.setProperty('--iso-c1', hex(iso.c1, '#8c1c3f'));
-					document.documentElement.style.setProperty('--iso-c2', hex(iso.c2, '#d5673f'));
-					document.documentElement.style.setProperty('--iso-c3', hex(iso.c3, '#45426d'));
-				} else {
-					document.documentElement.style.setProperty('--iso-c1', 'var(--color-brand)');
-					document.documentElement.style.setProperty('--iso-c2', 'var(--color-accent)');
-					document.documentElement.style.setProperty('--iso-c3', 'var(--color-indigo)');
-				}
+				const hex = (v, fb) =>
+					typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : fb;
+				const ISO_DEF = { c1: '#8c1c3f', c2: '#d5673f', c3: '#45426d' };
+				document.documentElement.style.setProperty('--iso-c1', hex(iso && iso.c1, ISO_DEF.c1));
+				document.documentElement.style.setProperty('--iso-c2', hex(iso && iso.c2, ISO_DEF.c2));
+				document.documentElement.style.setProperty('--iso-c3', hex(iso && iso.c3, ISO_DEF.c3));
 				// Logo del navbar: Isotipo (default) o Bandera. Se aplica como
 				// data-logo-nav en <html> para que el CSS muestre el SVG que
 				// corresponde (ver .logo-nav-* en global.css). El roadmap lo
@@ -100,6 +93,17 @@ const { title } = Astro.props;
 					/* ignorar */
 				}
 				document.documentElement.dataset.logoNav = logoNav;
+				// Altura del logo del navbar (roadmap → "Logo del navbar").
+				// Se guarda como 'lalangue-logo-h' (px, 8..24); default 11
+				// (= h-11, el tamaño clásico de Tailwind: 2.75rem / 44px).
+				let logoH = 11;
+				try {
+					const n = parseInt(localStorage.getItem('lalangue-logo-h') || '', 10);
+					if (Number.isFinite(n) && n >= 8 && n <= 24) logoH = n;
+				} catch (e) {
+					/* ignorar */
+				}
+				document.documentElement.style.setProperty('--logo-h', String(logoH));
 			})();
 		</script>
 	</head>

@@ -4,7 +4,7 @@
  * Dado el selector dispuesto en /roadmap — "Editor de paleta en vivo" — son
  * 7 paletas en dos grupos:
  *
- *   1. Las CANDIDATAS CLÁSICAS (Actual + A·Oro viejo, B·Salvia serena,
+ *   1. Las CANDIDATAS CLÁSICAS (Original + A·Oro viejo, B·Salvia serena,
  *      C·Terracota apagado, D·Acero + bronce): todas mantienen la marca
  *      vino fija (brand #8c1c3f, brand-dark #5b1133) y varían el acento,
  *      los neutros y la escala. Como comparten la marca, el tema activo se
@@ -42,21 +42,22 @@ export interface Paleta {
 	logos: { hex: string; nombre: string }[];
 }
 
-/** Tokens por defecto del sitio (los valores oficiales de global.css).
- *  Se usan para "Restaurar" y como base antes de aplicar una paleta. */
+/** Tokens por defecto del sitio — el tema default es "C · Terracota apagado"
+ *  (los mismos valores de global.css). Se usan para "Restaurar" y como base
+ *  antes de aplicar una paleta. */
 export const defaultTokens: Record<string, string> = {
 	brand: '#8c1c3f',
 	'brand-dark': '#5b1133',
-	accent: '#d5673f',
+	accent: '#c96f5a',
 	indigo: '#45426d',
-	night: '#14141a',
-	background: '#faf8f6',
-	surface: '#f6f6f8',
-	divider: '#e4e4ec',
-	'ink': '#2b2b34',
-	'ink-strong': '#14141a',
-	muted: '#6f6f7c',
-	dim: '#8e8e9c',
+	night: '#191716',
+	background: '#ffffff',
+	surface: '#f6f5f4',
+	divider: '#e9e2dc',
+	'ink': '#332d2b',
+	'ink-strong': '#1a1614',
+	muted: '#756a64',
+	dim: '#948b85',
 	// Escala clásica vino→azul (seguía en uso en el roadmap como referencia).
 	malbec: '#7b2a5a',
 	ciruela: '#61386a',
@@ -68,8 +69,8 @@ export const paletas: Paleta[] = [
 	/* ═══════════ CANDIDATAS CLÁSICAS (marca vino fija) ═══════════ */
 	{
 		id: 'actual',
-		nombre: 'Actual',
-		desc: 'Paleta vigente: acento naranja cálido y escala de vino a azul petróleo. Calidez + autoridad.',
+		nombre: 'Original',
+		desc: 'Paleta original: acento naranja cálido y escala de vino a azul petróleo. La que dio identidad al sitio, con calidez + autoridad.',
 		tokens: {
 			brand: '#8c1c3f',
 			'brand-dark': '#5b1133',
