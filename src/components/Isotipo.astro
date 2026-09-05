@@ -1,28 +1,22 @@
 ---
 interface Props {
-	wine?: string;
-	accent?: string;
-	indigo?: string;
 	class?: string;
 }
-const {
-	wine = '#8c1c3f',
-	accent = '#d5673f',
-	indigo = '#45426d',
-	class: className,
-} = Astro.props;
+const { class: className } = Astro.props;
 const sizeClass = className ?? 'h-auto w-full max-w-xs';
 ---
 
 <!-- Isotipo del logo (docs/logo_indigo.svg).
      Los 3 grupos usan data-c 1/2/3 y se pintan via CSS variables
-     --iso-c1/2/3 (ver global.css). Permite recolor en vivo desde el roadmap. -->
+     --iso-c1/2/3 (ver global.css). Resuelven así:
+       . isotipo de la paleta activa por defecto (fallback var(--color-*)),
+       . colores propios e independientes si el editor de /roadmap o el
+         Layout fijan --iso-c* en :root. -->
 <svg
 	viewBox="0 0 558.25281 580.5907"
 	class:list={['isotipo', sizeClass]}
 	role="img"
 	aria-label="Isotipo Lalangue"
-	style={`--iso-c1:${wine};--iso-c2:${accent};--iso-c3:${indigo}`}
 >
 <g
      id="g43"

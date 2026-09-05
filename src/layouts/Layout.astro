@@ -65,6 +65,30 @@ const { title } = Astro.props;
 				} catch (e) {
 					/* paleta dañada: ignorar y usar defaults */
 				}
+				// Isotipo con colores propios, independientes de la paleta del
+				// sitio. La elección se guarda en 'lalangue-iso' por el editor
+				// de /roadmap:
+				//   - 'active' (o sin clave): el isotipo sigue al tema del sitio
+				//     (referencias a --color-brand/accent/indigo), como siempre.
+				//   - una paleta específica: literales fijos, aunque después
+				//     cambies el tema; todo el sitio usa esos colores.
+				let iso = null;
+				try {
+					iso = JSON.parse(localStorage.getItem('lalangue-iso') || 'null');
+				} catch (e) {
+					iso = null;
+				}
+				if (iso && iso.pal && iso.pal !== 'active') {
+					const hex = (v, fb) =>
+						typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : fb;
+					document.documentElement.style.setProperty('--iso-c1', hex(iso.c1, '#8c1c3f'));
+					document.documentElement.style.setProperty('--iso-c2', hex(iso.c2, '#d5673f'));
+					document.documentElement.style.setProperty('--iso-c3', hex(iso.c3, '#45426d'));
+				} else {
+					document.documentElement.style.setProperty('--iso-c1', 'var(--color-brand)');
+					document.documentElement.style.setProperty('--iso-c2', 'var(--color-accent)');
+					document.documentElement.style.setProperty('--iso-c3', 'var(--color-indigo)');
+				}
 				// Logo del navbar: Isotipo (default) o Bandera. Se aplica como
 				// data-logo-nav en <html> para que el CSS muestre el SVG que
 				// corresponde (ver .logo-nav-* en global.css). El roadmap lo

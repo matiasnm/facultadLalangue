@@ -12,54 +12,11 @@ const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 
 /**
- * Isotipo — colección mixta.
- * Un plano (vino), el original en greyscale, y cuatro combinaciones
- * de la paleta. Cada celda define los 3 colores de los grupos del SVG.
- */
-const isotipoMarks = [
-	{
-		name: 'Vino',
-		wine: '#8c1c3f',
-		accent: '#8c1c3f',
-		indigo: '#8c1c3f',
-	},
-	{
-		name: 'Original · greyscale',
-		wine: '#1b1b24',
-		accent: '#8e8e9c',
-		indigo: '#454560',
-	},
-	{
-		name: 'Azul acero · Azul acero · Vino profundo',
-		wine: '#324765',
-		accent: '#324765',
-		indigo: '#5b1133',
-	},
-	{
-		name: 'Vino profundo · Azul acero · Ciruela',
-		wine: '#5b1133',
-		accent: '#324765',
-		indigo: '#61386a',
-	},
-	{
-		name: 'Índigo · Ciruela · Azul profundo',
-		wine: '#45426d',
-		accent: '#61386a',
-		indigo: '#2f4858',
-	},
-	{
-		name: 'Naranja · Índigo · Vino (rotación del original)',
-		wine: '#d5653e',
-		accent: '#4c3c6c',
-		indigo: '#620f31',
-	},
-];
-
-/**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
- * Los 3 slots permiten recolorear el logo; las opciones disponibles para
- * cada slot se cargan dinámicamente desde la paleta activa (ver el editor
- * de paleta en vivo). Estos datos solo mantienen etiqueta y nota.
+ * Los 3 slots permiten recolorear el logo; las opciones de cada slot se
+ * cargan dinámicamente desde la paleta elegida para el isotipo (dropdown
+ * "Paleta para el isotipo" en el editor en vivo). Estos datos solo
+ * mantienen etiqueta y nota.
  */
 const isotipoSlots = [
 	{
@@ -821,39 +778,106 @@ const samples: Record<string, string> = {
 							writeState(s);
 							// al ajustar a mano, el tema deja de estar "activo"
 							renderCards();
-							// y el isotipo de preview vuelve a pintarse con las
-							// variables CSS (para reflejar el token ajustado).
-							document.querySelectorAll('#isotipo-live .isotipo').forEach((iso) => {
-								isoSelects.forEach((sel) =>
-									iso.style.removeProperty(`--iso-${sel.dataset.isoSlot}`),
-								);
-							});
+							// y en modo "seguir al tema" el isotipo se re-deriva
+							// del token ajustado.
+							isoToActiveTokens();
 						});
 					});
 
-					// ── Isotipo: selects de color por paleta activa ────────────────
+					// ── Isotipo: colores independientes de la paleta ───────────────
+					// Elección guardada en 'lalangue-iso':
+					//   { pal: 'active' | '<paleta>', c1, c2, c3 }
+					//  - 'active': el isotipo sigue al tema del sitio (--color-*).
+					//  - paleta propia: el isotipo usa los logos de esa paleta
+					//    aunque el tema del sitio cambie después.
 					const isoSelects = Array.from(document.querySelectorAll('[data-iso-slot]'));
-					const slotDefault = (slot) => {
-						const s = readState();
-						if (slot === 'c1') return s['brand'] || DEFAULTS['brand'];
-						if (slot === 'c2') return s['accent'] || DEFAULTS['accent'];
-						return s['indigo'] || DEFAULTS['indigo'];
+					const isoPalSel = document.querySelector('[data-iso-palette]');
+					const isoSlotToken = { c1: 'brand', c2: 'accent', c3: 'indigo' };
+					const readIso = () => {
+						try { return JSON.parse(localStorage.getItem('lalangue-iso') || 'null') || {}; }
+						catch (e) { return {}; }
 					};
+					const writeIso = (iso) => {
+						try { localStorage.setItem('lalangue-iso', JSON.stringify(iso)); }
+						catch (e) { /* ignorar */ }
+					};
+					// Fuente de logos para el isotipo según la paleta elegida:
+					// 'active' (o sin elección) → el tema activo (o defaults).
+					const isoSource = (iso) => {
+						if (!iso.pal || iso.pal === 'active') {
+							const active = findActive(readState());
+							return active
+								? {
+										logos: active.logos,
+										brand: active.tokens['brand'],
+										accent: active.tokens['accent'],
+										indigo: active.tokens['indigo'],
+									}
+								: {
+										logos: DEFAULTS_LOGOS,
+										brand: DEFAULTS['brand'],
+										accent: DEFAULTS['accent'],
+										indigo: DEFAULTS['indigo'],
+									};
+						}
+						const p = PALETAS.find((x) => x.id === iso.pal);
+						return p
+							? {
+									logos: p.logos,
+									brand: p.tokens['brand'],
+									accent: p.tokens['accent'],
+									indigo: p.tokens['indigo'],
+								}
+							: null;
+					};
+					// Repinta :root (todo el sitio: header, navbar, footer) y el
+					// preview de esta sección. En modo "seguir al tema" cada slot
+					// pinta con el token del tema salvo que el usuario haya elegido
+					// un hex distinto (override); con paleta propia se aplican
+					// literales fijos.
 					const applyIsoFromSelects = () => {
-						document.querySelectorAll('#isotipo-live .isotipo').forEach((iso) => {
-							isoSelects.forEach((sel) => {
-								iso.style.setProperty(`--iso-${sel.dataset.isoSlot}`, sel.value);
+						const iso = readIso();
+						const active = !iso.pal || iso.pal === 'active';
+						const saved = readState();
+						isoSelects.forEach((sel) => {
+							const slot = sel.dataset.isoSlot;
+							document.querySelectorAll('#isotipo-live .isotipo').forEach((el) => {
+								el.style.setProperty(`--iso-${slot}`, sel.value);
 							});
+							iso[slot] = sel.value;
+						});
+						writeIso(iso);
+						['c1', 'c2', 'c3'].forEach((slot) => {
+							const t = isoSlotToken[slot];
+							const tokenHex = saved[t] || DEFAULTS[t];
+							const matches = !iso[slot] || iso[slot] === tokenHex;
+							const v = active && matches ? `var(--color-${t})` : iso[slot];
+							document.documentElement.style.setProperty(`--iso-${slot}`, v || DEFAULTS[t]);
 						});
 					};
 					const syncIsoSelects = () => {
-						const active = findActive(readState());
-						const logos = active ? active.logos : DEFAULTS_LOGOS;
+						const iso = readIso();
+						const src = isoSource(iso);
+						if (!src) return;
+						const active = !iso.pal || iso.pal === 'active';
+						const saved = readState();
 						isoSelects.forEach((sel) => {
 							const slot = sel.dataset.isoSlot;
-							const cur = slotDefault(slot);
+							const t = isoSlotToken[slot];
+							const opts = [...src.logos];
+							// Preferencia: el token del tema (modo activo) o la
+							// elección persistida (paleta propia). Si el hex no
+							// está entre los logos, se agrega como "Personalizado"
+							// para poder seleccionarlo de nuevo.
+							let cur = active ? saved[t] || src[t] : src[t];
+							if (!active && iso[slot] && opts.some((o) => o.hex === iso[slot])) {
+								cur = iso[slot];
+							}
+							if (!opts.some((o) => o.hex === cur)) {
+								opts.unshift({ hex: cur, nombre: 'Personalizado' });
+							}
 							sel.replaceChildren(
-								...logos.map((o) => {
+								...opts.map((o) => {
 									const opt = document.createElement('option');
 									opt.value = o.hex;
 									opt.textContent = `${o.hex} — ${o.nombre}`;
@@ -861,13 +885,60 @@ const samples: Record<string, string> = {
 									return opt;
 								}),
 							);
-							if (!logos.some((o) => o.hex === cur)) sel.selectedIndex = 0;
+							iso[slot] = sel.value;
 						});
+						writeIso(iso);
 						applyIsoFromSelects();
 					};
+					// Dropdown "Paleta para el isotipo": Paleta activa + los temas.
+					const syncIsoPalSel = () => {
+						if (!isoPalSel) return;
+						const iso = readIso();
+						const mk = (v, txt, sel) => {
+							const o = document.createElement('option');
+							o.value = v;
+							o.textContent = txt;
+							if (sel) o.selected = true;
+							return o;
+						};
+						const cur = !iso.pal || iso.pal === 'active' ? 'active' : iso.pal;
+						isoPalSel.replaceChildren(
+							mk('active', 'Paleta activa', cur === 'active'),
+							...PALETAS.map((p) => mk(p.id, p.nombre, cur === p.id)),
+						);
+					};
+					// Al elegir una paleta para el isotipo: carga sus logos en los
+					// selects y usa su marca/acento/índigo (independiente del tema).
+					if (isoPalSel) {
+						isoPalSel.addEventListener('change', () => {
+							const iso = readIso();
+							iso.pal = isoPalSel.value;
+							const src = isoSource(iso);
+							if (src) {
+								iso.c1 = src.brand;
+								iso.c2 = src.accent;
+								iso.c3 = src.indigo;
+							}
+							writeIso(iso);
+							syncIsoSelects();
+						});
+					}
 					isoSelects.forEach((sel) => {
 						sel.addEventListener('change', applyIsoFromSelects);
 					});
+					// En modo "seguir al tema", ajustar los tokens de marca/acento/
+					// índigo también recolorea el isotipo del sitio (sin override).
+					const isoToActiveTokens = () => {
+						const iso = readIso();
+						if (iso.pal && iso.pal !== 'active') return;
+						const s = readState();
+						iso.c1 = s['brand'] || DEFAULTS['brand'];
+						iso.c2 = s['accent'] || DEFAULTS['accent'];
+						iso.c3 = s['indigo'] || DEFAULTS['indigo'];
+						iso.pal = 'active';
+						writeIso(iso);
+						syncIsoSelects();
+					};
 
 					// ── Fondo: opciones por paleta activa ─────────────────────────
 					const bgSelect = $('bg-picker');
@@ -942,6 +1013,7 @@ const samples: Record<string, string> = {
 						syncInputs();
 						renderCards();
 						syncBg();
+						syncIsoPalSel();
 						syncIsoSelects();
 						renderDeck();
 					};
@@ -1090,27 +1162,39 @@ const samples: Record<string, string> = {
 					class="flex flex-wrap items-center justify-center gap-10 rounded-xl bg-white p-10"
 				>
 					<div class="flex flex-col items-center gap-3">
-						<Isotipo
-							class="h-40 w-auto"
-							wine="var(--color-brand)"
-							accent="var(--color-accent)"
-							indigo="var(--color-indigo)"
-						/>
+						<Isotipo class="h-40 w-auto" />
 						<span class="text-xs text-muted">Isotipo</span>
 					</div>
 					<div class="flex flex-col items-center gap-3">
-						<IsotipoBandera
-							class="h-40 w-auto"
-							wine="var(--color-brand)"
-							accent="var(--color-accent)"
-							indigo="var(--color-indigo)"
-						/>
+						<IsotipoBandera class="h-40 w-auto" />
 						<span class="text-xs text-muted">Bandera</span>
 					</div>
 				</div>
 
 				<!-- Pickers de color -->
 				<div class="flex flex-col justify-center gap-5">
+					<div>
+						<label for="iso-palette" class="text-sm font-medium text-ink-strong">
+							Paleta para el isotipo
+						</label>
+						<div class="mt-2">
+							<select
+								id="iso-palette"
+								data-iso-palette
+								class="w-full rounded-md border border-divider bg-white px-3 py-2 text-sm text-ink"
+							>
+								{/* Opciones: 'Paleta activa' + las paletas del editor
+								    (ver syncIsoPalSel en el script del editor). */}
+							</select>
+						</div>
+						<p class="mt-2 text-xs leading-relaxed text-muted">
+							A cada slot se cargan los <code class="text-brand">logos</code>
+							de la paleta elegida. En <strong>Paleta activa</strong> el
+							isotipo sigue al tema del sitio; al elegir una paleta
+							específica, el isotipo usa sus colores aunque después cambies
+							el tema.
+						</p>
+					</div>
 					{
 						isotipoSlots.map((slot) => (
 							<div>
@@ -1127,22 +1211,47 @@ const samples: Record<string, string> = {
 										data-iso-slot={slot.id}
 										class="w-full rounded-md border border-divider bg-white px-3 py-2 text-sm text-ink"
 									>
-										{/* Las opciones se cargan por JS desde la paleta activa. */}
+										{/* Las opciones se cargan por JS desde la paleta
+										    elegida para el isotipo (dropdown de arriba). */}
 									</select>
 								</div>
 							</div>
 						))
 					}
+					<div>
+						<span class="text-sm font-medium text-ink-strong">
+							Forma del logo en el navbar
+						</span>
+						<div class="mt-3 flex gap-2">
+							<button
+								type="button"
+								data-logo-nav-btn="isotipo"
+								aria-pressed="true"
+								class="flex-1 rounded-md border px-3 py-1.5 text-sm font-semibold transition-colors"
+							>
+								Isotipo
+							</button>
+							<button
+								type="button"
+								data-logo-nav-btn="bandera"
+								aria-pressed="false"
+								class="flex-1 rounded-md border px-3 py-1.5 text-sm font-semibold transition-colors"
+							>
+								Bandera
+							</button>
+						</div>
+					</div>
 					<p class="text-xs leading-relaxed text-muted">
-						Las opciones de estos selects son las de la paleta activa
-						(campo <code class="text-brand">logos</code> de cada tema).
-						Ambos isotipos se repintan en el momento: los tres grupos
-						del SVG se pintan con las variables CSS seleccionadas
-						(<code class="text-brand">--iso-c1/c2/c3</code>). En la
-						bandera un solo isotipo se parte por franjas diagonales
-						de color — vino a la izquierda, índigo al centro, accent
-						a la derecha — reconstruido 1:1 desde el export plano de
-						Inkscape (<code>docs/isologo_bandera.svg</code>).
+						Todo se repinta <strong>al instante</strong>: los isotipos del
+						navbar y del header usan las variables CSS
+						<code class="text-brand">--iso-c1/c2/c3</code>, así que al
+						modificar los colores o la forma acá, el navbar y el sitio se
+						actualizan en el momento (misma elección que la sección
+						"Logo del navbar" de más abajo). En la bandera un solo
+						isotipo se parte por franjas diagonales de color — vino a la
+						izquierda, índigo al centro, accent a la derecha —
+						reconstruido 1:1 desde el export plano de Inkscape
+						(<code>docs/isologo_bandera.svg</code>).
 					</p>
 				</div>
 			</div>
@@ -1173,18 +1282,8 @@ const samples: Record<string, string> = {
 						class="flex shrink-0 items-center gap-4 hover:no-underline"
 						aria-label="Vista previa del logo"
 					>
-						<Isotipo
-							class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
-							wine="var(--color-brand)"
-							accent="var(--color-accent)"
-							indigo="var(--color-indigo)"
-						/>
-						<IsotipoBandera
-							class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
-							wine="var(--color-brand)"
-							accent="var(--color-accent)"
-							indigo="var(--color-indigo)"
-						/>
+						<Isotipo class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
+						<IsotipoBandera class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
 						<span class="flex flex-col leading-none">
 							<span
 								class="flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none text-night/70"
@@ -1258,7 +1357,9 @@ const samples: Record<string, string> = {
 
 			<script>
 				const NAV_KEY = 'lalangue-logo-nav';
-				const btn = (v) => document.querySelector(`[data-logo-nav-btn="${v}"]`);
+				// Hay dos sets de botones (sección Isotipo y sección Navbar), todos
+				// con data-logo-nav-btn; se actualizan en bloque.
+				const btns = (v) => Array.from(document.querySelectorAll(`[data-logo-nav-btn="${v}"]`));
 				const setLogoNav = (v) => {
 					// data-logo-nav en <html> es lo que el CSS usa para mostrar
 					// el Isotipo o la Bandera (ver global.css). El Layout lo aplica
@@ -1270,16 +1371,16 @@ const samples: Record<string, string> = {
 						/* ignorar */
 					}
 					['isotipo', 'bandera'].forEach((k) => {
-						const b = btn(k);
-						if (!b) return;
 						const on = k === v;
-						b.setAttribute('aria-pressed', String(on));
-						b.classList.toggle('border-brand', on);
-						b.classList.toggle('bg-brand', on);
-						b.classList.toggle('text-white', on);
-						b.classList.toggle('border-divider', !on);
-						b.classList.toggle('bg-white', !on);
-						b.classList.toggle('text-ink', !on);
+						btns(k).forEach((b) => {
+							b.setAttribute('aria-pressed', String(on));
+							b.classList.toggle('border-brand', on);
+							b.classList.toggle('bg-brand', on);
+							b.classList.toggle('text-white', on);
+							b.classList.toggle('border-divider', !on);
+							b.classList.toggle('bg-white', !on);
+							b.classList.toggle('text-ink', !on);
+						});
 					});
 				};
 				document.querySelectorAll('[data-logo-nav-btn]').forEach((b) => {
@@ -1325,40 +1426,6 @@ const samples: Record<string, string> = {
 					number.addEventListener('change', () => sync(number.value));
 				}
 			</script>
-		</section>
-
-		<!-- ================= Isotipo — colección mixta ================= -->
-		<section class="mt-16">
-			<h2>Isotipo — colección mixta</h2>
-			<p class="text-ink/80">
-				Un plano, el original en greyscale y combinaciones de la paleta:
-				cada celda pinta los tres grupos del SVG con su propia terna de
-				colores.
-			</p>
-			<div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-				{
-					isotipoMarks.map((m) => (
-						<div class="flex flex-col rounded-xl border border-divider/30 bg-surface p-5">
-							<div
-								class="flex flex-1 items-center justify-center rounded-lg bg-white p-4"
-							>
-								<Isotipo
-									wine={m.wine}
-									accent={m.accent}
-									indigo={m.indigo}
-									class="h-20 w-auto"
-								/>
-							</div>
-							<div class="mt-3 text-center">
-								<p class="text-xs font-medium text-ink-strong">{m.name}</p>
-								<p class="mt-0.5 font-mono text-[0.6875rem] text-muted">
-									{m.wine} · {m.accent} · {m.indigo}
-								</p>
-							</div>
-						</div>
-					))
-				}
-			</div>
 		</section>
 
 		<!-- ================= Estilos globales ================= -->

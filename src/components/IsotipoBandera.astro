@@ -1,30 +1,21 @@
 ---
 interface Props {
-	wine?: string;
-	accent?: string;
-	indigo?: string;
 	class?: string;
 }
-const {
-	wine = '#8c1c3f',
-	accent = '#d5673f',
-	indigo = '#45426d',
-	class: className,
-} = Astro.props;
+const { class: className } = Astro.props;
 const sizeClass = className ?? 'h-auto w-full max-w-xs';
 ---
 
 <!-- Isotipo "bandera": un solo isotipo partido por franjas diagonales de
      color (vino a la izquierda, índigo al centro, accent a la derecha).
      Reconstruido 1:1 desde docs/isologo_bandera.svg (export plano de
-     Inkscape, sin clip-path/rects). Recolorea en vivo con --iso-c1/c2/c3
-     igual que el Isotipo. -->
+     Inkscape, sin clip-path/rects). Recolorea con --iso-c1/c2/c3 igual
+     que el Isotipo (fallback: la paleta activa). -->
 <svg
 	viewBox="0 0 468.47315 486.797"
 	class:list={['isotipo', 'isotipo-bandera', sizeClass]}
 	role="img"
 	aria-label="Isotipo bandera Lalangue"
-	style={`--iso-c1:${wine};--iso-c2:${accent};--iso-c3:${indigo};`}
 >
 <g data-c="3" transform="translate(1456.2775,335.91979)">
     <path

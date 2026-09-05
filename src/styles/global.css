@@ -72,24 +72,27 @@
 
   /* Isotipo — recolor en vivo (roadmap).
      Los 3 grupos del SVG llevan data-c 1/2/3 y se pintan con CSS
-     variables --iso-c1/2/3. Son la llave del "color picker" del roadmap. */
+     variables --iso-c1/2/3. Son la llave del "color picker" del roadmap.
+     El fallback apunta a la paleta activa (--color-*): por defecto el
+     isotipo sigue al tema; si el editor o el Layout fijan --iso-c* en
+     :root, el isotipo usa colores propios e independientes. */
   .isotipo [data-c="1"],
   .isotipo [data-c="1"] path,
   .isotipo [data-c="1"] > path {
-    fill: var(--iso-c1, #8c1c3f) !important;
-    stroke: var(--iso-c1, #8c1c3f) !important;
+    fill: var(--iso-c1, var(--color-brand)) !important;
+    stroke: var(--iso-c1, var(--color-brand)) !important;
   }
   .isotipo [data-c="2"],
   .isotipo [data-c="2"] path,
   .isotipo [data-c="2"] > path {
-    fill: var(--iso-c2, #d5673f) !important;
-    stroke: var(--iso-c2, #d5673f) !important;
+    fill: var(--iso-c2, var(--color-accent)) !important;
+    stroke: var(--iso-c2, var(--color-accent)) !important;
   }
   .isotipo [data-c="3"],
   .isotipo [data-c="3"] path,
   .isotipo [data-c="3"] > path {
-    fill: var(--iso-c3, #45426d) !important;
-    stroke: var(--iso-c3, #45426d) !important;
+    fill: var(--iso-c3, var(--color-indigo)) !important;
+    stroke: var(--iso-c3, var(--color-indigo)) !important;
   }
 
   /* Logo del navbar — elección Isotipo (default) vs Bandera.
