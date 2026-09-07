@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA } from '../data/componentes';
+import { dirigidoA, stats } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-08-28';
 
@@ -35,6 +35,26 @@ const dirigidoAEjemplo = dirigidoA(
 const base = import.meta.env.BASE_URL;
 const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
+// Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
+// mismo en todas las formaciones). Se renderiza full-bleed con el mapa
+// mundial de fondo (imagen local public/worldMap.webp, la de la landing).
+const insercionEjemplo = stats({
+	filas: [
+		{ region: 'América del sur', pct: '51%' },
+		{ region: 'América del norte', pct: '35%' },
+		{ region: 'Centroamérica', pct: '10%' },
+		{ region: 'Europa', pct: '10%' },
+		{ region: 'África y Asia', pct: '1%' },
+	],
+	frases: [
+		'77 millones de personas de habla hispana en el mundo buscan activamente terapia o ayuda psicológica profesional.',
+		'La mayoría de psicólogos recién recibidos no tienen pacientes durante los primeros dos años.',
+		'Y más del 70% ejerce solo de manera local.',
+	],
+	referencia:
+		'**Referencia:** Estudios de inserción laboral del *COP (2021)* y el APA Early Career Report (2022) … — texto real en INSERCION-ESTADISTICAS.',
+});
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1493,10 +1513,38 @@ const samples: Record<string, string> = {
 				un cierre centrado con texto y botón. Tomado de la sección
 				<code class="text-brand">#paraTi</code> de la landing del Máster.
 				Los colores usan las variables globales (brand, accent, surface),
-				no copias del original. Texto de ejemplo a reemplazar.
+				no copias del original. Ya está <strong>aplicado en las 6
+				formaciones</strong> con el texto correspondiente de cada una
+				(las que tienen "Planes de financiación" llevan la beca a
+				<code class="text-brand">#precios</code>; el resto, a la
+				entrevista de admisión). El ejemplo de abajo es ilustrativo.
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={dirigidoAEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Inserción Laboral (estadísticas) ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Inserción laboral (estadísticas)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Sección <strong>full-bleed</strong> de ancho completo: rompe el
+				contenedor <code class="text-brand">max-w-5xl</code> (técnica
+				<code class="text-brand">w-screen</code> +
+				<code class="text-brand">-ml-[50vw]</code> +
+				<code class="text-brand">left-1/2</code>, con
+				<code class="text-brand">overflow-x: clip</code> en body para evitar
+				la barra horizontal). Usa la misma imagen de mapa mundial de la
+				landing original (<code class="text-brand">worldMap.webp</code>,
+				local) al <strong>25% de opacidad</strong> sobre fondo noche: barras
+				por región a la izquierda, frases a la derecha y la referencia de
+				fuentes debajo. Bloque <code class="text-brand">stats</code>
+				(componente <code class="text-brand">INSERCION-ESTADISTICAS</code>,
+				idéntico en todas las formaciones).
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={insercionEjemplo} />
 			</div>
 		</section>
 	</main>

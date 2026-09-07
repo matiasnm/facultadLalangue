@@ -113,6 +113,10 @@
   /* Base: p, span y textos generales en DM Sans, 14px, line-height 1.6 */
   body {
     margin: 0;
+    /* Evita la barra horizontal que genera la sección full-bleed (w-screen).
+       `clip` a diferencia de `hidden` NO crea un scroll container, así que
+       el header sticky y el dropdown siguen funcionando. */
+    overflow-x: clip;
     font-family: var(--font-sans);
     font-size: 0.875rem; /* 14px */
     line-height: 1.6;

@@ -17,6 +17,8 @@ export type BloqueTitulo = {
 	texto: string;
 	nivel?: 2 | 3 | 4;
 	kicker?: string;
+	/** Ancla opcional para atajos internos (p. ej. `id="precios"`). */
+	id?: string;
 };
 export type BloqueTexto = { tipo: 'texto'; parrafos: string[] };
 export type BloqueLista = { tipo: 'lista'; items: string[]; ordenada?: boolean };
@@ -130,7 +132,7 @@ export interface ComponenteComun {
 /* ------------------------------------------------------------------ */
 /* Helpers de construcción (evitan ruido entre los datos)              */
 /* ------------------------------------------------------------------ */
-export const titulo = (texto, nivel = 2, kicker?) => ({ tipo: 'titulo', texto, nivel, kicker });
+export const titulo = (texto, nivel = 2, kicker?, id?) => ({ tipo: 'titulo', texto, nivel, kicker, id });
 export const texto = (parrafos) =>
 	({ tipo: 'texto', parrafos: Array.isArray(parrafos) ? parrafos : [parrafos] }) as BloqueTexto;
 export const lista = (items, ordenada = false) => ({ tipo: 'lista', items, ordenada }) as BloqueLista;

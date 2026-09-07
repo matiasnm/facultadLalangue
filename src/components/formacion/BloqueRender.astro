@@ -39,11 +39,11 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 			<p class="mt-14 text-xs font-semibold uppercase tracking-widest text-accent">{b.kicker}</p>
 		)}
 		{b.nivel === 3 ? (
-			<h3 class="mt-10 scroll-mt-24">{b.texto}</h3>
+			<h3 id={b.id} class="mt-10 scroll-mt-24">{b.texto}</h3>
 		) : b.nivel === 4 ? (
-			<h4 class="mt-6 scroll-mt-24">{b.texto}</h4>
+			<h4 id={b.id} class="mt-6 scroll-mt-24">{b.texto}</h4>
 		) : (
-			<h2 class="mt-14 scroll-mt-24 first:mt-0">{b.texto}</h2>
+			<h2 id={b.id} class="mt-14 scroll-mt-24 first:mt-0">{b.texto}</h2>
 		)}
 	</>
 )}
@@ -142,29 +142,48 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 	</figure>
 )}
 
-{/* Estadísticas de inserción */}
+{/* Estadísticas de inserción — sección full-bleed con mapa mundial de fondo.
+     El ancho es del 100vw rompiendo el contenedor max-w-5xl (técnica w-screen +
+     -ml-[50vw] + left-1/2). Fondo oscuro (bg-night) con el worldMap a 25% de
+     opacidad, tal como en la landing original del Máster. */}
 {b.tipo === 'stats' && (
-	<div class="mt-8 rounded-2xl border border-divider/30 bg-surface p-6 sm:p-8">
-		<ul class="list-none divide-y divide-divider/50 p-0">
-			{b.filas.map((f) => (
-				<li class="flex items-center justify-between gap-4 py-3">
-					<span class="shrink-0 text-sm font-medium text-ink/80">{f.region}</span>
-					<div class="flex flex-1 items-center gap-3 pl-4">
-						<div class="h-2 flex-1 overflow-hidden rounded-full bg-divider/60">
-							<div class="h-full rounded-full bg-brand" style={`width:${f.pct}`}></div>
-						</div>
-						<span class="w-10 text-right font-display font-semibold text-brand">{f.pct}</span>
-					</div>
-				</li>
-			))}
-		</ul>
-		<div class="mt-6 space-y-4">
-			{b.frases.map((fr) => (
-				<p class="text-lg font-medium leading-snug text-ink-strong">{fr}</p>
-			))}
+	<section
+		class="relative left-1/2 -ml-[50vw] mt-8 w-screen scroll-mt-24 bg-night py-16 sm:py-20"
+		aria-label="Inserción laboral"
+	>
+		{/* Mapa mundial de fondo (misma imagen de la landing, opacidad 25%). */}
+		<div
+			class="pointer-events-none absolute inset-0 opacity-25"
+			style={`background-image:url('${link('/worldMap.webp')}'); background-size:cover; background-position:center;`}
+			aria-hidden="true"
+		></div>
+		<div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+			<div class="grid gap-12 md:grid-cols-2 md:gap-16">
+				{/* Barras por región */}
+				<ul class="list-none space-y-6 p-0">
+					{b.filas.map((f) => (
+						<li>
+							<div class="flex items-baseline justify-between gap-3">
+								<span class="text-sm font-medium text-white/85">{f.region}</span>
+								<span class="font-display font-semibold text-white">{f.pct}</span>
+							</div>
+							<div class="mt-2 h-2 overflow-hidden rounded-full bg-white/15">
+								<div class="h-full rounded-full bg-white" style={`width:${f.pct}`}></div>
+							</div>
+						</li>
+					))}
+				</ul>
+				{/* Frases de inserción */}
+				<div class="space-y-5">
+					{b.frases.map((fr) => (
+						<p class="text-lg font-medium leading-snug text-white">{fr}</p>
+					))}
+				</div>
+			</div>
+			{/* Referencia de las fuentes */}
+			<Rico texto={b.referencia} class="mt-12 text-xs leading-relaxed text-white/60" />
 		</div>
-		<Rico texto={b.referencia} class="mt-6 text-xs leading-relaxed text-muted" />
-	</div>
+	</section>
 )}
 
 {/* FAQ — acordeón sin JavaScript (<details>) */}

@@ -17,6 +17,7 @@ import {
 	lista,
 	enlace,
 	faq,
+	dirigidoA,
 	type BloquePagina,
 } from './componentes';
 
@@ -35,6 +36,23 @@ export interface Formacion {
 }
 
 const ENTREVISTA = 'https://go.facultadlalangue.com/entrevista-directa';
+
+/**
+ * Tarjeta "dirigido-a" de la formación: reemplaza el par de títulos/listas
+ * "Es para ti si" / "No es para ti si" más el cierre con el CTA de beca.
+ * `becaHref` = "#precios" salta a los planes de financiación cuando la
+ * formación los tiene; en las que no, apunta a la entrevista de admisión
+ * (ahí se define la beca 60%).
+ */
+const paraTi = (positivos: string[], negativos: string[], becaHref: string = '#precios'): BloquePagina =>
+	dirigidoA(
+		{ titulo: 'Es para ti si:', items: positivos },
+		{ titulo: 'No es para ti si:', items: negativos },
+		{
+			texto: '**Amplía tu recorrido** según tu interés clínico o teórico.',
+			boton: { etiqueta: 'Beca 60% para profesionales', href: becaHref },
+		},
+	);
 
 /** Grupo "Plan de financiación": título + línea de precio + notas + botón checkout. */
 const plan = (paso: string, precioLinea: string, notas: string[], cart: number): BloquePagina[] => [
@@ -81,22 +99,23 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-A'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Eres un profesional con formación previa.',
-				'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
-				'Te interesa expandir tu práctica internacional.',
-				'Quieres construir una identidad profesional, no acumular cursos.',
-				'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos.',
-				'Esperas recetas cerradas.',
-				'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
-			texto('Beca 60% para profesionales.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			// (Máster: no tiene sección de planes → la beca va a la entrevista).
+			paraTi(
+				[
+					'Eres un profesional con formación previa.',
+					'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
+					'Te interesa expandir tu práctica internacional.',
+					'Quieres construir una identidad profesional, no acumular cursos.',
+					'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
+				],
+				[
+					'Buscas cursos rápidos.',
+					'Esperas recetas cerradas.',
+					'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
+				],
+				ENTREVISTA,
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -266,21 +285,23 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-A'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Eres un profesional con formación previa.',
-				'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
-				'Te interesa expandir tu práctica internacional.',
-				'Quieres construir una identidad profesional, no acumular cursos.',
-				'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos.',
-				'Esperas recetas cerradas.',
-				'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			// (Psicoterapia: sin sección de planes → la beca va a la entrevista).
+			paraTi(
+				[
+					'Eres un profesional con formación previa.',
+					'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
+					'Te interesa expandir tu práctica internacional.',
+					'Quieres construir una identidad profesional, no acumular cursos.',
+					'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
+				],
+				[
+					'Buscas cursos rápidos.',
+					'Esperas recetas cerradas.',
+					'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
+				],
+				ENTREVISTA,
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -449,22 +470,21 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-A'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Trabajas en psicología, educación, comunicación o ciencias sociales.',
-				'Te interesa comprender cómo las redes sociales y los algoritmos afectan la salud mental y la construcción de identidad.',
-				'Quieres adquirir herramientas para analizar el impacto psicológico de la cultura digital.',
-				'Buscas comprender las nuevas formas de sufrimiento vinculadas al entorno online.',
-				'Te interesa investigar o intervenir en fenómenos contemporáneos como dependencia digital, violencia online o ansiedad por exposición pública.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos o superficiales.',
-				'Esperas respuestas simples a fenómenos complejos de la cultura digital.',
-				'No tienes interés en comprender críticamente el impacto psicológico de las tecnologías.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
-			texto('Beca 60% para profesionales.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			paraTi(
+				[
+					'Trabajas en psicología, educación, comunicación o ciencias sociales.',
+					'Te interesa comprender cómo las redes sociales y los algoritmos afectan la salud mental y la construcción de identidad.',
+					'Quieres adquirir herramientas para analizar el impacto psicológico de la cultura digital.',
+					'Buscas comprender las nuevas formas de sufrimiento vinculadas al entorno online.',
+					'Te interesa investigar o intervenir en fenómenos contemporáneos como dependencia digital, violencia online o ansiedad por exposición pública.',
+				],
+				[
+					'Buscas cursos rápidos o superficiales.',
+					'Esperas respuestas simples a fenómenos complejos de la cultura digital.',
+					'No tienes interés en comprender críticamente el impacto psicológico de las tecnologías.',
+				],
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -511,7 +531,7 @@ export const formaciones: Formacion[] = [
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
-			titulo('Planes de financiación'),
+			titulo('Planes de financiación', 2, undefined, 'precios'),
 			...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Elige cuándo terminar'], 10058),
 			...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 10057),
 			...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 10059),
@@ -612,21 +632,20 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-B'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Eres psicólogo, terapeuta o profesional del campo de la salud mental.',
-				'Te interesa comprender la complejidad de los vínculos de pareja y la sexualidad en la actualidad.',
-				'Buscas herramientas clínicas para intervenir en conflictos vinculares, crisis afectivas y problemáticas sexuales.',
-				'Deseas ampliar tu práctica profesional en terapia de pareja y clínica relacional.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos sin formación clínica profunda.',
-				'Esperas recetas terapéuticas cerradas para problemas complejos.',
-				'No tienes interés en trabajar con diversidad relacional, sexual o cultural.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
-			texto('Beca 60% para profesionales.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			paraTi(
+				[
+					'Eres psicólogo, terapeuta o profesional del campo de la salud mental.',
+					'Te interesa comprender la complejidad de los vínculos de pareja y la sexualidad en la actualidad.',
+					'Buscas herramientas clínicas para intervenir en conflictos vinculares, crisis afectivas y problemáticas sexuales.',
+					'Deseas ampliar tu práctica profesional en terapia de pareja y clínica relacional.',
+				],
+				[
+					'Buscas cursos rápidos sin formación clínica profunda.',
+					'Esperas recetas terapéuticas cerradas para problemas complejos.',
+					'No tienes interés en trabajar con diversidad relacional, sexual o cultural.',
+				],
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -670,7 +689,7 @@ export const formaciones: Formacion[] = [
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
-			titulo('Planes de financiación'),
+			titulo('Planes de financiación', 2, undefined, 'precios'),
 			...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9544),
 			...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 9545),
 			...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 9546),
@@ -768,21 +787,20 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-B'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Trabajas en el campo de la salud mental, la educación o el acompañamiento de infancias y adolescencias.',
-				'Te interesa especializarte en psicopatología y clínica infantojuvenil.',
-				'Buscas herramientas clínicas para el abordaje de síntomas y sufrimiento psíquico en niños, niñas y adolescentes.',
-				'Deseas intervenir de forma interdisciplinaria, ética y situada, evitando la patologización.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos sin formación clínica profunda.',
-				'Esperas recetas terapéuticas cerradas para problemas complejos.',
-				'No tienes interés en trabajar con la singularidad infantojuvenil.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
-			texto('Beca 60% para profesionales.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			paraTi(
+				[
+					'Trabajas en el campo de la salud mental, la educación o el acompañamiento de infancias y adolescencias.',
+					'Te interesa especializarte en psicopatología y clínica infantojuvenil.',
+					'Buscas herramientas clínicas para el abordaje de síntomas y sufrimiento psíquico en niños, niñas y adolescentes.',
+					'Deseas intervenir de forma interdisciplinaria, ética y situada, evitando la patologización.',
+				],
+				[
+					'Buscas cursos rápidos sin formación clínica profunda.',
+					'Esperas recetas terapéuticas cerradas para problemas complejos.',
+					'No tienes interés en trabajar con la singularidad infantojuvenil.',
+				],
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -825,7 +843,7 @@ export const formaciones: Formacion[] = [
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
-			titulo('Planes de financiación'),
+			titulo('Planes de financiación', 2, undefined, 'precios'),
 			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9546),
 			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
 			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
@@ -949,21 +967,20 @@ export const formaciones: Formacion[] = [
 			c('METODOLOGIA-CABECERA'),
 			c('METODOLOGIA-MODALIDAD-A'),
 			c('METODOLOGIA-CONTADORES'),
-			titulo('Es para ti si:', 3),
-			lista([
-				'Eres profesional de la salud, educación o acompañamiento.',
-				'Deseas comprender los vectores de lectura psicoanalítica.',
-				'Te interesa comprender el sufrimiento humano más allá de diagnósticos rápidos.',
-				'Buscas una formación rigurosa que articule teoría, clínica y práctica.',
-			]),
-			titulo('No es para ti si:', 3),
-			lista([
-				'Buscas cursos rápidos sin formación clínica profunda.',
-				'Esperas recetas terapéuticas cerradas para problemas complejos.',
-				'No tienes interés en trabajar con la singularidad del inconsciente.',
-			]),
-			texto('**Amplía tu recorrido** según tu interés clínico o teórico.'),
-			texto('Beca 60% para profesionales.'),
+			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
+			paraTi(
+				[
+					'Eres profesional de la salud, educación o acompañamiento.',
+					'Deseas comprender los vectores de lectura psicoanalítica.',
+					'Te interesa comprender el sufrimiento humano más allá de diagnósticos rápidos.',
+					'Buscas una formación rigurosa que articule teoría, clínica y práctica.',
+				],
+				[
+					'Buscas cursos rápidos sin formación clínica profunda.',
+					'Esperas recetas terapéuticas cerradas para problemas complejos.',
+					'No tienes interés en trabajar con la singularidad del inconsciente.',
+				],
+			),
 			// La Facultad
 			titulo('La Facultad'),
 			c('FACULTAD-SUPERVISION-GRATUITA'),
@@ -999,7 +1016,7 @@ export const formaciones: Formacion[] = [
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-			titulo('Planes de financiación'),
+			titulo('Planes de financiación', 2, undefined, 'precios'),
 			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
 			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
 			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
