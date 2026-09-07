@@ -46,7 +46,7 @@ const final = `${prefijo}${numero}${sufijo}`;
 </noscript>
 
 <script>
-	const DURACION = 1500; // ms — sube rápido (rapidez inicial) y decelera al final.
+	const DURACION = 2000; // ms — sube rápido (rapidez inicial) y decelera al final.
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const contadores = Array.from(document.querySelectorAll<HTMLElement>('[data-contador]'));
 
@@ -83,7 +83,15 @@ const final = `${prefijo}${numero}${sufijo}`;
 					}
 				}
 			},
-			{ threshold: 0.4 },
+			{
+				// El contador entra "de verdad" al viewport antes de arrancar:
+				// rootMargin negativo encoge el área de intersección un 8% por
+				// abajo y threshold exige ~1/4 del elemento visible. Así la
+				// animación arranca cuando el usuario ya lo está viendo, no en
+				// el primer píxel que asoma ni en un scroll-restore.
+				rootMargin: '0px 0px -8% 0px',
+				threshold: 0.25,
+			},
 		);
 		contadores.forEach((el) => {
 			mostrar(el, 0);

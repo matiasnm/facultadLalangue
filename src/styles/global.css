@@ -59,10 +59,19 @@
     box-sizing: border-box;
   }
   img,
-  svg,
   video {
     display: block;
     max-width: 100%;
+    height: auto;
+  }
+  /* svg se mantiene fuera del max-width:100% a propósito: dentro de un flex
+     item con ancho indefinido, el porcentaje se resuelve contra un contenedor
+     circular y Chrome termina comprimiendo el ancho del svg (se vio en los
+     íconos de la tarjeta «dirigido a», que salían con tamaños distintos pese a
+     tener h-5 w-5). Los svg usan clases de tamaño explícitas (size-3, h-5…) o
+     w-full + max-w-*, así que no necesitan el tope global. */
+  svg {
+    display: block;
     height: auto;
   }
   button {
