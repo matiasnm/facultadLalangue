@@ -116,8 +116,8 @@ export const facultadSecciones: BloquePagina[] = [
 		'Comunidad académica internacional activa',
 	]),
 	contadores([
-		{ valor: '+ 0', etiqueta: 'Materiales descargables' },
-		{ valor: '+ 0', etiqueta: 'Clases optativas' },
+		{ valor: '+400', etiqueta: 'Materiales descargables' },
+		{ valor: '+100', etiqueta: 'Clases optativas' },
 	]),
 	enlace('Solicitar entrevista de admisión', 'https://go.facultadlalangue.com/entrevista-directa'),
 
