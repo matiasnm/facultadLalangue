@@ -234,12 +234,12 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'METODOLOGIA-CONTADORES',
-		nota: 'Doc §6 — Valores animados por JS en el sitio; por ahora figuran en 0.',
+		nota: 'Doc §6 — Valores del sitio original (+100/+400/+100); el render los anima desde 0 al visualizarse.',
 		bloques: [
 			contadores([
-				{ valor: '+ 0', etiqueta: 'Clases grabadas' },
-				{ valor: '+ 0', etiqueta: 'Materiales descargables' },
-				{ valor: '+ 0', etiqueta: 'Clases optativas' },
+				{ valor: '+100', etiqueta: 'Clases grabadas' },
+				{ valor: '+400', etiqueta: 'Materiales descargables' },
+				{ valor: '+100', etiqueta: 'Clases optativas' },
 			]),
 		],
 	},

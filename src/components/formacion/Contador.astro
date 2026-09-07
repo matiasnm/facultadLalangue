@@ -1,0 +1,93 @@
+---
+/**
+ * Contador animado — sube de 0 al valor real cuando entra al viewport.
+ *
+ * Recibe el valor como cadena (p. ej. "+100", "€200", "1.200") y lo separa en
+ * prefijo / número / sufijo. La animación corre una sola vez (primer avistaje):
+ * arranca rápido y decelera (ease-out cúbico).
+ *
+ * Accesibilidad y progresividad:
+ *  - El <span> animado es aria-hidden; el valor final va en un sr-only.
+ *  - Con <noscript> (JS apagado) se oculta el span animado y se muestra el
+ *    valor real tal cual vino en los datos.
+ *  - Con "prefers-reduced-motion: reduce" o sin IntersectionObserver, se
+ *    muestra el valor final sin animar.
+ */
+interface Props {
+	valor: string;
+}
+
+const { valor } = Astro.props;
+
+const m = /^(\D*)([\d.,]+)(\D*)$/.exec(valor) ?? [];
+const prefijo = (m[1] ?? '').trim();
+const numero = m[2] ? parseInt(m[2].replace(/[.,\s]/g, ''), 10) : 0;
+const sufijo = (m[3] ?? '').trim();
+const final = `${prefijo}${numero}${sufijo}`;
+---
+
+<span
+	data-contador
+	data-contador-prefijo={prefijo}
+	data-contador-sufijo={sufijo}
+	data-contador-target={numero}
+	aria-hidden="true"
+>
+	0
+</span>
+<span class="sr-only">{final}</span>
+<noscript>
+	<style>
+		[data-contador] {
+			display: none;
+		}
+	</style>
+	<span>{final}</span>
+</noscript>
+
+<script>
+	const DURACION = 1500; // ms — sube rápido (rapidez inicial) y decelera al final.
+	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const contadores = Array.from(document.querySelectorAll<HTMLElement>('[data-contador]'));
+
+	const mostrar = (el: HTMLElement, n: number) => {
+		const pre = el.dataset.contadorPrefijo ?? '';
+		const suf = el.dataset.contadorSufijo ?? '';
+		el.textContent = pre + n + suf;
+	};
+
+	const animar = (el: HTMLElement, desde: number, hasta: number) => {
+		const inicio = performance.now();
+		// ease-out cúbico: el número arranca a toda velocidad y va frenando.
+		const alivio = (t: number) => 1 - Math.pow(1 - t, 3);
+		const paso = (ahora: number) => {
+			const p = Math.min((ahora - inicio) / DURACION, 1);
+			mostrar(el, Math.round(desde + (hasta - desde) * alivio(p)));
+			if (p < 1) requestAnimationFrame(paso);
+		};
+		mostrar(el, desde);
+		requestAnimationFrame(paso);
+	};
+
+	if (reduce || !('IntersectionObserver' in window)) {
+		// Sin animación: valor final directo.
+		contadores.forEach((el) => mostrar(el, parseInt(el.dataset.contadorTarget ?? '0', 10)));
+	} else {
+		const io = new IntersectionObserver(
+			(entradas) => {
+				for (const e of entradas) {
+					if (e.isIntersecting) {
+						const el = e.target as HTMLElement;
+						animar(el, 0, parseInt(el.dataset.contadorTarget ?? '0', 10));
+						io.unobserve(el);
+					}
+				}
+			},
+			{ threshold: 0.4 },
+		);
+		contadores.forEach((el) => {
+			mostrar(el, 0);
+			io.observe(el);
+		});
+	}
+</script>

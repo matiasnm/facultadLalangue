@@ -9,6 +9,7 @@
  * formaciones.ts) y los renderizan a través de este componente.
  */
 import Rico from './Rico.astro';
+import Contador from './Contador.astro';
 import Avatar from '../Avatar.astro';
 import { siglasDe } from '../../data/docentes';
 import type { Bloque } from '../../data/componentes';
@@ -94,12 +95,14 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 	</ul>
 )}
 
-{/* Contadores — valores animados del sitio original (por ahora en 0) */}
+{/* Contadores — tarjetas animadas: suben de 0 al valor real al visualizarse */}
 {b.tipo === 'contadores' && (
 	<ul class="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
 		{b.items.map((c) => (
 			<li class="rounded-xl border border-divider/30 bg-surface p-5 text-center">
-				<span class="block font-display text-3xl font-semibold text-brand">{c.valor}</span>
+				<span class="block font-display text-3xl font-semibold text-brand">
+					<Contador valor={c.valor} />
+				</span>
 				<span class="mt-1 block text-sm text-muted">{c.etiqueta}</span>
 			</li>
 		))}
