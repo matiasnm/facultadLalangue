@@ -1,17 +1,24 @@
 ---
 /**
- * Contador animado — sube de 0 al valor real cuando entra al viewport.
+ * Contador animado 0 → valor real — misma mecánica que el original
+ * (widget Counter de Elementor en /landing-master-en-psicoanalisis):
  *
- * Recibe el valor como cadena (p. ej. "+100", "€200", "1.200") y lo separa en
- * prefijo / número / sufijo. La animación corre una sola vez (primer avistaje):
- * arranca rápido y decelera (ease-out cúbico).
+ *  - Markup con los mismos data-* del original (data-duration,
+ *    data-to-value, data-from-value y data-delimiter) sobre [data-contador].
+ *  - IntersectionObserver con threshold 0: la animación arranca apenas el
+ *    contador asoma en el viewport y corre una sola vez (unobserve).
+ *  - Easing "swing" de jQuery (`0.5 - Math.cos(p·π)/2`) y separador de
+ *    miles, igual que el plugin jquery-numerator que usa Elementor.
  *
- * Accesibilidad y progresividad:
- *  - El <span> animado es aria-hidden; el valor final va en un sr-only.
- *  - Con <noscript> (JS apagado) se oculta el span animado y se muestra el
- *    valor real tal cual vino en los datos.
- *  - Con "prefers-reduced-motion: reduce" o sin IntersectionObserver, se
- *    muestra el valor final sin animar.
+ * Mejoras de accesibilidad (propias, no de Elementor):
+ *  - El <span> animado es aria-hidden; el valor final vive en un sr-only.
+ *  - Con <noscript> se oculta el span animado y se muestra el valor real
+ *    tal cual viene en los datos.
+ *  - Sin IntersectionObserver (navegador muy viejo) se muestra el final.
+ *
+ * Nota: el original NO respeta prefers-reduced-motion; lo imitamos — la
+ * animación corre siempre al verse (solo la salta el noscript o la falta
+ * de IntersectionObserver).
  */
 interface Props {
 	valor: string;
@@ -30,11 +37,12 @@ const final = `${prefijo}${numero}${sufijo}`;
 	data-contador
 	data-contador-prefijo={prefijo}
 	data-contador-sufijo={sufijo}
-	data-contador-target={numero}
+	data-duration="2000"
+	data-from-value="0"
+	data-to-value={numero}
+	data-delimiter=","
 	aria-hidden="true"
->
-	0
-</span>
+>0</span>
 <span class="sr-only">{final}</span>
 <noscript>
 	<style>
@@ -46,56 +54,51 @@ const final = `${prefijo}${numero}${sufijo}`;
 </noscript>
 
 <script>
-	const DURACION = 2000; // ms — sube rápido (rapidez inicial) y decelera al final.
-	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const contadores = Array.from(document.querySelectorAll<HTMLElement>('[data-contador]'));
 
-	const mostrar = (el: HTMLElement, n: number) => {
+	const texto = (el: HTMLElement, n: number) => {
 		const pre = el.dataset.contadorPrefijo ?? '';
 		const suf = el.dataset.contadorSufijo ?? '';
-		el.textContent = pre + n + suf;
+		let num = String(n);
+		// Separador de miles como jquery-numerator (regex estándar).
+		const delim = el.dataset.delimiter;
+		if (delim) num = num.replace(/\B(?=(\d{3})+(?!\d))/g, delim);
+		el.textContent = pre + num + suf;
 	};
 
-	const animar = (el: HTMLElement, desde: number, hasta: number) => {
+	const animar = (el: HTMLElement) => {
+		const desde = parseInt(el.dataset.fromValue || '0', 10);
+		const hasta = parseInt(el.dataset.toValue ?? '0', 10);
+		const dur = parseInt(el.dataset.duration || '2000', 10);
+		// Easing "swing" de jQuery — el que usa jquery-numerator / Elementor.
+		const swing = (p: number) => 0.5 - Math.cos(p * Math.PI) / 2;
 		const inicio = performance.now();
-		// ease-out cúbico: el número arranca a toda velocidad y va frenando.
-		const alivio = (t: number) => 1 - Math.pow(1 - t, 3);
 		const paso = (ahora: number) => {
-			const p = Math.min((ahora - inicio) / DURACION, 1);
-			mostrar(el, Math.round(desde + (hasta - desde) * alivio(p)));
+			const p = Math.min((ahora - inicio) / dur, 1);
+			texto(el, Math.round(desde + (hasta - desde) * swing(p)));
 			if (p < 1) requestAnimationFrame(paso);
 		};
-		mostrar(el, desde);
+		texto(el, desde);
 		requestAnimationFrame(paso);
 	};
 
-	if (reduce || !('IntersectionObserver' in window)) {
-		// Sin animación: valor final directo.
-		contadores.forEach((el) => mostrar(el, parseInt(el.dataset.contadorTarget ?? '0', 10)));
+	if (!('IntersectionObserver' in window)) {
+		// Sin IO: valor final directo, sin animación.
+		contadores.forEach((el) => texto(el, parseInt(el.dataset.toValue ?? '0', 10)));
 	} else {
+		// Igual que el original: threshold 0 (cualquier píxel visible),
+		// sin rootMargin, y una sola vez.
 		const io = new IntersectionObserver(
 			(entradas) => {
 				for (const e of entradas) {
 					if (e.isIntersecting) {
-						const el = e.target as HTMLElement;
-						animar(el, 0, parseInt(el.dataset.contadorTarget ?? '0', 10));
-						io.unobserve(el);
+						animar(e.target as HTMLElement);
+						io.unobserve(e.target);
 					}
 				}
 			},
-			{
-				// El contador entra "de verdad" al viewport antes de arrancar:
-				// rootMargin negativo encoge el área de intersección un 8% por
-				// abajo y threshold exige ~1/4 del elemento visible. Así la
-				// animación arranca cuando el usuario ya lo está viendo, no en
-				// el primer píxel que asoma ni en un scroll-restore.
-				rootMargin: '0px 0px -8% 0px',
-				threshold: 0.25,
-			},
+			{ threshold: 0 },
 		);
-		contadores.forEach((el) => {
-			mostrar(el, 0);
-			io.observe(el);
-		});
+		contadores.forEach((el) => io.observe(el));
 	}
 </script>
