@@ -116,6 +116,16 @@ export type BloqueDirigidoA = {
 		boton: { etiqueta: string; href: string };
 	};
 };
+/**
+ * Carrusel de logos — marquee CSS infinito con pausa en hover. La lista se
+ * duplica para que la animación sea continua sin saltos. Usado para
+ * "Instituciones asociadas" (logos en blanco y negro de las instituciones
+ * afiliadas).
+ */
+export type BloqueCarruselLogos = {
+	tipo: 'carrusel-logos';
+	logos: { src: string; alt: string }[];
+};
 
 export type Bloque =
 	| BloqueTitulo
@@ -134,7 +144,8 @@ export type Bloque =
 	| BloquePersona
 	| BloqueEquipo
 	| BloqueTarjetas
-	| BloqueDirigidoA;
+	| BloqueDirigidoA
+	| BloqueCarruselLogos;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -159,6 +170,8 @@ export const beneficio = ({ titulo, subtitulo, descripcion, precio }) =>
 	({ tipo: 'beneficio', titulo, subtitulo, descripcion, precio }) as BloqueBeneficio;
 export const beneficios = (items, columnas = 3) =>
 	({ tipo: 'beneficios', items, columnas }) as BloqueBeneficios;
+export const carruselLogos = (logos) =>
+	({ tipo: 'carrusel-logos', logos }) as BloqueCarruselLogos;
 export const totalBeneficios = (titulo, valor, nota) =>
 	({ tipo: 'total-beneficios', titulo, valor, nota }) as BloqueTotalBeneficios;
 export const cita = (lineas, autor) => ({ tipo: 'cita', lineas, autor }) as BloqueCita;
@@ -698,12 +711,43 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'INSTITUCIONES-ASOCIADAS',
-		nota: 'Doc §29 — Máster, Psicoterapia y Metapsicología.',
+		nota: 'Doc §29 — Máster, Psicoterapia y Metapsicología. Logos en public/instituciones_asociadas/.',
 		bloques: [
 			titulo('Instituciones asociadas', 4),
-			texto(
-				'Time to Better · E-Faculté de Psychologie et Psychanalyse · Association des Psychanalystes Européens · Discurso Freudiano · Federation for Education in Europe — Fédération Européenne des Écoles · Raíces Editorial · PsySOS · Federación Internacional de Psicología de la Emergencia',
-			),
+			carruselLogos([
+				{
+					src: '/instituciones_asociadas/time_to_better.webp',
+					alt: 'Time to Better',
+				},
+				{
+					src: '/instituciones_asociadas/efpp.webp',
+					alt: 'E-Faculté de Psychologie et Psychoanalyse',
+				},
+				{
+					src: '/instituciones_asociadas/association_psychanalystes_europeens.webp',
+					alt: 'Association des Psychanalystes Européens',
+				},
+				{
+					src: '/instituciones_asociadas/discurso_freudiano.webp',
+					alt: 'Discurso Freudiano',
+				},
+				{
+					src: '/instituciones_asociadas/federation_education_europe.webp',
+					alt: 'Federation for Education in Europe — Fédération Européenne des Écoles',
+				},
+				{
+					src: '/instituciones_asociadas/raices_editorial.webp',
+					alt: 'Raíces Editorial',
+				},
+				{
+					src: '/instituciones_asociadas/psysos.webp',
+					alt: 'PsySOS',
+				},
+				{
+					src: '/instituciones_asociadas/fede_internacional_psicologia_emergencia.webp',
+					alt: 'Federación Internacional de Psicología de la Emergencia',
+				},
+			]),
 		],
 	},
 	{

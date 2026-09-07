@@ -137,6 +137,9 @@ function desplegar(b: Bloque, out: ItemInventario[]) {
 				out.push(item('li (tarjeta)', [t.titulo, t.descripcion].filter(Boolean).join(' — ')));
 			}
 			break;
+		case 'carrusel-logos':
+			out.push(item('ul (carrusel-logos)', b.logos.map((l) => l.alt).join(' · ')));
+			break;
 		default: {
 			// Bloque desconocido/futuro: se ignora para no romper el inventario.
 			const _never: never = b;

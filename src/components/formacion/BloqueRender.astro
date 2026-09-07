@@ -454,3 +454,72 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 		</div>
 	</div>
 )}
+
+{/* Carrusel de logos — marquee CSS infinito (misma idea que el image-carousel
+     de Elementor en la landing). La lista se duplica (aria-hidden la copia)
+     y el track se desplaza con una animación lineal continua; se pausa al
+     hover y se desactiva si el usuario prefiere menos movimiento. */}
+{b.tipo === 'carrusel-logos' && (
+	<div class="relative mt-6 overflow-hidden">
+		{/* Fundidos laterales para que los logos entren/salgan suavemente. */}
+		<div
+			class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent"
+			aria-hidden="true"
+		></div>
+		<div
+			class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent"
+			aria-hidden="true"
+		></div>
+		<div role="region" aria-label="Instituciones asociadas" class="carrusel-logos-track flex w-max">
+			<ul class="flex list-none items-center gap-12 p-0">
+				{b.logos.map((logo) => (
+					<li class="shrink-0">
+						<img
+							src={link(logo.src)}
+							alt={logo.alt}
+							class="h-10 w-auto opacity-70 grayscale transition-opacity duration-300 hover:opacity-100"
+							loading="lazy"
+						/>
+					</li>
+				))}
+			</ul>
+			{/* Copia exacta — aria-hidden para el bucle continuo sin saltos. */}
+			<ul class="flex list-none items-center gap-12 p-0" aria-hidden="true">
+				{b.logos.map((logo) => (
+					<li class="shrink-0">
+						<img
+							src={link(logo.src)}
+							alt=""
+							class="h-10 w-auto opacity-70 grayscale transition-opacity duration-300 hover:opacity-100"
+							loading="lazy"
+						/>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+)}
+
+<style>
+	.carrusel-logos-track {
+		animation: carrusel-logos-scroll 30s linear infinite;
+	}
+	.carrusel-logos-track:hover {
+		animation-play-state: paused;
+	}
+	@keyframes carrusel-logos-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			/* -50% = exactamente una copia de la lista (2 copias, la copia
+			   aria-hidden ocupa la segunda mitad). */
+			transform: translateX(-50%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.carrusel-logos-track {
+			animation: none;
+		}
+	}
+</style>

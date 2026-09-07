@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-09-07';
 
@@ -84,6 +84,33 @@ const beneficiosEjemplo = beneficios(
 	],
 	3,
 );
+
+// Carrusel de logos institucionales — bloque `carrusel-logos` (marquee CSS
+// infinito con pausa en hover). Componente INSTITUCIONES-ASOCIADAS (Máster,
+// Psicoterapia y Metapsicología): logos de las instituciones afiliadas con
+// los datos reales del landing original (blanco y negro).
+const carruselLogosEjemplo = carruselLogos([
+	{ src: '/instituciones_asociadas/time_to_better.webp', alt: 'Time to Better' },
+	{
+		src: '/instituciones_asociadas/efpp.webp',
+		alt: 'E-Faculté de Psychologie et Psychoanalyse',
+	},
+	{
+		src: '/instituciones_asociadas/association_psychanalystes_europeens.webp',
+		alt: 'Association des Psychanalystes Européens',
+	},
+	{ src: '/instituciones_asociadas/discurso_freudiano.webp', alt: 'Discurso Freudiano' },
+	{
+		src: '/instituciones_asociadas/federation_education_europe.webp',
+		alt: 'Federation for Education in Europe — Fédération Européenne des Écoles',
+	},
+	{ src: '/instituciones_asociadas/raices_editorial.webp', alt: 'Raíces Editorial' },
+	{ src: '/instituciones_asociadas/psysos.webp', alt: 'PsySOS' },
+	{
+		src: '/instituciones_asociadas/fede_internacional_psicologia_emergencia.webp',
+		alt: 'Federación Internacional de Psicología de la Emergencia',
+	},
+]);
 
 // Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
 // mismo en todas las formaciones). Se renderiza full-bleed con el mapa
@@ -1624,6 +1651,30 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={insercionEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Carrusel de logos institucionales ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Instituciones asociadas (carrusel de logos)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Carrusel continuo de logos de las instituciones afiliadas, tomado
+				del <em>image-carousel</em> del original (autoplay, pausa en
+				hover). Implementado como <strong>marquee CSS puro</strong> —
+				sin JavaScript: la lista se duplica y el track se desplaza con
+				una animación lineal continua. Respeta
+				<code class="text-brand">prefers-reduced-motion</code> (se apega
+				la animación) y expone la región con
+				<code class="text-brand">aria-label</code>. Los logos se
+				descargaron a <code class="text-brand">public/instituciones_asociadas/</code>
+				con nombres en <em>snake_case</em> para ubicarlos fácilmente.
+				Bloque <code class="text-brand">carrusel-logos</code>
+				(componente <code class="text-brand">INSTITUCIONES-ASOCIADAS</code>:
+				Máster, Psicoterapia y Metapsicología).
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={carruselLogosEjemplo} />
 			</div>
 		</section>
 	</main>
