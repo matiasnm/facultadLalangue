@@ -155,11 +155,14 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 	</ul>
 )}
 
-{/* Total de beneficios — tarjeta destacada */}
+{/* Total de beneficios — tarjeta destacada con contador animado (€1.363,
+     igual que el original: contador con prefijo €, miles con punto). */}
 {b.tipo === 'total-beneficios' && (
 	<div class="mt-6 rounded-2xl border border-dashed border-accent/50 bg-accent/5 p-6 text-center">
 		<p class="text-xs font-semibold uppercase tracking-widest text-muted">{b.titulo}</p>
-		<p class="mt-1 font-display text-4xl font-semibold text-brand">{b.valor}</p>
+		<p class="mt-1 font-display text-4xl font-semibold text-brand">
+			<Contador valor={b.valor} delimiter="." />
+		</p>
 		<p class="mt-2 text-sm text-ink/70">{b.nota}</p>
 	</div>
 )}

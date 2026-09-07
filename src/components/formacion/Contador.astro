@@ -22,9 +22,11 @@
  */
 interface Props {
 	valor: string;
+	/** Separador de miles: "," (original) o "." (total de beneficios). */
+	delimiter?: string;
 }
 
-const { valor } = Astro.props;
+const { valor, delimiter = ',' } = Astro.props;
 
 const m = /^(\D*)([\d.,]+)(\D*)$/.exec(valor) ?? [];
 const prefijo = (m[1] ?? '').trim();
@@ -40,7 +42,7 @@ const final = `${prefijo}${numero}${sufijo}`;
 	data-duration="2000"
 	data-from-value="0"
 	data-to-value={numero}
-	data-delimiter=","
+	data-delimiter={delimiter}
 	aria-hidden="true"
 >0</span>
 <span class="sr-only">{final}</span>

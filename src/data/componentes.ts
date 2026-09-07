@@ -443,12 +443,23 @@ export const componentes: ComponenteComun[] = [
 		],
 	},
 	{
-		id: 'BENEFICIOS-TOTAL',
-		nota: 'Doc §16.',
+		id: 'BENEFICIOS-TOTAL-COMPLETO',
+		nota: 'Total de beneficios Máster/Psicoterapia = 495+47+171+150+200+300 = 1363. Contador animado con miles en punto.',
 		bloques: [
 			totalBeneficios(
 				'Valor total en beneficios',
-				'€0',
+				'€1363',
+				'Todos estos beneficios forman parte de la formación.',
+			),
+		],
+	},
+	{
+		id: 'BENEFICIOS-TOTAL-BASE',
+		nota: 'Total de beneficios del resto de formaciones = 150+200+300 = 650. Contador animado con miles en punto.',
+		bloques: [
+			totalBeneficios(
+				'Valor total en beneficios',
+				'€650',
 				'Todos estos beneficios forman parte de la formación.',
 			),
 		],

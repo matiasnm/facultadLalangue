@@ -154,7 +154,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-COMPLETO'),
 			// CTA entrevista
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			texto('Agenda una entrevista gratuita y sin compromiso.'),
@@ -335,7 +335,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-COMPLETO'),
 			// CTA entrevista
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			texto('Agenda una entrevista gratuita y sin compromiso.'),
@@ -520,7 +520,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-BASE'),
 			// Planes de financiación
 			titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
 			titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -676,7 +676,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-BASE'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
 			titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -828,7 +828,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-BASE'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
 			titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -999,7 +999,7 @@ export const formaciones: Formacion[] = [
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL'),
+			c('BENEFICIOS-TOTAL-BASE'),
 			// Planes de financiación
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			titulo('Planes de financiación', 2, undefined, 'precios'),
