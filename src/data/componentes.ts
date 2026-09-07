@@ -48,8 +48,11 @@ export type BloqueTotalBeneficios = {
  * Grid de beneficios "exclusivos alumnos" — mismo diseño que la landing del
  * Máster (#Beneficios exclusivos alumnos): una grilla de tarjetas (3 columnas
  * en desktop, 2 en tablet, 1 en mobile) separadas por líneas de 1px sobre un
- * fondo, donde cada tarjeta "se ilumina" (fondo más claro + línea brand en su
- * borde inferior) al pasar el cursor.
+ * fondo, sin border radius, donde cada tarjeta "se ilumina" (fondo más claro
+ * + línea brand en su borde inferior) al pasar el cursor.
+ * - Todas las tarjetas miden lo mismo (auto-rows-fr), sin importar el texto.
+ * - El precio va abajo a la derecha, a la misma distancia del borde.
+ * - Los títulos se enumeran 1., 2., 3., … según su posición en el grid.
  */
 export type BloqueBeneficios = {
 	tipo: 'beneficios';

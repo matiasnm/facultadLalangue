@@ -1563,8 +1563,13 @@ const samples: Record<string, string> = {
 				original del Máster. Las líneas entre celdas son el
 				<code class="text-brand">gap-px</code> sobre el fondo del contenedor
 				(no bordes): 1 columna en mobile, 2 en tablet y
-				<strong>3 en desktop</strong>. Bloque <code class="text-brand">beneficios</code>
-				con colores de las variables globales, sin copias del original.
+				<strong>3 en desktop</strong>, sin border radius. Todas las tarjetas
+				miden <strong>lo mismo</strong> (<code class="text-brand">auto-rows-fr</code>),
+				el <strong>precio va abajo a la derecha</strong> (a la misma distancia
+				del borde en todas) y los <strong>títulos están enumerados</strong>
+				(1., 2., 3., …) como en el original. Bloque
+				<code class="text-brand">beneficios</code> con colores de las variables
+				globales, sin copias del original.
 				Ya está <strong>aplicado en las 6 formaciones</strong>: las que llevan
 				los 3 comunes (inscripción, perfil TimeToBetter, grupos) usan
 				<code class="text-brand">BENEFICIOS-GRID-BASE</code> y Máster +
