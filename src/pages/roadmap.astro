@@ -3,8 +3,33 @@ import Layout from '../layouts/Layout.astro';
 import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
+import BloqueRender from '../components/formacion/BloqueRender.astro';
+import { dirigidoA } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-08-28';
+
+// Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
+const dirigidoAEjemplo = dirigidoA(
+	{
+		titulo: 'Es para ti si:',
+		items: [
+			'[Placeholder] Sos un profesional con formación previa.',
+			'[Placeholder] Atendés o querés consolidar una práctica clínica.',
+			'[Placeholder] Te interesa expandir tu práctica internacional.',
+		],
+	},
+	{
+		titulo: 'No es para ti si:',
+		items: [
+			'[Placeholder] Buscás cursos rápidos.',
+			'[Placeholder] Esperás recetas cerradas.',
+		],
+	},
+	{
+		texto: '**Amplía tu recorrido** según tu interés clínico o teórico. *(placeholder)*',
+		boton: { etiqueta: 'Beca 60% para profesionales', href: '#precios' },
+	},
+);
 
 // Base pública (GitHub Pages sub-ruta). Prefija rutas internas con la base.
 const base = import.meta.env.BASE_URL;
@@ -1455,6 +1480,23 @@ const samples: Record<string, string> = {
 						</article>
 					))
 				}
+			</div>
+		</section>
+
+		<!-- ================= Tarjeta "dirigido-a" ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Tarjeta «dirigido a»</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Dos columnas que se miran — «Es para ti si» y «No es para ti si» —
+				con borde redondeado <strong>hacia el interior del par</strong>, más
+				un cierre centrado con texto y botón. Tomado de la sección
+				<code class="text-brand">#paraTi</code> de la landing del Máster.
+				Los colores usan las variables globales (brand, accent, surface),
+				no copias del original. Texto de ejemplo a reemplazar.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={dirigidoAEjemplo} />
 			</div>
 		</section>
 	</main>

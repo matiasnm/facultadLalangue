@@ -82,6 +82,22 @@ export type BloqueTarjetas = {
 	tipo: 'tarjetas';
 	items: { titulo: string; descripcion?: string; href?: string; imagen?: string }[];
 };
+/**
+ * Tarjeta "dirigido-a" — dos columnas que se miran ("Es para ti si" / "No es para
+ * ti si"), con borde redondeado hacia el interior del par, más un cierre
+ * centrado con texto y botón (p. ej. el acceso a la beca).
+ * Estilo tomado de la landing del Máster (sección #paraTi).
+ */
+export type BloqueDirigidoA = {
+	tipo: 'dirigido-a';
+	positivos: { titulo: string; items: string[] };
+	negativos: { titulo: string; items: string[] };
+	/** Cierre centrado debajo de las columnas. */
+	pie: {
+		texto: string;
+		boton: { etiqueta: string; href: string };
+	};
+};
 
 export type Bloque =
 	| BloqueTitulo
@@ -98,7 +114,8 @@ export type Bloque =
 	| BloqueEnlace
 	| BloquePersona
 	| BloqueEquipo
-	| BloqueTarjetas;
+	| BloqueTarjetas
+	| BloqueDirigidoA;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -149,6 +166,8 @@ export const persona = (nombre, titulo, bio, foto?, boton?) =>
 export const equipo = (personas, columnas = 3, modal = false) =>
 	({ tipo: 'equipo', personas, columnas, modal: modal || undefined }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
+export const dirigidoA = (positivos, negativos, pie) =>
+	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
