@@ -458,7 +458,8 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 {/* Carrusel de logos — marquee CSS infinito (misma idea que el image-carousel
      de Elementor en la landing). La lista se duplica (aria-hidden la copia)
      y el track se desplaza con una animación lineal continua; se pausa al
-     hover y se desactiva si el usuario prefiere menos movimiento. */}
+     hover y se desactiva si el usuario prefiere menos movimiento. Cada logo
+     con `href` es un enlace externo (pestaña nueva) sin estilos propios. */}
 {b.tipo === 'carrusel-logos' && (
 	<div class="relative mt-6 overflow-hidden">
 		{/* Fundidos laterales para que los logos entren/salgan suavemente. */}
@@ -474,12 +475,23 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 			<ul class="flex list-none items-center gap-12 p-0">
 				{b.logos.map((logo) => (
 					<li class="shrink-0">
-						<img
-							src={link(logo.src)}
-							alt={logo.alt}
-							class="h-10 w-auto opacity-70 grayscale transition-opacity duration-300 hover:opacity-100"
-							loading="lazy"
-						/>
+						{logo.href ? (
+							<a href={link(logo.href)} target="_blank" rel="noopener noreferrer">
+								<img
+									src={link(logo.src)}
+									alt={logo.alt}
+									class="h-10 w-auto opacity-70 grayscale"
+									loading="lazy"
+								/>
+							</a>
+						) : (
+							<img
+								src={link(logo.src)}
+								alt={logo.alt}
+								class="h-10 w-auto opacity-70 grayscale"
+								loading="lazy"
+							/>
+						)}
 					</li>
 				))}
 			</ul>
@@ -487,12 +499,13 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 			<ul class="flex list-none items-center gap-12 p-0" aria-hidden="true">
 				{b.logos.map((logo) => (
 					<li class="shrink-0">
-						<img
-							src={link(logo.src)}
-							alt=""
-							class="h-10 w-auto opacity-70 grayscale transition-opacity duration-300 hover:opacity-100"
-							loading="lazy"
-						/>
+						{logo.href ? (
+							<a href={link(logo.href)} tabindex="-1" aria-hidden="true">
+								<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+							</a>
+						) : (
+							<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+						)}
 					</li>
 				))}
 			</ul>

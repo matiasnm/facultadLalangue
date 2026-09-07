@@ -124,7 +124,7 @@ export type BloqueDirigidoA = {
  */
 export type BloqueCarruselLogos = {
 	tipo: 'carrusel-logos';
-	logos: { src: string; alt: string }[];
+	logos: { src: string; alt: string; href?: string }[];
 };
 
 export type Bloque =
@@ -711,41 +711,49 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'INSTITUCIONES-ASOCIADAS',
-		nota: 'Doc §29 — Máster, Psicoterapia y Metapsicología. Logos en public/instituciones_asociadas/.',
+		nota: 'Doc §29 — todas las formaciones. Logos en public/instituciones_asociadas/. Cada logo con href abre el sitio de la institución en pestaña nueva (target=_blank, sin hover).',
 		bloques: [
 			titulo('Instituciones asociadas', 4),
 			carruselLogos([
 				{
 					src: '/instituciones_asociadas/time_to_better.webp',
 					alt: 'Time to Better',
+					href: 'https://timetobetter.com/',
 				},
 				{
 					src: '/instituciones_asociadas/efpp.webp',
 					alt: 'E-Faculté de Psychologie et Psychoanalyse',
+					href: 'https://efpp.org/',
 				},
 				{
 					src: '/instituciones_asociadas/association_psychanalystes_europeens.webp',
 					alt: 'Association des Psychanalystes Européens',
+					href: 'https://www.ape-psychanalyse.com/',
 				},
 				{
 					src: '/instituciones_asociadas/discurso_freudiano.webp',
 					alt: 'Discurso Freudiano',
+					href: 'https://www.discursofreudiano.com/',
 				},
 				{
 					src: '/instituciones_asociadas/federation_education_europe.webp',
 					alt: 'Federation for Education in Europe — Fédération Européenne des Écoles',
+					href: 'https://www.fede.education/ecoles/esage-paris/',
 				},
 				{
 					src: '/instituciones_asociadas/raices_editorial.webp',
 					alt: 'Raíces Editorial',
+					href: 'https://raicesredasistencial.com/',
 				},
 				{
 					src: '/instituciones_asociadas/psysos.webp',
 					alt: 'PsySOS',
+					href: 'https://psysos.org/',
 				},
 				{
 					src: '/instituciones_asociadas/fede_internacional_psicologia_emergencia.webp',
 					alt: 'Federación Internacional de Psicología de la Emergencia',
+					href: 'https://fipe-ifep.org/',
 				},
 			]),
 		],

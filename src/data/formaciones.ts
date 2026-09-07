@@ -576,6 +576,7 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
+			c('INSTITUCIONES-ASOCIADAS'),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -732,6 +733,7 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
+			c('INSTITUCIONES-ASOCIADAS'),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -897,6 +899,7 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
+			c('INSTITUCIONES-ASOCIADAS'),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},

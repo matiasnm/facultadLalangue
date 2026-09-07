@@ -86,29 +86,34 @@ const beneficiosEjemplo = beneficios(
 );
 
 // Carrusel de logos institucionales — bloque `carrusel-logos` (marquee CSS
-// infinito con pausa en hover). Componente INSTITUCIONES-ASOCIADAS (Máster,
-// Psicoterapia y Metapsicología): logos de las instituciones afiliadas con
-// los datos reales del landing original (blanco y negro).
+// infinito con pausa en hover). Componente INSTITUCIONES-ASOCIADAS (usado en
+// todas las formaciones, arriba del CTA final): logos de las instituciones
+// afiliadas con los datos reales del landing original (blanco y negro).
+// Cada entrada con `href` abre el sitio de la institución en pestaña nueva.
 const carruselLogosEjemplo = carruselLogos([
-	{ src: '/instituciones_asociadas/time_to_better.webp', alt: 'Time to Better' },
+	{ src: '/instituciones_asociadas/time_to_better.webp', alt: 'Time to Better', href: 'https://timetobetter.com/' },
 	{
 		src: '/instituciones_asociadas/efpp.webp',
 		alt: 'E-Faculté de Psychologie et Psychoanalyse',
+		href: 'https://efpp.org/',
 	},
 	{
 		src: '/instituciones_asociadas/association_psychanalystes_europeens.webp',
 		alt: 'Association des Psychanalystes Européens',
+		href: 'https://www.ape-psychanalyse.com/',
 	},
-	{ src: '/instituciones_asociadas/discurso_freudiano.webp', alt: 'Discurso Freudiano' },
+	{ src: '/instituciones_asociadas/discurso_freudiano.webp', alt: 'Discurso Freudiano', href: 'https://www.discursofreudiano.com/' },
 	{
 		src: '/instituciones_asociadas/federation_education_europe.webp',
 		alt: 'Federation for Education in Europe — Fédération Européenne des Écoles',
+		href: 'https://www.fede.education/ecoles/esage-paris/',
 	},
-	{ src: '/instituciones_asociadas/raices_editorial.webp', alt: 'Raíces Editorial' },
-	{ src: '/instituciones_asociadas/psysos.webp', alt: 'PsySOS' },
+	{ src: '/instituciones_asociadas/raices_editorial.webp', alt: 'Raíces Editorial', href: 'https://raicesredasistencial.com/' },
+	{ src: '/instituciones_asociadas/psysos.webp', alt: 'PsySOS', href: 'https://psysos.org/' },
 	{
 		src: '/instituciones_asociadas/fede_internacional_psicologia_emergencia.webp',
 		alt: 'Federación Internacional de Psicología de la Emergencia',
+		href: 'https://fipe-ifep.org/',
 	},
 ]);
 
@@ -1670,8 +1675,11 @@ const samples: Record<string, string> = {
 				descargaron a <code class="text-brand">public/instituciones_asociadas/</code>
 				con nombres en <em>snake_case</em> para ubicarlos fácilmente.
 				Bloque <code class="text-brand">carrusel-logos</code>
-				(componente <code class="text-brand">INSTITUCIONES-ASOCIADAS</code>:
-				Máster, Psicoterapia y Metapsicología).
+				(componente <code class="text-brand">INSTITUCIONES-ASOCIADAS</code>,
+				en <strong>todas las formaciones</strong> arriba del CTA final).
+				Cada logo <strong>enlaza al sitio de la institución</strong> en
+				pestaña nueva (<code class="text-brand">target="_blank"</code>,
+				sin estilos de hover ni alteración visual).
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={carruselLogosEjemplo} />
