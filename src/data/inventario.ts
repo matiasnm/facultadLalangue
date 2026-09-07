@@ -85,6 +85,14 @@ function desplegar(b: Bloque, out: ItemInventario[]) {
 			out.push(item('p', b.descripcion));
 			out.push(item('p (precio)', b.precio));
 			break;
+		case 'beneficios':
+			for (const bf of b.items) {
+				out.push(item('h4 (beneficio)', bf.titulo));
+				if (bf.subtitulo) out.push(item('p', bf.subtitulo));
+				out.push(item('p', bf.descripcion));
+				out.push(item('p (precio)', bf.precio));
+			}
+			break;
 		case 'total-beneficios':
 			out.push(item('p (total-beneficios)', `${b.titulo} ${b.valor}`));
 			if (b.nota) out.push(item('p (nota)', b.nota));

@@ -4,9 +4,9 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats } from '../data/componentes';
+import { dirigidoA, stats, beneficios } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
-const lastUpdated = '2026-08-28';
+const lastUpdated = '2026-09-07';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
 const dirigidoAEjemplo = dirigidoA(
@@ -35,6 +35,55 @@ const dirigidoAEjemplo = dirigidoA(
 const base = import.meta.env.BASE_URL;
 const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+
+// Beneficios exclusivos alumnos — bloque `beneficios` (grid con hover
+// iluminado, igual que la landing del Máster). Componente
+// BENEFICIOS-GRID-BASE (3 comunes, resto de formaciones) y
+// BENEFICIOS-GRID-COMPLETO (6, Máster y Psicoterapia).
+const beneficiosEjemplo = beneficios(
+	[
+		{
+			titulo: 'Cinco módulos optativos',
+			subtitulo: 'A elección de cualquier formación.',
+			descripcion:
+				'Módulos opcionales extras a elección de cualquier formación de la Facultad.',
+			precio: '€495',
+		},
+		{
+			titulo: 'Taller «Interpretación de sueños»',
+			subtitulo: 'Por Mariela Molina · 4 clases.',
+			descripcion: 'Análisis de sueños: clínica, deseo e interpretación.',
+			precio: '€47',
+		},
+		{
+			titulo: 'Videoteca Clínica Completa',
+			subtitulo: 'Acceso ilimitado durante todo el programa.',
+			descripcion: 'Clases, cursos y material exclusivo para alumnos, siempre disponible.',
+			precio: '€171',
+		},
+		{
+			titulo: 'Inscripción Bonificada',
+			subtitulo: 'Sin costo de entrada.',
+			descripcion: 'El costo de inscripción queda completamente bonificado al ingresar.',
+			precio: '€150',
+		},
+		{
+			titulo: 'Perfil en TimeToBetter',
+			subtitulo: '6 meses gratuitos · Validación Lalangue.',
+			descripcion:
+				'Si no obtenés tu primer consultante en ese período, la bonificación se extiende hasta lograrlo.',
+			precio: '€200',
+		},
+		{
+			titulo: 'Grupos de Supervisión y Estudio',
+			subtitulo: 'Exclusivos para alumnos.',
+			descripcion:
+				'Lecturas y referencias clínicas de formación psicoanalítica contemporánea.',
+			precio: '€300',
+		},
+	],
+	3,
+);
 
 // Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
 // mismo en todas las formaciones). Se renderiza full-bleed con el mapa
@@ -1500,6 +1549,31 @@ const samples: Record<string, string> = {
 						</article>
 					))
 				}
+			</div>
+		</section>
+
+		<!-- ================= Beneficios exclusivos alumnos ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Beneficios exclusivos alumnos</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Grilla de tarjetas que <strong>se iluminan al pasar el cursor</strong>:
+				fondo más claro y una línea <strong>brand</strong> (vino) que crece
+				desde la izquierda en el borde inferior, tal como en la landing
+				original del Máster. Las líneas entre celdas son el
+				<code class="text-brand">gap-px</code> sobre el fondo del contenedor
+				(no bordes): 1 columna en mobile, 2 en tablet y
+				<strong>3 en desktop</strong>. Bloque <code class="text-brand">beneficios</code>
+				con colores de las variables globales, sin copias del original.
+				Ya está <strong>aplicado en las 6 formaciones</strong>: las que llevan
+				los 3 comunes (inscripción, perfil TimeToBetter, grupos) usan
+				<code class="text-brand">BENEFICIOS-GRID-BASE</code> y Máster +
+				Psicoterapia agregan los 3 de postgrado extendido con
+				<code class="text-brand">BENEFICIOS-GRID-COMPLETO</code>
+				(6 tarjetas). El ejemplo de abajo es el caso completo.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={beneficiosEjemplo} />
 			</div>
 		</section>
 

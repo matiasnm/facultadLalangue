@@ -153,10 +153,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-EXTRA-2-ANIOS'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-COMPLETO'),
 			c('BENEFICIOS-TOTAL'),
 			// CTA entrevista
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
@@ -337,10 +334,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-EXTRA-2-ANIOS'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-COMPLETO'),
 			c('BENEFICIOS-TOTAL'),
 			// CTA entrevista
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
@@ -525,9 +519,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-BASE'),
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
@@ -683,9 +675,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-BASE'),
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
@@ -837,9 +827,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-BASE'),
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
@@ -1010,9 +998,7 @@ export const formaciones: Formacion[] = [
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
-			c('BENEFICIO-INSCRIPCION-BONIFICADA'),
-			c('BENEFICIO-PERFIL-TIMETOBETTER'),
-			c('BENEFICIO-GRUPOS-SUPERVISION'),
+			c('BENEFICIOS-GRID-BASE'),
 			c('BENEFICIOS-TOTAL'),
 			// Planes de financiación
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),

@@ -44,6 +44,19 @@ export type BloqueTotalBeneficios = {
 	valor: string;
 	nota: string;
 };
+/**
+ * Grid de beneficios "exclusivos alumnos" — mismo diseño que la landing del
+ * Máster (#Beneficios exclusivos alumnos): una grilla de tarjetas (3 columnas
+ * en desktop, 2 en tablet, 1 en mobile) separadas por líneas de 1px sobre un
+ * fondo, donde cada tarjeta "se ilumina" (fondo más claro + línea brand en su
+ * borde inferior) al pasar el cursor.
+ */
+export type BloqueBeneficios = {
+	tipo: 'beneficios';
+	items: BloqueBeneficio[];
+	/** Columnas en desktop: 3 (seis beneficios) o 2 (cuatro o menos). */
+	columnas?: 2 | 3;
+};
 export type BloqueCita = { tipo: 'cita'; lineas: string[]; autor: string };
 export type BloqueStats = {
 	tipo: 'stats';
@@ -108,6 +121,7 @@ export type Bloque =
 	| BloqueChips
 	| BloqueContadores
 	| BloqueBeneficio
+	| BloqueBeneficios
 	| BloqueTotalBeneficios
 	| BloqueCita
 	| BloqueStats
@@ -140,6 +154,8 @@ export const chips = (items, variante = 'sello') => ({ tipo: 'chips', items, var
 export const contadores = (items) => ({ tipo: 'contadores', items }) as BloqueContadores;
 export const beneficio = ({ titulo, subtitulo, descripcion, precio }) =>
 	({ tipo: 'beneficio', titulo, subtitulo, descripcion, precio }) as BloqueBeneficio;
+export const beneficios = (items, columnas = 3) =>
+	({ tipo: 'beneficios', items, columnas }) as BloqueBeneficios;
 export const totalBeneficios = (titulo, valor, nota) =>
 	({ tipo: 'total-beneficios', titulo, valor, nota }) as BloqueTotalBeneficios;
 export const cita = (lineas, autor) => ({ tipo: 'cita', lineas, autor }) as BloqueCita;
@@ -346,6 +362,81 @@ export const componentes: ComponenteComun[] = [
 				descripcion: 'Clases, cursos y material exclusivo para alumnos, siempre disponible.',
 				precio: '€171',
 			}),
+		],
+	},
+	{
+		id: 'BENEFICIOS-GRID-BASE',
+		nota: 'Grid de beneficios «exclusivos alumnos» — los 3 comunes a todas las formaciones (inscripción, perfil, grupos).',
+		bloques: [
+			beneficios([
+				{
+					titulo: 'Inscripción Bonificada',
+					subtitulo: 'Sin costo de entrada.',
+					descripcion: 'El costo de inscripción queda completamente bonificado al ingresar.',
+					precio: '€150',
+				},
+				{
+					titulo: 'Perfil en TimeToBetter',
+					subtitulo: '6 meses gratuitos · Validación Lalangue.',
+					descripcion:
+						'Si no obtenés tu primer consultante en ese período, la bonificación se extiende hasta lograrlo.',
+					precio: '€200',
+				},
+				{
+					titulo: 'Grupos de Supervisión y Estudio',
+					subtitulo: 'Exclusivos para alumnos.',
+					descripcion:
+						'Lecturas y referencias clínicas de formación psicoanalítica contemporánea.',
+					precio: '€300',
+				},
+			], 3),
+		],
+	},
+	{
+		id: 'BENEFICIOS-GRID-COMPLETO',
+		nota: 'Grid de beneficios «exclusivos alumnos» — los 6 del Máster/Psicoterapia (3 comunes + 3 de postgrado extendido).',
+		bloques: [
+			beneficios([
+				{
+					titulo: 'Cinco módulos optativos',
+					subtitulo: 'A elección de cualquier formación.',
+					descripcion:
+						'Módulos opcionales extras a elección de cualquier formación de la Facultad.',
+					precio: '€495',
+				},
+				{
+					titulo: 'Taller «Interpretación de sueños»',
+					subtitulo: 'Por Mariela Molina · 4 clases.',
+					descripcion: 'Análisis de sueños: clínica, deseo e interpretación.',
+					precio: '€47',
+				},
+				{
+					titulo: 'Videoteca Clínica Completa',
+					subtitulo: 'Acceso ilimitado durante todo el programa.',
+					descripcion: 'Clases, cursos y material exclusivo para alumnos, siempre disponible.',
+					precio: '€171',
+				},
+				{
+					titulo: 'Inscripción Bonificada',
+					subtitulo: 'Sin costo de entrada.',
+					descripcion: 'El costo de inscripción queda completamente bonificado al ingresar.',
+					precio: '€150',
+				},
+				{
+					titulo: 'Perfil en TimeToBetter',
+					subtitulo: '6 meses gratuitos · Validación Lalangue.',
+					descripcion:
+						'Si no obtenés tu primer consultante en ese período, la bonificación se extiende hasta lograrlo.',
+					precio: '€200',
+				},
+				{
+					titulo: 'Grupos de Supervisión y Estudio',
+					subtitulo: 'Exclusivos para alumnos.',
+					descripcion:
+						'Lecturas y referencias clínicas de formación psicoanalítica contemporánea.',
+					precio: '€300',
+				},
+			], 3),
 		],
 	},
 	{
