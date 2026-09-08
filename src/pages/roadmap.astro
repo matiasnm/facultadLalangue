@@ -4,9 +4,9 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
-const lastUpdated = '2026-09-07';
+const lastUpdated = '2026-09-08';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
 const dirigidoAEjemplo = dirigidoA(
@@ -158,6 +158,25 @@ const insercionEjemplo = stats({
 	referencia:
 		'**Referencia:** Estudios de inserción laboral del *COP (2021)* y el APA Early Career Report (2022) … — texto real en INSERCION-ESTADISTICAS.',
 });
+
+// Articula — bloque `articula` (sección "… articula:" con los ejes de la
+// formación). Copia simplificada del bloque de articulación del landing
+// original (Elementor): fondo full-bleed en gradiente claro (blanco →
+// superficie), título centrado, columna izquierda con el lema institucional
+// (palabras clave en Roboto Serif índigo + separador) y columna derecha con
+// los N ejes numerados. El lema usa el default (LEMA_ARTICULACION);
+// el ejemplo replica los datos de la formación de Subjetividad Digital.
+const articulaEjemplo = articula(
+	'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
+	[
+		'Comprensión psicológica de la subjetividad digital.',
+		'Análisis del impacto de algoritmos y plataformas en la identidad.',
+		'Estudio de nuevas formas de sufrimiento online.',
+		'Herramientas para comprender daño algorítmico y dependencia digital.',
+		'Análisis crítico de cultura digital y economía de la atención.',
+		'Perspectivas interdisciplinarias para investigación e intervención.',
+	],
+);
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1728,6 +1747,30 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={admisionEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Articula ("… articula:") ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Articula («… articula:»)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Sección que presenta los ejes de cada formación, copiando el bloque de
+				articulación del landing original (Elementor): fondo
+				<strong>full-bleed</strong> en gradiente claro (blanco → superficie,
+				la misma técnica de ancho completo que <code class="text-brand">stats</code>),
+				título centrado, columna izquierda con el <strong>lema institucional</strong>
+				(palabras clave en <strong>Roboto Serif índigo</strong> con un separador
+				índigo debajo de cada línea) y columna derecha con los
+				<strong>N ejes numerados</strong> (número en Montserrat índigo).
+				En mobile una sola columna con los ejes primero. Bloque
+				<code class="text-brand">articula</code> — el lema viene por default
+				(<code class="text-brand">LEMA_ARTICULACION</code>) y cada formación pasa
+				su título y sus ejes. Ya está <strong>aplicado en las 6 formaciones</strong>
+				(reemplaza la tripla <code class="text-brand">titulo + FACULTAD-LEMA + lista</code>).
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={articulaEjemplo} />
 			</div>
 		</section>
 	</main>

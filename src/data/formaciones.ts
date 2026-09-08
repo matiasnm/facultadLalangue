@@ -19,6 +19,7 @@ import {
 	faq,
 	dirigidoA,
 	admision,
+	articula,
 	type BloquePagina,
 } from './componentes';
 
@@ -122,19 +123,14 @@ export const formaciones: Formacion[] = [
 			c('FACULTAD-SUPERVISION-GRATUITA'),
 			c('FACULTAD-TEXTO-INSTITUCIONAL'),
 			c('FACULTAD-PILARES'),
-			titulo('El Máster en Psicoanálisis Aplicado articula:'),
-			c('FACULTAD-LEMA'),
-			lista(
-				[
-					'Estudio profundo y riguroso del psicoanálisis.',
-					'Trabajo con estructuras clínicas y síntomas contemporáneos.',
-					'Neurociencia y epigenética en diálogo con el psicoanálisis.',
-					'Supervisión clínica real durante la formación.',
-					'Espacios de elaboración colectiva internacional.',
-					'Articulación entre teoría, caso y práctica.',
-				],
-				true,
-			),
+			articula('El Máster en Psicoanálisis Aplicado articula:', [
+				'Estudio profundo y riguroso del psicoanálisis.',
+				'Trabajo con estructuras clínicas y síntomas contemporáneos.',
+				'Neurociencia y epigenética en diálogo con el psicoanálisis.',
+				'Supervisión clínica real durante la formación.',
+				'Espacios de elaboración colectiva internacional.',
+				'Articulación entre teoría, caso y práctica.',
+			]),
 			// Profesores
 			titulo('Profesores del máster'),
 			c('PROFESORES-INTRO'),
@@ -324,19 +320,14 @@ export const formaciones: Formacion[] = [
 			c('FACULTAD-SUPERVISION-GRATUITA'),
 			c('FACULTAD-TEXTO-INSTITUCIONAL'),
 			c('FACULTAD-PILARES'),
-			titulo('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', 3),
-			c('FACULTAD-LEMA'),
-			lista(
-				[
-					'Estudio riguroso del psicoanálisis.',
-					'Comprensión de las estructuras clínicas.',
-					'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
-					'Práctica clínica supervisada.',
-					'Comunidad académica internacional.',
-					'Articulación entre teoría, caso y práctica.',
-				],
-				true,
-			),
+			articula('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', [
+				'Estudio riguroso del psicoanálisis.',
+				'Comprensión de las estructuras clínicas.',
+				'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
+				'Práctica clínica supervisada.',
+				'Comunidad académica internacional.',
+				'Articulación entre teoría, caso y práctica.',
+			]),
 			// Profesores
 			titulo('Profesores de la diplomatura'),
 			c('PROFESORES-INTRO'),
@@ -527,12 +518,8 @@ export const formaciones: Formacion[] = [
 				'Este diplomado propone un espacio de **formación interdisciplinaria** para analizar críticamente estos fenómenos y desarrollar herramientas conceptuales y prácticas para abordarlos.',
 			]),
 			c('FACULTAD-PILARES'),
-			titulo(
+			articula(
 				'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
-				3,
-			),
-			c('FACULTAD-LEMA'),
-			lista(
 				[
 					'Comprensión psicológica de la subjetividad digital.',
 					'Análisis del impacto de algoritmos y plataformas en la identidad.',
@@ -541,7 +528,6 @@ export const formaciones: Formacion[] = [
 					'Análisis crítico de cultura digital y economía de la atención.',
 					'Perspectivas interdisciplinarias para investigación e intervención.',
 				],
-				true,
 			),
 			// Profesores
 			titulo('Profesores de la diplomatura'),
@@ -687,19 +673,14 @@ export const formaciones: Formacion[] = [
 				'Este diplomado propone una **formación clínica integradora** que articula teoría, práctica y análisis de casos, favoreciendo una intervención profesional ética, contextualizada y respetuosa de la diversidad.',
 			]),
 			c('FACULTAD-PILARES'),
-			titulo('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', 3),
-			c('FACULTAD-LEMA'),
-			lista(
-				[
-					'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
-					'Integración de diferentes modelos psicoterapéuticos para el trabajo con parejas.',
-					'Análisis de dinámicas relacionales complejas y patrones vinculares disfuncionales.',
-					'Herramientas terapéuticas para abordar conflictos, crisis afectivas y disfunciones sexuales.',
-					'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
-					'Articulación entre teoría, intervención clínica y análisis de casos.',
-				],
-				true,
-			),
+			articula('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', [
+				'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
+				'Integración de diferentes modelos psicoterapéuticos para el trabajo con parejas.',
+				'Análisis de dinámicas relacionales complejas y patrones vinculares disfuncionales.',
+				'Herramientas terapéuticas para abordar conflictos, crisis afectivas y disfunciones sexuales.',
+				'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
+				'Articulación entre teoría, intervención clínica y análisis de casos.',
+			]),
 			// Profesores
 			titulo('Profesores de la diplomatura'),
 			c('PROFESORES-INTRO'),
@@ -840,19 +821,14 @@ export const formaciones: Formacion[] = [
 				'Abordar estas problemáticas desde el psicoanálisis contemporáneo es fundamental para profesionales que buscan intervenir con una perspectiva crítica y actualizada, ya que permite leer la singularidad de cada caso, articulando diagnóstico, vínculos y contexto.',
 			]),
 			c('FACULTAD-PILARES'),
-			titulo('La Diplomatura en Psicopatología Infanto-Juvenil articula:', 3),
-			c('FACULTAD-LEMA'),
-			lista(
-				[
-					'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
-					'Integración del psicoanálisis con enfoques interdisciplinarios actuales.',
-					'Análisis de presentaciones clínicas y diagnósticos diferenciales en la infancia y adolescencia.',
-					'Herramientas clínicas para el abordaje de síntomas, sufrimiento psíquico y problemáticas actuales.',
-					'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
-					'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
-				],
-				true,
-			),
+			articula('La Diplomatura en Psicopatología Infanto-Juvenil articula:', [
+				'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
+				'Integración del psicoanálisis con enfoques interdisciplinarios actuales.',
+				'Análisis de presentaciones clínicas y diagnósticos diferenciales en la infancia y adolescencia.',
+				'Herramientas clínicas para el abordaje de síntomas, sufrimiento psíquico y problemáticas actuales.',
+				'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
+				'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
+			]),
 			// Profesores
 			titulo('Profesores de la diplomatura'),
 			c('PROFESORES-INTRO'),
@@ -1022,12 +998,8 @@ export const formaciones: Formacion[] = [
 				'**Facultad Lalangue** escucha los *murmullos de la época* y propone un espacio de formación que articula pensamiento, clínica y comunidad.',
 			]),
 			c('FACULTAD-PILARES'),
-			titulo(
+			articula(
 				'La Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica articula:',
-				3,
-			),
-			c('FACULTAD-LEMA'),
-			lista(
 				[
 					'Estudio riguroso del psicoanálisis.',
 					'Comprensión de las estructuras clínicas.',
@@ -1036,7 +1008,6 @@ export const formaciones: Formacion[] = [
 					'Comunidad académica internacional.',
 					'Articulación entre teoría, caso y práctica.',
 				],
-				true,
 			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),

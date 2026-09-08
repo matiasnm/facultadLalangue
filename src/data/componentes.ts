@@ -142,6 +142,24 @@ export type BloqueAdmision = {
 	derContenido: string[];
 };
 
+/**
+ * Articula — sección "… articula:" que presenta los ejes de la formación.
+ * Copia simplificada del bloque de articulación del landing original (Elementor):
+ * fondo full-bleed en gradiente claro (blanco → superficie), título centrado,
+ * columna izquierda con el lema institucional (cada línea con una palabra clave
+ * en `**negrita**` y un divisor índigo debajo) y columna derecha con los N ejes
+ * numerados (número índigo en Montserrat + texto). En mobile el orden se invierte
+ * (primero los ejes, luego el lema), igual que el original.
+ */
+export type BloqueArticula = {
+	tipo: 'articula';
+	titulo: string;
+	/** Líneas del mensaje fijo (columna izquierda); `**palabra**` = acento. */
+	lema: string[];
+	/** Ejes numerados de la columna derecha. */
+	puntos: string[];
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -161,7 +179,8 @@ export type Bloque =
 	| BloqueTarjetas
 	| BloqueDirigidoA
 	| BloqueCarruselLogos
-	| BloqueAdmision;
+	| BloqueAdmision
+	| BloqueArticula;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -220,6 +239,14 @@ export const dirigidoA = (positivos, negativos, pie) =>
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido, izqTexto?) =>
 	({ tipo: 'admision', fondo, izqTitulo, izqTexto, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
+/** Lema institucional de la sección "articula:" (mismo en las 6 formaciones). */
+export const LEMA_ARTICULACION = [
+	'Abriendo grietas en lo **Establecido**',
+	'Rigurosos en los **Fundamentos**',
+	'Atentos al **Porvenir**',
+];
+export const articula = (titulo, puntos, lema = LEMA_ARTICULACION) =>
+	({ tipo: 'articula', titulo, lema, puntos }) as BloqueArticula;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
