@@ -201,6 +201,8 @@ export const equipo = (personas, columnas = 3, modal = false) =>
 	({ tipo: 'equipo', personas, columnas, modal: modal || undefined }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 export const dirigidoA = (positivos, negativos, pie) =>
+export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
+	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 
 /* ------------------------------------------------------------------ */
