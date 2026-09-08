@@ -1712,14 +1712,18 @@ const samples: Record<string, string> = {
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Admisión</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
-				Formulario de entrada a las formaciones. Frente al visitante se muestra un
-				fondo ancho teñido con el vino de la paleta del sitio
-				(<code class="text-brand">bg-brand-dark</code> sobre la imagen
-				<code class="text-brand">admision_fondo.webp</code>, no copia del original).
+				Formulario de entrada a las formaciones. Sección <strong>full-bleed</strong>
+				de ancho completo (misma técnica que <code class="text-brand">stats</code>:
+				<code class="text-brand">w-screen</code> + <code class="text-brand">-ml-[50vw]</code> +
+				<code class="text-brand">left-1/2</code>) para que la imagen
+				<code class="text-brand">admision_fondo.webp</code> cubra todo el ancho,
+				teñida con el vino de la paleta (<code class="text-brand">bg-brand-dark</code>).
 				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>
 				y una lista de requisitos con check; a la derecha, el <strong>Cartel de
-				Matrícula anual</strong> con precio tachado, descuento en vino y precio
-				final, más el enlace a la entrevista de admisión. El componente está
+				Matrícula anual</strong> (patrón del CTA) con precio tachado, descuento y
+				precio final, más el enlace a la entrevista de admisión. Tipografías y
+				tamaños de la paleta del sitio (h2/h3 default en blanco, precio con
+				<code class="text-brand">font-display</code>). El componente está
 				incluido en todas las formaciones, arriba del CTA "¿Listo para inscribirte?".
 			</p>
 			<div class="mt-8">
