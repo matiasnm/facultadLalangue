@@ -826,3 +826,5 @@ export const componentePorId: Record<ComponenteId, ComponenteComun> = Object.fro
 
 /** Cita el componente `nombre` dentro de las `secciones` de una formación. */
 export const c = (nombre: ComponenteId): BloquePagina => ({ tipo: 'componente', nombre });
+export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
+	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
