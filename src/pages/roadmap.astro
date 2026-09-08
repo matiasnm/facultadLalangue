@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-09-07';
 
@@ -116,6 +116,25 @@ const carruselLogosEjemplo = carruselLogos([
 		href: 'https://fipe-ifep.org/',
 	},
 ]);
+
+// Componente Admisión — bloque `admision` (fondo ancho con la imagen
+// public/admision_fondo.webp, filtros con la paleta propia del sitio, diseño
+// de 2 columnas: título + requisitos a la izquierda, cartel de matrícula a la
+// derecha). Ejemplo con datos coherentes para el preview del roadmap.
+const admisionEjemplo = admision(
+	'/admision_fondo.webp',
+	'Admisión',
+	[
+		'Requisito 1: Formación previa en psicología o afines.',
+		'Requisito 2: Entrevista de admisión obligatoria.',
+		'Requisito 3: Disponibilidad horaria para la cursada.',
+	],
+	'Admisión Anual',
+	[
+		'Beca del 60%',
+		'€1800 → €540/año',
+	]
+);
 
 // Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
 // mismo en todas las formaciones). Se renderiza full-bleed con el mapa

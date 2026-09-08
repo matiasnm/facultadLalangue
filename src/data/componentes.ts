@@ -201,10 +201,9 @@ export const equipo = (personas, columnas = 3, modal = false) =>
 	({ tipo: 'equipo', personas, columnas, modal: modal || undefined }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 export const dirigidoA = (positivos, negativos, pie) =>
+	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
 	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
-	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
-
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
@@ -826,8 +825,3 @@ export const componentePorId: Record<ComponenteId, ComponenteComun> = Object.fro
 
 /** Cita el componente `nombre` dentro de las `secciones` de una formación. */
 export const c = (nombre: ComponenteId): BloquePagina => ({ tipo: 'componente', nombre });
-export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
-	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
-export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
-	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido });export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) => { return { tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }; };
-export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) => ({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido });
