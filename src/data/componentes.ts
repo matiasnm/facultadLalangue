@@ -833,7 +833,8 @@ export const componentes: ComponenteComun[] = [
 					'Matrícula anual',
 					[
 						'€3990 → €1596 (-60%)',
-						'25% adicional OFF en 1 pago: €1197',
+						'25% adicional OFF en 1 pago',
+						'€1197',
 						'+ Planes de financiación',
 					]
 				),
