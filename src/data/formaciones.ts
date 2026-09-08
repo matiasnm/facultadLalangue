@@ -250,6 +250,7 @@ export const formaciones: Formacion[] = [
 					'€1197',
 					'+ Planes de financiación',
 				],
+				'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			c('CTA-INSCRIBIRTE'),
 			texto(
@@ -449,6 +450,7 @@ export const formaciones: Formacion[] = [
 					'€1197',
 					'+ Planes de financiación',
 				],
+				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			c('CTA-INSCRIBIRTE'),
 		],
@@ -614,25 +616,6 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1660 → €498 (1 pago)',
-					'6 pagos: €99,6/mes',
-					'10 pagos: €66,5/mes',
-					'Beca de admisión del 60%',
-					'+ Planes de financiación',
-				],
-			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -790,25 +773,6 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1660 → €498 (1 pago)',
-					'6 pagos: €99,6/mes',
-					'10 pagos: €66,5/mes',
-					'Beca de admisión del 60%',
-					'+ Planes de financiación',
-				],
-			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -975,24 +939,6 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 (-60%)',
-					'1 pago · EUROS/Año',
-					'Beca de admisión del 60%',
-					'+ Planes de financiación',
-				],
-			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -1178,24 +1124,6 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 (-60%)',
-					'1 pago · EUROS/Año',
-					'Beca de admisión del 60%',
-					'+ Planes de financiación',
-				],
-			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
