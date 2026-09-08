@@ -125,14 +125,17 @@ const admisionEjemplo = admision(
 	'/admision_fondo.webp',
 	'Admisión',
 	[
-		'Requisito 1: Formación previa en psicología o afines.',
-		'Requisito 2: Entrevista de admisión obligatoria.',
-		'Requisito 3: Disponibilidad horaria para la cursada.',
+		'Entrevista de admisión obligatoria.',
+		'Entrevista gratuita.',
+		'Orientación para regulaciones locales.',
+		'Becas parciales para perfiles seleccionados.',
+		'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
 	],
-	'Admisión Anual',
+	'Matrícula anual',
 	[
-		'Beca del 60%',
-		'€1800 → €540/año',
+		'€3990 → €1596 (-60%)',
+		'25% adicional OFF en 1 pago: €1197',
+		'+ Planes de financiación',
 	]
 );
 
@@ -1704,27 +1707,20 @@ const samples: Record<string, string> = {
 				<BloqueRender bloque={carruselLogosEjemplo} />
 			</div>
 		</section>
-	</main>
-</Layout>
 		<!-- ================= Admisión (formulario de entrada) ================= -->
 		<section class="mt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Admisión</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
 				Formulario de entrada a las formaciones. Frente al visitante se muestra un
-				fondo ancho con la imagen de fondo <code class="text-brand">admision_fondo.webp</code>
-				filtros con los colores de la paleta propia del sitio (no copia del original).
+				fondo ancho teñido con el vino de la paleta del sitio
+				(<code class="text-brand">bg-brand-dark</code> sobre la imagen
+				<code class="text-brand">admision_fondo.webp</code>, no copia del original).
 				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>
-				y una lista de requisitos; a la derecha, el <strong>Cartel de Matrícula
-				Anual</strong> con la información de la anualidad (beca del 60%, €540/año)
-				y enlace a la entrevista de admisión. El componente está incluido en
-				todas las formaciones, arriba del CTA "¿Listo para inscribirte?".
-				Bloque <code class="text-brand">admision</code>
-				(componente <code class="text-brand">ADMISION</code>:
-				incluye fondo, título izquierda, bullets izquierda y cartel matrícula derecha).
-				Cada entrada con <code class="text-brand">href</code> abre el sitio de
-				la institución en pestaña nueva (<code class="text-brand">target="_blank"</code>,
-				sin estilos de hover ni alteración visual).
+				y una lista de requisitos con check; a la derecha, el <strong>Cartel de
+				Matrícula anual</strong> con precio tachado, descuento en vino y precio
+				final, más el enlace a la entrevista de admisión. El componente está
+				incluido en todas las formaciones, arriba del CTA "¿Listo para inscribirte?".
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={admisionEjemplo} />

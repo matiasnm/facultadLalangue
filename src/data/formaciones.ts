@@ -18,6 +18,7 @@ import {
 	enlace,
 	faq,
 	dirigidoA,
+	admision,
 	type BloquePagina,
 } from './componentes';
 
@@ -232,6 +233,23 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula anual',
+				[
+					'€3990 → €1596 (-60%)',
+					'25% adicional OFF en 1 pago: €1197',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 			texto(
 				'Formación rigurosa, contemporánea y orientada a la práctica. Psicología y psicoanálisis para los desafíos del presente.',
@@ -413,6 +431,23 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula anual',
+				[
+					'€3990 → €1596 (-60%)',
+					'25% adicional OFF en 1 pago: €1197',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -577,6 +612,25 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1660 → €498 (1 pago)',
+					'6 pagos: €99,6/mes',
+					'10 pagos: €66,5/mes',
+					'Beca de admisión del 60%',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -734,6 +788,25 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1660 → €498 (1 pago)',
+					'6 pagos: €99,6/mes',
+					'10 pagos: €66,5/mes',
+					'Beca de admisión del 60%',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -900,6 +973,24 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 (-60%)',
+					'1 pago · EUROS/Año',
+					'Beca de admisión del 60%',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -1085,6 +1176,24 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 (-60%)',
+					'1 pago · EUROS/Año',
+					'Beca de admisión del 60%',
+					'+ Planes de financiación',
+				],
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},

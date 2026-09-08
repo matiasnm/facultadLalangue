@@ -823,9 +823,19 @@ export const componentes: ComponenteComun[] = [
 				admision(
 					'/admision_fondo.webp',
 					'Admisión',
-					['Requisito 1: Formación previa en psicología o afines', 'Requisito 2: Entrevista de admisión obligatoria', 'Requisito 3: Disponibilidad horaria para la cursada'],
-					'Admisión Anual',
-					['Beca del 60%', 'Planes de financiación a partir de €540/año']
+					[
+						'Entrevista de admisión obligatoria.',
+						'Entrevista gratuita.',
+						'Orientación para regulaciones locales.',
+						'Becas parciales para perfiles seleccionados.',
+						'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+					],
+					'Matrícula anual',
+					[
+						'€3990 → €1596 (-60%)',
+						'25% adicional OFF en 1 pago: €1197',
+						'+ Planes de financiación',
+					]
 				),
 			],
 		},
