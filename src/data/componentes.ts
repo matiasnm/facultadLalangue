@@ -136,6 +136,7 @@ export type BloqueAdmision = {
 	tipo: 'admision';
 	fondo: string;
 	izqTitulo: string;
+	izqTexto?: string; // párrafo introductorio opcional bajo el título (columna izquierda)
 	izqBullets: string[];
 	derTitulo: string;
 	derContenido: string[];
@@ -217,8 +218,8 @@ export const equipo = (personas, columnas = 3, modal = false) =>
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 export const dirigidoA = (positivos, negativos, pie) =>
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
-export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
-	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
+export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido, izqTexto?) =>
+	({ tipo: 'admision', fondo, izqTitulo, izqTexto, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
@@ -836,7 +837,8 @@ export const componentes: ComponenteComun[] = [
 						'25% adicional OFF en 1 pago',
 						'€1197',
 						'+ Planes de financiación',
-					]
+					],
+					'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 				),
 			],
 		},
