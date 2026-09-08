@@ -127,6 +127,20 @@ export type BloqueCarruselLogos = {
 	logos: { src: string; alt: string; href?: string }[];
 };
 
+/**
+ * Admisión — sección de admisión y matrícula con fondo ancho (imagen oscura
+ * filtrada con los colores de la paleta del sitio). 2 columnas: título + lista
+ * de requisitos a la izquierda, cartel de matrícula anual a la derecha.
+ */
+export type BloqueAdmision = {
+	tipo: 'admision';
+	fondo: string;
+	izqTitulo: string;
+	izqBullets: string[];
+	derTitulo: string;
+	derContenido: string[];
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -145,7 +159,8 @@ export type Bloque =
 	| BloqueEquipo
 	| BloqueTarjetas
 	| BloqueDirigidoA
-	| BloqueCarruselLogos;
+	| BloqueCarruselLogos
+	| BloqueAdmision;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -806,7 +821,7 @@ export const componentes: ComponenteComun[] = [
 			nota: 'Doc §34 — Sección de admisión y matrícula. Incluye título, bullets izquierda y cartel matrícula derecha.',
 			bloques: [
 				admision(
-					'/backgrounds/admision_fondo.webp',
+					'/admision_fondo.webp',
 					'Admisión',
 					['Requisito 1: Formación previa en psicología o afines', 'Requisito 2: Entrevista de admisión obligatoria', 'Requisito 3: Disponibilidad horaria para la cursada'],
 					'Admisión Anual',

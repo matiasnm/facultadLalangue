@@ -536,36 +536,50 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 		}
 	}
 </style>
-{/* Componente Admisión — fondo ancho con imagen y diseño de 2 columnas. */}
+{/* Componente Admisión — fondo ancho con imagen filtrada (colores de la
+		paleta del sitio) y diseño de 2 columnas: título + requisitos a la
+		izquierda, cartel de matrícula anual a la derecha. El filtro va SOLO en
+		la capa de fondo para no alterar el contenido (texto blanco limpio). */}
 {b.tipo === 'admision' && (
-	<div class="relative w-full bg-no-fixed bg-center bg-cover" style="background-image: url('${b.fondo}'); filter: hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1);">
-		<div class="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-20">
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-				<!-- Columna izquierda: texto y bullets -->
+	<section class="relative mt-8 scroll-mt-24 bg-night" aria-label={b.izqTitulo}>
+		{/* Fondo: imagen cubriendo toda la sección con el filtro de color.
+		    Capa separada (pointer-events-none, absolute) como en `stats`. */}
+		<div
+			class="pointer-events-none absolute inset-0 bg-cover bg-center"
+			style={`background-image:url('${link(b.fondo)}'); filter: hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1);`}
+			aria-hidden="true"
+		></div>
+		<div class="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
+			<div class="grid grid-cols-1 gap-8 md:gap-12 lg:grid-cols-2">
+				{/* Columna izquierda: título y requisitos numerados. */}
 				<div>
-					<h2 class="text-3xl font-bold text-white mb-4">Admisión</h2>
+					<h2 class="mb-4 text-3xl font-bold text-white">{b.izqTitulo}</h2>
 					<ul class="space-y-3 text-white">
 						{b.izqBullets.map((bullet, i) => (
 							<li class="flex items-start">
-								<span class="text-red-500 flex-shrink-0 w-5">${i + 1}.</span>
-								<span class="ml-3">${bullet}</span>
+								<span class="w-5 flex-shrink-0 font-semibold text-accent">{i + 1}.</span>
+								<span class="ml-3">{bullet}</span>
 							</li>
 						))}
 					</ul>
 				</div>
-				<!-- Columna derecha -->
-				<div class="border-l pt-8">
-					<h3 class="text-xl font-bold text-white mb-4">Matrícula Anual</h3>
-					<div class="p-6 text-white">
-						<p>Beca del 60%</p>
-						<p>€1800 → €540 euros/año</p>
-						<a href="/Entrevista-de-Admisión" class="mt-4 inline-block text-red-500 underline underline-offset-2 hover:text-red-300">
-							Solicitar entrevista de admisión
-						</a>
+				{/* Columna derecha: cartel de matrícula anual. */}
+				<div class="pt-8 lg:border-l lg:border-white/20 lg:pt-0 lg:pl-12">
+					<h3 class="mb-4 text-xl font-bold text-white">{b.derTitulo}</h3>
+					<div class="space-y-2">
+						{b.derContenido.map((linea, idx) => (
+							<p class={idx === 0 ? 'font-semibold text-white' : 'text-white/80'}>{linea}</p>
+						))}
 					</div>
+					<a
+						href={link('/Entrevista-de-Admisión')}
+						class="mt-4 inline-block font-semibold text-accent underline underline-offset-2 hover:opacity-80"
+					>
+						Solicitar entrevista de admisión
+					</a>
 				</div>
 			</div>
 		</div>
-	)</div>
+	</section>
 )}
 
