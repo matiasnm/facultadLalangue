@@ -800,6 +800,19 @@ export const componentes: ComponenteComun[] = [
 			]),
 		],
 	},
+		{
+			id: 'ADMISION',
+			nota: 'Doc §34 — Sección de admisión y matrícula. Incluye título, bullets izquierda y cartel matrícula derecha.',
+			bloques: [
+				admision(
+					'/backgrounds/admision_fondo.webp',
+					'Admisión',
+					['Requisito 1: Formación previa en psicología o afines', 'Requisito 2: Entrevista de admisión obligatoria', 'Requisito 3: Disponibilidad horaria para la cursada'],
+					'Admisión Anual',
+					['Beca del 60%', 'Planes de financiación a partir de €540/año']
+				),
+			],
+		},
 ] as const;
 
 export type ComponenteId = (typeof componentes)[number]['id'];

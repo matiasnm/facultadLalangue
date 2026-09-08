@@ -1687,3 +1687,29 @@ const samples: Record<string, string> = {
 		</section>
 	</main>
 </Layout>
+		<!-- ================= Admisión (formulario de entrada) ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Admisión</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Formulario de entrada a las formaciones. Frente al visitante se muestra un
+				fondo ancho con la imagen de fondo <code class="text-brand">admision_fondo.webp</code>
+				filtros con los colores de la paleta propia del sitio (no copia del original).
+				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>
+				y una lista de requisitos; a la derecha, el <strong>Cartel de Matrícula
+				Anual</strong> con la información de la anualidad (beca del 60%, €540/año)
+				y enlace a la entrevista de admisión. El componente está incluido en
+				todas las formaciones, arriba del CTA "¿Listo para inscribirte?".
+				Bloque <code class="text-brand">admision</code>
+				(componente <code class="text-brand">ADMISION</code>:
+				incluye fondo, título izquierda, bullets izquierda y cartel matrícula derecha).
+				Cada entrada con <code class="text-brand">href</code> abre el sitio de
+				la institución en pestaña nueva (<code class="text-brand">target="_blank"</code>,
+				sin estilos de hover ni alteración visual).
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={admisionEjemplo} />
+			</div>
+		</section>
+	</main>
+</Layout>
