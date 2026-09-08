@@ -829,4 +829,4 @@ export const c = (nombre: ComponenteId): BloquePagina => ({ tipo: 'componente', 
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
 	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) =>
-	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido });
+	({ tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido });export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido) => { return { tipo: 'admision', fondo, izqTitulo, izqBullets, derTitulo, derContenido }; };
