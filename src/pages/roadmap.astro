@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, LOGO_FACULTAD, ESLOGAN_FACULTAD } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-09-08';
 
@@ -178,6 +178,18 @@ const articulaEjemplo = articula(
 		'Herramientas para comprender daño algorítmico y dependencia digital.',
 		'Análisis crítico de cultura digital y economía de la atención.',
 		'Perspectivas interdisciplinarias para investigación e intervención.',
+	],
+);
+
+// Componente Facultad — bloque institucional compacto. Los pilares usan el
+// default PILARES_FACULTAD (los mismos de las 6 formaciones).
+const facultadEjemplo = facultad(
+	LOGO_FACULTAD,
+	ESLOGAN_FACULTAD,
+	[
+		'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+		'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+		'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
 	],
 );
 
@@ -1794,6 +1806,40 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={articulaEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Facultad (bloque institucional) ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Facultad (bloque institucional compacto)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Condensa la sección "La Facultad" de cada formación, <strong>más chica</strong>
+				que la sección original de la landing (elementos <code class="text-brand">94c731f</code>
+				+ <code class="text-brand">61e4cdb</code>) y adaptada a los estilos y la paleta
+				del sitio. En la parte superior, <strong>2 columnas</strong>: a la izquierda el
+				<strong>logo</strong> (<code class="text-brand">/logo.svg</code>) y el
+				<strong>eslogan</strong> "Primera y única facultad con Grupos de Supervisión y de
+				Estudio Gratuitos" — sin punto final, con el acento
+				<code class="text-brand">**…**</code> en <strong>vino</strong>
+				(<code class="text-brand">text-brand</code>) —; a la derecha, los
+				<strong>3 párrafos</strong> de la formación (Compartido institucional /
+				Subjetividad / Parejas / Infanto-Juvenil / Metapsicología). Abajo, la
+				<strong>grilla de 6 pilares</strong> (Institución con trayectoria, Cuerpo docente,
+				Certificación internacional, Comunidad activa, Inserción laboral y Prácticas
+				clínicas) con <strong>iconos minimalistas de trazo fino</strong> (sin relleno, en
+				lugar de los FontAwesome del original: globo, pizarrón, certificado, usuarios,
+				maletín y estetoscopio). En mobile el logo queda arriba y los párrafos debajo;
+				los pilares pasan a 1 columna. La <strong>imagen central</strong> del landing no
+				se utiliza. Bloque <code class="text-brand">facultad(logo, eslogan, párrafos,
+				pilares = PILARES_FACULTAD)</code>, ya <strong>aplicado en las 6 formaciones</strong>
+				(reemplaza <code class="text-brand">titulo + FACULTAD-SUPERVISION-GRATUITA +
+				TEXTO + FACULTAD-PILARES</code>; dentro del bloque va el h2 sr-only "La Facultad").
+				El ejemplo de abajo y las páginas renderizan desde el <strong>mismo</strong>
+				<code class="text-brand">BloqueRender</code>.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={facultadEjemplo} />
 			</div>
 		</section>
 	</main>

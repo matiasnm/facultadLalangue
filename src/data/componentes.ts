@@ -145,11 +145,12 @@ export type BloqueAdmision = {
 /**
  * Articula — sección "… articula:" que presenta los ejes de la formación.
  * Copia simplificada del bloque de articulación del landing original (Elementor):
- * fondo full-bleed en gradiente claro (blanco → superficie), título centrado,
- * columna izquierda con el lema institucional (cada línea con una palabra clave
- * en `**negrita**` y un divisor índigo debajo) y columna derecha con los N ejes
- * numerados (número índigo en Montserrat + texto). En mobile el orden se invierte
- * (primero los ejes, luego el lema), igual que el original.
+ * fondo full-bleed en gradiente claro (blanco → superficie), título h2 centrado,
+ * columna izquierda con el lema institucional (cada lema: frase arriba y la
+ * palabra clave `**negrita**` abajo, grande, en Roboto Serif vino, con un
+ * separador vino a la izquierda) y columna derecha con los N ejes numerados
+ * (número brand en Montserrat + texto) que cubre todo el alto del contenedor.
+ * En mobile el orden se invierte (primero los ejes, luego el lema).
  */
 export type BloqueArticula = {
 	tipo: 'articula';
@@ -158,6 +159,26 @@ export type BloqueArticula = {
 	lema: string[];
 	/** Ejes numerados de la columna derecha. */
 	puntos: string[];
+};
+
+/** Iconos minimalistas (trazo fino, sin relleno) de los pilares de la facultad. */
+export type IconoFacultad = 'globo' | 'docentes' | 'certificado' | 'comunidad' | 'insercion' | 'clinica';
+
+/**
+ * Facultad — bloque institucional compacto. 2 columnas: a la izquierda el logo
+ * y el eslogan "Primera y única facultad…", a la derecha los párrafos de la
+ * formación; abajo, la grilla de 6 pilares con iconos minimalistas. Copia
+ * simplificada y más chica de las secciones #et-main-area 94c731f (columnas)
+ * y 61e4cdb (pills) de la landing. La imagen central del original no se usa.
+ */
+export type BloqueFacultad = {
+	tipo: 'facultad';
+	logo: string;
+	/** Eslogan bajo el logo; `**negrita**` = acento en vino. */
+	eslogan: string;
+	/** Párrafos de la columna derecha (específicos de cada formación). */
+	parrafos: string[];
+	pilares: { icono: IconoFacultad; texto: string }[];
 };
 
 export type Bloque =
@@ -180,7 +201,8 @@ export type Bloque =
 	| BloqueDirigidoA
 	| BloqueCarruselLogos
 	| BloqueAdmision
-	| BloqueArticula;
+	| BloqueArticula
+	| BloqueFacultad;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -247,6 +269,21 @@ export const LEMA_ARTICULACION = [
 ];
 export const articula = (titulo, puntos, lema = LEMA_ARTICULACION) =>
 	({ tipo: 'articula', titulo, lema, puntos }) as BloqueArticula;
+/** Logo del encabezado institucional (bloque Facultad). */
+export const LOGO_FACULTAD = '/logo.svg';
+/** Eslogan del bloque Facultad (mismo en las 6 formaciones). */
+export const ESLOGAN_FACULTAD = 'Primera y única facultad con **Grupos de Supervisión y de Estudio Gratuitos**.';
+/** 6 pilares de respaldo institucional (icono + texto), compartidos por todas. */
+export const PILARES_FACULTAD: { icono: IconoFacultad; texto: string }[] = [
+	{ icono: 'globo', texto: 'Institución con trayectoria internacional.' },
+	{ icono: 'docentes', texto: 'Cuerpo docente con experiencia clínica y académica.' },
+	{ icono: 'certificado', texto: 'Certificación internacional. (EFPP | APE | FEDE | DREETS)' },
+	{ icono: 'comunidad', texto: 'Comunidad activa de formación y supervisión.' },
+	{ icono: 'insercion', texto: 'Acompañamiento para tu inserción laboral internacional.' },
+	{ icono: 'clinica', texto: 'Prácticas clínicas supervisadas y rentadas.' },
+];
+export const facultad = (logo, eslogan, parrafos, pilares = PILARES_FACULTAD) =>
+	({ tipo: 'facultad', logo, eslogan, parrafos, pilares }) as BloqueFacultad;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */

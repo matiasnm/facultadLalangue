@@ -20,6 +20,9 @@ import {
 	dirigidoA,
 	admision,
 	articula,
+	facultad,
+	LOGO_FACULTAD,
+	ESLOGAN_FACULTAD,
 	type BloquePagina,
 } from './componentes';
 
@@ -120,9 +123,11 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			c('FACULTAD-TEXTO-INSTITUCIONAL'),
-			c('FACULTAD-PILARES'),
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+				'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
+			]),
 			articula('El Máster en Psicoanálisis Aplicado articula:', [
 				'Estudio profundo y riguroso del psicoanálisis.',
 				'Trabajo con estructuras clínicas y síntomas contemporáneos.',
@@ -317,9 +322,11 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			c('FACULTAD-TEXTO-INSTITUCIONAL'),
-			c('FACULTAD-PILARES'),
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+				'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
+			]),
 			articula('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', [
 				'Estudio riguroso del psicoanálisis.',
 				'Comprensión de las estructuras clínicas.',
@@ -511,13 +518,11 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			texto([
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
 				'Las **tecnologías digitales** no solo transforman la comunicación: transforman también la forma en que las personas perciben su valor, su identidad y su lugar en el mundo.',
 				'**Comprender** el impacto psicológico de los algoritmos, la visibilidad digital y las dinámicas de las plataformas se vuelve una tarea central para profesionales que trabajan con subjetividad, educación y bienestar mental.',
 				'Este diplomado propone un espacio de **formación interdisciplinaria** para analizar críticamente estos fenómenos y desarrollar herramientas conceptuales y prácticas para abordarlos.',
 			]),
-			c('FACULTAD-PILARES'),
 			articula(
 				'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
 				[
@@ -666,13 +671,11 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			texto([
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
 				'Los **vínculos sexoafectivos contemporáneos** atraviesan profundas transformaciones culturales, tecnológicas y subjetivas.',
 				'**Comprender** la complejidad del deseo, la intimidad, la diversidad sexual y las nuevas configuraciones vinculares se vuelve fundamental para los profesionales que trabajan con la salud mental y las relaciones humanas.',
 				'Este diplomado propone una **formación clínica integradora** que articula teoría, práctica y análisis de casos, favoreciendo una intervención profesional ética, contextualizada y respetuosa de la diversidad.',
 			]),
-			c('FACULTAD-PILARES'),
 			articula('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', [
 				'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
 				'Integración de diferentes modelos psicoterapéuticos para el trabajo con parejas.',
@@ -815,12 +818,10 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			texto([
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
 				'La **psicopatología infanto-juvenil** requiere comprender los modos de sufrimiento situando los síntomas en procesos de constitución subjetiva en permanente transformación, y a través de una mirada clínica que contemple los cambios culturales, sociales y familiares que atraviesan las infancias.',
 				'Abordar estas problemáticas desde el psicoanálisis contemporáneo es fundamental para profesionales que buscan intervenir con una perspectiva crítica y actualizada, ya que permite leer la singularidad de cada caso, articulando diagnóstico, vínculos y contexto.',
 			]),
-			c('FACULTAD-PILARES'),
 			articula('La Diplomatura en Psicopatología Infanto-Juvenil articula:', [
 				'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
 				'Integración del psicoanálisis con enfoques interdisciplinarios actuales.',
@@ -989,15 +990,11 @@ export const formaciones: Formacion[] = [
 			),
 			// La Facultad
 			titulo('La Facultad'),
-			c('FACULTAD-SUPERVISION-GRATUITA'),
-			// Variante Metapsicología de FACULTAD-TEXTO-INSTITUCIONAL:
-			// última frase distinta, por eso va como bloque propio (mismo render).
-			texto([
+			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
 				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
 				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
 				'**Facultad Lalangue** escucha los *murmullos de la época* y propone un espacio de formación que articula pensamiento, clínica y comunidad.',
 			]),
-			c('FACULTAD-PILARES'),
 			articula(
 				'La Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica articula:',
 				[
