@@ -1768,18 +1768,23 @@ const samples: Record<string, string> = {
 				gradiente claro sobre las superficies globales
 				(<code class="text-brand">from-white</code> →
 				<code class="text-brand">to-surface</code>; misma técnica de ancho completo que
-				<code class="text-brand">stats</code>), título <code class="text-brand">h3</code>
-				<strong>global</strong> (Poppins, sin forzar tipografía ni color del original)
-				centrado, columna izquierda con el <strong>lema institucional</strong> en
-				Montserrat (<code class="text-brand">--font-heading</code>) con las palabras
-				clave en <strong>Roboto Serif vino</strong>
-				(<code class="text-brand">[&amp;_strong]:text-brand</code>, 2× el tamaño de la
-				línea) y un separador vino de 5px bajo cada línea, y columna derecha con los
+				<code class="text-brand">stats</code>), título <code class="text-brand">h2</code>
+				<strong>global</strong> (Poppins, 26px) centrado — "El Máster … articula:" es un
+				<code class="text-brand">h2</code>, no un <code class="text-brand">h3</code> —,
+				columna izquierda con el <strong>lema institucional</strong> — todo
+				<strong>alineado a la izquierda</strong> — donde cada lema es la frase en
+				Montserrat (<code class="text-brand">--font-heading</code>), la <strong>palabra
+				clave debajo</strong>, sola, en <strong>Roboto Serif vino</strong>
+				(<code class="text-brand">text-brand</code>, a <code class="text-brand">1.75rem</code>:
+				siempre por debajo del h1 y a tono con el h2) y un
+				separador vino de 5px al final del bloque; y columna derecha con los
 				<strong>ejes numerados</strong> — número en Montserrat vino, texto de cuerpo —
 				que <strong>cubre toda la altura del contenedor</strong>
 				(<code class="text-brand">flex flex-col justify-between</code>). En mobile una
 				sola columna con los ejes primero. Bloque <code class="text-brand">articula</code>:
-				el lema viene por default (<code class="text-brand">LEMA_ARTICULACION</code>) y
+				el lema viene por default (<code class="text-brand">LEMA_ARTICULACION</code>,
+				formato <code class="text-brand">"frase **Palabra clave**"</code>, la palabra
+				clave se separa sola en la línea baja) y
 				cada formación pasa su título y sus ejes. Ya está <strong>aplicado en las 6
 				formaciones</strong> (reemplaza la tripla
 				<code class="text-brand">titulo + FACULTAD-LEMA + lista</code>). El ejemplo de

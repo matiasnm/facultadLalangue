@@ -30,6 +30,18 @@ const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke=
 // La cruz va en la paleta "accent" (terracota) para distinguirla del check (brand/vino).
 const checkIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 text-brand"><circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>`;
 const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 text-accent"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6m0-6-6 6"/></svg>`;
+
+// Lema de articula: "frase **Palabra clave**". La frase va arriba y la palabra
+// clave abajo, sola, grande y en vino. Separa ambos para renderizarlas aparte.
+function lemaPartes(linea: string): { antes: string; palabra: string; despues: string } {
+	const m = linea.match(/\*\*(.+?)\*\*/);
+	if (!m) return { antes: linea.trim(), palabra: '', despues: '' };
+	return {
+		antes: linea.slice(0, m.index ?? 0).trim(),
+		palabra: m[1],
+		despues: linea.slice((m.index ?? 0) + m[0].length).trim(),
+	};
+}
 ---
 
 {/* Título — h2/h3/h4 con kicker opcional (p. ej. "Incluido en tu formación") */}
@@ -539,31 +551,38 @@ const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" strok
 {/* Articula — sección "… articula:" con los ejes de la formación. Copia
      simplificada del bloque de articulación del landing original, adaptada
      a los estilos y la paleta del sitio: fondo full-bleed en gradiente claro
-     (blanco → superficie), título h3 global centrado, columna izquierda con
-     el lema institucional (palabras clave en Roboto Serif vino y un
-     separador vino debajo de cada línea) y columna derecha con los N ejes
-     numerados que cubre la altura del contenedor (justify-between). En
-     mobile una sola columna con los ejes primero (igual que el original
-     invertía el orden). */}
+     (blanco → superficie), título h2 global centrado, columna izquierda con
+     el lema institucional (frase arriba y palabra clave abajo, grande, en
+     Roboto Serif vino, con un separador vino debajo; todo alineado a la
+     izquierda) y columna derecha con los N ejes numerados que cubre la
+     altura del contenedor (justify-between). En mobile una sola columna con
+     los ejes primero (igual que el original invertía el orden). La palabra
+     clave usa un tamaño propio de escala (1.75rem), siempre por debajo del
+     h1 y a tono con el h2 de la sección. */}
 {b.tipo === 'articula' && (
 	<section
 		class="relative left-1/2 -ml-[50vw] mt-8 w-screen scroll-mt-24 bg-gradient-to-b from-white to-surface py-16 sm:py-20"
 		aria-label={b.titulo}
 	>
 		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-			<h3 class="text-center">{b.titulo}</h3>
+			<h2 class="text-center">{b.titulo}</h2>
 			<div class="mt-8 flex flex-col-reverse gap-10 md:grid md:grid-cols-2 md:gap-14 lg:gap-20">
-				{/* Izquierda: lema institucional + separador tras cada línea. */}
-				<div class="flex flex-col items-center gap-8 text-center">
-					{b.lema.map((linea) => (
-						<div class="flex w-full flex-col items-center gap-4">
-							<Rico
-								texto={linea}
-								class="mb-0 font-heading text-xl leading-[2.5rem] text-ink [&_strong]:font-serif [&_strong]:font-bold [&_strong]:leading-none [&_strong]:text-brand [&_strong]:text-[2em] sm:text-2xl sm:leading-[3.1rem]"
-							/>
-							<div class="h-[5px] w-4/5 bg-brand" aria-hidden="true"></div>
-						</div>
-					))}
+				{/* Izquierda: lema institucional, alineado a la izquierda. Cada
+				     lema es frase arriba + palabra clave abajo (grande, vino). */}
+				<div class="flex flex-col items-start gap-8 text-left">
+					{b.lema.map((linea) => {
+						const { antes, palabra, despues } = lemaPartes(linea);
+						return (
+							<div class="flex w-full flex-col items-start gap-4">
+								<p class="mb-0 font-heading text-xl leading-relaxed text-ink sm:text-2xl">
+									{antes}
+									{palabra && <span class="mt-1 block font-serif font-bold leading-none text-brand text-[1.75rem]">{palabra}</span>}
+									{despues}
+								</p>
+								<div class="h-[5px] w-full bg-brand" aria-hidden="true"></div>
+							</div>
+						);
+					})}
 				</div>
 				{/* Derecha: ejes numerados — la lista cubre el alto del contenedor
 				     (la columna del lema es más alta; justify-between reparte los
