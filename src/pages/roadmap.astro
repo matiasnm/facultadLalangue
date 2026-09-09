@@ -120,7 +120,8 @@ const carruselLogosEjemplo = carruselLogos([
 // Componente Admisión — bloque `admision` (fondo ancho con la imagen
 // public/admision_fondo.webp, filtros con la paleta propia del sitio, diseño
 // de 2 columnas: título + requisitos a la izquierda, cartel de matrícula a la
-// derecha). Ejemplo con datos coherentes para el preview del roadmap.
+// derecha). Ejemplo con los datos reales (los mismos de ADMISION y de las 6
+// formaciones), incluido el párrafo introductorio opcional `izqTexto`.
 const admisionEjemplo = admision(
 	'/admision_fondo.webp',
 	'Admisión',
@@ -134,9 +135,11 @@ const admisionEjemplo = admision(
 	'Matrícula anual',
 	[
 		'€3990 → €1596 (-60%)',
-		'25% adicional OFF en 1 pago: €1197',
+		'25% adicional OFF en 1 pago',
+		'€1197',
 		'+ Planes de financiación',
-	]
+	],
+	'El ingreso se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica.',
 );
 
 // Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
@@ -1737,13 +1740,17 @@ const samples: Record<string, string> = {
 				<code class="text-brand">left-1/2</code>) para que la imagen
 				<code class="text-brand">admision_fondo.webp</code> cubra todo el ancho,
 				teñida con el vino de la paleta (<code class="text-brand">bg-brand-dark</code>).
-				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>
-				y una lista de requisitos con check; a la derecha, el <strong>Cartel de
+				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>,
+				un <strong>párrafo introductorio opcional</strong>
+				(<code class="text-brand">izqTexto</code>, bajo el título) y la lista de
+				requisitos con check; a la derecha, el <strong>Cartel de
 				Matrícula anual</strong> (patrón del CTA) con precio tachado, descuento y
 				precio final, más el enlace a la entrevista de admisión. Tipografías y
 				tamaños de la paleta del sitio (h2/h3 default en blanco, precio con
 				<code class="text-brand">font-display</code>). El componente está
 				incluido en todas las formaciones, arriba del CTA "¿Listo para inscribirte?".
+				El ejemplo de abajo usa los datos reales (los mismos de
+				<code class="text-brand">ADMISION</code> y de las 6 formaciones).
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={admisionEjemplo} />
@@ -1755,19 +1762,30 @@ const samples: Record<string, string> = {
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Articula («… articula:»)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
-				Sección que presenta los ejes de cada formación, copiando el bloque de
-				articulación del landing original (Elementor): fondo
-				<strong>full-bleed</strong> en gradiente claro (blanco → superficie,
-				la misma técnica de ancho completo que <code class="text-brand">stats</code>),
-				título centrado, columna izquierda con el <strong>lema institucional</strong>
-				(palabras clave en <strong>Roboto Serif índigo</strong> con un separador
-				índigo debajo de cada línea) y columna derecha con los
-				<strong>N ejes numerados</strong> (número en Montserrat índigo).
-				En mobile una sola columna con los ejes primero. Bloque
-				<code class="text-brand">articula</code> — el lema viene por default
-				(<code class="text-brand">LEMA_ARTICULACION</code>) y cada formación pasa
-				su título y sus ejes. Ya está <strong>aplicado en las 6 formaciones</strong>
-				(reemplaza la tripla <code class="text-brand">titulo + FACULTAD-LEMA + lista</code>).
+				Sección que presenta los ejes de cada formación. Copia del bloque de
+				articulación del landing original (Elementor), <strong>adaptada a los
+				estilos y la paleta del sitio</strong>: fondo <strong>full-bleed</strong> en
+				gradiente claro sobre las superficies globales
+				(<code class="text-brand">from-white</code> →
+				<code class="text-brand">to-surface</code>; misma técnica de ancho completo que
+				<code class="text-brand">stats</code>), título <code class="text-brand">h3</code>
+				<strong>global</strong> (Poppins, sin forzar tipografía ni color del original)
+				centrado, columna izquierda con el <strong>lema institucional</strong> en
+				Montserrat (<code class="text-brand">--font-heading</code>) con las palabras
+				clave en <strong>Roboto Serif vino</strong>
+				(<code class="text-brand">[&amp;_strong]:text-brand</code>, 2× el tamaño de la
+				línea) y un separador vino de 5px bajo cada línea, y columna derecha con los
+				<strong>ejes numerados</strong> — número en Montserrat vino, texto de cuerpo —
+				que <strong>cubre toda la altura del contenedor</strong>
+				(<code class="text-brand">flex flex-col justify-between</code>). En mobile una
+				sola columna con los ejes primero. Bloque <code class="text-brand">articula</code>:
+				el lema viene por default (<code class="text-brand">LEMA_ARTICULACION</code>) y
+				cada formación pasa su título y sus ejes. Ya está <strong>aplicado en las 6
+				formaciones</strong> (reemplaza la tripla
+				<code class="text-brand">titulo + FACULTAD-LEMA + lista</code>). El ejemplo de
+				abajo y las páginas renderizan desde el <strong>mismo</strong>
+				<code class="text-brand">BloqueRender</code>: el roadmap es la especificación y
+				la app no cambia los estilos.
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={articulaEjemplo} />
