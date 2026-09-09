@@ -1,0 +1,92 @@
+---
+/**
+ * LogoCarrusel — marquee CSS infinito de logos (misma idea que el
+ * image-carousel de Elementor en la landing). La lista se duplica
+ * (aria-hidden la copia) y el track se desplaza con una animación lineal
+ * continua; se pausa al hover y se apaga si el usuario prefiere menos
+ * movimiento. Cada logo con `href` es un enlace externo (pestaña nueva) sin
+ * estilos propios.
+ *
+ * Usado por el bloque `carrusel-logos` (INSTITUCIONES-ASOCIADAS) y por los
+ * dos carruseles de la sección `profesores` (universidades y medios).
+ */
+interface Props {
+	logos: { src: string; alt: string; href?: string }[];
+	/** Etiqueta accesible de la región (lectores de pantalla). */
+	label: string;
+	/** Clases extra (por ejemplo márgenes): se suman al contenedor raíz. */
+	class?: string;
+}
+
+const { logos, label, class: className } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+// Prefija rutas internas con la base; deja intactas "#", anclas y URLs absolutas.
+const link = (href: string) =>
+	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+---
+
+<div class:list={['relative mt-6 overflow-hidden', className]}>
+	{/* Fundidos laterales para que los logos entren/salgan suavemente. */}
+	<div
+		class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent"
+		aria-hidden="true"
+	></div>
+	<div
+		class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent"
+		aria-hidden="true"
+	></div>
+	<div role="region" aria-label={label} class="carrusel-logos-track flex w-max">
+		<ul class="flex list-none items-center gap-12 p-0">
+			{logos.map((logo) => (
+				<li class="shrink-0">
+					{logo.href ? (
+						<a href={link(logo.href)} target="_blank" rel="noopener noreferrer">
+							<img src={link(logo.src)} alt={logo.alt} class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+						</a>
+					) : (
+						<img src={link(logo.src)} alt={logo.alt} class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+					)}
+				</li>
+			))}
+		</ul>
+		{/* Copia exacta — aria-hidden para el bucle continuo sin saltos. */}
+		<ul class="flex list-none items-center gap-12 p-0" aria-hidden="true">
+			{logos.map((logo) => (
+				<li class="shrink-0">
+					{logo.href ? (
+						<a href={link(logo.href)} tabindex="-1" aria-hidden="true">
+							<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+						</a>
+					) : (
+						<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
+					)}
+				</li>
+			))}
+		</ul>
+	</div>
+</div>
+
+<style>
+	.carrusel-logos-track {
+		animation: carrusel-logos-scroll 30s linear infinite;
+	}
+	.carrusel-logos-track:hover {
+		animation-play-state: paused;
+	}
+	@keyframes carrusel-logos-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			/* -50% = exactamente una copia de la lista (2 copias, la copia
+			   aria-hidden ocupa la segunda mitad). */
+			transform: translateX(-50%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.carrusel-logos-track {
+			animation: none;
+		}
+	}
+</style>

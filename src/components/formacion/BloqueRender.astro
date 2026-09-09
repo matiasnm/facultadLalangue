@@ -11,6 +11,7 @@
 import Rico from './Rico.astro';
 import Contador from './Contador.astro';
 import Avatar from '../Avatar.astro';
+import LogoCarrusel from './LogoCarrusel.astro';
 import { siglasDe } from '../../data/docentes';
 import type { Bloque, IconoFacultad, IconoMetodologia } from '../../data/componentes';
 
@@ -495,86 +496,15 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 )}
 
 {/* Carrusel de logos — marquee CSS infinito (misma idea que el image-carousel
-     de Elementor en la landing). La lista se duplica (aria-hidden la copia)
-     y el track se desplaza con una animación lineal continua; se pausa al
-     hover y se desactiva si el usuario prefiere menos movimiento. Cada logo
-     con `href` es un enlace externo (pestaña nueva) sin estilos propios. */}
+     de Elementor en la landing). La lista se duplica y el track se desplaza
+     con una animación lineal continua; se pausa al hover y se desactiva si el
+     usuario prefiere menos movimiento. Cada logo con `href` es un enlace
+     externo (pestaña nueva) sin estilos propios. El diseño vive en
+     LogoCarrusel.astro (también usado por los logos de la sección
+     `profesores`). */}
 {b.tipo === 'carrusel-logos' && (
-	<div class="relative mt-6 overflow-hidden">
-		{/* Fundidos laterales para que los logos entren/salgan suavemente. */}
-		<div
-			class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent"
-			aria-hidden="true"
-		></div>
-		<div
-			class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent"
-			aria-hidden="true"
-		></div>
-		<div role="region" aria-label="Instituciones asociadas" class="carrusel-logos-track flex w-max">
-			<ul class="flex list-none items-center gap-12 p-0">
-				{b.logos.map((logo) => (
-					<li class="shrink-0">
-						{logo.href ? (
-							<a href={link(logo.href)} target="_blank" rel="noopener noreferrer">
-								<img
-									src={link(logo.src)}
-									alt={logo.alt}
-									class="h-10 w-auto opacity-70 grayscale"
-									loading="lazy"
-								/>
-							</a>
-						) : (
-							<img
-								src={link(logo.src)}
-								alt={logo.alt}
-								class="h-10 w-auto opacity-70 grayscale"
-								loading="lazy"
-							/>
-						)}
-					</li>
-				))}
-			</ul>
-			{/* Copia exacta — aria-hidden para el bucle continuo sin saltos. */}
-			<ul class="flex list-none items-center gap-12 p-0" aria-hidden="true">
-				{b.logos.map((logo) => (
-					<li class="shrink-0">
-						{logo.href ? (
-							<a href={link(logo.href)} tabindex="-1" aria-hidden="true">
-								<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
-							</a>
-						) : (
-							<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
-						)}
-					</li>
-				))}
-			</ul>
-		</div>
-	</div>
+	<LogoCarrusel logos={b.logos} label="Instituciones asociadas" />
 )}
-
-<style>
-	.carrusel-logos-track {
-		animation: carrusel-logos-scroll 30s linear infinite;
-	}
-	.carrusel-logos-track:hover {
-		animation-play-state: paused;
-	}
-	@keyframes carrusel-logos-scroll {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			/* -50% = exactamente una copia de la lista (2 copias, la copia
-			   aria-hidden ocupa la segunda mitad). */
-			transform: translateX(-50%);
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.carrusel-logos-track {
-			animation: none;
-		}
-	}
-</style>
 {/* Articula — sección "… articula:" con los ejes de la formación. Copia
      simplificada del bloque de articulación del landing original, adaptada
      a los estilos y la paleta del sitio: fondo full-bleed en gradiente claro
@@ -755,6 +685,117 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		</div>
 	</section>
 )}
+{/* Profesores — sección de docentes de cada formación. Copia de la landing del
+     Máster (#profesores): carrusel de logos de las universidades de procedencia
+     (marquee, default compartido), slider de fotos de profesores con flechas y
+     autoplay (sin puntitos) que cierra con la tarjeta CTA "otros referentes"
+     (replica otrosRef.webp del original) enlazando al plantel académico, y el
+     cierre "También los leíste en" (medios, marquee). El slider pausa al hover
+     y al foco (script al final del archivo) y respeta prefers-reduced-motion. */}
+{b.tipo === 'profesores' && (
+	<section class="mt-14" id="profesores">
+		<h2>{b.titulo}</h2>
+		{b.intro && <Rico texto={b.intro} class="mt-6 max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85" />}
+		<LogoCarrusel logos={b.universidades} label="Universidades e instituciones de procedencia" />
+		{/* Slider de profesores: scroll-snap con flechas + autoplay. */}
+		<div class="relative mt-10" data-profesores-slider>
+			<div
+				class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+				data-profesores-viewport
+			>
+				<ul class="flex list-none gap-5 p-0">
+					{b.profesores.map((p) => (
+						<li class="w-60 shrink-0 snap-start sm:w-64">
+							<figure class="m-0">
+								<img
+									src={link(p.foto)}
+									alt={p.nombre}
+									class="aspect-[3/4] w-full rounded-2xl object-cover"
+									loading="lazy"
+								/>
+								<figcaption class="mt-3 text-center text-sm font-medium text-ink-strong">
+									{p.nombre}
+								</figcaption>
+							</figure>
+						</li>
+					))}
+					{/* Tarjeta CTA "otros referentes" — replica la imagen
+					     otrosRef.webp (800x1000) del original: enlaza al plantel. */}
+					<li class="w-60 shrink-0 snap-start sm:w-64">
+						<a
+							href={link(b.masReferentesHref)}
+							class="group flex aspect-[3/4] w-full flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-brand/40 bg-brand/[0.04] px-6 text-center transition-colors hover:border-brand hover:bg-brand/[0.08] hover:no-underline"
+						>
+							<span class="text-xs font-semibold uppercase tracking-widest text-brand/70">
+								Plantel académico
+							</span>
+							<span class="font-display text-xl font-semibold leading-snug text-brand">
+								Y otros referentes del mundo psy
+							</span>
+							<span class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
+								Ver plantel
+								<svg
+									viewBox="0 0 24 24"
+									class="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									aria-hidden="true"
+								>
+									<path d="M7 17 17 7M8 7h9v9" />
+								</svg>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			{/* Flechas prev/next — las mismas que el original (sin puntitos). */}
+			<button
+				type="button"
+				data-profesores-prev
+				aria-label="Profesores anteriores"
+				class="absolute left-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:left-3"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-4"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="m15 6-6 6 6 6" />
+				</svg>
+			</button>
+			<button
+				type="button"
+				data-profesores-next
+				aria-label="Profesores siguientes"
+				class="absolute right-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:right-3"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-4"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="m9 6 6 6-6 6" />
+				</svg>
+			</button>
+		</div>
+		<h3 class="mt-12">También los leíste en</h3>
+		<LogoCarrusel logos={b.medios} label="Medios que publicaron sobre la facultad" class="mt-4" />
+	</section>
+)}
+
 {/* Admisión — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con fondo:
      imagen + tinte vino en una sola capa (gradiente + url). Margen global en la
      section; dentro solo 1 grid de 2 columnas. Ambos títulos son h2
@@ -822,4 +863,55 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		</div>
 	</section>
 )}
+
+{/* Slider de profesores: flechas + autoplay, sin puntitos. Soporta varios
+     sliders por página; cada uno avanza de a una tarjeta y vuelve al inicio
+     al llegar al final. Pausa al hover y al foco (para que los botones y los
+     links de la tarjeta CTA sean usables) y se apaga con
+     prefers-reduced-motion. */}
+<script>
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	document.querySelectorAll('[data-profesores-slider]').forEach((slider) => {
+		const viewport = slider.querySelector('[data-profesores-viewport]');
+		const prev = slider.querySelector('[data-profesores-prev]');
+		const next = slider.querySelector('[data-profesores-next]');
+		if (!viewport || !prev || !next) return;
+
+		// Un paso = una tarjeta + el gap (gap-5 = 1.25rem).
+		const card = () => viewport.querySelector('li');
+		const step = () => (card()?.offsetWidth ?? 0) + 20;
+
+		const go = (dir) => {
+			const max = viewport.scrollWidth - viewport.clientWidth;
+			const target = viewport.scrollLeft + dir * step();
+			viewport.scrollTo({ left: Math.max(0, Math.min(target, max)), behavior: 'smooth' });
+		};
+
+		prev.addEventListener('click', () => go(-1));
+		next.addEventListener('click', () => go(1));
+
+		let timer = 0;
+		const stop = () => window.clearInterval(timer);
+		const start = () => {
+			stop();
+			if (reduceMotion) return;
+			timer = window.setInterval(() => {
+				const max = viewport.scrollWidth - viewport.clientWidth;
+				// Al llegar al final vuelve al inicio (loop cerrado).
+				if (viewport.scrollLeft >= max - 4) {
+					viewport.scrollTo({ left: 0, behavior: 'smooth' });
+				} else {
+					go(1);
+				}
+			}, 4000);
+		};
+
+		slider.addEventListener('mouseenter', stop);
+		slider.addEventListener('mouseleave', start);
+		slider.addEventListener('focusin', stop);
+		slider.addEventListener('focusout', start);
+		start();
+	});
+</script>
 

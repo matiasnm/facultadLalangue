@@ -22,6 +22,7 @@ import {
 	articula,
 	facultad,
 	metodologia,
+	profesores,
 	MODALIDAD_A,
 	MODALIDAD_B,
 	LOGO_FACULTAD,
@@ -138,22 +139,14 @@ export const formaciones: Formacion[] = [
 				'Articulación entre teoría, caso y práctica.',
 			]),
 			// Profesores
-			titulo('Profesores del máster'),
-			c('PROFESORES-INTRO'),
-			texto(
-				'Universidades e instituciones de procedencia: Universidad de Granada, Universidad de Buenos Aires, Universidad Católica Argentina, Asociación Argentina de Salud Mental, Universidad Abierta Interamericana, Universidad de la Marina Mercante, Consejo Latinoamericano de Ciencias Sociales, Universidad Tecnológica Nacional, Universidad del Aconcagua, Universidad Salesiana, Universidad de Flores, Universidad Católica de Santiago del Estero.',
-			),
-			lista([
-				'Dra. Marta Gerez Ambertín',
-				'Lic. Juan Manuel Martínez',
-				'Lic. Lara Lizenberg',
-				'Lic. Silvia Kargodorian',
-				'Lic. Verónica Gerstner',
-				'Lic. Lucas Vázquez Topssian',
+			profesores('Profesores del máster', [
+				{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
+				{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
+				{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
+				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
 			]),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
@@ -335,20 +328,15 @@ export const formaciones: Formacion[] = [
 				'Articulación entre teoría, caso y práctica.',
 			]),
 			// Profesores
-			titulo('Profesores de la diplomatura'),
-			c('PROFESORES-INTRO'),
-			lista([
-				'Lic. Juan Manuel Martínez',
-				'Lic. Daniel Camps',
-				'Lic. Pía Martina',
-				'Lic. Diego Núñez',
-				'Lic. Lucas Vázquez Topssian',
-				'Lic. Vanesa Carpaneto',
-				'Lic. Ester Migrabi',
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
+				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
 			]),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
@@ -532,18 +520,13 @@ export const formaciones: Formacion[] = [
 				],
 			),
 			// Profesores
-			titulo('Profesores de la diplomatura'),
-			c('PROFESORES-INTRO'),
-			lista([
-				'Lic. Diego Núñez',
-				'Lic. Gabriela Artaza Toro',
-				'Lic. Yamila Coronel',
-				'Lic. Pía Martina',
-				'Lic. Vanesa Carpaneto',
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+				{ foto: '/conocenos/yamila_coronel.webp', nombre: 'Lic. Yamila Coronel' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
 			]),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -680,18 +663,13 @@ export const formaciones: Formacion[] = [
 				'Articulación entre teoría, intervención clínica y análisis de casos.',
 			]),
 			// Profesores
-			titulo('Profesores de la diplomatura'),
-			c('PROFESORES-INTRO'),
-			lista([
-				'Lic. Gabriela Artaza Toro',
-				'Lic. Diego Núñez',
-				'Lic. Alejandra Giudice',
-				'Lic. Sebastián Mosquera',
-				'Lic. Noelia Benedetto',
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/alejandra_giudice.webp', nombre: 'Lic. Alejandra Giudice' },
+				{ foto: '/conocenos/sebastian_mosquera.webp', nombre: 'Lic. Sebastián Mosquera' },
+				{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
 			]),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -824,18 +802,13 @@ export const formaciones: Formacion[] = [
 				'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
 			]),
 			// Profesores
-			titulo('Profesores de la diplomatura'),
-			c('PROFESORES-INTRO'),
-			lista([
-				'Lic. Macarena Cao Gene',
-				'Lic. Julián Porri',
-				'Lic. Irina Poletti',
-				'Lic. Juan Augusto Laplacette',
-				'Lic. Viviana Estanga',
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
+				{ foto: '/conocenos/julian_porri.webp', nombre: 'Lic. Julián Porri' },
+				{ foto: '/conocenos/irina_poletti.webp', nombre: 'Lic. Irina Poletti' },
+				{ foto: '/conocenos/juan_augusto_laplacette.webp', nombre: 'Lic. Juan Augusto Laplacette' },
+				{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
 			]),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -947,20 +920,11 @@ export const formaciones: Formacion[] = [
 				'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
 			),
 			// Profesores (en esta página van antes que la metodología)
-			titulo('Profesores de la diplomatura'),
-			c('PROFESORES-INTRO'),
-			texto(
-				'Universidades e instituciones de procedencia: Universidad de Granada, Universidad de Buenos Aires, Universidad Católica Argentina, Asociación Argentina de Salud Mental, Universidad Abierta Interamericana, Universidad de la Marina Mercante, Consejo Latinoamericano de Ciencias Sociales, Universidad Tecnológica Nacional, Universidad del Aconcagua, Universidad Salesiana, Universidad de Flores, Universidad Católica de Santiago del Estero.',
-			),
-			texto(
-				'También los leíste en: News.MC, CEC Times, Reuters, La Nación, Revista Praxis Filosófica, Sputnik, Universidad del Valle Programa Editorial, Página 12.',
-			),
-			lista([
-				'Lic. Juan Manuel Martínez',
-				'Lic. Daniel Camps',
-				'Lic. Pía Martina',
-				'Lic. Ester Migrabi',
-				'y otros referentes del mundo psy',
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
 			]),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),

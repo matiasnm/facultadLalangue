@@ -201,6 +201,32 @@ export type BloqueMetodologia = {
 	puntos: { icono: IconoMetodologia; texto: string }[];
 };
 
+/** Un logo de carrusel: `src` + `alt` (y `href` opcional al sitio). */
+export type Logo = { src: string; alt: string; href?: string };
+
+/**
+ * Profesores — sección de docentes de cada formación. Copia de la sección
+ * #profesores de la landing del Máster: carrusel automático de logos de las
+ * universidades e instituciones de procedencia (marquee CSS), slider de fotos
+ * de profesores con flechas y autoplay (sin puntitos) que cierra con una
+ * tarjeta CTA al plantel académico, y el cierre "También los leíste en"
+ * (medios, marquee CSS). Las universidades y los medios vienen por default
+ * (UNIVERSIDADES_PROFESORES y MEDIOS_TAMBIEN, los mismos en todas); cada
+ * formación solo pasa su título y su lista de docentes.
+ */
+export type BloqueProfesores = {
+	tipo: 'profesores';
+	titulo: string;
+	/** Intro de la sección (default: PROFESORES_INTRO, la misma en todas). */
+	intro?: string;
+	universidades: Logo[];
+	/** Docentes con su foto (`/conocenos/<nombre>.webp`). */
+	profesores: { foto: string; nombre: string }[];
+	medios: Logo[];
+	/** Ruta interna del plantel académico (tarjeta "más referentes"). */
+	masReferentesHref?: string;
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -223,7 +249,8 @@ export type Bloque =
 	| BloqueAdmision
 	| BloqueArticula
 	| BloqueFacultad
-	| BloqueMetodologia;
+	| BloqueMetodologia
+	| BloqueProfesores;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -332,6 +359,50 @@ export const MODALIDAD_B: { icono: IconoMetodologia; texto: string }[] = [
 ];
 export const metodologia = (titulo, puntos, lema = LEMA_METODOLOGIA) =>
 	({ tipo: 'metodologia', titulo, lema, puntos }) as BloqueMetodologia;
+/** Intro de la sección de profesores (idéntica en todas las formaciones). */
+export const PROFESORES_INTRO =
+	'Nuestros docentes cuentan con trayectoria en universidades y espacios de formación de Europa y América Latina, así como en instituciones clínicas y asociaciones profesionales internacionales.';
+
+/** Universidades e instituciones de procedencia (las mismas en todas las
+ *  formaciones). Cada logo enlaza al sitio de la institución en pestaña nueva. */
+export const UNIVERSIDADES_PROFESORES: Logo[] = [
+	{ src: '/logos_universidades/universidad_de_granada.webp', alt: 'Universidad de Granada', href: 'https://www.ugr.es/' },
+	{ src: '/logos_universidades/universidad_de_buenos_aires.webp', alt: 'Universidad de Buenos Aires', href: 'https://www.uba.ar/' },
+	{ src: '/logos_universidades/universidad_catolica_argentina.webp', alt: 'Universidad Católica Argentina', href: 'https://uca.edu.ar/' },
+	{ src: '/logos_universidades/asociacion_argentina_de_salud_mental.webp', alt: 'Asociación Argentina de Salud Mental', href: 'https://www.aasm.org.ar/' },
+	{ src: '/logos_universidades/universidad_abierta_interamericana.webp', alt: 'Universidad Abierta Interamericana', href: 'https://www.uai.edu.ar/' },
+	{ src: '/logos_universidades/universidad_de_la_marina_mercante.webp', alt: 'Universidad de la Marina Mercante', href: 'https://www.udemm.edu.ar/' },
+	{ src: '/logos_universidades/clacso.webp', alt: 'Consejo Latinoamericano de Ciencias Sociales — CLACSO', href: 'https://www.clacso.org/' },
+	{ src: '/logos_universidades/utn.webp', alt: 'Universidad Tecnológica Nacional', href: 'https://www.utn.edu.ar/' },
+	{ src: '/logos_universidades/universidad_del_aconcagua.webp', alt: 'Universidad del Aconcagua', href: 'https://www.uda.edu.ar/' },
+	{ src: '/logos_universidades/universidad_salesiana.webp', alt: 'Universidad Salesiana', href: 'https://unisal.edu.ar/' },
+	{ src: '/logos_universidades/universidad_de_flores.webp', alt: 'Universidad de Flores', href: 'https://www.uflo.edu.ar/' },
+	{ src: '/logos_universidades/universidad_catolica_de_santiago_del_estero.webp', alt: 'Universidad Católica de Santiago del Estero', href: 'https://www.ucse.edu.ar/' },
+];
+
+/** Medios "También los leíste en" (los mismos en todas las formaciones).
+ *  CEC Times no tiene URL oficial confirmada → se muestra el logo sin enlace. */
+export const MEDIOS_TAMBIEN: Logo[] = [
+	{ src: '/logos_medios/news_mc.webp', alt: 'News.MC', href: 'https://news.mc/' },
+	{ src: '/logos_medios/cec_times.webp', alt: 'CEC Times' },
+	{ src: '/logos_medios/reuters.webp', alt: 'Reuters', href: 'https://www.reuters.com/' },
+	{ src: '/logos_medios/la_nacion.webp', alt: 'La Nación', href: 'https://www.lanacion.com.ar/' },
+	{ src: '/logos_medios/revista_praxis_filosofica.webp', alt: 'Revista Praxis Filosófica', href: 'https://praxisfilosofica.univalle.edu.co/' },
+	{ src: '/logos_medios/sputnik.webp', alt: 'Sputnik', href: 'https://sputniknews.lat/' },
+	{ src: '/logos_medios/universidad_del_valle_programa_editorial.webp', alt: 'Universidad del Valle — Programa Editorial', href: 'https://programaeditorial.univalle.edu.co/' },
+	{ src: '/logos_medios/pagina_12.webp', alt: 'Página 12', href: 'https://www.pagina12.com.ar/' },
+];
+
+export const profesores = (titulo, lista) =>
+	({
+		tipo: 'profesores',
+		titulo,
+		intro: PROFESORES_INTRO,
+		universidades: UNIVERSIDADES_PROFESORES,
+		profesores: lista,
+		medios: MEDIOS_TAMBIEN,
+		masReferentesHref: '/plantel-academico/',
+	}) as BloqueProfesores;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
@@ -404,15 +475,6 @@ export const componentes: ComponenteComun[] = [
 				{ valor: '+400', etiqueta: 'Materiales descargables' },
 				{ valor: '+100', etiqueta: 'Clases optativas' },
 			]),
-		],
-	},
-	{
-		id: 'PROFESORES-INTRO',
-		nota: 'Doc §7 — Intro de la sección de profesores (idéntica en todas).',
-		bloques: [
-			texto(
-				'Nuestros docentes cuentan con trayectoria en universidades y espacios de formación de Europa y América Latina, así como en instituciones clínicas y asociaciones profesionales internacionales.',
-			),
 		],
 	},
 	{

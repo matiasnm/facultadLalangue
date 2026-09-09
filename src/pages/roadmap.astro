@@ -4,9 +4,9 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
-const lastUpdated = '2026-09-08';
+const lastUpdated = '2026-09-09';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
 const dirigidoAEjemplo = dirigidoA(
@@ -196,6 +196,22 @@ const facultadEjemplo = facultad(
 // Componente Metodología — misma estructura que articula pero con video en la
 // derecha (placeholder) y la grilla gris de modalidad (MODALIDAD_A de ejemplo).
 const metodologiaEjemplo = metodologia('Metodología', MODALIDAD_A);
+
+// Componente Profesores — sección de docentes de cada formación: carrusel de
+// logos de las universidades de procedencia (marquee) + slider de fotos con
+// flechas y autoplay + cierre "También los leíste en" (medios, marquee).
+// Universidades y medios vienen por default (UNIVERSIDADES_PROFESORES y
+// MEDIOS_TAMBIEN, los mismos en todas las formaciones); el ejemplo replica la
+// lista real del Máster. La tarjeta final "Y otros referentes" enlaza al
+// plantel académico.
+const profesoresEjemplo = profesores('Profesores del máster', [
+	{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
+	{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+	{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
+	{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
+	{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
+	{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+]);
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1888,6 +1904,48 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={metodologiaEjemplo} />
+			</div>
+		</section>
+	<!-- ================= Profesores (bloque de docentes) ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Profesores (sección de docentes de cada formación)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Reemplaza la sección "Profesores" de cada formación (la intro
+				<code class="text-brand">PROFESORES-INTRO</code>, el texto de
+				universidades de procedencia y la lista de docentes + el cierre "También
+				los leíste en"; la intro pasa a ser el <strong>default</strong> del bloque).
+				Copia de la sección <code class="text-brand">#profesores</code> de la
+				landing del Máster, adaptada a los estilos del sitio: el
+				<strong>carrusel de universidades</strong> y el cierre
+				<strong>"También los leíste en"</strong> con los medios son
+				<strong>marquees CSS infinitos</strong> — el mismo componente
+				<code class="text-brand">LogoCarrusel</code> que usa el bloque
+				<code class="text-brand">carrusel-logos</code> — con <strong>pausa al
+				hover</strong> y desactivados con <code class="text-brand">prefers-reduced-motion</code>;
+				cada logo enlaza al sitio de la institución o medio en pestaña nueva
+				(el logo de <em>CEC Times no tiene URL confirmada y queda sin enlace</em>).
+				En el medio, un <strong>slider de fotos de profesores</strong> con
+				<strong>flechas redondas</strong> prev/next, <strong>scroll-snap</strong> y
+				<strong>autoplay de 4s</strong> que <strong>pausa al hover y al foco</strong>
+				(respeta <code class="text-brand">prefers-reduced-motion</code>) y
+				<strong>no lleva puntitos</strong>. Cada profesor se muestra con su
+				<strong>foto 3:4</strong> (<code class="text-brand">public/conocenos/…</code>)
+				y su <strong>nombre</strong> debajo. El slider cierra con la
+				<strong>tarjeta CTA "Y otros referentes del mundo psy"</strong> — réplica de
+				la imagen otrosRef.webp del original: borde dashed vino y enlace al
+				<strong>/plantel-academico/</strong>. Las universidades y los medios vienen
+				por default (<code class="text-brand">UNIVERSIDADES_PROFESORES</code> y
+				<code class="text-brand">MEDIOS_TAMBIEN</code>, los mismos en todas las
+				formaciones), así cada formación solo pasa su título y su lista de doctores.
+				Bloque <code class="text-brand">profesores(titulo, lista)</code>, ya
+				<strong>aplicado en las 6 formaciones</strong> (el Máster y Metapsicología,
+				que además tenían el texto de universidades, quedan idénticos al resto).
+				El ejemplo de abajo (con la lista real del Máster) y las páginas renderizan
+				desde el <strong>mismo</strong> <code class="text-brand">BloqueRender</code>.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={profesoresEjemplo} />
 			</div>
 		</section>
 	</main>
