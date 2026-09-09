@@ -321,15 +321,14 @@ export const MODALIDAD_A: { icono: IconoMetodologia; texto: string }[] = [
 	{ icono: 'comunidad', texto: 'Comunidad académica internacional activa' },
 ];
 /** Modalidad B — variante de Parejas/Infanto-Juvenil: primer ítem "Clases
- * teóricas en vivo" + el bullet de investigación extra (7 ítems). */
+ * teóricas en vivo" y el bullet de casos fusionado con investigación (6 ítems). */
 export const MODALIDAD_B: { icono: IconoMetodologia; texto: string }[] = [
 	{ icono: 'clase', texto: 'Clases teóricas en vivo' },
 	{ icono: 'grabaciones', texto: 'Clases grabadas' },
 	{ icono: 'supervision', texto: 'Prácticas supervisadas' },
-	{ icono: 'casos', texto: 'Discusión de casos clínicos reales' },
+	{ icono: 'casos', texto: 'Espacios de investigación y Discusión de casos clínicos' },
 	{ icono: 'salida', texto: 'Salida Laboral Internacional' },
 	{ icono: 'comunidad', texto: 'Comunidad académica internacional activa' },
-	{ icono: 'investigacion', texto: 'Espacios de investigación y acompañamiento académico' },
 ];
 export const metodologia = (titulo, puntos, lema = LEMA_METODOLOGIA) =>
 	({ tipo: 'metodologia', titulo, lema, puntos }) as BloqueMetodologia;
