@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, LOGO_FACULTAD, ESLOGAN_FACULTAD } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-09-08';
 
@@ -192,6 +192,10 @@ const facultadEjemplo = facultad(
 		'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
 	],
 );
+
+// Componente Metodología — misma estructura que articula pero con video en la
+// derecha (placeholder) y la grilla gris de modalidad (MODALIDAD_A de ejemplo).
+const metodologiaEjemplo = metodologia('Metodología', MODALIDAD_A);
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1840,6 +1844,45 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={facultadEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Metodología (bloque de modalidad) ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Metodología (bloque de modalidad de cursada)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Reemplaza la sección "Metodología" de cada formación (los <strong>3 sellos</strong>
+				de <code class="text-brand">METODOLOGIA-CABECERA</code> + la lista de
+				<code class="text-brand">METODOLOGIA-MODALIDAD-A/B</code>; los
+				<strong>contadores</strong> aplicados siguen aparte). Tiene la misma estructura
+				que <strong>articula…</strong>: <strong>2 columnas</strong> — a la izquierda los
+				<strong>sellos de metodología</strong> (frase Montserrat arriba y la palabra
+				<code class="text-brand">**negra**</code> abajo, sola, en Roboto Serif vino de
+				1.75rem, todo alineado a la izquierda con su separador vino): "Primera y única
+				facultad con <strong>Supervisiones Gratuitas</strong>", "Primera Comunidad
+				Internacional activa, <strong>más de 7000 miembros</strong>" y "Modalidad 100%
+				<strong>Online y Flexible</strong>". A la derecha, un <strong>video</strong>
+				(<code class="text-brand">aspect-video</code>, caja gris con play — placeholder,
+				<strong>sin src por ahora</strong>). Abajo, la <strong>grilla gris de bullets de
+				modalidad</strong>, 2 columnas (1 en mobile): <strong>6 ítems</strong> en
+				<code class="text-brand">MODALIDAD_A</code> (Clases sincrónicas, Clases grabadas,
+				Prácticas supervisadas, Discusión de casos clínicos reales, Salida Laboral
+				Internacional, Comunidad académica internacional activa) y <strong>7</strong> en
+				<code class="text-brand">MODALIDAD_B</code> (Parejas e Infanto-Juvenil: primer
+				ítem "Clases teóricas en vivo" + Espacios de investigación y acompañamiento
+				académico), con <strong>iconos minimalistas de trazo fino</strong>
+				del mismo tipo que los de Facultad (play, pantalla, clipboard, burbuja, avión,
+				globo y lupa) en círculo blanco. Bloque
+				<code class="text-brand">metodologia(titulo, puntos, lema = LEMA_METODOLOGIA)</code>,
+				ya <strong>aplicado en las 6 formaciones</strong> (Máster, Psicoterapia,
+				Subjetividad y Metapsicología usan <code class="text-brand">MODALIDAD_A</code>;
+				Parejas e Infanto-Juvenil usan <code class="text-brand">MODALIDAD_B</code>). El
+				ejemplo de abajo (con <code class="text-brand">MODALIDAD_A</code>) y las páginas
+				renderizan desde el <strong>mismo</strong> <code class="text-brand">BloqueRender</code>.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={metodologiaEjemplo} />
 			</div>
 		</section>
 	</main>

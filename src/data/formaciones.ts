@@ -21,6 +21,9 @@ import {
 	admision,
 	articula,
 	facultad,
+	metodologia,
+	MODALIDAD_A,
+	MODALIDAD_B,
 	LOGO_FACULTAD,
 	ESLOGAN_FACULTAD,
 	type BloquePagina,
@@ -100,9 +103,7 @@ export const formaciones: Formacion[] = [
 				'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
 			),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-A'),
+			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			// (Máster: no tiene sección de planes → la beca va a la entrevista).
@@ -299,9 +300,7 @@ export const formaciones: Formacion[] = [
 				'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
 			),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-A'),
+			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			// (Psicoterapia: sin sección de planes → la beca va a la entrevista).
@@ -497,9 +496,7 @@ export const formaciones: Formacion[] = [
 				'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
 			),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-A'),
+			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			paraTi(
@@ -651,9 +648,7 @@ export const formaciones: Formacion[] = [
 				'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
 			),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-B'),
+			metodologia('Metodología', MODALIDAD_B),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			paraTi(
@@ -798,9 +793,7 @@ export const formaciones: Formacion[] = [
 				'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
 			),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-B'),
+			metodologia('Metodología', MODALIDAD_B),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			paraTi(
@@ -970,9 +963,7 @@ export const formaciones: Formacion[] = [
 				'y otros referentes del mundo psy',
 			]),
 			// Metodología
-			titulo('Metodología'),
-			c('METODOLOGIA-CABECERA'),
-			c('METODOLOGIA-MODALIDAD-A'),
+			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
 			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
 			paraTi(

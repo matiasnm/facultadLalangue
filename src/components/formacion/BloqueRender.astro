@@ -12,7 +12,7 @@ import Rico from './Rico.astro';
 import Contador from './Contador.astro';
 import Avatar from '../Avatar.astro';
 import { siglasDe } from '../../data/docentes';
-import type { Bloque, IconoFacultad } from '../../data/componentes';
+import type { Bloque, IconoFacultad, IconoMetodologia } from '../../data/componentes';
 
 const base = import.meta.env.BASE_URL;
 // Prefija rutas internas con la base; deja intactas "#", anclas y URLs absolutas.
@@ -30,6 +30,20 @@ const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke=
 // La cruz va en la paleta "accent" (terracota) para distinguirla del check (brand/vino).
 const checkIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 text-brand"><circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>`;
 const crossIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 text-accent"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6m0-6-6 6"/></svg>`;
+
+// Iconos minimalistas (trazo fino, sin relleno) de la modalidad metodológica:
+// clase sincrónica (play), grabaciones (pantalla), prácticas supervisadas
+// (clipboard con check), discusión de casos (burbuja), salida laboral
+// (avión de papel) y comunidad activa (globo); + lupa para investigación.
+const iconosMetodologia: Record<IconoMetodologia, string> = {
+	clase: `<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>`,
+	grabaciones: `<rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 16.5v3M15 16.5v3M7 19.5h10"/><path d="m10.5 8 3.75 2.25-3.75 2.25z"/>`,
+	supervision: `<rect x="5.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M9.5 3.5V6h5V3.5"/><path d="m9 13 2 2 4-4.5"/>`,
+	casos: `<path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-7l-4.5 3.5V15H7a3 3 0 0 1-3-3z"/><path d="M8 9.5h.01M12 9.5h.01M16 9.5h.01"/>`,
+	salida: `<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>`,
+	comunidad: `<circle cx="12" cy="12" r="9"/><path d="M3.5 12h17"/><path d="M12 3a14.5 14.5 0 0 1 0 18 14.5 14.5 0 0 1 0-18"/>`,
+	investigacion: `<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>`,
+};
 
 // Lema de articula: "frase **Palabra clave**". La frase va arriba y la palabra
 // clave abajo, sola, grande y en vino. Separa ambos para renderizarlas aparte.
@@ -664,6 +678,74 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						></svg>
 					</span>
 					<p class="mb-0 pt-1.5 text-sm leading-relaxed text-ink/85">{p.texto}</p>
+				</div>
+			))}
+		</div>
+	</section>
+)}
+
+{/* Metodología — bloque de modalidad de cursada, misma estructura que
+     "articula…" pero con un video en la columna derecha (placeholder por
+     ahora: caja 16:9 con play). Izquierda: sellos de metodología (frase +
+     palabra clave abajo en Roboto Serif vino, alineado a la izquierda, con
+     separador vino). Debajo: grilla gris de bullets de modalidad (2
+     columnas) con iconos minimalistas del mismo tipo que Facultad. */}
+{b.tipo === 'metodologia' && (
+	<section class="mt-14">
+		<h2>{b.titulo}</h2>
+		<div class="mt-8 grid items-center gap-10 md:grid-cols-2 md:gap-14">
+			{/* Izquierda: sellos de metodología. */}
+			<div class="flex flex-col items-start gap-8 text-left">
+				{b.lema.map((linea) => {
+					const { antes, palabra, despues } = lemaPartes(linea);
+					return (
+						<div class="flex w-full flex-col items-start gap-4">
+							<p class="mb-0 font-heading text-xl leading-relaxed text-ink sm:text-2xl">
+								{antes}
+								{palabra && <span class="mt-1 block font-serif font-bold leading-none text-brand text-[1.75rem]">{palabra}</span>}
+								{despues}
+							</p>
+							<div class="h-[5px] w-full bg-brand" aria-hidden="true"></div>
+						</div>
+					);
+				})}
+			</div>
+			{/* Derecha: video (placeholder 16:9, sin src por ahora). */}
+			<div
+				class="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-2xl bg-ink/[0.06]"
+				role="img"
+				aria-label="Video de la modalidad de cursada — próximamente"
+			>
+				<span class="flex flex-col items-center gap-3 text-ink/40">
+					<span class="flex size-14 items-center justify-center rounded-full bg-white text-brand">
+						<svg viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 size-5" aria-hidden="true">
+							<path d="M8 5.5v13l11-6.5z" />
+						</svg>
+					</span>
+					<span class="text-sm">Video — próximamente</span>
+				</span>
+			</div>
+		</div>
+		{/* Bullets de modalidad: grilla gris (2 columnas) con iconos minimalistas. */}
+		<div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+			{b.puntos.map((p) => (
+				<div class="flex items-center gap-3 rounded-xl bg-ink/[0.05] px-4 py-3">
+					<span
+						class="flex size-9 shrink-0 items-center justify-center rounded-full bg-white text-brand"
+						aria-hidden="true"
+					>
+						<svg
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-[1.05rem]"
+							set:html={iconosMetodologia[p.icono]}
+						></svg>
+					</span>
+					<p class="mb-0 text-sm leading-snug text-ink">{p.texto}</p>
 				</div>
 			))}
 		</div>

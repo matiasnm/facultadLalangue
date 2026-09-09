@@ -181,6 +181,26 @@ export type BloqueFacultad = {
 	pilares: { icono: IconoFacultad; texto: string }[];
 };
 
+/** Iconos minimalistas (trazo fino, sin relleno) de la modalidad metodológica. */
+export type IconoMetodologia = 'clase' | 'grabaciones' | 'supervision' | 'casos' | 'salida' | 'comunidad' | 'investigacion';
+
+/**
+ * Metodología — bloque de modalidad de cursada: igual estructura que
+ * "articula…" pero con un video en la columna derecha (placeholder por ahora,
+ * sin src). Columna izquierda con los sellos de metodología (frase arriba y
+ * la palabra `**negrita**` debajo, en Roboto Serif vino, alineado a la
+ * izquierda) y debajo la grilla gris de bullets de modalidad (2 columnas)
+ * con iconos minimalistas del mismo tipo que los del bloque Facultad.
+ */
+export type BloqueMetodologia = {
+	tipo: 'metodologia';
+	titulo: string;
+	/** Sellos de metodología; `**palabra**` = acento. */
+	lema: string[];
+	/** Bullets de modalidad de la grilla gris (icono + texto). */
+	puntos: { icono: IconoMetodologia; texto: string }[];
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -202,7 +222,8 @@ export type Bloque =
 	| BloqueCarruselLogos
 	| BloqueAdmision
 	| BloqueArticula
-	| BloqueFacultad;
+	| BloqueFacultad
+	| BloqueMetodologia;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -284,6 +305,34 @@ export const PILARES_FACULTAD: { icono: IconoFacultad; texto: string }[] = [
 ];
 export const facultad = (logo, eslogan, parrafos, pilares = PILARES_FACULTAD) =>
 	({ tipo: 'facultad', logo, eslogan, parrafos, pilares }) as BloqueFacultad;
+/** Sellos de metodología del bloque `metodologia` (mismos en las 6 formaciones). */
+export const LEMA_METODOLOGIA = [
+	'Primera y única facultad con **Supervisiones Gratuitas**',
+	'Primera Comunidad Internacional activa, **+ de 7000 miembros**',
+	'Modalidad 100% **Online y Flexible**',
+];
+/** Modalidad A — 6 bullets (Máster, Psicoterapia, Subjetividad, Metapsicología). */
+export const MODALIDAD_A: { icono: IconoMetodologia; texto: string }[] = [
+	{ icono: 'clase', texto: 'Clases sincrónicas' },
+	{ icono: 'grabaciones', texto: 'Clases grabadas' },
+	{ icono: 'supervision', texto: 'Prácticas supervisadas' },
+	{ icono: 'casos', texto: 'Discusión de casos clínicos reales' },
+	{ icono: 'salida', texto: 'Salida Laboral Internacional' },
+	{ icono: 'comunidad', texto: 'Comunidad académica internacional activa' },
+];
+/** Modalidad B — variante de Parejas/Infanto-Juvenil: primer ítem "Clases
+ * teóricas en vivo" + el bullet de investigación extra (7 ítems). */
+export const MODALIDAD_B: { icono: IconoMetodologia; texto: string }[] = [
+	{ icono: 'clase', texto: 'Clases teóricas en vivo' },
+	{ icono: 'grabaciones', texto: 'Clases grabadas' },
+	{ icono: 'supervision', texto: 'Prácticas supervisadas' },
+	{ icono: 'casos', texto: 'Discusión de casos clínicos reales' },
+	{ icono: 'salida', texto: 'Salida Laboral Internacional' },
+	{ icono: 'comunidad', texto: 'Comunidad académica internacional activa' },
+	{ icono: 'investigacion', texto: 'Espacios de investigación y acompañamiento académico' },
+];
+export const metodologia = (titulo, puntos, lema = LEMA_METODOLOGIA) =>
+	({ tipo: 'metodologia', titulo, lema, puntos }) as BloqueMetodologia;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
