@@ -37,9 +37,9 @@ const link = (href: string) =>
 		aria-hidden="true"
 	></div>
 	<div role="region" aria-label={label} class="carrusel-logos-track flex w-max">
-		<ul class="flex list-none items-center gap-12 p-0">
+		<ul class="flex list-none items-center p-0">
 			{logos.map((logo) => (
-				<li class="shrink-0">
+				<li class="me-12 shrink-0">
 					{logo.href ? (
 						<a href={link(logo.href)} target="_blank" rel="noopener noreferrer">
 							<img src={link(logo.src)} alt={logo.alt} class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
@@ -51,9 +51,9 @@ const link = (href: string) =>
 			))}
 		</ul>
 		{/* Copia exacta — aria-hidden para el bucle continuo sin saltos. */}
-		<ul class="flex list-none items-center gap-12 p-0" aria-hidden="true">
+		<ul class="flex list-none items-center p-0" aria-hidden="true">
 			{logos.map((logo) => (
-				<li class="shrink-0">
+				<li class="me-12 shrink-0">
 					{logo.href ? (
 						<a href={link(logo.href)} tabindex="-1" aria-hidden="true">
 							<img src={link(logo.src)} alt="" class="h-10 w-auto opacity-70 grayscale" loading="lazy" />
