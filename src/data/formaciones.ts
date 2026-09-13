@@ -789,22 +789,6 @@ export const formaciones: Formacion[] = [
 			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9546),
 			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
 			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
-			// Admisión
-			titulo('Admisión'),
-			texto(
-				'El ingreso al diplomado se realiza mediante una **Entrevista de Orientación y Admisión** con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			lista([
-				'Entrevista de admisión obligatoria.',
-				'Entrevista gratuita.',
-				'Orientación para regulaciones locales.',
-				'Becas parciales para perfiles seleccionados.',
-				'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-			]),
-			titulo('Matrícula Anual', 3),
-			lista(['Beca de admisión del 60%', 'Planes de financiación disponibles']),
-			texto('€1800 → **€540 euros/año**'),
-			enlace('Entrevista de admisión', ENTREVISTA),
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
@@ -852,6 +836,24 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 euros/año',
+					'Beca de admisión del 60%',
+					'Planes de financiación disponibles',
+				],
+				'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
@@ -941,22 +943,6 @@ export const formaciones: Formacion[] = [
 			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
 			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
 			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
-			// Admisión
-			titulo('Admisión'),
-			texto(
-				'El ingreso a la diplomatura se realiza mediante una **Entrevista de Orientación y Admisión** con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			lista([
-				'Entrevista de admisión obligatoria.',
-				'Entrevista gratuita.',
-				'Orientación para regulaciones locales.',
-				'Becas parciales para perfiles seleccionados.',
-				'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-			]),
-			titulo('Matrícula Anual', 3),
-			lista(['Beca de admisión del 60%', 'Planes de financiación disponibles']),
-			texto('€1800 → **€540 euros/año**'),
-			enlace('Entrevista de admisión', ENTREVISTA),
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
@@ -1017,6 +1003,24 @@ export const formaciones: Formacion[] = [
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 euros/año',
+					'Beca de admisión del 60%',
+					'Planes de financiación disponibles',
+				],
+				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+			),
 			c('CTA-INSCRIBIRTE'),
 		],
 	},
