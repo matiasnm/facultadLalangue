@@ -155,21 +155,6 @@ export const formaciones: Formacion[] = [
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			texto('Agenda una entrevista gratuita y sin compromiso.'),
 			enlace('Solicitar entrevista de admisión', ENTREVISTA),
-			// Admisión
-			titulo('Admisión'),
-			texto(
-				'El ingreso al Máster se realiza mediante una **Entrevista de Orientación y Admisión** con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			lista([
-				'Entrevista de admisión obligatoria.',
-				'Entrevista gratuita.',
-				'Orientación para regulaciones locales.',
-				'Becas parciales para perfiles seleccionados.',
-				'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-			]),
-			titulo('Matrícula anual', 3),
-			texto('€3990 → -60% → €1596 · 25% adicional OFF 1 pago → €1197 · + Planes de financiación'),
-			enlace('Agendar entrevista de admisión', ENTREVISTA),
 			// Salida Laboral
 			titulo('Salida Laboral Internacional'),
 			c('FREUD-CITA-TERAPIA-PUEBLO'),
@@ -345,21 +330,6 @@ export const formaciones: Formacion[] = [
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			texto('Agenda una entrevista gratuita y sin compromiso.'),
 			enlace('Solicitar entrevista de admisión', ENTREVISTA),
-			// Admisión
-			titulo('Admisión'),
-			texto(
-				'El ingreso a la diplomatura se realiza mediante una **Entrevista de Orientación y Admisión** con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			lista([
-				'Entrevista de admisión obligatoria.',
-				'Entrevista gratuita.',
-				'Orientación para regulaciones locales.',
-				'Becas parciales para perfiles seleccionados.',
-				'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-			]),
-			titulo('Matrícula anual', 3),
-			texto('€3990 → -60% → €1596 · 25% adicional OFF 1 pago → €1197 · + Planes de financiación'),
-			enlace('Agendar entrevista de admisión', ENTREVISTA),
 			// Salida Laboral
 			titulo('Salida Laboral Internacional'),
 			c('FREUD-CITA-TERAPIA-PUEBLO'),
