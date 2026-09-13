@@ -994,12 +994,6 @@ export const formaciones: Formacion[] = [
 			]),
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
-			// Newsletter
-			titulo('Newsletter'),
-			texto('Recibe contenido exclusivo y novedades del Máster.'),
-			texto(
-				'Novedades, aperturas de convocatoria y contenidos breves para acompañar una práctica clínica ética y actual.',
-			),
 			// Cierre
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
