@@ -24,12 +24,17 @@ import {
 	metodologia,
 	profesores,
 	modulos,
+	certificacion,
 	MODALIDAD_A,
 	MODALIDAD_B,
 	LOGO_FACULTAD,
 	ESLOGAN_FACULTAD,
 	type BloquePagina,
 } from './componentes';
+
+/** Intro institucional compartida de la sección Certificación (era el componente común 'CERTIFICACION-INTRO'). */
+const CERTIFICACION_INTRO =
+	'La **Facultad Internacional de Psicología y Psicoanálisis Lalangue** es una institución francesa reconocida como organismo de formación profesionalizante por la *DREETS (Gobierno Francés)*, avalada por la *Asociación de Psicoanalistas Europeos (APE)* y la *Federación Europea de Escuelas (FEDE)*, orientada a la práctica clínica real, al trabajo en comunidad y a la inserción en redes profesionales internacionales.';
 
 export interface Formacion {
 	slug: string;
@@ -170,18 +175,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista([
-				'Certificación internacional con reconocimiento académico y clínico.',
-				'El ejercicio profesional depende de la normativa vigente en cada país.',
-			]),
-			enlace(
-				'Programa Académico',
-				'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/master.png',
+				{
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
 			),
-			texto('*Diploma de muestra.'),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -347,18 +357,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista([
-				'Certificación internacional con reconocimiento académico y clínico.',
-				'El ejercicio profesional depende de la normativa vigente en cada país.',
-			]),
-			enlace(
-				'Programa académico',
-				'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/psicoterapia.png',
+				{
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
 			),
-			texto('*Diploma de muestra.'),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -512,16 +527,21 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista(['Certificación internacional.', 'Formación online con alcance global.']),
-			texto('*El ejercicio profesional en territorio depende de la normativa vigente en cada país.'),
-			enlace(
-				'Programa Académico',
-				'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/subjetividad.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
 			),
-			texto('*Diploma de muestra.'),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -657,16 +677,21 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista(['Certificación internacional.', 'Formación online con alcance global.']),
-			texto('*El ejercicio profesional en territorio depende de la normativa vigente en cada país.'),
-			enlace(
-				'Programa académico',
-				'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/parejas.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
 			),
-			texto('*Diploma de muestra.'),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -798,11 +823,17 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista(['Certificación internacional.', 'Formación online con alcance global.']),
-			texto('*El ejercicio profesional en territorio depende de la normativa vigente en cada país.'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/infanto.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -954,18 +985,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación
-			titulo('Certificación'),
-			c('CERTIFICACION-INTRO'),
-			lista([
-				'Certificación internacional con reconocimiento académico y clínico.',
-				'El ejercicio profesional depende de la normativa vigente en cada país.',
-			]),
-			enlace(
-				'Programa Académico',
-				'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/metapsicologia.png',
+				{
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
 			),
-			texto('*Diploma de muestra.'),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),

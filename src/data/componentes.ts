@@ -248,6 +248,31 @@ export type BloqueModulos = {
 	enlace?: { etiqueta: string; href: string };
 };
 
+/**
+ * Certificación — sección full-bleed copiada de la sección #certificacion de
+ * la landing del Máster: fondo claro de ancho total, título a la izquierda con
+ * el párrafo institucional (intro, formato Rico), los puntos con check y el
+ * botón opcional; a la derecha el diploma de muestra (imagen /diplomas/*.png)
+ * con su nota al pie. Estructura mínima: la section tiene UN solo contenedor
+ * central con el padding; dentro un grid de 2 columnas (texto | figura).
+ */
+export type BloqueCertificacion = {
+	tipo: 'certificacion';
+	titulo: string;
+	/** Párrafo institucional (Rico): qué es FIPP Lalangue y sus avales. */
+	intro: string;
+	/** Puntos con check (p. ej. "Certificación internacional con reconocimiento académico y clínico."). */
+	puntos: string[];
+	/** Diploma de muestra: `/diplomas/*.png`. */
+	foto: string;
+	/** Botón opcional (p. ej. "Programa académico" → PDF del plan). */
+	enlace?: { etiqueta: string; href: string };
+	/** Nota opcional bajo los puntos (p. ej. "*El ejercicio profesional…"). */
+	nota?: string;
+	/** Nota opcional bajo el diploma (p. ej. "*Diploma de muestra."). */
+	notaDiploma?: string;
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -272,7 +297,8 @@ export type Bloque =
 	| BloqueFacultad
 	| BloqueMetodologia
 	| BloqueProfesores
-	| BloqueModulos;
+	| BloqueModulos
+	| BloqueCertificacion;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -428,6 +454,9 @@ export const profesores = (titulo, lista) =>
 
 export const modulos = (titulo, lista, intro?, enlace?) =>
 	({ tipo: 'modulos', titulo, modulos: lista, intro, enlace }) as BloqueModulos;
+
+export const certificacion = (titulo, intro, puntos, foto, extras?) =>
+	({ tipo: 'certificacion', titulo, intro, puntos, foto, ...extras }) as BloqueCertificacion;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */

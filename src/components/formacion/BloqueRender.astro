@@ -862,6 +862,70 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
+{/* Certificación — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con
+     fondo claro, copia de la sección #certificacion de la landing del Máster:
+     texto a la izquierda (título, párrafo institucional, puntos con check y
+     botón opcional) y el diploma de muestra a la derecha (figura). Estructura
+     mínima: la section tiene UN solo contenedor central con el padding; dentro
+     un grid de 2 columnas. Los márgenes viven donde está el texto. */}
+{b.tipo === 'certificacion' && (
+	<section
+		class="relative left-1/2 -ml-[50vw] mt-14 w-screen scroll-mt-24 bg-surface py-16 sm:py-20"
+		id="certificacion"
+		aria-label={b.titulo}
+	>
+		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+			<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+				{/* Columna izquierda: título, intro, puntos con check y botón. */}
+				<div>
+					<h2>{b.titulo}</h2>
+					<Rico
+						texto={b.intro}
+						class="mt-4 text-[0.9375rem] leading-relaxed text-ink/85"
+					/>
+					<ul class="mt-6 flex list-none flex-col gap-3 p-0">
+						{b.puntos.map((punto) => (
+							<li class="flex items-start gap-3 text-[0.9375rem] leading-snug text-ink">
+								<span set:html={checkIcon} />
+								<span>{punto}</span>
+							</li>
+						))}
+					</ul>
+					{b.nota && (
+						<p class="mb-0 mt-4 text-xs leading-relaxed text-muted">
+							{b.nota}
+						</p>
+					)}
+					{b.enlace && (
+						<a
+							href={link(b.enlace.href)}
+							target="_blank"
+							rel="noopener"
+							class="mt-8 inline-flex items-center rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:no-underline"
+						>
+							{b.enlace.etiqueta}
+						</a>
+					)}
+				</div>
+				{/* Columna derecha: el diploma de muestra (figura con su propia nota). */}
+				<figure class="m-0">
+					<img
+						src={link(b.foto)}
+						alt="Diploma de muestra"
+						class="w-full rounded-xl shadow-md"
+						loading="lazy"
+					/>
+					{b.notaDiploma && (
+						<figcaption class="mt-2 text-center text-xs text-muted">
+							{b.notaDiploma}
+						</figcaption>
+					)}
+				</figure>
+			</div>
+		</div>
+	</section>
+)}
+
 {/* Admisión — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con fondo:
      imagen + tinte vino en una sola capa (gradiente + url). Margen global en la
      section; dentro solo 1 grid de 2 columnas. Ambos títulos son h2

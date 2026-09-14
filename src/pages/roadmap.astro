@@ -4,9 +4,9 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, certificacion, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
-const lastUpdated = '2026-09-13';
+const lastUpdated = '2026-09-14';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
 const dirigidoAEjemplo = dirigidoA(
@@ -231,6 +231,27 @@ const modulosEjemplo = modulos(
 	{
 		etiqueta: 'Programa académico',
 		href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+	},
+);
+
+// Componente Certificación — sección full-bleed copiada de #certificacion de
+// la landing del Máster: texto a la izquierda (título + párrafo institucional
+// + puntos con check + botón opcional) y el diploma de muestra a la derecha.
+// El ejemplo replica el del Máster (los diplomas viven en public/diplomas/).
+const certificacionEjemplo = certificacion(
+	'Certificación',
+	'La **Facultad Internacional de Psicología y Psicoanálisis Lalangue** es una institución francesa reconocida como organismo de formación profesionalizante por la *DREETS (Gobierno Francés)*, avalada por la *Asociación de Psicoanalistas Europeos (APE)* y la *Federación Europea de Escuelas (FEDE)*, orientada a la práctica clínica real, al trabajo en comunidad y a la inserción en redes profesionales internacionales.',
+	[
+		'Certificación internacional con reconocimiento académico y clínico.',
+		'El ejercicio profesional depende de la normativa vigente en cada país.',
+	],
+	'/diplomas/master.png',
+	{
+		enlace: {
+			etiqueta: 'Programa Académico',
+			href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+		},
+		notaDiploma: '*Diploma de muestra.',
 	},
 );
 
@@ -1999,6 +2020,36 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={modulosEjemplo} />
+			</div>
+		</section>
+
+		{/* ------------------------- Certificación ------------------------- */}
+		<section class="mt-20">
+			<h3 class="mb-4 border-b-2 border-brand/30 pb-3 font-display text-2xl text-brand">
+				Certificación
+			</h3>
+			<p class="leading-relaxed text-ink">
+				Sección <strong>full-bleed</strong> con fondo claro (mismo patrón que
+				<code class="text-brand">Módulos de Clases</code>: ancho de pantalla completo,
+				<code class="text-brand">bg-surface</code>), copia de la sección
+				<code class="text-brand">#certificacion</code> de la landing del Máster. Estructura:
+				la <code class="text-brand">section</code> tiene <strong>un solo contenedor central</strong>
+				con el padding y un <strong>grid de 2 columnas</strong>. A la <strong>izquierda</strong>:
+				título, párrafo institucional (Rico), los puntos con check (ícono reutilizado de
+				<code class="text-brand">checkIcon</code>) y el botón opcional "Programa académico"
+				(fondo <code class="text-brand">brand</code>); la <strong>nota</strong> legal opcional
+				("*El ejercicio profesional…") va bajo los puntos. A la <strong>derecha</strong>: el
+				<strong>diploma de muestra</strong> (imagen de <code class="text-brand">public/diplomas/…</code>
+				con su <code class="text-brand">alt="Diploma de muestra"</code>) dentro de una
+				<code class="text-brand">figure</code> con su <code class="text-brand">figcaption</code>
+				("*Diploma de muestra."). Márgenes solo donde está el texto. Bloque
+				<code class="text-brand">certificacion(titulo, intro, puntos, foto, extras?)</code>
+				con <code class="text-brand">extras = &#123; enlace?, nota?, notaDiploma? &#125;</code>; aplicado
+				a las <strong>6 formaciones</strong> con esa sección (Máster, Psicoterapia, Subjetividad,
+				Parejas, Infanto, Metapsicología), cada una con su propio diploma. Ejemplo (el del Máster):
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={certificacionEjemplo} />
 			</div>
 		</section>
 	</main>
