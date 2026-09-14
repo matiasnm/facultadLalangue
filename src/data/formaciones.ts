@@ -9,6 +9,25 @@
  * (`secciones`): o citas un componente común (`c('NOMBRE')`, definido en
  * src/data/componentes.ts) o define un bloque propio. Ninguna página lleva
  * text-bruto de diseño: todo pasa por los render de src/components/formacion/.
+ *
+ * ORDEN CANÓNICO de los bloques (igual en todas las formaciones):
+ *    1. Metodología          → metodologia() + METODOLOGIA-CONTADORES
+ *    2. La Facultad          → titulo('La Facultad') + facultad()
+ *    3. articula             → articula()
+ *    4. Certificación        → certificacion()
+ *    5. Módulos de Clases    → modulos()
+ *    6. Profesores           → profesores()
+ *    7. Beneficios           → BENEFICIOS-*
+ *    8. Salida Laboral       → (solo Máster y Psicoterapia)
+ *    9. Supervisión Clínica  → (solo Máster y Psicoterapia)
+ *   10. Inserción Laboral    → titulo + INSERCION-ESTADISTICAS
+ *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
+ *   12. Preguntas Frecuentes → titulo + FAQ-*
+ *   13. Listo para inscribirte → CTA-INSCRIBIRTE
+ *   14. Nuestras formaciones   → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   15. Footer
+ * Los bloques intersticiales (intro, «Es para ti si…», planes de financiación,
+ * CTA de entrevista, clase abierta) se intercalan sin romper ese orden.
  */
 import {
 	c,
@@ -95,22 +114,6 @@ export const formaciones: Formacion[] = [
 			texto(
 				'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
 			),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
-					{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
-					{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
-					{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
-				},
-			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
@@ -146,6 +149,39 @@ export const formaciones: Formacion[] = [
 				'Espacios de elaboración colectiva internacional.',
 				'Articulación entre teoría, caso y práctica.',
 			]),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/master.png',
+				{
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+					{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
+					{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
+					{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
+					{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
+				],
+				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+				},
+			),
 			// Profesores
 			profesores('Profesores del máster', [
 				{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
@@ -175,22 +211,25 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
+			// Admisión
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
 				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
 				],
-				'/diplomas/master.png',
-				{
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
+				'Matrícula anual',
+				[
+					'€3990 → €1596 (-60%)',
+					'25% adicional OFF en 1 pago',
+					'€1197',
+					'+ Planes de financiación',
+				],
+				'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
@@ -224,28 +263,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula anual',
-				[
-					'€3990 → €1596 (-60%)',
-					'25% adicional OFF en 1 pago',
-					'€1197',
-					'+ Planes de financiación',
-				],
-				'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -269,26 +289,6 @@ export const formaciones: Formacion[] = [
 				'Este diplomado propone un recorrido formativo de 2 años orientado a quienes desean formarse en psicoterapia con enfoque psicoanalítico, articulando teoría, técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
 				'A lo largo del recorrido se estudian los fundamentos del aparato psíquico, las estructuras clínicas, la infancia, la sexualidad, la intervención en crisis y el trabajo con entrevistas clínicas. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
 			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo_mas_alla_del_principio_del_placer.webp', nombre: 'Módulo 2 | Más allá del principio del placer y segunda tópica' },
-					{ foto: '/modulos_clases/modulo_piaget_y_freud.webp', nombre: 'Módulo 3 | Piaget y Freud: desarrollo y constitución psíquica' },
-					{ foto: '/modulos_clases/modulo_neurociencia_y_psicoterapia.webp', nombre: 'Módulo 4 | Neurociencia y psicoterapia' },
-					{ foto: '/modulos_clases/modulo_corrientes_postfreudianas.webp', nombre: 'Módulo 5 | Más allá de Freud: corrientes postfreudianas' },
-					{ foto: '/modulos_clases/modulo_pruebas_proyectivas.webp', nombre: 'Módulo 6 | Pruebas proyectivas' },
-					{ foto: '/modulos_clases/modulo_terapia_de_pareja_y_sexologia.webp', nombre: 'Módulo 7 | Terapia de pareja y sexología' },
-					{ foto: '/modulos_clases/modulo_psicoterapia_en_crisis.webp', nombre: 'Módulo 8 | Psicoterapia en crisis y emergencias' },
-					{ foto: '/modulos_clases/modulo_como_comenzar_a_atender.webp', nombre: 'Módulo 9 | ¿Cómo comenzar a atender clínicamente?' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
-				},
-			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
@@ -324,6 +324,43 @@ export const formaciones: Formacion[] = [
 				'Comunidad académica internacional.',
 				'Articulación entre teoría, caso y práctica.',
 			]),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/psicoterapia.png',
+				{
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+					{ foto: '/modulos_clases/modulo_mas_alla_del_principio_del_placer.webp', nombre: 'Módulo 2 | Más allá del principio del placer y segunda tópica' },
+					{ foto: '/modulos_clases/modulo_piaget_y_freud.webp', nombre: 'Módulo 3 | Piaget y Freud: desarrollo y constitución psíquica' },
+					{ foto: '/modulos_clases/modulo_neurociencia_y_psicoterapia.webp', nombre: 'Módulo 4 | Neurociencia y psicoterapia' },
+					{ foto: '/modulos_clases/modulo_corrientes_postfreudianas.webp', nombre: 'Módulo 5 | Más allá de Freud: corrientes postfreudianas' },
+					{ foto: '/modulos_clases/modulo_pruebas_proyectivas.webp', nombre: 'Módulo 6 | Pruebas proyectivas' },
+					{ foto: '/modulos_clases/modulo_terapia_de_pareja_y_sexologia.webp', nombre: 'Módulo 7 | Terapia de pareja y sexología' },
+					{ foto: '/modulos_clases/modulo_psicoterapia_en_crisis.webp', nombre: 'Módulo 8 | Psicoterapia en crisis y emergencias' },
+					{ foto: '/modulos_clases/modulo_como_comenzar_a_atender.webp', nombre: 'Módulo 9 | ¿Cómo comenzar a atender clínicamente?' },
+				],
+				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
+				},
+			),
 			// Profesores
 			profesores('Profesores de la diplomatura', [
 				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
@@ -354,22 +391,25 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
+			// Admisión
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
 				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
 				],
-				'/diplomas/psicoterapia.png',
-				{
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
+				'Matrícula anual',
+				[
+					'€3990 → €1596 (-60%)',
+					'25% adicional OFF en 1 pago',
+					'€1197',
+					'+ Planes de financiación',
+				],
+				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
@@ -403,28 +443,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula anual',
-				[
-					'€3990 → €1596 (-60%)',
-					'25% adicional OFF en 1 pago',
-					'€1197',
-					'+ Planes de financiación',
-				],
-				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -448,25 +469,6 @@ export const formaciones: Formacion[] = [
 				'A lo largo del programa se analizan los efectos psicológicos de las plataformas digitales, el rol de los algoritmos en la producción de subjetividad y los desafíos que enfrentan profesionales de la salud mental, educación y comunicación para acompañar estos fenómenos contemporáneos.',
 				'El recorrido combina herramientas provenientes de la psicología contemporánea, la investigación en comportamiento digital y el análisis crítico de las tecnologías emergentes.',
 			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_subjetividad_digital_identidad_online.webp', nombre: 'Módulo 1 | Subjetividad digital y construcción de identidad online' },
-					{ foto: '/modulos_clases/modulo_economia_de_la_atencion.webp', nombre: 'Módulo 2 | Economía de la atención y diseño persuasivo de plataformas' },
-					{ foto: '/modulos_clases/modulo_algoritmos_y_produccion_de_subjetividad.webp', nombre: 'Módulo 3 | Algoritmos, visibilidad y producción de subjetividad' },
-					{ foto: '/modulos_clases/modulo_dano_algoritmico.webp', nombre: 'Módulo 4 | Daño algorítmico y amplificación del malestar psicológico' },
-					{ foto: '/modulos_clases/modulo_dependencia_digital.webp', nombre: 'Módulo 5 | Dependencia digital, compulsión a redes sociales y dopamina digital' },
-					{ foto: '/modulos_clases/modulo_violencia_digital.webp', nombre: 'Módulo 6 | Violencia digital, cancelación y exposición pública' },
-					{ foto: '/modulos_clases/modulo_salud_mental_digital.webp', nombre: 'Módulo 7 | Salud mental en entornos digitales' },
-					{ foto: '/modulos_clases/modulo_estrategias_intervencion_online.webp', nombre: 'Módulo 8 | Estrategias de intervención y acompañamiento en contextos online' },
-				],
-				'El programa se organiza en módulos que abordan las transformaciones psicológicas y sociales generadas por la cultura digital. Entre los principales contenidos se trabajan:',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
-				},
-			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
@@ -503,6 +505,40 @@ export const formaciones: Formacion[] = [
 					'Perspectivas interdisciplinarias para investigación e intervención.',
 				],
 			),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/subjetividad.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo_subjetividad_digital_identidad_online.webp', nombre: 'Módulo 1 | Subjetividad digital y construcción de identidad online' },
+					{ foto: '/modulos_clases/modulo_economia_de_la_atencion.webp', nombre: 'Módulo 2 | Economía de la atención y diseño persuasivo de plataformas' },
+					{ foto: '/modulos_clases/modulo_algoritmos_y_produccion_de_subjetividad.webp', nombre: 'Módulo 3 | Algoritmos, visibilidad y producción de subjetividad' },
+					{ foto: '/modulos_clases/modulo_dano_algoritmico.webp', nombre: 'Módulo 4 | Daño algorítmico y amplificación del malestar psicológico' },
+					{ foto: '/modulos_clases/modulo_dependencia_digital.webp', nombre: 'Módulo 5 | Dependencia digital, compulsión a redes sociales y dopamina digital' },
+					{ foto: '/modulos_clases/modulo_violencia_digital.webp', nombre: 'Módulo 6 | Violencia digital, cancelación y exposición pública' },
+					{ foto: '/modulos_clases/modulo_salud_mental_digital.webp', nombre: 'Módulo 7 | Salud mental en entornos digitales' },
+					{ foto: '/modulos_clases/modulo_estrategias_intervencion_online.webp', nombre: 'Módulo 8 | Estrategias de intervención y acompañamiento en contextos online' },
+				],
+				'El programa se organiza en módulos que abordan las transformaciones psicológicas y sociales generadas por la cultura digital. Entre los principales contenidos se trabajan:',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+				},
+			),
 			// Profesores
 			profesores('Profesores de la diplomatura', [
 				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
@@ -524,21 +560,6 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/subjetividad.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -574,9 +595,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -598,29 +619,6 @@ export const formaciones: Formacion[] = [
 				'En un contexto marcado por transformaciones culturales, cambios en los modelos de pareja y ampliación de los discursos sobre el deseo, el amor y la sexualidad, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** analiza críticamente los nuevos desafíos clínicos y propone una formación rigurosa y actualizada orientada a profesionales interesados en profundizar su abordaje terapéutico de los vínculos sexoafectivos contemporáneos.',
 				'La propuesta articula teoría y práctica clínica para ofrecer herramientas terapéuticas eficaces, éticas y contextualizadas, abordando las mutaciones del lazo vincular, del erotismo y de la subjetividad contemporánea en diálogo con cuatro corrientes psicoterapéuticas: psicoanálisis, enfoque sistémico, terapia cognitivo-conductual e integrativa, favoreciendo una mirada plural e inclusiva para intervenir en las complejas configuraciones relacionales actuales.',
 			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_fundamentos_clinica_vincular.webp', nombre: 'Módulo 1 | Fundamentos de la clínica vincular y sexual' },
-					{ foto: '/modulos_clases/modulo_historia_terapia_de_pareja.webp', nombre: 'Módulo 2 | Historia y evolución de la terapia de pareja' },
-					{ foto: '/modulos_clases/modulo_sexualidad_y_rol_terapeuta.webp', nombre: 'Módulo 3 | Sexualidad humana y rol del terapeuta en consulta sexológica' },
-					{ foto: '/modulos_clases/modulo_dinamicas_de_pareja_apego.webp', nombre: 'Módulo 4 | Dinámicas de pareja, apego y mandatos amorosos' },
-					{ foto: '/modulos_clases/modulo_patrones_vinculares_disfuncionales.webp', nombre: 'Módulo 5 | Patrones vinculares disfuncionales: celos, control, dependencia emocional e infidelidad' },
-					{ foto: '/modulos_clases/modulo_disfunciones_sexuales.webp', nombre: 'Módulo 6 | Sexualidad, disfunciones sexuales y nuevos modelos vinculares' },
-					{ foto: '/modulos_clases/modulo_diversidad_relacional_y_vinculos_no_monogamicos.webp', nombre: 'Módulo 7 | Intervenciones clínicas en diversidad relacional y vínculos no monogámicos' },
-					{ foto: '/modulos_clases/modulo_crisis_afectivas_duelo.webp', nombre: 'Módulo 8 | Parejas en transición: crisis afectivas, duelo, infertilidad y parentalidad' },
-					{ foto: '/modulos_clases/modulo_sexualidades_diversas.webp', nombre: 'Módulo 9 | Sexualidades diversas, cuerpos y subjetividades contemporáneas' },
-					{ foto: '/modulos_clases/modulo_modelos_terapeuticos_pareja.webp', nombre: 'Módulo 10 | Modelos teóricos de terapia de pareja: psicoanálisis, sistémica, TCC e integrativa' },
-					{ foto: '/modulos_clases/modulo_tecnicas_clinicas_contemporaneas.webp', nombre: 'Módulo 11 | Técnicas clínicas contemporáneas: EFT, terapia narrativa, mindfulness y recursos integrativos' },
-					{ foto: '/modulos_clases/modulo_contextos_de_vulnerabilidad.webp', nombre: 'Módulo 12 | Intervenciones en contextos de vulnerabilidad, enfermedad, discapacidad o consumo problemático' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
-				},
-			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_B),
 			c('METODOLOGIA-CONTADORES'),
@@ -653,6 +651,44 @@ export const formaciones: Formacion[] = [
 				'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
 				'Articulación entre teoría, intervención clínica y análisis de casos.',
 			]),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/parejas.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo_fundamentos_clinica_vincular.webp', nombre: 'Módulo 1 | Fundamentos de la clínica vincular y sexual' },
+					{ foto: '/modulos_clases/modulo_historia_terapia_de_pareja.webp', nombre: 'Módulo 2 | Historia y evolución de la terapia de pareja' },
+					{ foto: '/modulos_clases/modulo_sexualidad_y_rol_terapeuta.webp', nombre: 'Módulo 3 | Sexualidad humana y rol del terapeuta en consulta sexológica' },
+					{ foto: '/modulos_clases/modulo_dinamicas_de_pareja_apego.webp', nombre: 'Módulo 4 | Dinámicas de pareja, apego y mandatos amorosos' },
+					{ foto: '/modulos_clases/modulo_patrones_vinculares_disfuncionales.webp', nombre: 'Módulo 5 | Patrones vinculares disfuncionales: celos, control, dependencia emocional e infidelidad' },
+					{ foto: '/modulos_clases/modulo_disfunciones_sexuales.webp', nombre: 'Módulo 6 | Sexualidad, disfunciones sexuales y nuevos modelos vinculares' },
+					{ foto: '/modulos_clases/modulo_diversidad_relacional_y_vinculos_no_monogamicos.webp', nombre: 'Módulo 7 | Intervenciones clínicas en diversidad relacional y vínculos no monogámicos' },
+					{ foto: '/modulos_clases/modulo_crisis_afectivas_duelo.webp', nombre: 'Módulo 8 | Parejas en transición: crisis afectivas, duelo, infertilidad y parentalidad' },
+					{ foto: '/modulos_clases/modulo_sexualidades_diversas.webp', nombre: 'Módulo 9 | Sexualidades diversas, cuerpos y subjetividades contemporáneas' },
+					{ foto: '/modulos_clases/modulo_modelos_terapeuticos_pareja.webp', nombre: 'Módulo 10 | Modelos teóricos de terapia de pareja: psicoanálisis, sistémica, TCC e integrativa' },
+					{ foto: '/modulos_clases/modulo_tecnicas_clinicas_contemporaneas.webp', nombre: 'Módulo 11 | Técnicas clínicas contemporáneas: EFT, terapia narrativa, mindfulness y recursos integrativos' },
+					{ foto: '/modulos_clases/modulo_contextos_de_vulnerabilidad.webp', nombre: 'Módulo 12 | Intervenciones en contextos de vulnerabilidad, enfermedad, discapacidad o consumo problemático' },
+				],
+				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+				},
+			),
 			// Profesores
 			profesores('Profesores de la diplomatura', [
 				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
@@ -674,21 +710,6 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/parejas.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -724,9 +745,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -749,20 +770,6 @@ export const formaciones: Formacion[] = [
 				'El **psiquismo en niños, niñas y adolescentes** está en plena constitución, por lo que los síntomas deben leerse en relación con dimensiones estructurales, evolutivas y socioculturales, evitando trasladar categorías propias de la clínica adulta y toda patologización, para una intervención situada y respetuosa.',
 				'Este diplomado propone un abordaje especializado de la Psicopatología Infanto-Juvenil desde una perspectiva psicoanalítica contemporánea, interdisciplinaria y ética. A lo largo del recorrido se analizan diversas presentaciones clínicas (como depresiones, fobias, trastornos psicosomáticos, TDA, TEA y diversas patologías) integrando diagnóstico, abordaje clínico y trabajo con familias e instituciones.',
 			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_psicopatologia_clinica_infantojuvenil.webp', nombre: 'Módulo 1 | Psicopatología clínica infantojuvenil' },
-					{ foto: '/modulos_clases/modulo_marco_legal_nnyA.webp', nombre: 'Módulo 2 | Marco legal protectorio de Niños y Adolescentes' },
-					{ foto: '/modulos_clases/modulo_constitucion_subjetiva_inicios.webp', nombre: 'Módulo 3 | Psicopatología clínica en los inicios de la constitución subjetiva' },
-					{ foto: '/modulos_clases/modulo_patologias_discapacidades_bebes.webp', nombre: 'Módulo 4 | Patologías, discapacidades y trastornos en Niñez: su clínica y praxis' },
-					{ foto: '/modulos_clases/modulo_violencias_sexuales_infancia.webp', nombre: 'Módulo 5 | Violencias sexuales en la infancia: abordaje clínico actual' },
-					{ foto: '/modulos_clases/modulo_duelo_depresion_neurosis_infancia.webp', nombre: 'Módulo 6 | Avatares clínicos: duelo, depresión y neurosis en la infancia' },
-					{ foto: '/modulos_clases/modulo_cuerpo_psiquismo_plasticidad.webp', nombre: 'Módulo 7 | Cuerpo, psiquismo y plasticidad en la clínica con Niños y Adolescentes' },
-				],
-				'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
-			),
 			// Clase abierta
 			titulo('Vive la experiencia: Clase abierta sin costo'),
 			texto(
@@ -799,6 +806,31 @@ export const formaciones: Formacion[] = [
 				'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
 				'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
 			]),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/infanto.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo_psicopatologia_clinica_infantojuvenil.webp', nombre: 'Módulo 1 | Psicopatología clínica infantojuvenil' },
+					{ foto: '/modulos_clases/modulo_marco_legal_nnyA.webp', nombre: 'Módulo 2 | Marco legal protectorio de Niños y Adolescentes' },
+					{ foto: '/modulos_clases/modulo_constitucion_subjetiva_inicios.webp', nombre: 'Módulo 3 | Psicopatología clínica en los inicios de la constitución subjetiva' },
+					{ foto: '/modulos_clases/modulo_patologias_discapacidades_bebes.webp', nombre: 'Módulo 4 | Patologías, discapacidades y trastornos en Niñez: su clínica y praxis' },
+					{ foto: '/modulos_clases/modulo_violencias_sexuales_infancia.webp', nombre: 'Módulo 5 | Violencias sexuales en la infancia: abordaje clínico actual' },
+					{ foto: '/modulos_clases/modulo_duelo_depresion_neurosis_infancia.webp', nombre: 'Módulo 6 | Avatares clínicos: duelo, depresión y neurosis en la infancia' },
+					{ foto: '/modulos_clases/modulo_cuerpo_psiquismo_plasticidad.webp', nombre: 'Módulo 7 | Cuerpo, psiquismo y plasticidad en la clínica con Niños y Adolescentes' },
+				],
+				'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
+			),
 			// Profesores
 			profesores('Profesores de la diplomatura', [
 				{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
@@ -820,16 +852,24 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/infanto.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					notaDiploma: '*Diploma de muestra.',
-				},
+			// Admisión
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 euros/año',
+					'Beca de admisión del 60%',
+					'Planes de financiación disponibles',
+				],
+				'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
@@ -868,27 +908,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 euros/año',
-					'Beca de admisión del 60%',
-					'Planes de financiación disponibles',
-				],
-				'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -909,30 +931,6 @@ export const formaciones: Formacion[] = [
 			texto([
 				'Este diplomado propone un recorrido formativo de 1 año, con posibilidad de cursada express en 6 o 3 meses, orientado a quienes desean formarse en las **bases de la teoría psicoanalítica** articulada con técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
 				'A lo largo del recorrido se estudian los **fundamentos del aparato psíquico**, las estructuras clínicas, la sexualidad, la intervención y las diversas voces del psicoanálisis. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo_introduccion_al_narcisismo.webp', nombre: 'Módulo 2 | Introducción al narcisismo' },
-					{ foto: '/modulos_clases/modulo_pulsiones_y_destinos.webp', nombre: 'Módulo 3 | Pulsiones y destinos de la pulsión' },
-					{ foto: '/modulos_clases/modulo_segunda_topica_y_masoquismo.webp', nombre: 'Módulo 4 y 5 | Segunda tópica y masoquismo' },
-					{ foto: '/modulos_clases/modulo_angustia_sintoma_cultura.webp', nombre: 'Módulo 6 | Angustia, síntoma y cultura' },
-					{ foto: '/modulos_clases/modulo_mas_alla_de_freud.webp', nombre: 'Módulo 7 | Más allá de Freud' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
-				},
-			),
-			// Profesores (en esta página van antes que la metodología)
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
 			]),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),
@@ -969,19 +967,6 @@ export const formaciones: Formacion[] = [
 					'Articulación entre teoría, caso y práctica.',
 				],
 			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL-BASE'),
-			// Planes de financiación
-			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-			titulo('Planes de financiación', 2, undefined, 'precios'),
-			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
-			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
-			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
 			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
 			certificacion(
 				'Certificación',
@@ -998,6 +983,62 @@ export const formaciones: Formacion[] = [
 					},
 					notaDiploma: '*Diploma de muestra.',
 				},
+			),
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+					{ foto: '/modulos_clases/modulo_introduccion_al_narcisismo.webp', nombre: 'Módulo 2 | Introducción al narcisismo' },
+					{ foto: '/modulos_clases/modulo_pulsiones_y_destinos.webp', nombre: 'Módulo 3 | Pulsiones y destinos de la pulsión' },
+					{ foto: '/modulos_clases/modulo_segunda_topica_y_masoquismo.webp', nombre: 'Módulo 4 y 5 | Segunda tópica y masoquismo' },
+					{ foto: '/modulos_clases/modulo_angustia_sintoma_cultura.webp', nombre: 'Módulo 6 | Angustia, síntoma y cultura' },
+					{ foto: '/modulos_clases/modulo_mas_alla_de_freud.webp', nombre: 'Módulo 7 | Más allá de Freud' },
+				],
+				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+				},
+			),
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
+			]),
+			// Beneficios
+			c('BENEFICIOS-INTRO'),
+			c('BENEFICIOS-GRID-BASE'),
+			c('BENEFICIOS-TOTAL-BASE'),
+			// Planes de financiación
+			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
+			titulo('Planes de financiación', 2, undefined, 'precios'),
+			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
+			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
+			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
+			// Inserción
+			titulo('Inserción Laboral'),
+			c('INSERCION-ESTADISTICAS'),
+			// Admisión
+			admision(
+				'/admision_fondo.webp',
+				'Admisión',
+				[
+					'Entrevista de admisión obligatoria.',
+					'Entrevista gratuita.',
+					'Orientación para regulaciones locales.',
+					'Becas parciales para perfiles seleccionados.',
+					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+				],
+				'Matrícula Anual',
+				[
+					'€1800 → €540 euros/año',
+					'Beca de admisión del 60%',
+					'Planes de financiación disponibles',
+				],
+				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
@@ -1036,27 +1077,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
+			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 euros/año',
-					'Beca de admisión del 60%',
-					'Planes de financiación disponibles',
-				],
-				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 ];
