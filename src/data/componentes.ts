@@ -230,9 +230,12 @@ export type BloqueProfesores = {
 /**
  * Módulos de Clases — sección full-bleed copiada de la landing del Máster
  * ("Módulos de Clases"): fondo claro de ancho total, título centrado, intro
- * (Rico) y un carrusel con flechas + autoplay de las cards de cada módulo
- * (imagen 16:9 + nombre). Cada card es una figura (imagen + título); el
- * único margen está en el figcaption, donde vive el texto.
+ * (Rico) y un carrusel A ANCHO COMPLETO de las cards de cada módulo (imagen
+ * 16:9 + nombre). Las cards se deslizan solas: animación automática (autoplay
+ * de 4s, pausa al hover/foco, off con prefers-reduced-motion), sin flechas;
+ * también se arrastran con el dedo o el ratón (scroll-snap). Cada card es una
+ * figura (imagen + título); el único margen está en el figcaption, donde vive
+ * el texto.
  */
 export type BloqueModulos = {
 	tipo: 'modulos';
