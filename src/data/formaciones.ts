@@ -455,9 +455,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
 				},
 			),
-			texto(
-				'Estos contenidos permiten comprender cómo las tecnologías digitales están transformando las formas contemporáneas de malestar y las prácticas profesionales vinculadas a la salud mental y la educación.',
-			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),
 			c('METODOLOGIA-CONTADORES'),
