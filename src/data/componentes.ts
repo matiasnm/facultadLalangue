@@ -227,6 +227,24 @@ export type BloqueProfesores = {
 	masReferentesHref?: string;
 };
 
+/**
+ * Módulos de Clases — sección full-bleed copiada de la landing del Máster
+ * ("Módulos de Clases"): fondo claro de ancho total, título centrado, intro
+ * (Rico) y un carrusel con flechas + autoplay de las cards de cada módulo
+ * (imagen 16:9 + nombre). Cada card es una figura (imagen + título); el
+ * único margen está en el figcaption, donde vive el texto.
+ */
+export type BloqueModulos = {
+	tipo: 'modulos';
+	titulo: string;
+	/** Cards de módulo: la imagen (`/modulos_clases/*.webp`) y su nombre. */
+	modulos: { foto: string; nombre: string }[];
+	/** Intro de la sección (acepta **negrita** y [enlaces](#ancla)). */
+	intro?: string;
+	/** Enlace opcional debajo del carrusel (p. ej. "Programa académico"). */
+	enlace?: { etiqueta: string; href: string };
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -250,7 +268,8 @@ export type Bloque =
 	| BloqueArticula
 	| BloqueFacultad
 	| BloqueMetodologia
-	| BloqueProfesores;
+	| BloqueProfesores
+	| BloqueModulos;
 
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
@@ -403,6 +422,9 @@ export const profesores = (titulo, lista) =>
 		medios: MEDIOS_TAMBIEN,
 		masReferentesHref: '/plantel-academico/',
 	}) as BloqueProfesores;
+
+export const modulos = (titulo, lista, intro?, enlace?) =>
+	({ tipo: 'modulos', titulo, modulos: lista, intro, enlace }) as BloqueModulos;
 /* ------------------------------------------------------------------ */
 /* Los 33 componentes comunes                                          */
 /* ------------------------------------------------------------------ */

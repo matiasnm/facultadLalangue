@@ -23,6 +23,7 @@ import {
 	facultad,
 	metodologia,
 	profesores,
+	modulos,
 	MODALIDAD_A,
 	MODALIDAD_B,
 	LOGO_FACULTAD,
@@ -89,19 +90,21 @@ export const formaciones: Formacion[] = [
 			texto(
 				'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
 			),
-			// Módulos de Clases
-			titulo('Módulos de Clases'),
-			c('INTRO-MODULOS-CLASES'),
-			lista([
-				'Módulo 1 | El inconsciente y sus precursores',
-				'Módulo 2 | El nudo y los tres registros',
-				'Módulo 3 | Escuela Inglesa',
-				'Módulo 4 | La subjetividad en tiempos de algoritmos',
-				'Módulo 5 | Psicopatología del diagnóstico diferencial',
-			]),
-			enlace(
-				'Programa académico',
-				'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			modulos(
+				'Módulos de Clases',
+				[
+					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+					{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
+					{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
+					{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
+					{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
+				],
+				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+				{
+					etiqueta: 'Programa académico',
+					href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+				},
 			),
 			// Metodología
 			metodologia('Metodología', MODALIDAD_A),

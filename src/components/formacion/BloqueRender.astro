@@ -796,6 +796,105 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
+{/* Módulos de Clases — sección full-bleed (w-screen + -ml-[50vw] + left-1/2),
+     copia de la landing del Máster: fondo claro de ancho total, título centrado,
+     intro y un carrusel con flechas + autoplay de las cards de cada módulo.
+     Estructura mínima: la section tiene UN solo contenedor central (el padding
+     vive acá, donde está el texto) y cada card de módulo es una <figure>
+     (imagen 16:9 + título con su propio margen). El slider es el mismo patrón
+     que el de profesores (scroll-snap, flechas redondas y autoplay de 4s). */}
+{b.tipo === 'modulos' && (
+	<section
+		class="relative left-1/2 -ml-[50vw] mt-14 w-screen scroll-mt-24 bg-surface py-16 sm:py-20"
+		id="modulos-clases"
+		aria-label={b.titulo}
+	>
+		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+			<h2 class="text-center">{b.titulo}</h2>
+			{b.intro && (
+				<Rico
+					texto={b.intro}
+					class="mx-auto mt-4 max-w-2xl text-center text-[0.9375rem] leading-relaxed text-ink/85"
+				/>
+			)}
+			{/* Carrusel de módulos: las cards se deslizan y encajan (snap). */}
+			<div class="relative mt-10" data-modulos-slider>
+				<div
+					class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+					data-modulos-viewport
+				>
+					<ul class="flex list-none items-stretch gap-5 p-0">
+						{b.modulos.map((m) => (
+							<li class="w-72 shrink-0 snap-start sm:w-80">
+								<figure class="m-0">
+									<img
+										src={link(m.foto)}
+										alt={m.nombre}
+										class="aspect-video w-full rounded-2xl object-cover"
+										loading="lazy"
+									/>
+									<figcaption class="mt-4 text-center text-sm font-medium leading-snug text-ink-strong">
+										{m.nombre}
+									</figcaption>
+								</figure>
+							</li>
+						))}
+					</ul>
+				</div>
+				{/* Flechas prev/next — las mismas que el slider de profesores. */}
+				<button
+					type="button"
+					data-modulos-prev
+					aria-label="Módulos anteriores"
+					class="absolute left-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:left-3"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="size-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="m15 6-6 6 6 6" />
+					</svg>
+				</button>
+				<button
+					type="button"
+					data-modulos-next
+					aria-label="Módulos siguientes"
+					class="absolute right-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:right-3"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						class="size-4"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="m9 6 6 6-6 6" />
+					</svg>
+				</button>
+			</div>
+			{b.enlace && (
+				<p class="mb-0 mt-12 text-center">
+					<a
+						href={link(b.enlace.href)}
+						class="inline-flex items-center rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:no-underline"
+					>
+						{b.enlace.etiqueta}
+					</a>
+				</p>
+			)}
+		</div>
+	</section>
+)}
+
 {/* Admisión — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con fondo:
      imagen + tinte vino en una sola capa (gradiente + url). Margen global en la
      section; dentro solo 1 grid de 2 columnas. Ambos títulos son h2
@@ -864,18 +963,18 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
-{/* Slider de profesores: flechas + autoplay, sin puntitos. Soporta varios
-     sliders por página; cada uno avanza de a una tarjeta y vuelve al inicio
-     al llegar al final. Pausa al hover y al foco (para que los botones y los
-     links de la tarjeta CTA sean usables) y se apaga con
-     prefers-reduced-motion. */}
+{/* Sliders de profesores y de módulos de clases: flechas + autoplay, sin
+     puntitos. Soporta varios sliders por página; cada uno avanza de a una
+     tarjeta y vuelve al inicio al llegar al final. Pausa al hover y al foco
+     (para que los botones y los links de las tarjetas sean usables) y se
+     apaga con prefers-reduced-motion. */}
 <script>
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	document.querySelectorAll('[data-profesores-slider]').forEach((slider) => {
-		const viewport = slider.querySelector('[data-profesores-viewport]');
-		const prev = slider.querySelector('[data-profesores-prev]');
-		const next = slider.querySelector('[data-profesores-next]');
+	const initSlider = (slider) => {
+		const viewport = slider.querySelector('[data-profesores-viewport], [data-modulos-viewport]');
+		const prev = slider.querySelector('[data-profesores-prev], [data-modulos-prev]');
+		const next = slider.querySelector('[data-profesores-next], [data-modulos-next]');
 		if (!viewport || !prev || !next) return;
 
 		// Un paso = una tarjeta + el gap (gap-5 = 1.25rem).
@@ -912,6 +1011,8 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		slider.addEventListener('focusin', stop);
 		slider.addEventListener('focusout', start);
 		start();
-	});
+	};
+
+	document.querySelectorAll('[data-profesores-slider], [data-modulos-slider]').forEach(initSlider);
 </script>
 

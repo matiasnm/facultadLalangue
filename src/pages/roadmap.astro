@@ -4,9 +4,9 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
-const lastUpdated = '2026-09-09';
+const lastUpdated = '2026-09-13';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
 const dirigidoAEjemplo = dirigidoA(
@@ -212,6 +212,26 @@ const profesoresEjemplo = profesores('Profesores del máster', [
 	{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
 	{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
 ]);
+
+// Componente Módulos de Clases — sección full-bleed copiada de la landing del
+// Máster: título centrado, intro y carrusel con flechas + autoplay de las
+// cards de cada módulo (imagen 16:9 + nombre). El ejemplo replica la lista
+// real del Máster (las imágenes viven en public/modulos_clases/).
+const modulosEjemplo = modulos(
+	'Módulos de Clases',
+	[
+		{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+		{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
+		{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
+		{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
+		{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
+	],
+	'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+	{
+		etiqueta: 'Programa académico',
+		href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+	},
+);
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1946,6 +1966,33 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={profesoresEjemplo} />
+			</div>
+		</section>
+	<!-- ========= Módulos de Clases (carrusel full-bleed de módulos) ========= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Módulos de Clases (carrusel full-bleed de las cards de cada módulo)</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Copia de la sección "Módulos de Clases" de la landing del Máster, adaptada a los
+				estilos del sitio: <strong>sección full-bleed</strong>
+				(<code class="text-brand">w-screen + -ml-[50vw] + left-1/2</code>, fondo claro
+				<code class="text-brand">bg-surface</code>) con <strong>título centrado</strong>,
+				intro (formato <strong>Rico</strong>, con enlace a <code class="text-brand">#profesores</code>)
+				y un <strong>carrusel móvil</strong> de las <strong>cards de cada módulo</strong>:
+				imagen 16:9 de <code class="text-brand">public/modulos_clases/…</code> redondeada
+				y nombre debajo. El carrusel usa el <strong>mismo patrón</strong> que el slider de
+				profesores (scroll-snap, <strong>flechas redondas</strong>, <strong>autoplay de 4s</strong>
+				que pausa al hover/foco y respeta <code class="text-brand">prefers-reduced-motion</code>).
+				Estructura <strong>mínima</strong>: una <code class="text-brand">section</code> con un
+				solo contenedor central donde vive el padding del texto; cada card es una
+				<code class="text-brand">figure</code> (imagen + título con su propio margen), sin
+				divs anidados. El botón de cierre (p. ej. "Programa académico") es <strong>opcional</strong>.
+				Bloque <code class="text-brand">modulos(titulo, lista, intro?, enlace?)</code>; el
+				ejemplo de abajo (con la lista real del Máster) y las páginas renderizan desde el
+				<strong>mismo</strong> <code class="text-brand">BloqueRender</code>.
+			</p>
+			<div class="mt-8">
+				<BloqueRender bloque={modulosEjemplo} />
 			</div>
 		</section>
 	</main>
