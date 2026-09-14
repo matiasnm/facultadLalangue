@@ -246,9 +246,6 @@ export const formaciones: Formacion[] = [
 				'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 			),
 			c('CTA-INSCRIBIRTE'),
-			texto(
-				'Formación rigurosa, contemporánea y orientada a la práctica. Psicología y psicoanálisis para los desafíos del presente.',
-			),
 		],
 	},
 

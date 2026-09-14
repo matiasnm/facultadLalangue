@@ -290,20 +290,25 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</details>
 )}
 
-{/* CTA — panel de marca con acciones */}
+{/* CTA — banda full-bleed de marca (ancho de pantalla completo, sin esquinas
+     redondeadas) que cierra la página; cada formación termina con este bloque y
+     el footer va pegado debajo, sin separaciones. Estructura mínima: la section
+     full-bleed tiene UN contenedor central con el padding para el texto. */}
 {b.tipo === 'cta' && (
-	<div class="mt-12 rounded-2xl bg-brand px-6 py-12 text-center sm:px-10">
-		<h2 class="text-white">{b.titulo}</h2>
-		{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
-		{b.acciones.map((a) => (
-			<a
-				href={link(a.href)}
-				class="mt-6 inline-block rounded-md bg-white px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-brand transition-colors hover:bg-accent hover:text-white hover:no-underline"
-			>
-				{a.etiqueta}
-			</a>
-		))}
-	</div>
+	<section class="relative left-1/2 -ml-[50vw] mt-12 w-screen bg-brand py-16 text-center sm:py-20">
+		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+			<h2 class="text-white">{b.titulo}</h2>
+			{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
+			{b.acciones.map((a) => (
+				<a
+					href={link(a.href)}
+					class="mt-6 inline-block rounded-md bg-white px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-brand transition-colors hover:bg-accent hover:text-white hover:no-underline"
+				>
+					{a.etiqueta}
+				</a>
+			))}
+		</div>
+	</section>
 )}
 
 {/* Enlace — link destacado del cuerpo (programa, checkout, entrevista…) */}
