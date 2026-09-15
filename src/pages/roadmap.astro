@@ -144,7 +144,7 @@ const admisionEjemplo = admision(
 
 // Inserción laboral — bloque `stats` (componente INSERCION-ESTADISTICAS, el
 // mismo en todas las formaciones). Se renderiza full-bleed con el mapa
-// mundial de fondo (imagen local public/worldMap.webp, la de la landing).
+// mundial de fondo (imagen local public/fondos/world_map.webp).
 const insercionEjemplo = stats({
 	filas: [
 		{ region: 'América del sur', pct: '51%' },
@@ -1765,8 +1765,8 @@ const samples: Record<string, string> = {
 				<code class="text-brand">left-1/2</code>, con
 				<code class="text-brand">overflow-x: clip</code> en body para evitar
 				la barra horizontal). Usa la misma imagen de mapa mundial de la
-				landing original (<code class="text-brand">worldMap.webp</code>,
-				local) al <strong>25% de opacidad</strong> sobre fondo noche: barras
+				landing original (<code class="text-brand">fondos/world_map.webp</code>,
+				local) al <strong>40% de opacidad</strong> sobre fondo <code class="text-brand">muted</code>: barras
 				por región a la izquierda, frases a la derecha y la referencia de
 				fuentes debajo. Bloque <code class="text-brand">stats</code>
 				(componente <code class="text-brand">INSERCION-ESTADISTICAS</code>,

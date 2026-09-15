@@ -212,7 +212,23 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		<p class="mt-1 font-display text-4xl font-semibold text-brand">
 			<Contador valor={b.valor} delimiter="." />
 		</p>
-		<p class="mt-2 text-sm text-ink/70">{b.nota}</p>
+		{/* Cierre: en 'secciones' la `nota` se reemplaza por el h2 + texto + botón
+		     de entrevista (CTA que antes era su propia sección aparte). */}
+		{secciones && b.cierre ? (
+			<>
+				<h2 class="mt-8">{b.cierre.encabezado}</h2>
+				<p class="mt-3 text-lg font-medium text-ink-strong">{b.cierre.texto}</p>
+				<a
+					href={link(b.cierre.accion.href)}
+					class="mt-6 inline-block rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:text-white hover:no-underline"
+					{...(/^https?:\/\//.test(b.cierre.accion.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+				>
+					{b.cierre.accion.etiqueta}
+				</a>
+			</>
+		) : (
+			<p class="mt-2 text-sm text-ink/70">{b.nota}</p>
+		)}
 	</div>
 )}
 
@@ -230,17 +246,17 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 
 {/* Estadísticas de inserción — sección full-bleed con mapa mundial de fondo.
      El ancho es del 100vw rompiendo el contenedor max-w-5xl (técnica w-screen +
-     -ml-[50vw] + left-1/2). Fondo oscuro (bg-night) con el worldMap a 25% de
-     opacidad, tal como en la landing original del Máster. */}
+     -ml-[50vw] + left-1/2). Fondo muted (bg-muted) con el world_map a 40% de
+     opacidad para dar menos contraste que el antiguo bg-night. */}
 {b.tipo === 'stats' && (
 	<section
-		class={`scroll-mt-24 bg-night py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-8 w-screen'}`}
+		class={`relative scroll-mt-24 bg-muted py-16 sm:py-20${secciones ? '' : ' left-1/2 -ml-[50vw] mt-8 w-screen'}`}
 		aria-label="Inserción laboral"
 	>
-		{/* Mapa mundial de fondo (misma imagen de la landing, opacidad 25%). */}
+		{/* Mapa mundial de fondo (opacidad 40%). */}
 		<div
-			class="pointer-events-none absolute inset-0 opacity-25"
-			style={`background-image:url('${link('/worldMap.webp')}'); background-size:cover; background-position:center;`}
+			class="pointer-events-none absolute inset-0 opacity-40"
+			style={`background-image:url('${link('/fondos/world_map.webp')}'); background-size:cover; background-position:center;`}
 			aria-hidden="true"
 		></div>
 		<div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">

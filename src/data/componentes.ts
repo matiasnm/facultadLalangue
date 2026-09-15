@@ -43,6 +43,14 @@ export type BloqueTotalBeneficios = {
 	titulo: string;
 	valor: string;
 	nota: string;
+	/** Cierre de la tarjeta (se renderiza SOLO en el layout 'secciones'):
+	 *  reemplaza la `nota` por un h2 + texto + botón de entrevista, igual
+	 *  que el cierre del bloque de beneficios en la landing del Máster. */
+	cierre?: {
+		encabezado: string;
+		texto: string;
+		accion: { etiqueta: string; href: string };
+	};
 };
 /**
  * Grid de beneficios "exclusivos alumnos" — mismo diseño que la landing del
@@ -341,8 +349,8 @@ export const beneficios = (items, columnas = 3) =>
 	({ tipo: 'beneficios', items, columnas }) as BloqueBeneficios;
 export const carruselLogos = (logos) =>
 	({ tipo: 'carrusel-logos', logos }) as BloqueCarruselLogos;
-export const totalBeneficios = (titulo, valor, nota) =>
-	({ tipo: 'total-beneficios', titulo, valor, nota }) as BloqueTotalBeneficios;
+export const totalBeneficios = (titulo, valor, nota, cierre?) =>
+	({ tipo: 'total-beneficios', titulo, valor, nota, cierre }) as BloqueTotalBeneficios;
 export const cita = (lineas, autor) => ({ tipo: 'cita', lineas, autor }) as BloqueCita;
 export const stats = ({ titulo, filas, frases, referencia }) =>
 	({ tipo: 'stats', titulo, filas, frases, referencia }) as BloqueStats;
@@ -724,6 +732,11 @@ export const componentes: ComponenteComun[] = [
 				'Valor total en beneficios',
 				'€1363',
 				'Todos estos beneficios forman parte de la formación.',
+				{
+					encabezado: 'Convierte tu deseo de saber en una práctica clínica ética y actual',
+					texto: 'Agenda una entrevista gratuita y sin compromiso.',
+					accion: { etiqueta: 'Agendar entrevista de admisión', href: 'https://go.facultadlalangue.com/entrevista-directa' },
+				},
 			),
 		],
 	},
@@ -735,6 +748,11 @@ export const componentes: ComponenteComun[] = [
 				'Valor total en beneficios',
 				'€650',
 				'Todos estos beneficios forman parte de la formación.',
+				{
+					encabezado: 'Convierte tu deseo de saber en una práctica clínica ética y actual',
+					texto: 'Agenda una entrevista gratuita y sin compromiso.',
+					accion: { etiqueta: 'Agendar entrevista de admisión', href: 'https://go.facultadlalangue.com/entrevista-directa' },
+				},
 			),
 		],
 	},

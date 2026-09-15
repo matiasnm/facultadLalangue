@@ -119,7 +119,7 @@ export const facultadSecciones: BloquePagina[] = [
 		{ valor: '+400', etiqueta: 'Materiales descargables' },
 		{ valor: '+100', etiqueta: 'Clases optativas' },
 	]),
-	enlace('Solicitar entrevista de admisión', 'https://go.facultadlalangue.com/entrevista-directa'),
+	enlace('Agendar entrevista de admisión', 'https://go.facultadlalangue.com/entrevista-directa'),
 
 	/* ── Modelo académico (5 pilares) ──────────────────────────────────── */
 	titulo('El modelo académico articula'),
@@ -266,7 +266,7 @@ export const facultadSecciones: BloquePagina[] = [
 	{
 		tipo: 'cta',
 		titulo: 'Convierte tu deseo de saber en una práctica clínica ética y actual',
-		acciones: [{ etiqueta: 'Solicitar entrevista de admisión', href: 'https://go.facultadlalangue.com/entrevista-directa' }],
+		acciones: [{ etiqueta: 'Agendar entrevista de admisión', href: 'https://go.facultadlalangue.com/entrevista-directa' }],
 	},
 
 	/* ── FAQs ──────────────────────────────────────────────────────────── */

@@ -206,21 +206,15 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 8. Beneficios
+			// 8. Beneficios — el cierre de la tarjeta de total lleva el CTA de
+			//    entrevista (h2 + texto + botón), que antes era su propia sección.
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-COMPLETO'),
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
 
-			// 9. CTA entrevista
-			seccion(
-				titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-				texto('Agenda una entrevista gratuita y sin compromiso.'),
-				enlace('Solicitar entrevista de admisión', ENTREVISTA),
-			),
-
-			// 10. Salida Laboral
+			// 9. Salida Laboral
 			seccion(
 				titulo('Salida Laboral Internacional'),
 				c('FREUD-CITA-TERAPIA-PUEBLO'),
@@ -228,17 +222,17 @@ export const formaciones: Formacion[] = [
 				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
 			),
 
-			// 11. Supervisión clínica
+			// 10. Supervisión clínica
 			seccion(
 				c('SUPERVISION-CLINICA-COMPLETA'),
 				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-				enlace('Solicitar entrevista de admisión', ENTREVISTA),
+				enlace('Agendar entrevista de admisión', ENTREVISTA),
 			),
 
-			// 12. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
+			// 11. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
 			seccion(c('INSERCION-ESTADISTICAS')),
 
-			// 13. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
+			// 12. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
 			seccion(
 				certificacion(
 					'Certificación',
@@ -258,7 +252,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 14. Admisión
+			// 13. Admisión
 			seccion(
 				admision(
 					'/admision_fondo.webp',
@@ -281,7 +275,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 15. Preguntas Frecuentes
+			// 14. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -315,13 +309,13 @@ export const formaciones: Formacion[] = [
 				enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
 			),
 
-			// 16. Nuestras formaciones
+			// 15. Nuestras formaciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
 
-			// 17. CTA final
+			// 16. CTA final
 			seccion(c('CTA-INSCRIBIRTE')),
 		],
 	},
@@ -419,7 +413,7 @@ export const formaciones: Formacion[] = [
 			// CTA entrevista
 			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
 			texto('Agenda una entrevista gratuita y sin compromiso.'),
-			enlace('Solicitar entrevista de admisión', ENTREVISTA),
+			enlace('Agendar entrevista de admisión', ENTREVISTA),
 			// Salida Laboral
 			titulo('Salida Laboral Internacional'),
 			c('FREUD-CITA-TERAPIA-PUEBLO'),
@@ -428,7 +422,7 @@ export const formaciones: Formacion[] = [
 			// Supervisión
 			c('SUPERVISION-CLINICA-COMPLETA'),
 			texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-			enlace('Solicitar entrevista de admisión', ENTREVISTA),
+			enlace('Agendar entrevista de admisión', ENTREVISTA),
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),

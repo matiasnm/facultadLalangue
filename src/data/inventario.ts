@@ -51,24 +51,25 @@ const item = (etiqueta: string, texto: string): ItemInventario => ({
 export function bloquesAItems(
 	bloques: (BloquePagina | SeccionPagina)[],
 	out: ItemInventario[] = [],
+	usaLayoutSecciones = false,
 ): ItemInventario[] {
 	for (const b of bloques) {
 		if ('bloques' in b) {
 			// Sección agrupada (layout 'secciones' del Máster): se aplanan sus bloques.
-			bloquesAItems(b.bloques, out);
+			bloquesAItems(b.bloques, out, true);
 			continue;
 		}
 		if (b.tipo === 'componente') {
 			const cc = componentePorId[b.nombre];
-			if (cc) bloquesAItems(cc.bloques as BloquePagina[], out);
+			if (cc) bloquesAItems(cc.bloques as BloquePagina[], out, usaLayoutSecciones);
 			continue;
 		}
-		desplegar(b, out);
+		desplegar(b, out, usaLayoutSecciones);
 	}
 	return out;
 }
 
-function desplegar(b: Bloque, out: ItemInventario[]) {
+function desplegar(b: Bloque, out: ItemInventario[], secciones: boolean) {
 	switch (b.tipo) {
 		case 'titulo': {
 			if (b.kicker) out.push(item('p', b.kicker));
@@ -103,7 +104,13 @@ function desplegar(b: Bloque, out: ItemInventario[]) {
 			break;
 		case 'total-beneficios':
 			out.push(item('p (total-beneficios)', `${b.titulo} ${b.valor}`));
-			if (b.nota) out.push(item('p (nota)', b.nota));
+			if (secciones && b.cierre) {
+				out.push(item('h2', b.cierre.encabezado));
+				out.push(item('p', b.cierre.texto));
+				out.push(item('a (botón)', b.cierre.accion.etiqueta));
+			} else if (b.nota) {
+				out.push(item('p (nota)', b.nota));
+			}
 			break;
 		case 'cita':
 			out.push(item('blockquote', b.lineas.join(' ')));
