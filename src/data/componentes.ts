@@ -71,10 +71,9 @@ export type BloqueBeneficios = {
 export type BloqueCita = { tipo: 'cita'; lineas: string[]; autor: string };
 export type BloqueStats = {
 	tipo: 'stats';
-	/** Título opcional que se renderiza DENTRO de la sección full-bleed
-	 *  cuando la página usa el layout 'secciones' (reemplaza al bloque
-	 *  `titulo` suelto del layout clásico). Combinado le dan el encabezado
-	 *  blanco a la banda oscura, igual que en el original. */
+	/** Título opcional que se renderiza DENTRO de la sección (layout
+	 *  'secciones' de las páginas de formación). Es parte del componente:
+	 *  las páginas NO declaran un `titulo` suelto para la banda. */
 	titulo?: string;
 	filas: { region: string; pct: string }[];
 	frases: string[];
@@ -317,11 +316,11 @@ export type Bloque =
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
 
 /**
- * Sección de una formación con layout 'secciones' (Máster): un grupo de
- * bloques que se renderiza dentro de UN SOLO <section> apilado. Las secciones
- * NO llevan márgenes entre sí: cada una paga su propio padding vertical (y su
- * fondo cuando corresponde) y los bloques internos solo guardan ritmo entre
- * ellos. El orden canónico de los bloques se mantiene al agrupar.
+ * Sección de una formación (layout 'secciones', presente en TODAS las páginas
+ * de formación): un grupo de bloques que se renderiza dentro de UN SOLO
+ * <section> apilado. Las secciones NO llevan márgenes entre sí: cada una paga
+ * su propio padding vertical (y su fondo cuando corresponde) y los bloques
+ * internos solo guardan ritmo entre ellos. El orden canónico se mantiene.
  */
 export type SeccionPagina = {
 	bloques: BloquePagina[];
@@ -863,7 +862,7 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'INSERCION-ESTADISTICAS',
-		nota: 'Doc §21 — Estadísticas de inserción (todas las formaciones). El `titulo` vive en el bloque para que el layout "secciones" del Máster lo renderice dentro de la banda oscura.',
+		nota: 'Doc §21 — Estadísticas de inserción (todas las formaciones). El `titulo` vive en el bloque para que el layout "secciones" lo renderice dentro de la banda oscura.',
 		bloques: [
 			stats({
 				titulo: 'Inserción Laboral',
@@ -1117,5 +1116,5 @@ export const componentePorId: Record<ComponenteId, ComponenteComun> = Object.fro
 /** Cita el componente `nombre` dentro de las `secciones` de una formación. */
 export const c = (nombre: ComponenteId): BloquePagina => ({ tipo: 'componente', nombre });
 
-/** Agrupa bloques en una sección del layout 'secciones' (Máster). */
+/** Agrupa bloques en una sección del layout 'secciones' (todas las formaciones). */
 export const seccion = (...bloques: BloquePagina[]): SeccionPagina => ({ bloques });

@@ -2047,6 +2047,12 @@ const samples: Record<string, string> = {
 				con <code class="text-brand">extras = &#123; enlace?, nota?, notaDiploma? &#125;</code>; aplicado
 				a las <strong>6 formaciones</strong> con esa sección (Máster, Psicoterapia, Subjetividad,
 				Parejas, Infanto, Metapsicología), cada una con su propio diploma. Ejemplo (el del Máster):
+				<br />
+				<strong>En el layout 'secciones' (todas las formaciones):</strong> la Certificación NO es full-width.
+				Solo existen dos medidas (sección full-width o sección con márgenes izquierdo/derecho)
+				y esta va <strong>con márgenes</strong> (contenedor <code class="text-brand">max-w-5xl</code>,
+				sin <code class="text-brand">bg-surface</code>), igual que <code class="text-brand">La Facultad</code>.
+				El hero de todas las formaciones, en cambio, es una sección full-width.
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={certificacionEjemplo} />

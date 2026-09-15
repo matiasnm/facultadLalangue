@@ -10,24 +10,40 @@
  * src/data/componentes.ts) o define un bloque propio. Ninguna página lleva
  * text-bruto de diseño: todo pasa por los render de src/components/formacion/.
  *
- * ORDEN CANÓNICO de los bloques (igual en todas las formaciones):
- *    1. Metodología          → metodologia() + METODOLOGIA-CONTADORES
- *    2. La Facultad          → titulo('La Facultad') + facultad()
- *    3. articula             → articula()
- *    4. Profesores           → profesores()
- *    5. Módulos de Clases    → modulos()
- *    6. Beneficios           → BENEFICIOS-*
- *    7. Salida Laboral       → (solo Máster y Psicoterapia)
- *    8. Supervisión Clínica  → (solo Máster y Psicoterapia)
- *    9. Inserción Laboral    → titulo + INSERCION-ESTADISTICAS
- *   10. Certificación        → certificacion()
- *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
- *   12. Preguntas Frecuentes → titulo + FAQ-*
- *   13. Nuestras formaciones   → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
- *   14. Listo para inscribirte → CTA-INSCRIBIRTE
- *   15. Footer
- * Los bloques intersticiales (intro, «Es para ti si…», planes de financiación,
- * CTA de entrevista, clase abierta) se intercalan sin romper ese orden.
+ * ORDEN CANÓNICO de los bloques (igual en todas las formaciones).
+ *
+ * TODAS las páginas de formación usan el layout 'secciones': cada grupo de
+ * bloques se envuelve en seccion(...) y vive en su propio <section> apilado.
+ * Solo existen DOS medidas de ancho:
+ *   - sección FULL-WIDTH (renderiza SU PROPIA <section>): el hero de la página,
+ *     y los bloques stats, cta, articula, modulos y admision (ver
+ *     SECCION_PROPA en SeccionFormacion.astro);
+ *   - sección CON MÁRGENES (max-w-5xl): todo lo demás.
+ *
+ * Orden de los grupos:
+ *    1. Tapa institucional   → INSIGNIAS-INSTITUCIONALES + intro (texto)
+ *    2. Metodología          → metodologia() + METODOLOGIA-CONTADORES
+ *    3. Es para ti si…       → paraTi() (dirigidoA)
+ *    4. La Facultad          → titulo('La Facultad') + facultad()
+ *    5. Qué articula         → articula()
+ *    6. Profesores           → profesores()
+ *    7. Módulos de Clases    → modulos()
+ *    8. Beneficios           → BENEFICIOS-* (el CTA de la tarjeta total se
+ *                              pliega dentro de ella y NO se declara suelto)
+ *    9. Salida Laboral       → (solo Máster y Psicoterapia)
+ *   10. Supervisión Clínica  → (solo Máster y Psicoterapia)
+ *   11. Inserción Laboral    → INSERCION-ESTADISTICAS (su título vive DENTRO
+ *                              del bloque; no se declara un titulo suelto)
+ *   12. Certificación        → certificacion()
+ *   13. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
+ *   14. Preguntas Frecuentes → titulo + FAQ-*
+ *   15. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   16. Listo para inscribirte → CTA-INSCRIBIRTE
+ * Los bloques intersticiales (intro, planes de financiación, clase abierta) se
+ * intercalan sin romper ese orden. El CTA de entrevista y el título de la
+ * Inserción NO se declaran como bloques sueltos: viven como componente único
+ * (el cierre de la tarjeta de beneficios y el título de INSERCION-ESTADISTICAS);
+ * se modifican UNA sola vez y se propagan a todas las páginas.
  */
 import {
 	c,
@@ -69,12 +85,10 @@ export interface Formacion {
 	modalidad: string;
 	dirigidoA: string;
 	/**
-	 * Layout de página. 'clasico' (por defecto) es el actual: bloques sueltos
-	 * dentro del main. 'secciones' es el piloto del Máster: cada grupo de
-	 * bloques se renderiza dentro de un <section> apilado sin márgenes.
+	 * Grupos (`seccion(...)`) que forman la página, en orden. Igual en todas
+	 * las formaciones: cada grupo se renderiza en su propio <section> apilado.
 	 */
-	layout?: 'clasico' | 'secciones';
-	secciones: BloquePagina[] | SeccionPagina[];
+	secciones: SeccionPagina[];
 }
 
 const ENTREVISTA = 'https://go.facultadlalangue.com/entrevista-directa';
@@ -117,7 +131,6 @@ export const formaciones: Formacion[] = [
 		duracion: '2 años (72 semanas)',
 		modalidad: '100% online',
 		dirigidoA: 'Profesionales con formación previa en psicología, psicoterapia u otras disciplinas afines',
-		layout: 'secciones',
 		secciones: [
 			// 1. Tapa institucional: insignias + intro
 			seccion(
@@ -335,169 +348,198 @@ export const formaciones: Formacion[] = [
 		dirigidoA:
 			'Profesionales y personas con interés en la práctica vocacional del acompañamiento',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto([
-				'Este diplomado propone un recorrido formativo de 2 años orientado a quienes desean formarse en psicoterapia con enfoque psicoanalítico, articulando teoría, técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
-				'A lo largo del recorrido se estudian los fundamentos del aparato psíquico, las estructuras clínicas, la infancia, la sexualidad, la intervención en crisis y el trabajo con entrevistas clínicas. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
-			]),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_A),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			// (Psicoterapia: sin sección de planes → la beca va a la entrevista).
-			paraTi(
-				[
-					'Eres un profesional con formación previa.',
-					'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
-					'Te interesa expandir tu práctica internacional.',
-					'Quieres construir una identidad profesional, no acumular cursos.',
-					'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
-				],
-				[
-					'Buscas cursos rápidos.',
-					'Esperas recetas cerradas.',
-					'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
-				],
-				ENTREVISTA,
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto([
+						'Este diplomado propone un recorrido formativo de 2 años orientado a quienes desean formarse en psicoterapia con enfoque psicoanalítico, articulando teoría, técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
+						'A lo largo del recorrido se estudian los fundamentos del aparato psíquico, las estructuras clínicas, la infancia, la sexualidad, la intervención en crisis y el trabajo con entrevistas clínicas. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
+				]),
 			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
-				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
-				'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
-			]),
-			articula('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', [
-				'Estudio riguroso del psicoanálisis.',
-				'Comprensión de las estructuras clínicas.',
-				'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
-				'Práctica clínica supervisada.',
-				'Comunidad académica internacional.',
-				'Articulación entre teoría, caso y práctica.',
-			]),
+			// 2. Metodología y contadores
+			seccion(
+				metodologia('Metodología', MODALIDAD_A),
+				c('METODOLOGIA-CONTADORES'),
+			),
+			// 3. Es para ti si / No es para ti si + beca a la entrevista
+			seccion(
+				paraTi(
+						[
+								'Eres un profesional con formación previa.',
+								'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
+								'Te interesa expandir tu práctica internacional.',
+								'Quieres construir una identidad profesional, no acumular cursos.',
+								'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
+						],
+						[
+								'Buscas cursos rápidos.',
+								'Esperas recetas cerradas.',
+								'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
+						],
+						ENTREVISTA,
+				),
+			),
+			// 4. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+						'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+						'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+						'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
+				]),
+			),
+			// 5. Qué articula
+			seccion(
+				articula('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', [
+						'Estudio riguroso del psicoanálisis.',
+						'Comprensión de las estructuras clínicas.',
+						'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
+						'Práctica clínica supervisada.',
+						'Comunidad académica internacional.',
+						'Articulación entre teoría, caso y práctica.',
+				]),
+			),
+			// 6. Profesores
+			seccion(
+				profesores('Profesores de la diplomatura', [
+						{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+						{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+						{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+						{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+						{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+						{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
+						{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
+				]),
+			),
+			// 7. Módulos de Clases
+			seccion(
+				modulos(
+						'Módulos de Clases',
+						[
+								{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+								{ foto: '/modulos_clases/modulo_mas_alla_del_principio_del_placer.webp', nombre: 'Módulo 2 | Más allá del principio del placer y segunda tópica' },
+								{ foto: '/modulos_clases/modulo_piaget_y_freud.webp', nombre: 'Módulo 3 | Piaget y Freud: desarrollo y constitución psíquica' },
+								{ foto: '/modulos_clases/modulo_neurociencia_y_psicoterapia.webp', nombre: 'Módulo 4 | Neurociencia y psicoterapia' },
+								{ foto: '/modulos_clases/modulo_corrientes_postfreudianas.webp', nombre: 'Módulo 5 | Más allá de Freud: corrientes postfreudianas' },
+								{ foto: '/modulos_clases/modulo_pruebas_proyectivas.webp', nombre: 'Módulo 6 | Pruebas proyectivas' },
+								{ foto: '/modulos_clases/modulo_terapia_de_pareja_y_sexologia.webp', nombre: 'Módulo 7 | Terapia de pareja y sexología' },
+								{ foto: '/modulos_clases/modulo_psicoterapia_en_crisis.webp', nombre: 'Módulo 8 | Psicoterapia en crisis y emergencias' },
+								{ foto: '/modulos_clases/modulo_como_comenzar_a_atender.webp', nombre: 'Módulo 9 | ¿Cómo comenzar a atender clínicamente?' },
+						],
+						'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+						{
+								etiqueta: 'Programa académico',
+								href: 'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
+						},
+				),
+			),
+			// 8. Beneficios (CTA plegado en la tarjeta €1363)
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-COMPLETO'),
+				c('BENEFICIOS-TOTAL-COMPLETO'),
+			),
+			// 9. Salida Laboral Internacional
+			seccion(
+				titulo('Salida Laboral Internacional'),
+				c('FREUD-CITA-TERAPIA-PUEBLO'),
+				c('DIRECTORIOS-INSERCION'),
+				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
+			),
+			// 10. Supervisión clínica
+			seccion(
+				c('SUPERVISION-CLINICA-COMPLETA'),
+				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
+				enlace('Agendar entrevista de admisión', ENTREVISTA),
+			),
+			// 11. Inserción Laboral (el título vive en el bloque)
+			seccion(
+				c('INSERCION-ESTADISTICAS'),
+			),
+			// 12. Certificación
+			seccion(
+				certificacion(
+						'Certificación',
+						CERTIFICACION_INTRO,
+						[
+								'Certificación internacional con reconocimiento académico y clínico.',
+								'El ejercicio profesional depende de la normativa vigente en cada país.',
+						],
+						'/diplomas/psicoterapia.png',
+						{
+								enlace: {
+										etiqueta: 'Programa académico',
+										href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
+								},
+								notaDiploma: '*Diploma de muestra.',
+						},
+				),
+			),
+			// 13. Admisión
+			seccion(
+				admision(
+						'/admision_fondo.webp',
+						'Admisión',
+						[
+								'Entrevista de admisión obligatoria.',
+								'Entrevista gratuita.',
+								'Orientación para regulaciones locales.',
+								'Becas parciales para perfiles seleccionados.',
+								'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+						],
+						'Matrícula anual',
+						[
+								'€3990 → €1596 (-60%)',
+								'25% adicional OFF en 1 pago',
+								'€1197',
+								'+ Planes de financiación',
+						],
+						'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+				),
+			),
+			// 14. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+						'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
+						['No necesariamente.'],
+						[
+								'La Diplomatura en Psicoterapia con enfoque psicoanalítico (2 años) está abierta a profesionales y personas con interés en la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
+						],
+						[
+								'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
+						],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+						'La **Diplomatura en Psicoterapia con enfoque psicoanalítico** es una formación de **2 años (72 semanas)** que se cursa en modalidad **100% online**.',
+						'La propuesta combina clases grabadas semanales, encuentros en vivo (también disponibles en diferido), lecturas y materiales complementarios, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
+						'El sistema de evaluación incluye cuestionarios tipo múltiple choice al finalizar cada clase grabada, evaluaciones parciales y un trabajo final integrador de un mínimo de 50 páginas, que debe ser defendido ante la Dirección Académica.',
+						'Además, la Facultad prevé dos reagrupamientos presenciales anuales en diferentes países, abiertos a toda la comunidad estudiantil. Estos encuentros permiten a estudiantes, profesores y equipo académico conocerse personalmente y compartir una jornada intensiva de formación en torno a un tema específico, desarrollado a través de conferencias y espacios de diálogo con docentes invitados.',
+						'📍 El primer reagrupamiento tuvo lugar el 28 de junio del 2025 en Buenos Aires, Argentina, y marcó el inicio de una tradición que valoramos profundamente: el encuentro entre saber, cuerpo y comunidad. Puedes verlo en nuestro canal de **[YouTube @facultadlalangue](https://www.youtube.com/@facultadlalangue)**.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+						'Puedes inscribirte al **Diplomado de Psicoterapia con enfoque psicoanalítico** a través de nuestra **Entrevista de Admisión**.',
+						'**Esta instancia no es comercial:** tiene como objetivo conocer tu recorrido, disponibilidad y deseo de formación, para evaluar juntos si este programa es adecuado para tu momento profesional.',
+				]),
+				c('FAQ-DOCENTES'),
+				c('FAQ-ENFOQUE-LACANIANO'),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+				enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
+			),
+			// 15. Otras formaciones + instituciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+			// 16. CTA final
+			seccion(
+				c('CTA-INSCRIBIRTE'),
+			),
 
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
-				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
-				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo_mas_alla_del_principio_del_placer.webp', nombre: 'Módulo 2 | Más allá del principio del placer y segunda tópica' },
-					{ foto: '/modulos_clases/modulo_piaget_y_freud.webp', nombre: 'Módulo 3 | Piaget y Freud: desarrollo y constitución psíquica' },
-					{ foto: '/modulos_clases/modulo_neurociencia_y_psicoterapia.webp', nombre: 'Módulo 4 | Neurociencia y psicoterapia' },
-					{ foto: '/modulos_clases/modulo_corrientes_postfreudianas.webp', nombre: 'Módulo 5 | Más allá de Freud: corrientes postfreudianas' },
-					{ foto: '/modulos_clases/modulo_pruebas_proyectivas.webp', nombre: 'Módulo 6 | Pruebas proyectivas' },
-					{ foto: '/modulos_clases/modulo_terapia_de_pareja_y_sexologia.webp', nombre: 'Módulo 7 | Terapia de pareja y sexología' },
-					{ foto: '/modulos_clases/modulo_psicoterapia_en_crisis.webp', nombre: 'Módulo 8 | Psicoterapia en crisis y emergencias' },
-					{ foto: '/modulos_clases/modulo_como_comenzar_a_atender.webp', nombre: 'Módulo 9 | ¿Cómo comenzar a atender clínicamente?' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
-				},
-			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-COMPLETO'),
-			c('BENEFICIOS-TOTAL-COMPLETO'),
-			// CTA entrevista
-			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-			texto('Agenda una entrevista gratuita y sin compromiso.'),
-			enlace('Agendar entrevista de admisión', ENTREVISTA),
-			// Salida Laboral
-			titulo('Salida Laboral Internacional'),
-			c('FREUD-CITA-TERAPIA-PUEBLO'),
-			c('DIRECTORIOS-INSERCION'),
-			c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
-			// Supervisión
-			c('SUPERVISION-CLINICA-COMPLETA'),
-			texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-			enlace('Agendar entrevista de admisión', ENTREVISTA),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/psicoterapia.png',
-				{
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
-			// Admisión
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula anual',
-				[
-					'€3990 → €1596 (-60%)',
-					'25% adicional OFF en 1 pago',
-					'€1197',
-					'+ Planes de financiación',
-				],
-				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
-				['No necesariamente.'],
-				[
-					'La Diplomatura en Psicoterapia con enfoque psicoanalítico (2 años) está abierta a profesionales y personas con interés en la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
-				],
-			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'La **Diplomatura en Psicoterapia con enfoque psicoanalítico** es una formación de **2 años (72 semanas)** que se cursa en modalidad **100% online**.',
-				'La propuesta combina clases grabadas semanales, encuentros en vivo (también disponibles en diferido), lecturas y materiales complementarios, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
-				'El sistema de evaluación incluye cuestionarios tipo múltiple choice al finalizar cada clase grabada, evaluaciones parciales y un trabajo final integrador de un mínimo de 50 páginas, que debe ser defendido ante la Dirección Académica.',
-				'Además, la Facultad prevé dos reagrupamientos presenciales anuales en diferentes países, abiertos a toda la comunidad estudiantil. Estos encuentros permiten a estudiantes, profesores y equipo académico conocerse personalmente y compartir una jornada intensiva de formación en torno a un tema específico, desarrollado a través de conferencias y espacios de diálogo con docentes invitados.',
-				'📍 El primer reagrupamiento tuvo lugar el 28 de junio del 2025 en Buenos Aires, Argentina, y marcó el inicio de una tradición que valoramos profundamente: el encuentro entre saber, cuerpo y comunidad. Puedes verlo en nuestro canal de **[YouTube @facultadlalangue](https://www.youtube.com/@facultadlalangue)**.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte al **Diplomado de Psicoterapia con enfoque psicoanalítico** a través de nuestra **Entrevista de Admisión**.',
-				'**Esta instancia no es comercial:** tiene como objetivo conocer tu recorrido, disponibilidad y deseo de formación, para evaluar juntos si este programa es adecuado para tu momento profesional.',
-			]),
-			c('FAQ-DOCENTES'),
-			c('FAQ-ENFOQUE-LACANIANO'),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
-			// Cierre
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -515,142 +557,172 @@ export const formaciones: Formacion[] = [
 		dirigidoA:
 			'Profesionales y personas interesadas en el impacto psicológico de la cultura digital',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto([
-				'Este diplomado anual propone comprender las **nuevas formas de sufrimiento vinculadas a entornos digitales**, incluyendo fenómenos como dependencia a redes sociales, ansiedad por exposición pública, violencia digital, daño algorítmico y transformaciones en la identidad online.',
-				'A lo largo del programa se analizan los efectos psicológicos de las plataformas digitales, el rol de los algoritmos en la producción de subjetividad y los desafíos que enfrentan profesionales de la salud mental, educación y comunicación para acompañar estos fenómenos contemporáneos.',
-				'El recorrido combina herramientas provenientes de la psicología contemporánea, la investigación en comportamiento digital y el análisis crítico de las tecnologías emergentes.',
-			]),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_A),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			paraTi(
-				[
-					'Trabajas en psicología, educación, comunicación o ciencias sociales.',
-					'Te interesa comprender cómo las redes sociales y los algoritmos afectan la salud mental y la construcción de identidad.',
-					'Quieres adquirir herramientas para analizar el impacto psicológico de la cultura digital.',
-					'Buscas comprender las nuevas formas de sufrimiento vinculadas al entorno online.',
-					'Te interesa investigar o intervenir en fenómenos contemporáneos como dependencia digital, violencia online o ansiedad por exposición pública.',
-				],
-				[
-					'Buscas cursos rápidos o superficiales.',
-					'Esperas respuestas simples a fenómenos complejos de la cultura digital.',
-					'No tienes interés en comprender críticamente el impacto psicológico de las tecnologías.',
-				],
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto([
+						'Este diplomado anual propone comprender las **nuevas formas de sufrimiento vinculadas a entornos digitales**, incluyendo fenómenos como dependencia a redes sociales, ansiedad por exposición pública, violencia digital, daño algorítmico y transformaciones en la identidad online.',
+						'A lo largo del programa se analizan los efectos psicológicos de las plataformas digitales, el rol de los algoritmos en la producción de subjetividad y los desafíos que enfrentan profesionales de la salud mental, educación y comunicación para acompañar estos fenómenos contemporáneos.',
+						'El recorrido combina herramientas provenientes de la psicología contemporánea, la investigación en comportamiento digital y el análisis crítico de las tecnologías emergentes.',
+				]),
 			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'Las **tecnologías digitales** no solo transforman la comunicación: transforman también la forma en que las personas perciben su valor, su identidad y su lugar en el mundo.',
-				'**Comprender** el impacto psicológico de los algoritmos, la visibilidad digital y las dinámicas de las plataformas se vuelve una tarea central para profesionales que trabajan con subjetividad, educación y bienestar mental.',
-				'Este diplomado propone un espacio de **formación interdisciplinaria** para analizar críticamente estos fenómenos y desarrollar herramientas conceptuales y prácticas para abordarlos.',
-			]),
-			articula(
-				'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
-				[
-					'Comprensión psicológica de la subjetividad digital.',
-					'Análisis del impacto de algoritmos y plataformas en la identidad.',
-					'Estudio de nuevas formas de sufrimiento online.',
-					'Herramientas para comprender daño algorítmico y dependencia digital.',
-					'Análisis crítico de cultura digital y economía de la atención.',
-					'Perspectivas interdisciplinarias para investigación e intervención.',
-				],
+			// 2. Metodología y contadores
+			seccion(
+				metodologia('Metodología', MODALIDAD_A),
+				c('METODOLOGIA-CONTADORES'),
+			),
+			// 3. Es para ti si / No es para ti si
+			seccion(
+				paraTi(
+						[
+								'Trabajas en psicología, educación, comunicación o ciencias sociales.',
+								'Te interesa comprender cómo las redes sociales y los algoritmos afectan la salud mental y la construcción de identidad.',
+								'Quieres adquirir herramientas para analizar el impacto psicológico de la cultura digital.',
+								'Buscas comprender las nuevas formas de sufrimiento vinculadas al entorno online.',
+								'Te interesa investigar o intervenir en fenómenos contemporáneos como dependencia digital, violencia online o ansiedad por exposición pública.',
+						],
+						[
+								'Buscas cursos rápidos o superficiales.',
+								'Esperas respuestas simples a fenómenos complejos de la cultura digital.',
+								'No tienes interés en comprender críticamente el impacto psicológico de las tecnologías.',
+						],
+				),
+			),
+			// 4. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+						'Las **tecnologías digitales** no solo transforman la comunicación: transforman también la forma en que las personas perciben su valor, su identidad y su lugar en el mundo.',
+						'**Comprender** el impacto psicológico de los algoritmos, la visibilidad digital y las dinámicas de las plataformas se vuelve una tarea central para profesionales que trabajan con subjetividad, educación y bienestar mental.',
+						'Este diplomado propone un espacio de **formación interdisciplinaria** para analizar críticamente estos fenómenos y desarrollar herramientas conceptuales y prácticas para abordarlos.',
+				]),
+			),
+			// 5. Qué articula
+			seccion(
+				articula(
+						'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
+						[
+								'Comprensión psicológica de la subjetividad digital.',
+								'Análisis del impacto de algoritmos y plataformas en la identidad.',
+								'Estudio de nuevas formas de sufrimiento online.',
+								'Herramientas para comprender daño algorítmico y dependencia digital.',
+								'Análisis crítico de cultura digital y economía de la atención.',
+								'Perspectivas interdisciplinarias para investigación e intervención.',
+						],
+				),
+			),
+			// 6. Profesores
+			seccion(
+				profesores('Profesores de la diplomatura', [
+						{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+						{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+						{ foto: '/conocenos/yamila_coronel.webp', nombre: 'Lic. Yamila Coronel' },
+						{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+						{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
+				]),
+			),
+			// 7. Módulos de Clases
+			seccion(
+				modulos(
+						'Módulos de Clases',
+						[
+								{ foto: '/modulos_clases/modulo_subjetividad_digital_identidad_online.webp', nombre: 'Módulo 1 | Subjetividad digital y construcción de identidad online' },
+								{ foto: '/modulos_clases/modulo_economia_de_la_atencion.webp', nombre: 'Módulo 2 | Economía de la atención y diseño persuasivo de plataformas' },
+								{ foto: '/modulos_clases/modulo_algoritmos_y_produccion_de_subjetividad.webp', nombre: 'Módulo 3 | Algoritmos, visibilidad y producción de subjetividad' },
+								{ foto: '/modulos_clases/modulo_dano_algoritmico.webp', nombre: 'Módulo 4 | Daño algorítmico y amplificación del malestar psicológico' },
+								{ foto: '/modulos_clases/modulo_dependencia_digital.webp', nombre: 'Módulo 5 | Dependencia digital, compulsión a redes sociales y dopamina digital' },
+								{ foto: '/modulos_clases/modulo_violencia_digital.webp', nombre: 'Módulo 6 | Violencia digital, cancelación y exposición pública' },
+								{ foto: '/modulos_clases/modulo_salud_mental_digital.webp', nombre: 'Módulo 7 | Salud mental en entornos digitales' },
+								{ foto: '/modulos_clases/modulo_estrategias_intervencion_online.webp', nombre: 'Módulo 8 | Estrategias de intervención y acompañamiento en contextos online' },
+						],
+						'El programa se organiza en módulos que abordan las transformaciones psicológicas y sociales generadas por la cultura digital. Entre los principales contenidos se trabajan:',
+						{
+								etiqueta: 'Programa académico',
+								href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+						},
+				),
+			),
+			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-BASE'),
+				c('BENEFICIOS-TOTAL-BASE'),
+			),
+			// 9. Planes de financiación
+			seccion(
+				titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
+				titulo('Planes de financiación', 2, undefined, 'precios'),
+				...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Elige cuándo terminar'], 10058),
+				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 10057),
+				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 10059),
+			),
+			// 10. Inserción Laboral (el título vive en el bloque)
+			seccion(
+				c('INSERCION-ESTADISTICAS'),
+			),
+			// 11. Certificación
+			seccion(
+				certificacion(
+						'Certificación',
+						CERTIFICACION_INTRO,
+						['Certificación internacional.', 'Formación online con alcance global.'],
+						'/diplomas/subjetividad.png',
+						{
+								nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+								enlace: {
+										etiqueta: 'Programa Académico',
+										href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+								},
+								notaDiploma: '*Diploma de muestra.',
+						},
+				),
+			),
+			// 12. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+						'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
+						['No necesariamente.'],
+						[
+								'La Diplomatura en Subjetividad Digital (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en los efectos de la hiper digitalización en la subjetividad, inclusive sin estudios previos.',
+						],
+						[
+								'Sin embargo, debes tener en cuenta que la habilitación legal para ejercer como psicoterapeuta en territorio depende de las normativas vigentes en tu país.',
+						],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+						'La **Diplomatura en Subjetividad Digital** es una formación que se cursa en **modalidad 100% online** y cuenta con un total de 36 clases.',
+						'La propuesta combina clases grabadas disponibles en el campus, junto con materiales complementarios, bibliografía y recursos de profundización, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
+						'A lo largo del recorrido, se integran espacios de análisis y abordaje de las nuevas formas de subjetividad en entornos digitales, articulando teoría y práctica desde una perspectiva psicoanalítica e interdisciplinaria.',
+						'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+						'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
+						'Luego, recibirás a través de email los accesos al Campus paso a paso.',
+						'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
+				]),
+				c('FAQ-DOCENTES'),
+				faq('¿El enfoque es exclusivamente lacaniano?', [
+						'**No.** La **Diplomatura en Subjetividad Digital** aborda los fenómenos contemporáneos desde una perspectiva psicoanalítica, pero en articulación con múltiples enfoques necesarios para comprender la complejidad de la era digital.',
+						'El programa integra aportes de la *psicología, el psicoanálisis, las neurociencias, el campo legal y la ética*, permitiendo analizar cómo la tecnología, las redes sociales y la inteligencia artificial impactan en la subjetividad, los vínculos y la salud mental.',
+						'Desde la Facultad, proponemos una formación interdisciplinaria y actualizada, en diálogo con los desarrollos más recientes en investigación y práctica clínica, convocando a especialistas de distintos campos para ofrecer una lectura amplia, rigurosa y situada de los nuevos modos de sufrimiento en entornos digitales.',
+				]),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+			),
+			// 13. Otras formaciones + instituciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+			// 14. CTA final
+			seccion(
+				c('CTA-INSCRIBIRTE'),
 			),
 
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
-				{ foto: '/conocenos/yamila_coronel.webp', nombre: 'Lic. Yamila Coronel' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_subjetividad_digital_identidad_online.webp', nombre: 'Módulo 1 | Subjetividad digital y construcción de identidad online' },
-					{ foto: '/modulos_clases/modulo_economia_de_la_atencion.webp', nombre: 'Módulo 2 | Economía de la atención y diseño persuasivo de plataformas' },
-					{ foto: '/modulos_clases/modulo_algoritmos_y_produccion_de_subjetividad.webp', nombre: 'Módulo 3 | Algoritmos, visibilidad y producción de subjetividad' },
-					{ foto: '/modulos_clases/modulo_dano_algoritmico.webp', nombre: 'Módulo 4 | Daño algorítmico y amplificación del malestar psicológico' },
-					{ foto: '/modulos_clases/modulo_dependencia_digital.webp', nombre: 'Módulo 5 | Dependencia digital, compulsión a redes sociales y dopamina digital' },
-					{ foto: '/modulos_clases/modulo_violencia_digital.webp', nombre: 'Módulo 6 | Violencia digital, cancelación y exposición pública' },
-					{ foto: '/modulos_clases/modulo_salud_mental_digital.webp', nombre: 'Módulo 7 | Salud mental en entornos digitales' },
-					{ foto: '/modulos_clases/modulo_estrategias_intervencion_online.webp', nombre: 'Módulo 8 | Estrategias de intervención y acompañamiento en contextos online' },
-				],
-				'El programa se organiza en módulos que abordan las transformaciones psicológicas y sociales generadas por la cultura digital. Entre los principales contenidos se trabajan:',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
-				},
-			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL-BASE'),
-			// Planes de financiación
-			titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
-			titulo('Planes de financiación', 2, undefined, 'precios'),
-			...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Elige cuándo terminar'], 10058),
-			...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 10057),
-			...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 10059),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/subjetividad.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
-				['No necesariamente.'],
-				[
-					'La Diplomatura en Subjetividad Digital (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en los efectos de la hiper digitalización en la subjetividad, inclusive sin estudios previos.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la habilitación legal para ejercer como psicoterapeuta en territorio depende de las normativas vigentes en tu país.',
-				],
-			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'La **Diplomatura en Subjetividad Digital** es una formación que se cursa en **modalidad 100% online** y cuenta con un total de 36 clases.',
-				'La propuesta combina clases grabadas disponibles en el campus, junto con materiales complementarios, bibliografía y recursos de profundización, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
-				'A lo largo del recorrido, se integran espacios de análisis y abordaje de las nuevas formas de subjetividad en entornos digitales, articulando teoría y práctica desde una perspectiva psicoanalítica e interdisciplinaria.',
-				'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
-				'Luego, recibirás a través de email los accesos al Campus paso a paso.',
-				'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
-			]),
-			c('FAQ-DOCENTES'),
-			faq('¿El enfoque es exclusivamente lacaniano?', [
-				'**No.** La **Diplomatura en Subjetividad Digital** aborda los fenómenos contemporáneos desde una perspectiva psicoanalítica, pero en articulación con múltiples enfoques necesarios para comprender la complejidad de la era digital.',
-				'El programa integra aportes de la *psicología, el psicoanálisis, las neurociencias, el campo legal y la ética*, permitiendo analizar cómo la tecnología, las redes sociales y la inteligencia artificial impactan en la subjetividad, los vínculos y la salud mental.',
-				'Desde la Facultad, proponemos una formación interdisciplinaria y actualizada, en diálogo con los desarrollos más recientes en investigación y práctica clínica, convocando a especialistas de distintos campos para ofrecer una lectura amplia, rigurosa y situada de los nuevos modos de sufrimiento en entornos digitales.',
-			]),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			// Cierre
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -667,141 +739,171 @@ export const formaciones: Formacion[] = [
 		modalidad: '100% online',
 		dirigidoA: 'Psicólogos, terapeutas y profesionales del campo de la salud mental',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto([
-				'En un contexto marcado por transformaciones culturales, cambios en los modelos de pareja y ampliación de los discursos sobre el deseo, el amor y la sexualidad, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** analiza críticamente los nuevos desafíos clínicos y propone una formación rigurosa y actualizada orientada a profesionales interesados en profundizar su abordaje terapéutico de los vínculos sexoafectivos contemporáneos.',
-				'La propuesta articula teoría y práctica clínica para ofrecer herramientas terapéuticas eficaces, éticas y contextualizadas, abordando las mutaciones del lazo vincular, del erotismo y de la subjetividad contemporánea en diálogo con cuatro corrientes psicoterapéuticas: psicoanálisis, enfoque sistémico, terapia cognitivo-conductual e integrativa, favoreciendo una mirada plural e inclusiva para intervenir en las complejas configuraciones relacionales actuales.',
-			]),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_B),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			paraTi(
-				[
-					'Eres psicólogo, terapeuta o profesional del campo de la salud mental.',
-					'Te interesa comprender la complejidad de los vínculos de pareja y la sexualidad en la actualidad.',
-					'Buscas herramientas clínicas para intervenir en conflictos vinculares, crisis afectivas y problemáticas sexuales.',
-					'Deseas ampliar tu práctica profesional en terapia de pareja y clínica relacional.',
-				],
-				[
-					'Buscas cursos rápidos sin formación clínica profunda.',
-					'Esperas recetas terapéuticas cerradas para problemas complejos.',
-					'No tienes interés en trabajar con diversidad relacional, sexual o cultural.',
-				],
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto([
+						'En un contexto marcado por transformaciones culturales, cambios en los modelos de pareja y ampliación de los discursos sobre el deseo, el amor y la sexualidad, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** analiza críticamente los nuevos desafíos clínicos y propone una formación rigurosa y actualizada orientada a profesionales interesados en profundizar su abordaje terapéutico de los vínculos sexoafectivos contemporáneos.',
+						'La propuesta articula teoría y práctica clínica para ofrecer herramientas terapéuticas eficaces, éticas y contextualizadas, abordando las mutaciones del lazo vincular, del erotismo y de la subjetividad contemporánea en diálogo con cuatro corrientes psicoterapéuticas: psicoanálisis, enfoque sistémico, terapia cognitivo-conductual e integrativa, favoreciendo una mirada plural e inclusiva para intervenir en las complejas configuraciones relacionales actuales.',
+				]),
 			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'Los **vínculos sexoafectivos contemporáneos** atraviesan profundas transformaciones culturales, tecnológicas y subjetivas.',
-				'**Comprender** la complejidad del deseo, la intimidad, la diversidad sexual y las nuevas configuraciones vinculares se vuelve fundamental para los profesionales que trabajan con la salud mental y las relaciones humanas.',
-				'Este diplomado propone una **formación clínica integradora** que articula teoría, práctica y análisis de casos, favoreciendo una intervención profesional ética, contextualizada y respetuosa de la diversidad.',
-			]),
-			articula('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', [
-				'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
-				'Integración de diferentes modelos psicoterapéuticos para el trabajo con parejas.',
-				'Análisis de dinámicas relacionales complejas y patrones vinculares disfuncionales.',
-				'Herramientas terapéuticas para abordar conflictos, crisis afectivas y disfunciones sexuales.',
-				'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
-				'Articulación entre teoría, intervención clínica y análisis de casos.',
-			]),
+			// 2. Metodología y contadores
+			seccion(
+				metodologia('Metodología', MODALIDAD_B),
+				c('METODOLOGIA-CONTADORES'),
+			),
+			// 3. Es para ti si / No es para ti si
+			seccion(
+				paraTi(
+						[
+								'Eres psicólogo, terapeuta o profesional del campo de la salud mental.',
+								'Te interesa comprender la complejidad de los vínculos de pareja y la sexualidad en la actualidad.',
+								'Buscas herramientas clínicas para intervenir en conflictos vinculares, crisis afectivas y problemáticas sexuales.',
+								'Deseas ampliar tu práctica profesional en terapia de pareja y clínica relacional.',
+						],
+						[
+								'Buscas cursos rápidos sin formación clínica profunda.',
+								'Esperas recetas terapéuticas cerradas para problemas complejos.',
+								'No tienes interés en trabajar con diversidad relacional, sexual o cultural.',
+						],
+				),
+			),
+			// 4. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+						'Los **vínculos sexoafectivos contemporáneos** atraviesan profundas transformaciones culturales, tecnológicas y subjetivas.',
+						'**Comprender** la complejidad del deseo, la intimidad, la diversidad sexual y las nuevas configuraciones vinculares se vuelve fundamental para los profesionales que trabajan con la salud mental y las relaciones humanas.',
+						'Este diplomado propone una **formación clínica integradora** que articula teoría, práctica y análisis de casos, favoreciendo una intervención profesional ética, contextualizada y respetuosa de la diversidad.',
+				]),
+			),
+			// 5. Qué articula
+			seccion(
+				articula('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', [
+						'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
+						'Integración de diferentes modelos psicoterapéuticos para el trabajo con parejas.',
+						'Análisis de dinámicas relacionales complejas y patrones vinculares disfuncionales.',
+						'Herramientas terapéuticas para abordar conflictos, crisis afectivas y disfunciones sexuales.',
+						'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
+						'Articulación entre teoría, intervención clínica y análisis de casos.',
+				]),
+			),
+			// 6. Profesores
+			seccion(
+				profesores('Profesores de la diplomatura', [
+						{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+						{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+						{ foto: '/conocenos/alejandra_giudice.webp', nombre: 'Lic. Alejandra Giudice' },
+						{ foto: '/conocenos/sebastian_mosquera.webp', nombre: 'Lic. Sebastián Mosquera' },
+						{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
+				]),
+			),
+			// 7. Módulos de Clases
+			seccion(
+				modulos(
+						'Módulos de Clases',
+						[
+								{ foto: '/modulos_clases/modulo_fundamentos_clinica_vincular.webp', nombre: 'Módulo 1 | Fundamentos de la clínica vincular y sexual' },
+								{ foto: '/modulos_clases/modulo_historia_terapia_de_pareja.webp', nombre: 'Módulo 2 | Historia y evolución de la terapia de pareja' },
+								{ foto: '/modulos_clases/modulo_sexualidad_y_rol_terapeuta.webp', nombre: 'Módulo 3 | Sexualidad humana y rol del terapeuta en consulta sexológica' },
+								{ foto: '/modulos_clases/modulo_dinamicas_de_pareja_apego.webp', nombre: 'Módulo 4 | Dinámicas de pareja, apego y mandatos amorosos' },
+								{ foto: '/modulos_clases/modulo_patrones_vinculares_disfuncionales.webp', nombre: 'Módulo 5 | Patrones vinculares disfuncionales: celos, control, dependencia emocional e infidelidad' },
+								{ foto: '/modulos_clases/modulo_disfunciones_sexuales.webp', nombre: 'Módulo 6 | Sexualidad, disfunciones sexuales y nuevos modelos vinculares' },
+								{ foto: '/modulos_clases/modulo_diversidad_relacional_y_vinculos_no_monogamicos.webp', nombre: 'Módulo 7 | Intervenciones clínicas en diversidad relacional y vínculos no monogámicos' },
+								{ foto: '/modulos_clases/modulo_crisis_afectivas_duelo.webp', nombre: 'Módulo 8 | Parejas en transición: crisis afectivas, duelo, infertilidad y parentalidad' },
+								{ foto: '/modulos_clases/modulo_sexualidades_diversas.webp', nombre: 'Módulo 9 | Sexualidades diversas, cuerpos y subjetividades contemporáneas' },
+								{ foto: '/modulos_clases/modulo_modelos_terapeuticos_pareja.webp', nombre: 'Módulo 10 | Modelos teóricos de terapia de pareja: psicoanálisis, sistémica, TCC e integrativa' },
+								{ foto: '/modulos_clases/modulo_tecnicas_clinicas_contemporaneas.webp', nombre: 'Módulo 11 | Técnicas clínicas contemporáneas: EFT, terapia narrativa, mindfulness y recursos integrativos' },
+								{ foto: '/modulos_clases/modulo_contextos_de_vulnerabilidad.webp', nombre: 'Módulo 12 | Intervenciones en contextos de vulnerabilidad, enfermedad, discapacidad o consumo problemático' },
+						],
+						'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+						{
+								etiqueta: 'Programa académico',
+								href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+						},
+				),
+			),
+			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-BASE'),
+				c('BENEFICIOS-TOTAL-BASE'),
+			),
+			// 9. Planes de financiación
+			seccion(
+				titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
+				titulo('Planes de financiación', 2, undefined, 'precios'),
+				...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9544),
+				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 9545),
+				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 9546),
+			),
+			// 10. Inserción Laboral (el título vive en el bloque)
+			seccion(
+				c('INSERCION-ESTADISTICAS'),
+			),
+			// 11. Certificación
+			seccion(
+				certificacion(
+						'Certificación',
+						CERTIFICACION_INTRO,
+						['Certificación internacional.', 'Formación online con alcance global.'],
+						'/diplomas/parejas.png',
+						{
+								nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+								enlace: {
+										etiqueta: 'Programa académico',
+										href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+								},
+								notaDiploma: '*Diploma de muestra.',
+						},
+				),
+			),
+			// 12. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+						'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
+						['No necesariamente.'],
+						[
+								'La Diplomatura en Clínica de Parejas (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
+						],
+						[
+								'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
+						],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+						'La **Diplomatura en Clínica de Parejas y Erotismo Relacional** es una formación de 1 año, que se cursa en modalidad 100% online.',
+						'La propuesta combina una clase grabada semanal disponible en el campus, junto con encuentros en vivo una vez al mes con profesores de la formación (también accesibles en diferido), lo que permite sostener una experiencia formativa dinámica, acompañada y flexible desde cualquier parte del mundo.',
+						'Además, la cursada incluye lecturas, materiales complementarios y espacios clínicos que articulan teoría y práctica, favoreciendo una formación rigurosa y aplicada al trabajo con vínculos contemporáneos.',
+						'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+						'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
+						'Luego, recibirás a través de email los accesos al Campus paso a paso.',
+						'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
+				]),
+				c('FAQ-DOCENTES'),
+				faq('¿El enfoque es exclusivamente lacaniano?', [
+						'**No.** Si bien la formación incluye una sólida base psicoanalítica, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** integra los principales enfoques que hoy estructuran la práctica clínica contemporánea en el trabajo con parejas.',
+						'Los desarrollos más actuales en investigación y clínica señalan cuatro grandes perspectivas de referencia: *el psicoanálisis, el enfoque sistémico, la terapia cognitivo-conductual (TCC) y los modelos integrativos*. Nuestra propuesta articula estos enfoques de manera rigurosa y complementaria, permitiendo una comprensión más amplia y eficaz de los vínculos sexoafectivos.',
+						'Desde la Facultad, apostamos a una formación en diálogo con la vanguardia clínica, convocando a profesionales y referentes especializados en cada una de estas corrientes, con el objetivo de brindar herramientas actualizadas, éticas y aplicables a la complejidad de la clínica de pareja en la actualidad.',
+				]),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+			),
+			// 13. Otras formaciones + instituciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+			// 14. CTA final
+			seccion(
+				c('CTA-INSCRIBIRTE'),
+			),
 
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/alejandra_giudice.webp', nombre: 'Lic. Alejandra Giudice' },
-				{ foto: '/conocenos/sebastian_mosquera.webp', nombre: 'Lic. Sebastián Mosquera' },
-				{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_fundamentos_clinica_vincular.webp', nombre: 'Módulo 1 | Fundamentos de la clínica vincular y sexual' },
-					{ foto: '/modulos_clases/modulo_historia_terapia_de_pareja.webp', nombre: 'Módulo 2 | Historia y evolución de la terapia de pareja' },
-					{ foto: '/modulos_clases/modulo_sexualidad_y_rol_terapeuta.webp', nombre: 'Módulo 3 | Sexualidad humana y rol del terapeuta en consulta sexológica' },
-					{ foto: '/modulos_clases/modulo_dinamicas_de_pareja_apego.webp', nombre: 'Módulo 4 | Dinámicas de pareja, apego y mandatos amorosos' },
-					{ foto: '/modulos_clases/modulo_patrones_vinculares_disfuncionales.webp', nombre: 'Módulo 5 | Patrones vinculares disfuncionales: celos, control, dependencia emocional e infidelidad' },
-					{ foto: '/modulos_clases/modulo_disfunciones_sexuales.webp', nombre: 'Módulo 6 | Sexualidad, disfunciones sexuales y nuevos modelos vinculares' },
-					{ foto: '/modulos_clases/modulo_diversidad_relacional_y_vinculos_no_monogamicos.webp', nombre: 'Módulo 7 | Intervenciones clínicas en diversidad relacional y vínculos no monogámicos' },
-					{ foto: '/modulos_clases/modulo_crisis_afectivas_duelo.webp', nombre: 'Módulo 8 | Parejas en transición: crisis afectivas, duelo, infertilidad y parentalidad' },
-					{ foto: '/modulos_clases/modulo_sexualidades_diversas.webp', nombre: 'Módulo 9 | Sexualidades diversas, cuerpos y subjetividades contemporáneas' },
-					{ foto: '/modulos_clases/modulo_modelos_terapeuticos_pareja.webp', nombre: 'Módulo 10 | Modelos teóricos de terapia de pareja: psicoanálisis, sistémica, TCC e integrativa' },
-					{ foto: '/modulos_clases/modulo_tecnicas_clinicas_contemporaneas.webp', nombre: 'Módulo 11 | Técnicas clínicas contemporáneas: EFT, terapia narrativa, mindfulness y recursos integrativos' },
-					{ foto: '/modulos_clases/modulo_contextos_de_vulnerabilidad.webp', nombre: 'Módulo 12 | Intervenciones en contextos de vulnerabilidad, enfermedad, discapacidad o consumo problemático' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
-				},
-			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL-BASE'),
-			// Planes de financiación
-			titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
-			titulo('Planes de financiación', 2, undefined, 'precios'),
-			...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9544),
-			...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 9545),
-			...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 9546),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/parejas.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
-				['No necesariamente.'],
-				[
-					'La Diplomatura en Clínica de Parejas (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
-				],
-			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'La **Diplomatura en Clínica de Parejas y Erotismo Relacional** es una formación de 1 año, que se cursa en modalidad 100% online.',
-				'La propuesta combina una clase grabada semanal disponible en el campus, junto con encuentros en vivo una vez al mes con profesores de la formación (también accesibles en diferido), lo que permite sostener una experiencia formativa dinámica, acompañada y flexible desde cualquier parte del mundo.',
-				'Además, la cursada incluye lecturas, materiales complementarios y espacios clínicos que articulan teoría y práctica, favoreciendo una formación rigurosa y aplicada al trabajo con vínculos contemporáneos.',
-				'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
-				'Luego, recibirás a través de email los accesos al Campus paso a paso.',
-				'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
-			]),
-			c('FAQ-DOCENTES'),
-			faq('¿El enfoque es exclusivamente lacaniano?', [
-				'**No.** Si bien la formación incluye una sólida base psicoanalítica, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** integra los principales enfoques que hoy estructuran la práctica clínica contemporánea en el trabajo con parejas.',
-				'Los desarrollos más actuales en investigación y clínica señalan cuatro grandes perspectivas de referencia: *el psicoanálisis, el enfoque sistémico, la terapia cognitivo-conductual (TCC) y los modelos integrativos*. Nuestra propuesta articula estos enfoques de manera rigurosa y complementaria, permitiendo una comprensión más amplia y eficaz de los vínculos sexoafectivos.',
-				'Desde la Facultad, apostamos a una formación en diálogo con la vanguardia clínica, convocando a profesionales y referentes especializados en cada una de estas corrientes, con el objetivo de brindar herramientas actualizadas, éticas y aplicables a la complejidad de la clínica de pareja en la actualidad.',
-			]),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			// Cierre
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -819,153 +921,187 @@ export const formaciones: Formacion[] = [
 		dirigidoA:
 			'Profesionales del campo de la salud mental, la educación y el acompañamiento de infancias y adolescencias',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto([
-				'El **psiquismo en niños, niñas y adolescentes** está en plena constitución, por lo que los síntomas deben leerse en relación con dimensiones estructurales, evolutivas y socioculturales, evitando trasladar categorías propias de la clínica adulta y toda patologización, para una intervención situada y respetuosa.',
-				'Este diplomado propone un abordaje especializado de la Psicopatología Infanto-Juvenil desde una perspectiva psicoanalítica contemporánea, interdisciplinaria y ética. A lo largo del recorrido se analizan diversas presentaciones clínicas (como depresiones, fobias, trastornos psicosomáticos, TDA, TEA y diversas patologías) integrando diagnóstico, abordaje clínico y trabajo con familias e instituciones.',
-			]),
-			// Clase abierta
-			titulo('Vive la experiencia: Clase abierta sin costo'),
-			texto(
-				'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto([
+						'El **psiquismo en niños, niñas y adolescentes** está en plena constitución, por lo que los síntomas deben leerse en relación con dimensiones estructurales, evolutivas y socioculturales, evitando trasladar categorías propias de la clínica adulta y toda patologización, para una intervención situada y respetuosa.',
+						'Este diplomado propone un abordaje especializado de la Psicopatología Infanto-Juvenil desde una perspectiva psicoanalítica contemporánea, interdisciplinaria y ética. A lo largo del recorrido se analizan diversas presentaciones clínicas (como depresiones, fobias, trastornos psicosomáticos, TDA, TEA y diversas patologías) integrando diagnóstico, abordaje clínico y trabajo con familias e instituciones.',
+				]),
 			),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_B),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			paraTi(
-				[
-					'Trabajas en el campo de la salud mental, la educación o el acompañamiento de infancias y adolescencias.',
-					'Te interesa especializarte en psicopatología y clínica infantojuvenil.',
-					'Buscas herramientas clínicas para el abordaje de síntomas y sufrimiento psíquico en niños, niñas y adolescentes.',
-					'Deseas intervenir de forma interdisciplinaria, ética y situada, evitando la patologización.',
-				],
-				[
-					'Buscas cursos rápidos sin formación clínica profunda.',
-					'Esperas recetas terapéuticas cerradas para problemas complejos.',
-					'No tienes interés en trabajar con la singularidad infantojuvenil.',
-				],
+			// 2. Clase abierta
+			seccion(
+				titulo('Vive la experiencia: Clase abierta sin costo'),
+				texto(
+						'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
+				),
 			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'La **psicopatología infanto-juvenil** requiere comprender los modos de sufrimiento situando los síntomas en procesos de constitución subjetiva en permanente transformación, y a través de una mirada clínica que contemple los cambios culturales, sociales y familiares que atraviesan las infancias.',
-				'Abordar estas problemáticas desde el psicoanálisis contemporáneo es fundamental para profesionales que buscan intervenir con una perspectiva crítica y actualizada, ya que permite leer la singularidad de cada caso, articulando diagnóstico, vínculos y contexto.',
-			]),
-			articula('La Diplomatura en Psicopatología Infanto-Juvenil articula:', [
-				'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
-				'Integración del psicoanálisis con enfoques interdisciplinarios actuales.',
-				'Análisis de presentaciones clínicas y diagnósticos diferenciales en la infancia y adolescencia.',
-				'Herramientas clínicas para el abordaje de síntomas, sufrimiento psíquico y problemáticas actuales.',
-				'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
-				'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
-			]),
+			// 3. Metodología y contadores
+			seccion(
+				metodologia('Metodología', MODALIDAD_B),
+				c('METODOLOGIA-CONTADORES'),
+			),
+			// 4. Es para ti si / No es para ti si
+			seccion(
+				paraTi(
+						[
+								'Trabajas en el campo de la salud mental, la educación o el acompañamiento de infancias y adolescencias.',
+								'Te interesa especializarte en psicopatología y clínica infantojuvenil.',
+								'Buscas herramientas clínicas para el abordaje de síntomas y sufrimiento psíquico en niños, niñas y adolescentes.',
+								'Deseas intervenir de forma interdisciplinaria, ética y situada, evitando la patologización.',
+						],
+						[
+								'Buscas cursos rápidos sin formación clínica profunda.',
+								'Esperas recetas terapéuticas cerradas para problemas complejos.',
+								'No tienes interés en trabajar con la singularidad infantojuvenil.',
+						],
+				),
+			),
+			// 5. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+						'La **psicopatología infanto-juvenil** requiere comprender los modos de sufrimiento situando los síntomas en procesos de constitución subjetiva en permanente transformación, y a través de una mirada clínica que contemple los cambios culturales, sociales y familiares que atraviesan las infancias.',
+						'Abordar estas problemáticas desde el psicoanálisis contemporáneo es fundamental para profesionales que buscan intervenir con una perspectiva crítica y actualizada, ya que permite leer la singularidad de cada caso, articulando diagnóstico, vínculos y contexto.',
+				]),
+			),
+			// 6. Qué articula
+			seccion(
+				articula('La Diplomatura en Psicopatología Infanto-Juvenil articula:', [
+						'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
+						'Integración del psicoanálisis con enfoques interdisciplinarios actuales.',
+						'Análisis de presentaciones clínicas y diagnósticos diferenciales en la infancia y adolescencia.',
+						'Herramientas clínicas para el abordaje de síntomas, sufrimiento psíquico y problemáticas actuales.',
+						'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
+						'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
+				]),
+			),
+			// 7. Profesores
+			seccion(
+				profesores('Profesores de la diplomatura', [
+						{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
+						{ foto: '/conocenos/julian_porri.webp', nombre: 'Lic. Julián Porri' },
+						{ foto: '/conocenos/irina_poletti.webp', nombre: 'Lic. Irina Poletti' },
+						{ foto: '/conocenos/juan_augusto_laplacette.webp', nombre: 'Lic. Juan Augusto Laplacette' },
+						{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
+				]),
+			),
+			// 8. Módulos de Clases
+			seccion(
+				modulos(
+						'Módulos de Clases',
+						[
+								{ foto: '/modulos_clases/modulo_psicopatologia_clinica_infantojuvenil.webp', nombre: 'Módulo 1 | Psicopatología clínica infantojuvenil' },
+								{ foto: '/modulos_clases/modulo_marco_legal_nnyA.webp', nombre: 'Módulo 2 | Marco legal protectorio de Niños y Adolescentes' },
+								{ foto: '/modulos_clases/modulo_constitucion_subjetiva_inicios.webp', nombre: 'Módulo 3 | Psicopatología clínica en los inicios de la constitución subjetiva' },
+								{ foto: '/modulos_clases/modulo_patologias_discapacidades_bebes.webp', nombre: 'Módulo 4 | Patologías, discapacidades y trastornos en Niñez: su clínica y praxis' },
+								{ foto: '/modulos_clases/modulo_violencias_sexuales_infancia.webp', nombre: 'Módulo 5 | Violencias sexuales en la infancia: abordaje clínico actual' },
+								{ foto: '/modulos_clases/modulo_duelo_depresion_neurosis_infancia.webp', nombre: 'Módulo 6 | Avatares clínicos: duelo, depresión y neurosis en la infancia' },
+								{ foto: '/modulos_clases/modulo_cuerpo_psiquismo_plasticidad.webp', nombre: 'Módulo 7 | Cuerpo, psiquismo y plasticidad en la clínica con Niños y Adolescentes' },
+						],
+						'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
+				),
+			),
+			// 9. Beneficios (CTA plegado en la tarjeta €650)
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-BASE'),
+				c('BENEFICIOS-TOTAL-BASE'),
+			),
+			// 10. Planes de financiación
+			seccion(
+				titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
+				titulo('Planes de financiación', 2, undefined, 'precios'),
+				...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9546),
+				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
+				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
+			),
+			// 11. Inserción Laboral (el título vive en el bloque)
+			seccion(
+				c('INSERCION-ESTADISTICAS'),
+			),
+			// 12. Certificación
+			seccion(
+				certificacion(
+						'Certificación',
+						CERTIFICACION_INTRO,
+						['Certificación internacional.', 'Formación online con alcance global.'],
+						'/diplomas/infanto.png',
+						{
+								nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+								notaDiploma: '*Diploma de muestra.',
+						},
+				),
+			),
+			// 13. Admisión
+			seccion(
+				admision(
+						'/admision_fondo.webp',
+						'Admisión',
+						[
+								'Entrevista de admisión obligatoria.',
+								'Entrevista gratuita.',
+								'Orientación para regulaciones locales.',
+								'Becas parciales para perfiles seleccionados.',
+								'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+						],
+						'Matrícula Anual',
+						[
+								'€1800 → €540 euros/año',
+								'Beca de admisión del 60%',
+								'Planes de financiación disponibles',
+						],
+						'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+				),
+			),
+			// 14. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+						'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
+						['No necesariamente.'],
+						[
+								'La Diplomatura en Psicopatología Infanto-Juvenil (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en el estudio y/o la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
+						],
+						[
+								'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
+						],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+						'La **Diplomatura en Psicopatología Clínica Infantojuvenil** es una formación que se cursa en **modalidad 100% online** y cuenta con un total de **36 clases obligatorias**, además de clases optativas de profundización.',
+						'La propuesta combina **clases grabadas** disponibles en el campus, junto con encuentros sincrónicos con docentes de la formación, lo que permite una experiencia de cursada acompañada, dinámica y accesible desde cualquier parte del mundo.',
+						'**El sistema de evaluación** incluye cuestionarios tipo múltiple choice al finalizar cada clase, favoreciendo la integración progresiva de los contenidos y el seguimiento del aprendizaje.',
+						'A lo largo del recorrido, la formación articula un enfoque psicoanalítico con una perspectiva integrativa e interdisciplinaria, abordando la clínica infantojuvenil desde una mirada contemporánea, ética y contextualizada.',
+						'Para quienes decidan continuar su formación en la **Diplomatura en Psicoterapia con enfoque psicoanalítico**, esta materia será considerada como válida dentro de una de las materias anuales del primer año, permitiendo articular y profundizar el recorrido académico dentro de la Facultad.',
+						'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+						'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
+						'Luego, recibirás a través de email los accesos al Campus paso a paso.',
+						'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
+				]),
+				c('FAQ-DOCENTES'),
+				faq('¿El enfoque es exclusivamente lacaniano?', [
+						'**No.** Si bien la formación se apoya en una sólida base psicoanalítica, la **Diplomatura en Psicopatología Clínica Infantojuvenil** propone un abordaje integrativo e interdisciplinario, necesario para comprender la complejidad del psiquismo en niños, niñas y adolescentes.',
+						'El programa articula el psicoanálisis con aportes de *la psicología del desarrollo, la psiquiatría, la neuropsicología y el campo socio-jurídico*, incorporando también la perspectiva de derechos, los contextos familiares y los factores culturales que inciden en la constitución subjetiva.',
+						'Desde la Facultad, promovemos una lectura clínica crítica, ética y contemporánea, que evita la patologización reduccionista y permite intervenir de manera situada, convocando a profesionales de distintas disciplinas para ofrecer herramientas sólidas y actualizadas frente a los desafíos de la clínica infantojuvenil actual.',
+				]),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+			),
+			// 15. Otras formaciones + instituciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+			// 16. CTA final
+			seccion(
+				c('CTA-INSCRIBIRTE'),
+			),
 
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
-				{ foto: '/conocenos/julian_porri.webp', nombre: 'Lic. Julián Porri' },
-				{ foto: '/conocenos/irina_poletti.webp', nombre: 'Lic. Irina Poletti' },
-				{ foto: '/conocenos/juan_augusto_laplacette.webp', nombre: 'Lic. Juan Augusto Laplacette' },
-				{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo_psicopatologia_clinica_infantojuvenil.webp', nombre: 'Módulo 1 | Psicopatología clínica infantojuvenil' },
-					{ foto: '/modulos_clases/modulo_marco_legal_nnyA.webp', nombre: 'Módulo 2 | Marco legal protectorio de Niños y Adolescentes' },
-					{ foto: '/modulos_clases/modulo_constitucion_subjetiva_inicios.webp', nombre: 'Módulo 3 | Psicopatología clínica en los inicios de la constitución subjetiva' },
-					{ foto: '/modulos_clases/modulo_patologias_discapacidades_bebes.webp', nombre: 'Módulo 4 | Patologías, discapacidades y trastornos en Niñez: su clínica y praxis' },
-					{ foto: '/modulos_clases/modulo_violencias_sexuales_infancia.webp', nombre: 'Módulo 5 | Violencias sexuales en la infancia: abordaje clínico actual' },
-					{ foto: '/modulos_clases/modulo_duelo_depresion_neurosis_infancia.webp', nombre: 'Módulo 6 | Avatares clínicos: duelo, depresión y neurosis en la infancia' },
-					{ foto: '/modulos_clases/modulo_cuerpo_psiquismo_plasticidad.webp', nombre: 'Módulo 7 | Cuerpo, psiquismo y plasticidad en la clínica con Niños y Adolescentes' },
-				],
-				'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
-			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL-BASE'),
-			// Planes de financiación
-			titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
-			titulo('Planes de financiación', 2, undefined, 'precios'),
-			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9546),
-			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
-			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/infanto.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
-			// Admisión
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 euros/año',
-					'Beca de admisión del 60%',
-					'Planes de financiación disponibles',
-				],
-				'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
-				['No necesariamente.'],
-				[
-					'La Diplomatura en Psicopatología Infanto-Juvenil (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en el estudio y/o la práctica vocacional del acompañamiento, inclusive sin estudios previos.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
-				],
-			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'La **Diplomatura en Psicopatología Clínica Infantojuvenil** es una formación que se cursa en **modalidad 100% online** y cuenta con un total de **36 clases obligatorias**, además de clases optativas de profundización.',
-				'La propuesta combina **clases grabadas** disponibles en el campus, junto con encuentros sincrónicos con docentes de la formación, lo que permite una experiencia de cursada acompañada, dinámica y accesible desde cualquier parte del mundo.',
-				'**El sistema de evaluación** incluye cuestionarios tipo múltiple choice al finalizar cada clase, favoreciendo la integración progresiva de los contenidos y el seguimiento del aprendizaje.',
-				'A lo largo del recorrido, la formación articula un enfoque psicoanalítico con una perspectiva integrativa e interdisciplinaria, abordando la clínica infantojuvenil desde una mirada contemporánea, ética y contextualizada.',
-				'Para quienes decidan continuar su formación en la **Diplomatura en Psicoterapia con enfoque psicoanalítico**, esta materia será considerada como válida dentro de una de las materias anuales del primer año, permitiendo articular y profundizar el recorrido académico dentro de la Facultad.',
-				'Para quienes necesitan mayor flexibilidad, la diplomatura también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
-				'Luego, recibirás a través de email los accesos al Campus paso a paso.',
-				'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
-			]),
-			c('FAQ-DOCENTES'),
-			faq('¿El enfoque es exclusivamente lacaniano?', [
-				'**No.** Si bien la formación se apoya en una sólida base psicoanalítica, la **Diplomatura en Psicopatología Clínica Infantojuvenil** propone un abordaje integrativo e interdisciplinario, necesario para comprender la complejidad del psiquismo en niños, niñas y adolescentes.',
-				'El programa articula el psicoanálisis con aportes de *la psicología del desarrollo, la psiquiatría, la neuropsicología y el campo socio-jurídico*, incorporando también la perspectiva de derechos, los contextos familiares y los factores culturales que inciden en la constitución subjetiva.',
-				'Desde la Facultad, promovemos una lectura clínica crítica, ética y contemporánea, que evita la patologización reduccionista y permite intervenir de manera situada, convocando a profesionales de distintas disciplinas para ofrecer herramientas sólidas y actualizadas frente a los desafíos de la clínica infantojuvenil actual.',
-			]),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			// Cierre
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -982,160 +1118,191 @@ export const formaciones: Formacion[] = [
 		modalidad: '100% online',
 		dirigidoA: 'Profesionales de la salud, educación o acompañamiento',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto([
-				'Este diplomado propone un recorrido formativo de 1 año, con posibilidad de cursada express en 6 o 3 meses, orientado a quienes desean formarse en las **bases de la teoría psicoanalítica** articulada con técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
-				'A lo largo del recorrido se estudian los **fundamentos del aparato psíquico**, las estructuras clínicas, la sexualidad, la intervención y las diversas voces del psicoanálisis. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
-			]),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_A),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			paraTi(
-				[
-					'Eres profesional de la salud, educación o acompañamiento.',
-					'Deseas comprender los vectores de lectura psicoanalítica.',
-					'Te interesa comprender el sufrimiento humano más allá de diagnósticos rápidos.',
-					'Buscas una formación rigurosa que articule teoría, clínica y práctica.',
-				],
-				[
-					'Buscas cursos rápidos sin formación clínica profunda.',
-					'Esperas recetas terapéuticas cerradas para problemas complejos.',
-					'No tienes interés en trabajar con la singularidad del inconsciente.',
-				],
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto([
+						'Este diplomado propone un recorrido formativo de 1 año, con posibilidad de cursada express en 6 o 3 meses, orientado a quienes desean formarse en las **bases de la teoría psicoanalítica** articulada con técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
+						'A lo largo del recorrido se estudian los **fundamentos del aparato psíquico**, las estructuras clínicas, la sexualidad, la intervención y las diversas voces del psicoanálisis. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
+				]),
 			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
-				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
-				'**Facultad Lalangue** escucha los *murmullos de la época* y propone un espacio de formación que articula pensamiento, clínica y comunidad.',
-			]),
-			articula(
-				'La Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica articula:',
-				[
-					'Estudio riguroso del psicoanálisis.',
-					'Comprensión de las estructuras clínicas.',
-					'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
-					'Práctica clínica supervisada.',
-					'Comunidad académica internacional.',
-					'Articulación entre teoría, caso y práctica.',
-				],
+			// 2. Metodología y contadores
+			seccion(
+				metodologia('Metodología', MODALIDAD_A),
+				c('METODOLOGIA-CONTADORES'),
+			),
+			// 3. Es para ti si / No es para ti si
+			seccion(
+				paraTi(
+						[
+								'Eres profesional de la salud, educación o acompañamiento.',
+								'Deseas comprender los vectores de lectura psicoanalítica.',
+								'Te interesa comprender el sufrimiento humano más allá de diagnósticos rápidos.',
+								'Buscas una formación rigurosa que articule teoría, clínica y práctica.',
+						],
+						[
+								'Buscas cursos rápidos sin formación clínica profunda.',
+								'Esperas recetas terapéuticas cerradas para problemas complejos.',
+								'No tienes interés en trabajar con la singularidad del inconsciente.',
+						],
+				),
+			),
+			// 4. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+						'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+						'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+						'**Facultad Lalangue** escucha los *murmullos de la época* y propone un espacio de formación que articula pensamiento, clínica y comunidad.',
+				]),
+			),
+			// 5. Qué articula
+			seccion(
+				articula(
+						'La Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica articula:',
+						[
+								'Estudio riguroso del psicoanálisis.',
+								'Comprensión de las estructuras clínicas.',
+								'Diálogo entre psicoanálisis, neurociencia y clínica contemporánea.',
+								'Práctica clínica supervisada.',
+								'Comunidad académica internacional.',
+								'Articulación entre teoría, caso y práctica.',
+						],
+				),
+			),
+			// 6. Profesores
+			seccion(
+				profesores('Profesores de la diplomatura', [
+						{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+						{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+						{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+						{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
+				]),
+			),
+			// 7. Módulos de Clases
+			seccion(
+				modulos(
+						'Módulos de Clases',
+						[
+								{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+								{ foto: '/modulos_clases/modulo_introduccion_al_narcisismo.webp', nombre: 'Módulo 2 | Introducción al narcisismo' },
+								{ foto: '/modulos_clases/modulo_pulsiones_y_destinos.webp', nombre: 'Módulo 3 | Pulsiones y destinos de la pulsión' },
+								{ foto: '/modulos_clases/modulo_segunda_topica_y_masoquismo.webp', nombre: 'Módulo 4 y 5 | Segunda tópica y masoquismo' },
+								{ foto: '/modulos_clases/modulo_angustia_sintoma_cultura.webp', nombre: 'Módulo 6 | Angustia, síntoma y cultura' },
+								{ foto: '/modulos_clases/modulo_mas_alla_de_freud.webp', nombre: 'Módulo 7 | Más allá de Freud' },
+						],
+						'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+						{
+								etiqueta: 'Programa académico',
+								href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+						},
+				),
+			),
+			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-BASE'),
+				c('BENEFICIOS-TOTAL-BASE'),
+			),
+			// 9. Planes de financiación
+			seccion(
+				titulo('Planes de financiación', 2, undefined, 'precios'),
+				...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
+				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
+				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
+			),
+			// 10. Inserción Laboral (el título vive en el bloque)
+			seccion(
+				c('INSERCION-ESTADISTICAS'),
+			),
+			// 11. Certificación
+			seccion(
+				certificacion(
+						'Certificación',
+						CERTIFICACION_INTRO,
+						[
+								'Certificación internacional con reconocimiento académico y clínico.',
+								'El ejercicio profesional depende de la normativa vigente en cada país.',
+						],
+						'/diplomas/metapsicologia.png',
+						{
+								enlace: {
+										etiqueta: 'Programa Académico',
+										href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+								},
+								notaDiploma: '*Diploma de muestra.',
+						},
+				),
+			),
+			// 12. Admisión
+			seccion(
+				admision(
+						'/admision_fondo.webp',
+						'Admisión',
+						[
+								'Entrevista de admisión obligatoria.',
+								'Entrevista gratuita.',
+								'Orientación para regulaciones locales.',
+								'Becas parciales para perfiles seleccionados.',
+								'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+						],
+						'Matrícula Anual',
+						[
+								'€1800 → €540 euros/año',
+								'Beca de admisión del 60%',
+								'Planes de financiación disponibles',
+						],
+						'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+				),
+			),
+			// 13. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+						'¿Necesito ser psicólogo/a para inscribirme en esta diplomatura?',
+						['No necesariamente.'],
+						[
+								'La Diplomatura en Metapsicología: Introducción a la teoría psicoanalítica (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en comprender la teoría psicoanalítica, inclusive sin estudios previos.',
+						],
+						[
+								'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
+						],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+						'La **Diplomatura en Metapsicología: Introducción a la Teoría Psicoanalítica** es una formación que se cursa en **modalidad 100% online** y cuenta con un recorrido estructurado a través de clases grabadas disponibles en el campus, junto con encuentros sincrónicos con docentes de la formación.',
+						'La propuesta se complementa con *materiales de lectura y recursos académicos* que permiten una cursada flexible y accesible desde cualquier parte del mundo, favoreciendo la comprensión progresiva de los conceptos fundamentales del psicoanálisis.',
+						'*El sistema de evaluación* incluye cuestionarios tipo multiple choice al finalizar cada clase, acompañando la integración de contenidos y el seguimiento del proceso de aprendizaje.',
+						'A lo largo del recorrido, la formación introduce los conceptos centrales de la teoría psicoanalítica desde una perspectiva rigurosa y articulada con la clínica contemporánea, constituyendo una base sólida para desarrollos posteriores.',
+						'Para quienes decidan continuar su formación en la **Diplomatura en Psicoterapia** con enfoque psicoanalítico, este programa será considerado como equivalente a la materia de ***Metapsicología*** del primer año, permitiendo articular y profundizar el recorrido académico dentro de la Facultad.',
+						'Para quienes necesitan mayor flexibilidad, la formación también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+						'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
+						'Luego, recibirás a través de email los accesos al Campus paso a paso.',
+						'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
+				]),
+				c('FAQ-DOCENTES'),
+				faq('¿El enfoque es exclusivamente lacaniano?', [
+						'**No.** La Diplomatura en Metapsicología: Introducción a la Teoría Psicoanalítica introduce a la lógica freudiana como fundamento del psicoanálisis, al mismo tiempo que recorre los desarrollos y pensamientos de las distintas voces que han enriquecido el campo psicoanalítico a lo largo del tiempo.',
+						'La formación articula los aportes de *Sigmund Freud* con otras lecturas contemporáneas, permitiendo una comprensión plural, rigurosa y crítica de la teoría psicoanalítica.',
+						'Desde la Facultad, proponemos una transmisión que no se reduce a una única corriente, sino que abre el diálogo entre distintas perspectivas, situando la metapsicología en relación con la clínica actual y los desafíos de la subjetividad contemporánea.',
+				]),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+			),
+			// 14. Otras formaciones + instituciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+			// 15. CTA final
+			seccion(
+				c('CTA-INSCRIBIRTE'),
 			),
 
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo_introduccion_al_narcisismo.webp', nombre: 'Módulo 2 | Introducción al narcisismo' },
-					{ foto: '/modulos_clases/modulo_pulsiones_y_destinos.webp', nombre: 'Módulo 3 | Pulsiones y destinos de la pulsión' },
-					{ foto: '/modulos_clases/modulo_segunda_topica_y_masoquismo.webp', nombre: 'Módulo 4 y 5 | Segunda tópica y masoquismo' },
-					{ foto: '/modulos_clases/modulo_angustia_sintoma_cultura.webp', nombre: 'Módulo 6 | Angustia, síntoma y cultura' },
-					{ foto: '/modulos_clases/modulo_mas_alla_de_freud.webp', nombre: 'Módulo 7 | Más allá de Freud' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **profesores** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
-				},
-			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-BASE'),
-			c('BENEFICIOS-TOTAL-BASE'),
-			// Planes de financiación
-			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-			titulo('Planes de financiación', 2, undefined, 'precios'),
-			...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
-			...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
-			...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/metapsicologia.png',
-				{
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
-			// Admisión
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula Anual',
-				[
-					'€1800 → €540 euros/año',
-					'Beca de admisión del 60%',
-					'Planes de financiación disponibles',
-				],
-				'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
-			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en esta diplomatura?',
-				['No necesariamente.'],
-				[
-					'La Diplomatura en Metapsicología: Introducción a la teoría psicoanalítica (1 año o puedes optar por la cursada express) está abierta a profesionales y personas con interés en comprender la teoría psicoanalítica, inclusive sin estudios previos.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
-				],
-			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'La **Diplomatura en Metapsicología: Introducción a la Teoría Psicoanalítica** es una formación que se cursa en **modalidad 100% online** y cuenta con un recorrido estructurado a través de clases grabadas disponibles en el campus, junto con encuentros sincrónicos con docentes de la formación.',
-				'La propuesta se complementa con *materiales de lectura y recursos académicos* que permiten una cursada flexible y accesible desde cualquier parte del mundo, favoreciendo la comprensión progresiva de los conceptos fundamentales del psicoanálisis.',
-				'*El sistema de evaluación* incluye cuestionarios tipo multiple choice al finalizar cada clase, acompañando la integración de contenidos y el seguimiento del proceso de aprendizaje.',
-				'A lo largo del recorrido, la formación introduce los conceptos centrales de la teoría psicoanalítica desde una perspectiva rigurosa y articulada con la clínica contemporánea, constituyendo una base sólida para desarrollos posteriores.',
-				'Para quienes decidan continuar su formación en la **Diplomatura en Psicoterapia** con enfoque psicoanalítico, este programa será considerado como equivalente a la materia de ***Metapsicología*** del primer año, permitiendo articular y profundizar el recorrido académico dentro de la Facultad.',
-				'Para quienes necesitan mayor flexibilidad, la formación también puede realizarse en **modalidad express**, permitiendo completarla a su propio ritmo en 6 o incluso 3 meses, adaptándose a diferentes tiempos y objetivos profesionales.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte a través de la **opción de pago** que elijas, en tres simples pasos.',
-				'Luego, recibirás a través de email los accesos al Campus paso a paso.',
-				'*Ten en cuenta también que el valor monetario no sea un impedimento para formarte en FIPP Lalangue: si te encuentras condicionada/o escríbenos, que juntos encontraremos un camino viable.',
-			]),
-			c('FAQ-DOCENTES'),
-			faq('¿El enfoque es exclusivamente lacaniano?', [
-				'**No.** La Diplomatura en Metapsicología: Introducción a la Teoría Psicoanalítica introduce a la lógica freudiana como fundamento del psicoanálisis, al mismo tiempo que recorre los desarrollos y pensamientos de las distintas voces que han enriquecido el campo psicoanalítico a lo largo del tiempo.',
-				'La formación articula los aportes de *Sigmund Freud* con otras lecturas contemporáneas, permitiendo una comprensión plural, rigurosa y crítica de la teoría psicoanalítica.',
-				'Desde la Facultad, proponemos una transmisión que no se reduce a una única corriente, sino que abre el diálogo entre distintas perspectivas, situando la metapsicología en relación con la clínica actual y los desafíos de la subjetividad contemporánea.',
-			]),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			// Cierre
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
-			c('CTA-INSCRIBIRTE'),
 		],
 	},
 ];

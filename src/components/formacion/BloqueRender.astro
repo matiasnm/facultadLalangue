@@ -23,10 +23,11 @@ const link = (href: string) =>
 interface Props {
 	bloque: Bloque;
 	/**
-	 * Layout de página: 'clasico' (bloques sueltos, default) o 'secciones'
-	 * (piloto Máster). En 'secciones' los bloques full-bleed dejan de romper
-	 * el contenedor (el <main> ya es full-width) y los títulos que viven
-	 * dentro del bloque (p. ej. stats) se renderizan dentro de la sección.
+	 * Layout de página: 'clasico' (default, páginas estáticas y ejemplos del
+	 * roadmap) o 'secciones' (páginas de formación agrupadas). En 'secciones'
+	 * los bloques full-bleed dejan de romper el contenedor (el <main> ya es
+	 * full-width) y los títulos que viven dentro del bloque (p. ej. stats) se
+	 * renderizan dentro de la sección.
 	 */
 	layout?: 'clasico' | 'secciones';
 }
@@ -902,11 +903,11 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      un grid de 2 columnas. Los márgenes viven donde está el texto. */}
 {b.tipo === 'certificacion' && (
 	<section
-		class={`scroll-mt-24 bg-surface py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-14 w-screen'}`}
+		class={`scroll-mt-24${secciones ? ' py-14 sm:py-16' : ' bg-surface py-16 sm:py-20 relative left-1/2 -ml-[50vw] mt-14 w-screen'}`}
 		id="certificacion"
 		aria-label={b.titulo}
 	>
-		<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+		<div class={`mx-auto px-4 sm:px-6 lg:px-8${secciones ? ' max-w-5xl' : ' max-w-6xl'}`}>
 			<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
 				{/* Columna izquierda: título, intro, puntos con check y botón. */}
 				<div>

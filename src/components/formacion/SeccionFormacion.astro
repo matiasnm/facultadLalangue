@@ -1,6 +1,7 @@
 ---
 /**
- * SeccionFormacion — un grupo de bloques del layout 'secciones' (piloto Máster).
+ * SeccionFormacion — un grupo de bloques del layout 'secciones' (el de TODAS
+ * las páginas de formación).
  *
  * Cada entrada de `formacion.secciones` (tipo SeccionPagina = { bloques }) se
  * renderiza como UN SOLO <section> apilado. Las secciones NO llevan márgenes
@@ -30,8 +31,13 @@ interface Props {
 
 const { entrada } = Astro.props;
 
-/** Bloques de banda ancha que poseen su propia sección (fondo + padding). */
-const FULLBLEED = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision']);
+/** Bloques que renderizan SU PROPIA <section> en el layout 'secciones' y por
+ *  eso, cuando son el único bloque del grupo, se renderizan directos sin
+ *  envolver: bandas full-width (stats, cta, articula, modulos, admision) y
+ *  Certificación, que en 'secciones' es una sección CON márgenes (max-w-5xl),
+ *  igual que La Facultad. Solo existen dos medidas: sección full-width o
+ *  sección con márgenes izquierdo/derecho. */
+const SECCION_PROPA = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision']);
 
 /** Expande cada cita a un componente común (c('NOMBRE')) a sus bloques reales,
  *  para decidir el envoltorio sobre la lista ya aplanada. */
@@ -44,7 +50,7 @@ const bloques = entrada.bloques.flatMap((b): Bloque[] => {
 });
 
 const unico = bloques.length === 1 ? bloques[0] : undefined;
-const solo = !!unico && FULLBLEED.has(unico.tipo);
+const solo = !!unico && SECCION_PROPA.has(unico.tipo);
 ---
 
 {solo && unico ? (

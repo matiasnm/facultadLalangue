@@ -11,9 +11,9 @@ import BloqueRender from './BloqueRender.astro';
 
 interface Props {
 	nombre: ComponenteId;
-	/** Layout de página: 'clasico' (default) o 'secciones' (piloto Máster).
-	 *  Se reenvía a BloqueRender para que los bloques sepan si viven dentro
-	 *  de una sección agrupada (sin márgenes entre sí ni full-bleed). */
+	/** Layout de página: 'clasico' (default) o 'secciones' (páginas de
+	 *  formación agrupadas). Se reenvía a BloqueRender para que los bloques
+	 *  sepan si viven dentro de una sección agrupada. */
 	layout?: 'clasico' | 'secciones';
 }
 
