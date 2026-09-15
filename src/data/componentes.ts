@@ -481,19 +481,20 @@ export const modulos = (titulo, lista, intro?, enlace?) =>
 export const certificacion = (titulo, intro, puntos, foto, extras?) =>
 	({ tipo: 'certificacion', titulo, intro, puntos, foto, ...extras }) as BloqueCertificacion;
 /* ------------------------------------------------------------------ */
-/* Los 33 componentes comunes                                          */
+/* Los 32 componentes comunes                                          */
 /* ------------------------------------------------------------------ */
+
+/** Insignias institucionales de las formaciones (fuente única: se muestran en
+ *  el hero de las formaciones con `intro`). Si cambia una insignia, cambia en
+ *  todo el sitio. */
+export const INSIGNIAS_INSTITUCIONALES = [
+	'Institución Francesa',
+	'Certificación Europea',
+	'100% Online',
+	'Salida Laboral Internacional',
+] as const;
+
 export const componentes: ComponenteComun[] = [
-	{
-		id: 'INSIGNIAS-INSTITUCIONALES',
-		nota: 'Doc §1 — Encabezado de cada formación.',
-		bloques: [
-			chips(
-				['Institución Francesa', 'Certificación Europea', '100% Online', 'Salida Laboral Internacional'],
-				'insignia',
-			),
-		],
-	},
 	{
 		id: 'INTRO-MODULOS-CLASES',
 		nota: 'Doc §2.',

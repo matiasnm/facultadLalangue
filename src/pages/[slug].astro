@@ -5,23 +5,26 @@
  * URL definida por su `slug` (que coincide con la ruta citada en el menú).
  *
  * La página NO define contenido: declara los datos de la formación (encabezado
- * y meta) y renderiza sus `secciones` — grupos de bloques envueltos en
- * seccion(...) — exclusivamente a través de los componentes de render de
- * src/components/formacion/. Cualquier cambio de diseño se hace una sola vez
- * en BloqueRender y se propaga a todas las páginas (fuente única de verdad).
+ * y meta, renderizados por HeroFormacion) y sus `secciones` — grupos de
+ * bloques envueltos en seccion(...) — exclusivamente a través de los
+ * componentes de render de src/components/formacion/. Cualquier cambio de
+ * diseño se hace una sola vez en esos componentes y se propaga a todas las
+ * páginas (fuente única de verdad).
  *
  * Layout único (el mismo en todas las formaciones), con dos medidas de ancho:
- *  - el hero (volver + encabezado + meta) es una sección full-width;
- *  - cada grupo de bloques se apila en su propio <section>, con márgenes
- *    (max-w-5xl) salvo los bloques full-width (stats, cta, articula, modulos,
- *    admision) que renderizan su propia sección.
+ *  - el hero (HeroFormacion) es una sección full-width con el mismo
+ *    contenedor y tipografía que el hero del home; no tiene botón
+ *    "Volver al inicio";
+ *  - cada grupo de bloques se apila en su propio <section>, con el MISMO
+ *    margen izquierdo/derecho que el hero (max-w-7xl), salvo los bloques
+ *    full-width (stats, cta, articula, modulos, admision) que renderizan su
+ *    propia banda de color, y Certificación.
  */
 import Layout from '../layouts/Layout.astro';
 import { formaciones } from '../data/formaciones';
 import type { SeccionPagina } from '../data/componentes';
 import SeccionFormacion from '../components/formacion/SeccionFormacion.astro';
-
-const base = import.meta.env.BASE_URL;
+import HeroFormacion from '../components/formacion/HeroFormacion.astro';
 
 export function getStaticPaths() {
 	return formaciones.map((f) => ({
@@ -40,47 +43,7 @@ const secciones: SeccionPagina[] = formacion.secciones;
 
 <Layout title={`${formacion.titulo} — Facultad Lalangue`}>
 	<main class="flex-1">
-		<!-- Hero: sección full-width (primera medida). El contenido vive en un
-		     contenedor max-w-5xl con márgenes. -->
-		<section class="py-12 sm:py-16">
-			<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-				<!-- Volver al inicio -->
-				<a
-					href={base || '/'}
-					class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
-				>
-					<span aria-hidden="true">←</span> Volver al inicio
-				</a>
-
-				<!-- Encabezado -->
-				<header class="mt-6">
-					{formacion.kicker && <p class="text-sm font-semibold text-accent">{formacion.kicker}</p>}
-					<p class="mt-2 text-xs font-semibold uppercase tracking-widest text-accent">
-						{formacion.categoria}
-					</p>
-					<h1 class="mt-2 max-w-4xl text-4xl font-semibold leading-tight sm:text-5xl">
-						{formacion.titulo}
-					</h1>
-					<p class="mt-4 max-w-3xl text-lg leading-relaxed text-ink/80">{formacion.descripcion}</p>
-				</header>
-
-				<!-- Meta -->
-				<div class="mt-10 grid gap-4 sm:grid-cols-3">
-					<div class="rounded-lg border border-divider/30 bg-surface p-5">
-						<p class="text-xs font-semibold uppercase tracking-widest text-muted">Duración</p>
-						<p class="mt-2 text-sm font-medium text-night">{formacion.duracion}</p>
-					</div>
-					<div class="rounded-lg border border-divider/30 bg-surface p-5">
-						<p class="text-xs font-semibold uppercase tracking-widest text-muted">Modalidad</p>
-						<p class="mt-2 text-sm font-medium text-night">{formacion.modalidad}</p>
-					</div>
-					<div class="rounded-lg border border-divider/30 bg-surface p-5">
-						<p class="text-xs font-semibold uppercase tracking-widest text-muted">Dirigido a</p>
-						<p class="mt-2 text-sm font-medium text-night">{formacion.dirigidoA}</p>
-					</div>
-				</div>
-			</div>
-		</section>
+		<HeroFormacion formacion={formacion} />
 
 		<!-- Contenido: secciones agrupadas, apiladas sin márgenes entre sí -->
 		{secciones.map((entrada) => (

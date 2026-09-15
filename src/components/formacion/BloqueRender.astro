@@ -246,9 +246,10 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 )}
 
 {/* Estadísticas de inserción — sección full-bleed con mapa mundial de fondo.
-     El ancho es del 100vw rompiendo el contenedor max-w-5xl (técnica w-screen +
-     -ml-[50vw] + left-1/2). Fondo muted (bg-muted) con el world_map a 40% de
-     opacidad para dar menos contraste que el antiguo bg-night. */}
+     El ancho es del 100vw rompiendo el contenedor del contenido (técnica
+     w-screen + -ml-[50vw] + left-1/2). Fondo muted (bg-muted) con el
+     world_map a 40% de opacidad para dar menos contraste que el antiguo
+     bg-night. */}
 {b.tipo === 'stats' && (
 	<section
 		class={`relative scroll-mt-24 bg-muted py-16 sm:py-20${secciones ? '' : ' left-1/2 -ml-[50vw] mt-8 w-screen'}`}
@@ -260,7 +261,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 			style={`background-image:url('${link('/fondos/world_map.webp')}'); background-size:cover; background-position:center;`}
 			aria-hidden="true"
 		></div>
-		<div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+		<div class={`relative mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
 			{/* Título: en el layout 'secciones' vive dentro de la banda (h2 blanco). */}
 			{secciones && b.titulo && <h2 class="mb-8 text-white">{b.titulo}</h2>}
 			<div class="grid gap-12 md:grid-cols-2 md:gap-16">
@@ -324,7 +325,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      full-bleed tiene UN contenedor central con el padding para el texto. */}
 {b.tipo === 'cta' && (
 	<section class={`bg-brand py-16 text-center sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-12 w-screen'}`}>
-		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
 			<h2 class="text-white">{b.titulo}</h2>
 			{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
 			{b.acciones.map((a) => (
@@ -482,14 +483,16 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</ul>
 )}
 
-{/* Dirigido-a — par de columnas que se miran ("Es para ti si" / "No es para ti si")
-     con bordes redondeados hacia el interior, más cierre centrado con botón. */}
+{/* Dirigido-a — dos tarjetas claras sobre la banda vino SÓLIDA de su sección
+     (SeccionFormacion aplica bg-brand-dark). Estructura plana: <article> por
+     columna (nada de <section> dentro de <section>), mismos radios simples
+     (rounded-2xl), gap amplio entre columnas (md:gap-10 lg:gap-12) y cierre
+     centrado con texto blanco y botón acento. */}
 {b.tipo === 'dirigido-a' && (
-	<div class="mt-8 rounded-[2rem] border border-divider/40 bg-surface/40 p-4 sm:p-6">
-		<div class="grid list-none gap-4 p-0 md:grid-cols-2 md:gap-6">
-			{/* Columna "para ti" — redondea su lado derecho (hacia la otra columna) */}
-			<section class="rounded-2xl rounded-r-[2rem] border border-divider/30 bg-surface p-6 md:rounded-r-[2.5rem]">
-				<h3 class="font-subheading text-xl font-semibold text-ink-strong">{b.positivos.titulo}</h3>
+	<div>
+		<div class="grid gap-5 md:grid-cols-2 md:gap-10 lg:gap-12">
+			<article class="rounded-2xl border border-divider/30 bg-surface p-6">
+				<h3 class="font-subheading text-2xl font-semibold text-ink-strong">{b.positivos.titulo}</h3>
 				<div class="mt-3 h-px w-12 bg-brand" aria-hidden="true"></div>
 				<ul class="mt-4 list-none space-y-3 p-0">
 					{b.positivos.items.map((it) => (
@@ -499,10 +502,9 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						</li>
 					))}
 				</ul>
-			</section>
-			{/* Columna "no es para ti" — redondea su lado izquierdo (hacia la otra columna) */}
-			<section class="rounded-2xl rounded-l-[2rem] border border-divider/30 bg-surface p-6 md:rounded-l-[2.5rem] md:translate-y-6">
-				<h3 class="font-subheading text-xl font-semibold text-ink-strong">{b.negativos.titulo}</h3>
+			</article>
+			<article class="rounded-2xl border border-divider/30 bg-surface p-6">
+				<h3 class="font-subheading text-2xl font-semibold text-ink-strong">{b.negativos.titulo}</h3>
 				<div class="mt-3 h-px w-12 bg-accent" aria-hidden="true"></div>
 				<ul class="mt-4 list-none space-y-3 p-0">
 					{b.negativos.items.map((it) => (
@@ -512,14 +514,14 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						</li>
 					))}
 				</ul>
-			</section>
+			</article>
 		</div>
-		{/* Cierre centrado con texto y botón */}
-		<div class="mt-8 text-center">
-			<Rico texto={b.pie.texto} class="text-lg font-semibold text-ink-strong" />
+		{/* Cierre centrado sobre la banda vino (texto blanco + botón acento) */}
+		<div class="mt-10 text-center">
+			<Rico texto={b.pie.texto} class="text-lg font-semibold text-white" />
 			<a
 				href={link(b.pie.boton.href)}
-				class="mt-5 inline-block rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-accent hover:text-white hover:no-underline"
+				class="mt-6 inline-block rounded-md bg-accent px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-white hover:text-brand hover:no-underline"
 				{...(/^https?:\/\//.test(b.pie.boton.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 			>
 				{b.pie.boton.etiqueta}
@@ -554,7 +556,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		class={`scroll-mt-24 bg-gradient-to-b from-white to-surface py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-8 w-screen'}`}
 		aria-label={b.titulo}
 	>
-		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
 			<h2 class="text-center">{b.titulo}</h2>
 			<div class="mt-8 flex flex-col-reverse gap-10 md:grid md:grid-cols-2 md:gap-14 lg:gap-20">
 				{/* Izquierda: lema institucional, alineado a la izquierda. Cada
@@ -846,7 +848,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		aria-label={b.titulo}
 	>
 		{/* Texto — único contenedor con padding (donde vive el texto). */}
-		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
 			<h2 class="text-center">{b.titulo}</h2>
 			{b.intro && (
 				<Rico
@@ -881,7 +883,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 			</div>
 		</div>
 		{b.enlace && (
-			<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+			<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
 				<p class="mb-0 mt-12 text-center">
 					<a
 						href={link(b.enlace.href)}
@@ -907,7 +909,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		id="certificacion"
 		aria-label={b.titulo}
 	>
-		<div class={`mx-auto px-4 sm:px-6 lg:px-8${secciones ? ' max-w-5xl' : ' max-w-6xl'}`}>
+		<div class={`mx-auto px-4 sm:px-6 lg:px-8${secciones ? ' max-w-7xl' : ' max-w-6xl'}`}>
 			<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
 				{/* Columna izquierda: título, intro, puntos con check y botón. */}
 				<div>
@@ -972,7 +974,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
 		aria-label={b.izqTitulo}
 	>
-		<div class="mx-auto grid max-w-5xl grid-cols-1 gap-10 px-4 sm:px-6 md:gap-14 lg:grid-cols-2 lg:px-8">
+		<div class={`mx-auto grid ${secciones ? 'max-w-7xl' : 'max-w-5xl'} grid-cols-1 gap-10 px-4 sm:px-6 md:gap-14 lg:grid-cols-2 lg:px-8`}>
 			{/* Columna izquierda: título y puntos con check (flex para repartir el alto). */}
 			<div class="flex flex-col pt-4 md:pt-5">
 				<h2 class="text-white uppercase">{b.izqTitulo}</h2>

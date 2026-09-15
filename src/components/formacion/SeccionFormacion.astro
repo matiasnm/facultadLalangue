@@ -10,12 +10,16 @@
  * contenedor anula el margen superior del primer bloque con
  * `[&>:first-child]:mt-0`).
  *
+ * Medida única: todos los contenedores de contenido usan el MISMO margen
+ * izquierdo/derecho que el hero (max-w-7xl). Los únicos bloques que se
+ * escapan son los que renderizan su propia banda de color full-width (stats,
+ * cta, articula, modulos, admision) y Certificación.
+ *
  * Regla de oro: si el grupo resuelve a UN SOLO bloque full-bleed (stats, cta,
  * articula, modulos, certificacion o admision — bandas de ancho completo que
  * ya poseen su propia sección con fondo y padding), ese bloque se renderiza
  * DIRECTAMENTE para que él mismo sea el <section>. En el layout 'secciones'
- * esos bloques pierden el full-bleed (el <main> ya es full-width) pero
- * conservan su fondo y su padding.
+ * esos bloques conservan su fondo y su padding.
  */
 import {
 	componentePorId,
@@ -34,9 +38,8 @@ const { entrada } = Astro.props;
 /** Bloques que renderizan SU PROPIA <section> en el layout 'secciones' y por
  *  eso, cuando son el único bloque del grupo, se renderizan directos sin
  *  envolver: bandas full-width (stats, cta, articula, modulos, admision) y
- *  Certificación, que en 'secciones' es una sección CON márgenes (max-w-5xl),
- *  igual que La Facultad. Solo existen dos medidas: sección full-width o
- *  sección con márgenes izquierdo/derecho. */
+ *  Certificación. Solo existen dos anchos: la banda full-width (que paga su
+ *  propio fondo) o la sección con el margen del hero (max-w-7xl). */
 const SECCION_PROPA = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision']);
 
 /** Expande cada cita a un componente común (c('NOMBRE')) a sus bloques reales,
@@ -51,13 +54,17 @@ const bloques = entrada.bloques.flatMap((b): Bloque[] => {
 
 const unico = bloques.length === 1 ? bloques[0] : undefined;
 const solo = !!unico && SECCION_PROPA.has(unico.tipo);
+// El grupo "Es para ti si / No es para ti si" lleva su propia banda de color
+// SÓLIDA de la paleta (fondo vino profundo) para contrastar con el blanco del
+// resto de la página; las tarjetas claras del bloque se destacan sobre ella.
+const conFondoParaTi = bloques.some((b) => b.tipo === 'dirigido-a');
 ---
 
 {solo && unico ? (
 	<BloqueRender bloque={unico} layout="secciones" />
 ) : (
-	<section class="py-14 sm:py-16">
-		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 [&>:first-child]:mt-0">
+	<section class={`py-16 sm:py-20${conFondoParaTi ? ' bg-brand-dark' : ' py-14 sm:py-16'}`}>
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 [&>:first-child]:mt-0">
 			{bloques.map((b) => (
 				<BloqueRender bloque={b} layout="secciones" />
 			))}

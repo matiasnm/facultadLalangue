@@ -15,31 +15,32 @@
  * TODAS las páginas de formación usan el layout 'secciones': cada grupo de
  * bloques se envuelve en seccion(...) y vive en su propio <section> apilado.
  * Solo existen DOS medidas de ancho:
- *   - sección FULL-WIDTH (renderiza SU PROPIA <section>): el hero de la página,
- *     y los bloques stats, cta, articula, modulos y admision (ver
- *     SECCION_PROPA en SeccionFormacion.astro);
- *   - sección CON MÁRGENES (max-w-5xl): todo lo demás.
+ *   - banda de color FULL-WIDTH (renderiza SU PROPIA <section>): los bloques
+ *     stats, cta, articula, modulos y admision (ver SECCION_PROPA en
+ *     SeccionFormacion.astro);
+ *   - sección CON EL MISMO MARGEN QUE EL HERO (max-w-7xl): todo lo demás,
+ *     incluida la banda de "Es para ti…" (vino sólido profundo, bg-brand-dark).
  *
- * Orden de los grupos:
- *    1. Tapa institucional   → INSIGNIAS-INSTITUCIONALES + intro (texto)
- *    2. Metodología          → metodologia() + METODOLOGIA-CONTADORES
- *    3. Es para ti si…       → paraTi() (dirigidoA)
- *    4. La Facultad          → titulo('La Facultad') + facultad()
- *    5. Qué articula         → articula()
- *    6. Profesores           → profesores()
- *    7. Módulos de Clases    → modulos()
- *    8. Beneficios           → BENEFICIOS-* (el CTA de la tarjeta total se
+ * Orden de los grupos (la intro y las insignias institucionales NO son un
+ * grupo: viven UNA vez en el hero, desde el campo `intro` de cada formación):
+ *    1. Metodología          → metodologia() + METODOLOGIA-CONTADORES
+ *    2. Es para ti si…       → paraTi() (dirigidoA)
+ *    3. La Facultad          → titulo('La Facultad') + facultad()
+ *    4. Qué articula         → articula()
+ *    5. Profesores           → profesores()
+ *    6. Módulos de Clases    → modulos()
+ *    7. Beneficios           → BENEFICIOS-* (el CTA de la tarjeta total se
  *                              pliega dentro de ella y NO se declara suelto)
- *    9. Salida Laboral       → (solo Máster y Psicoterapia)
- *   10. Supervisión Clínica  → (solo Máster y Psicoterapia)
- *   11. Inserción Laboral    → INSERCION-ESTADISTICAS (su título vive DENTRO
+ *    8. Salida Laboral       → (solo Máster y Psicoterapia)
+ *    9. Supervisión Clínica  → (solo Máster y Psicoterapia)
+ *   10. Inserción Laboral    → INSERCION-ESTADISTICAS (su título vive DENTRO
  *                              del bloque; no se declara un titulo suelto)
- *   12. Certificación        → certificacion()
- *   13. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
- *   14. Preguntas Frecuentes → titulo + FAQ-*
- *   15. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
- *   16. Listo para inscribirte → CTA-INSCRIBIRTE
- * Los bloques intersticiales (intro, planes de financiación, clase abierta) se
+ *   11. Certificación        → certificacion()
+ *   12. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
+ *   13. Preguntas Frecuentes → titulo + FAQ-*
+ *   14. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   15. Listo para inscribirte → CTA-INSCRIBIRTE
+ * Los bloques intersticiales (planes de financiación, clase abierta) se
  * intercalan sin romper ese orden. El CTA de entrevista y el título de la
  * Inserción NO se declaran como bloques sueltos: viven como componente único
  * (el cierre de la tarjeta de beneficios y el título de INSERCION-ESTADISTICAS);
@@ -77,8 +78,18 @@ export interface Formacion {
 	slug: string;
 	titulo: string;
 	categoria: string;
-	/** Tagline de presentación (bajo el h1). */
+	/** Subtítulo del hero (bajo el h1). */
 	descripcion: string;
+	/**
+	 * Párrafo(s) de introducción que vive(n) en el hero (bajo el subtítulo).
+	 * Puede ser un solo string (formaciones sin párrafos markdown) o un array
+	 * de párrafos (formaciones con formato **negrita**, *itálica*…). Si está
+	 * presente, el hero usa la variante de dos columnas (contenido 2/3 +
+	 * cards 1/3, insignias centradas) y la formación NO declara el grupo
+	 * "Tapa institucional" en `secciones`: la intro y las insignias se
+	 * renderizan una sola vez, en el hero.
+	 */
+	intro?: string | string[];
 	/** Badge opcional del encabezado (p. ej. "Nuevas Cohortes…"). */
 	kicker?: string;
 	duracion: string;
@@ -128,25 +139,21 @@ export const formaciones: Formacion[] = [
 		categoria: 'Máster',
 		kicker: 'Nuevas Cohortes 09/2026 | Becas del 60%',
 		descripcion: 'Para quienes comparten la pasión por un psicoanálisis actual.',
+		intro:
+			'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
 		duracion: '2 años (72 semanas)',
 		modalidad: '100% online',
 		dirigidoA: 'Profesionales con formación previa en psicología, psicoterapia u otras disciplinas afines',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto(
-					'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
-				),
-			),
-
-			// 2. Metodología
+			// 1. Metodología
+			// (La intro y las insignias institucionales viven en el hero: esta
+			// formación tiene campo `intro`, no declara grupo de tapa.)
 			seccion(
 				metodologia('Metodología', MODALIDAD_A),
 				c('METODOLOGIA-CONTADORES'),
 			),
 
-			// 3. "Es para ti si / No es para ti si" — tarjeta "dirigido-a"
+			// 2. "Es para ti si / No es para ti si" — tarjeta "dirigido-a"
 			// (Máster: no tiene sección de planes → la beca va a la entrevista).
 			seccion(
 				paraTi(
@@ -166,7 +173,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 4. La Facultad
+			// 3. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -176,7 +183,7 @@ export const formaciones: Formacion[] = [
 				]),
 			),
 
-			// 5. Qué articula
+			// 4. Qué articula
 			seccion(
 				articula('El Máster en Psicoanálisis Aplicado articula:', [
 					'Estudio profundo y riguroso del psicoanálisis.',
@@ -188,7 +195,7 @@ export const formaciones: Formacion[] = [
 				]),
 			),
 
-			// 6. Profesores
+			// 5. Profesores
 			seccion(
 				profesores('Profesores del máster', [
 					{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
@@ -200,7 +207,7 @@ export const formaciones: Formacion[] = [
 				]),
 			),
 
-			// 7. Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			// 6. Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			seccion(
 				modulos(
 					'Módulos de Clases',
@@ -219,7 +226,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 8. Beneficios — el cierre de la tarjeta de total lleva el CTA de
+			// 7. Beneficios — el cierre de la tarjeta de total lleva el CTA de
 			//    entrevista (h2 + texto + botón), que antes era su propia sección.
 			seccion(
 				c('BENEFICIOS-INTRO'),
@@ -227,7 +234,7 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
 
-			// 9. Salida Laboral
+			// 8. Salida Laboral
 			seccion(
 				titulo('Salida Laboral Internacional'),
 				c('FREUD-CITA-TERAPIA-PUEBLO'),
@@ -235,17 +242,17 @@ export const formaciones: Formacion[] = [
 				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
 			),
 
-			// 10. Supervisión clínica
+			// 9. Supervisión clínica
 			seccion(
 				c('SUPERVISION-CLINICA-COMPLETA'),
 				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
 				enlace('Agendar entrevista de admisión', ENTREVISTA),
 			),
 
-			// 11. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
+			// 10. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
 			seccion(c('INSERCION-ESTADISTICAS')),
 
-			// 12. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
+			// 11. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
 			seccion(
 				certificacion(
 					'Certificación',
@@ -265,7 +272,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 13. Admisión
+			// 12. Admisión
 			seccion(
 				admision(
 					'/admision_fondo.webp',
@@ -288,7 +295,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 14. Preguntas Frecuentes
+			// 13. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -322,13 +329,13 @@ export const formaciones: Formacion[] = [
 				enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
 			),
 
-			// 15. Nuestras formaciones
+			// 14. Nuestras formaciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
 
-			// 16. CTA final
+			// 15. CTA final
 			seccion(c('CTA-INSCRIBIRTE')),
 		],
 	},
@@ -343,25 +350,21 @@ export const formaciones: Formacion[] = [
 		kicker: 'Nuevas Cohortes 09/2026 | Becas del 60%',
 		descripcion:
 			'Para quienes desean aprender a acompañar desde una perspectiva psicoanalítica contemporánea.',
+		intro: [
+			'Este diplomado propone un recorrido formativo de 2 años orientado a quienes desean formarse en psicoterapia con enfoque psicoanalítico, articulando teoría, técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
+			'A lo largo del recorrido se estudian los fundamentos del aparato psíquico, las estructuras clínicas, la infancia, la sexualidad, la intervención en crisis y el trabajo con entrevistas clínicas. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
+		],
 		duracion: '2 años (72 semanas)',
 		modalidad: '100% online',
 		dirigidoA:
 			'Profesionales y personas con interés en la práctica vocacional del acompañamiento',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto([
-						'Este diplomado propone un recorrido formativo de 2 años orientado a quienes desean formarse en psicoterapia con enfoque psicoanalítico, articulando teoría, técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
-						'A lo largo del recorrido se estudian los fundamentos del aparato psíquico, las estructuras clínicas, la infancia, la sexualidad, la intervención en crisis y el trabajo con entrevistas clínicas. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
-				]),
-			),
-			// 2. Metodología y contadores
+			// 1. Metodología y contadores
 			seccion(
 				metodologia('Metodología', MODALIDAD_A),
 				c('METODOLOGIA-CONTADORES'),
 			),
-			// 3. Es para ti si / No es para ti si + beca a la entrevista
+			// 2. Es para ti si / No es para ti si + beca a la entrevista
 			seccion(
 				paraTi(
 						[
@@ -379,7 +382,7 @@ export const formaciones: Formacion[] = [
 						ENTREVISTA,
 				),
 			),
-			// 4. La Facultad
+			// 3. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -388,7 +391,7 @@ export const formaciones: Formacion[] = [
 						'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
 				]),
 			),
-			// 5. Qué articula
+			// 4. Qué articula
 			seccion(
 				articula('La Diplomatura en Psicoterapia con orientación psicoanalítica articula:', [
 						'Estudio riguroso del psicoanálisis.',
@@ -399,7 +402,7 @@ export const formaciones: Formacion[] = [
 						'Articulación entre teoría, caso y práctica.',
 				]),
 			),
-			// 6. Profesores
+			// 5. Profesores
 			seccion(
 				profesores('Profesores de la diplomatura', [
 						{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
@@ -411,7 +414,7 @@ export const formaciones: Formacion[] = [
 						{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
 				]),
 			),
-			// 7. Módulos de Clases
+			// 6. Módulos de Clases
 			seccion(
 				modulos(
 						'Módulos de Clases',
@@ -433,30 +436,30 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 8. Beneficios (CTA plegado en la tarjeta €1363)
+			// 7. Beneficios (CTA plegado en la tarjeta €1363)
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-COMPLETO'),
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
-			// 9. Salida Laboral Internacional
+			// 8. Salida Laboral Internacional
 			seccion(
 				titulo('Salida Laboral Internacional'),
 				c('FREUD-CITA-TERAPIA-PUEBLO'),
 				c('DIRECTORIOS-INSERCION'),
 				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
 			),
-			// 10. Supervisión clínica
+			// 9. Supervisión clínica
 			seccion(
 				c('SUPERVISION-CLINICA-COMPLETA'),
 				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
 				enlace('Agendar entrevista de admisión', ENTREVISTA),
 			),
-			// 11. Inserción Laboral (el título vive en el bloque)
+			// 10. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 12. Certificación
+			// 11. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -475,7 +478,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 13. Admisión
+			// 12. Admisión
 			seccion(
 				admision(
 						'/admision_fondo.webp',
@@ -497,7 +500,7 @@ export const formaciones: Formacion[] = [
 						'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 				),
 			),
-			// 14. Preguntas Frecuentes
+			// 13. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -530,12 +533,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ENTREVISTA-ADMISION'),
 				enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
 			),
-			// 15. Otras formaciones + instituciones
+			// 14. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 16. CTA final
+			// 15. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),
@@ -552,26 +555,22 @@ export const formaciones: Formacion[] = [
 		categoria: 'Diplomatura',
 		descripcion:
 			'Comprende cómo las plataformas digitales, los algoritmos y las dinámicas de las redes sociales están transformando la subjetividad, el bienestar psicológico y las nuevas formas de sufrimiento en la vida online.',
+		intro: [
+			'Este diplomado anual propone comprender las **nuevas formas de sufrimiento vinculadas a entornos digitales**, incluyendo fenómenos como dependencia a redes sociales, ansiedad por exposición pública, violencia digital, daño algorítmico y transformaciones en la identidad online.',
+			'A lo largo del programa se analizan los efectos psicológicos de las plataformas digitales, el rol de los algoritmos en la producción de subjetividad y los desafíos que enfrentan profesionales de la salud mental, educación y comunicación para acompañar estos fenómenos contemporáneos.',
+			'El recorrido combina herramientas provenientes de la psicología contemporánea, la investigación en comportamiento digital y el análisis crítico de las tecnologías emergentes.',
+		],
 		duracion: '1 año (36 clases), con cursada express de 6 o 3 meses',
 		modalidad: '100% online',
 		dirigidoA:
 			'Profesionales y personas interesadas en el impacto psicológico de la cultura digital',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto([
-						'Este diplomado anual propone comprender las **nuevas formas de sufrimiento vinculadas a entornos digitales**, incluyendo fenómenos como dependencia a redes sociales, ansiedad por exposición pública, violencia digital, daño algorítmico y transformaciones en la identidad online.',
-						'A lo largo del programa se analizan los efectos psicológicos de las plataformas digitales, el rol de los algoritmos en la producción de subjetividad y los desafíos que enfrentan profesionales de la salud mental, educación y comunicación para acompañar estos fenómenos contemporáneos.',
-						'El recorrido combina herramientas provenientes de la psicología contemporánea, la investigación en comportamiento digital y el análisis crítico de las tecnologías emergentes.',
-				]),
-			),
-			// 2. Metodología y contadores
+			// 1. Metodología y contadores
 			seccion(
 				metodologia('Metodología', MODALIDAD_A),
 				c('METODOLOGIA-CONTADORES'),
 			),
-			// 3. Es para ti si / No es para ti si
+			// 2. Es para ti si / No es para ti si
 			seccion(
 				paraTi(
 						[
@@ -588,7 +587,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 4. La Facultad
+			// 3. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -597,7 +596,7 @@ export const formaciones: Formacion[] = [
 						'Este diplomado propone un espacio de **formación interdisciplinaria** para analizar críticamente estos fenómenos y desarrollar herramientas conceptuales y prácticas para abordarlos.',
 				]),
 			),
-			// 5. Qué articula
+			// 4. Qué articula
 			seccion(
 				articula(
 						'La Diplomatura Internacional en Subjetividad Digital, IA y nuevas formas de sufrimiento online articula:',
@@ -611,7 +610,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 6. Profesores
+			// 5. Profesores
 			seccion(
 				profesores('Profesores de la diplomatura', [
 						{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
@@ -621,7 +620,7 @@ export const formaciones: Formacion[] = [
 						{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
 				]),
 			),
-			// 7. Módulos de Clases
+			// 6. Módulos de Clases
 			seccion(
 				modulos(
 						'Módulos de Clases',
@@ -642,13 +641,13 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			// 7. Beneficios (CTA plegado en la tarjeta €650)
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 9. Planes de financiación
+			// 8. Planes de financiación
 			seccion(
 				titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
 				titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -656,11 +655,11 @@ export const formaciones: Formacion[] = [
 				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 10057),
 				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 10059),
 			),
-			// 10. Inserción Laboral (el título vive en el bloque)
+			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 11. Certificación
+			// 10. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -677,7 +676,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 12. Preguntas Frecuentes
+			// 11. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -713,12 +712,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 				c('FAQ-ENTREVISTA-ADMISION'),
 			),
-			// 13. Otras formaciones + instituciones
+			// 12. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 14. CTA final
+			// 13. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),
@@ -735,24 +734,20 @@ export const formaciones: Formacion[] = [
 		categoria: 'Diplomatura',
 		descripcion:
 			'Las relaciones de pareja siempre aparecen: en los conflictos, en los síntomas, en la historia. Formate con herramientas contemporáneas para una integración clínica aplicable.',
+		intro: [
+			'En un contexto marcado por transformaciones culturales, cambios en los modelos de pareja y ampliación de los discursos sobre el deseo, el amor y la sexualidad, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** analiza críticamente los nuevos desafíos clínicos y propone una formación rigurosa y actualizada orientada a profesionales interesados en profundizar su abordaje terapéutico de los vínculos sexoafectivos contemporáneos.',
+			'La propuesta articula teoría y práctica clínica para ofrecer herramientas terapéuticas eficaces, éticas y contextualizadas, abordando las mutaciones del lazo vincular, del erotismo y de la subjetividad contemporánea en diálogo con cuatro corrientes psicoterapéuticas: psicoanálisis, enfoque sistémico, terapia cognitivo-conductual e integrativa, favoreciendo una mirada plural e inclusiva para intervenir en las complejas configuraciones relacionales actuales.',
+		],
 		duracion: '1 año, con cursada express de 6 o 3 meses',
 		modalidad: '100% online',
 		dirigidoA: 'Psicólogos, terapeutas y profesionales del campo de la salud mental',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto([
-						'En un contexto marcado por transformaciones culturales, cambios en los modelos de pareja y ampliación de los discursos sobre el deseo, el amor y la sexualidad, la **Diplomatura en Clínica de Parejas y Erotismo Relacional** analiza críticamente los nuevos desafíos clínicos y propone una formación rigurosa y actualizada orientada a profesionales interesados en profundizar su abordaje terapéutico de los vínculos sexoafectivos contemporáneos.',
-						'La propuesta articula teoría y práctica clínica para ofrecer herramientas terapéuticas eficaces, éticas y contextualizadas, abordando las mutaciones del lazo vincular, del erotismo y de la subjetividad contemporánea en diálogo con cuatro corrientes psicoterapéuticas: psicoanálisis, enfoque sistémico, terapia cognitivo-conductual e integrativa, favoreciendo una mirada plural e inclusiva para intervenir en las complejas configuraciones relacionales actuales.',
-				]),
-			),
-			// 2. Metodología y contadores
+			// 1. Metodología y contadores
 			seccion(
 				metodologia('Metodología', MODALIDAD_B),
 				c('METODOLOGIA-CONTADORES'),
 			),
-			// 3. Es para ti si / No es para ti si
+			// 2. Es para ti si / No es para ti si
 			seccion(
 				paraTi(
 						[
@@ -768,7 +763,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 4. La Facultad
+			// 3. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -777,7 +772,7 @@ export const formaciones: Formacion[] = [
 						'Este diplomado propone una **formación clínica integradora** que articula teoría, práctica y análisis de casos, favoreciendo una intervención profesional ética, contextualizada y respetuosa de la diversidad.',
 				]),
 			),
-			// 5. Qué articula
+			// 4. Qué articula
 			seccion(
 				articula('La Diplomatura en Clínica de Parejas y Erotismo Relacional articula:', [
 						'Comprensión clínica de los vínculos de pareja y la sexualidad contemporánea.',
@@ -788,7 +783,7 @@ export const formaciones: Formacion[] = [
 						'Articulación entre teoría, intervención clínica y análisis de casos.',
 				]),
 			),
-			// 6. Profesores
+			// 5. Profesores
 			seccion(
 				profesores('Profesores de la diplomatura', [
 						{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
@@ -798,7 +793,7 @@ export const formaciones: Formacion[] = [
 						{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
 				]),
 			),
-			// 7. Módulos de Clases
+			// 6. Módulos de Clases
 			seccion(
 				modulos(
 						'Módulos de Clases',
@@ -823,13 +818,13 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			// 7. Beneficios (CTA plegado en la tarjeta €650)
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 9. Planes de financiación
+			// 8. Planes de financiación
 			seccion(
 				titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
 				titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -837,11 +832,11 @@ export const formaciones: Formacion[] = [
 				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 9545),
 				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 9546),
 			),
-			// 10. Inserción Laboral (el título vive en el bloque)
+			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 11. Certificación
+			// 10. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -858,7 +853,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 12. Preguntas Frecuentes
+			// 11. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -894,12 +889,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 				c('FAQ-ENTREVISTA-ADMISION'),
 			),
-			// 13. Otras formaciones + instituciones
+			// 12. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 14. CTA final
+			// 13. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),
@@ -916,32 +911,28 @@ export const formaciones: Formacion[] = [
 		categoria: 'Diplomatura',
 		descripcion:
 			'Para quienes deseen especializarse en psicopatología y clínica infantojuvenil desde una perspectiva psicoanalítica contemporánea, articulada con un enfoque interdisciplinario y ético.',
+		intro: [
+			'El **psiquismo en niños, niñas y adolescentes** está en plena constitución, por lo que los síntomas deben leerse en relación con dimensiones estructurales, evolutivas y socioculturales, evitando trasladar categorías propias de la clínica adulta y toda patologización, para una intervención situada y respetuosa.',
+			'Este diplomado propone un abordaje especializado de la Psicopatología Infanto-Juvenil desde una perspectiva psicoanalítica contemporánea, interdisciplinaria y ética. A lo largo del recorrido se analizan diversas presentaciones clínicas (como depresiones, fobias, trastornos psicosomáticos, TDA, TEA y diversas patologías) integrando diagnóstico, abordaje clínico y trabajo con familias e instituciones.',
+		],
 		duracion: '1 año (36 clases obligatorias + optativas)',
 		modalidad: '100% online',
 		dirigidoA:
 			'Profesionales del campo de la salud mental, la educación y el acompañamiento de infancias y adolescencias',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto([
-						'El **psiquismo en niños, niñas y adolescentes** está en plena constitución, por lo que los síntomas deben leerse en relación con dimensiones estructurales, evolutivas y socioculturales, evitando trasladar categorías propias de la clínica adulta y toda patologización, para una intervención situada y respetuosa.',
-						'Este diplomado propone un abordaje especializado de la Psicopatología Infanto-Juvenil desde una perspectiva psicoanalítica contemporánea, interdisciplinaria y ética. A lo largo del recorrido se analizan diversas presentaciones clínicas (como depresiones, fobias, trastornos psicosomáticos, TDA, TEA y diversas patologías) integrando diagnóstico, abordaje clínico y trabajo con familias e instituciones.',
-				]),
-			),
-			// 2. Clase abierta
+			// 1. Clase abierta
 			seccion(
 				titulo('Vive la experiencia: Clase abierta sin costo'),
 				texto(
 						'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
 				),
 			),
-			// 3. Metodología y contadores
+			// 2. Metodología y contadores
 			seccion(
 				metodologia('Metodología', MODALIDAD_B),
 				c('METODOLOGIA-CONTADORES'),
 			),
-			// 4. Es para ti si / No es para ti si
+			// 3. Es para ti si / No es para ti si
 			seccion(
 				paraTi(
 						[
@@ -957,7 +948,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 5. La Facultad
+			// 4. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -965,7 +956,7 @@ export const formaciones: Formacion[] = [
 						'Abordar estas problemáticas desde el psicoanálisis contemporáneo es fundamental para profesionales que buscan intervenir con una perspectiva crítica y actualizada, ya que permite leer la singularidad de cada caso, articulando diagnóstico, vínculos y contexto.',
 				]),
 			),
-			// 6. Qué articula
+			// 5. Qué articula
 			seccion(
 				articula('La Diplomatura en Psicopatología Infanto-Juvenil articula:', [
 						'Comprensión clínica del psiquismo en constitución en niños, niñas y adolescentes.',
@@ -976,7 +967,7 @@ export const formaciones: Formacion[] = [
 						'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
 				]),
 			),
-			// 7. Profesores
+			// 6. Profesores
 			seccion(
 				profesores('Profesores de la diplomatura', [
 						{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
@@ -986,7 +977,7 @@ export const formaciones: Formacion[] = [
 						{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
 				]),
 			),
-			// 8. Módulos de Clases
+			// 7. Módulos de Clases
 			seccion(
 				modulos(
 						'Módulos de Clases',
@@ -1002,13 +993,13 @@ export const formaciones: Formacion[] = [
 						'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
 				),
 			),
-			// 9. Beneficios (CTA plegado en la tarjeta €650)
+			// 8. Beneficios (CTA plegado en la tarjeta €650)
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 10. Planes de financiación
+			// 9. Planes de financiación
 			seccion(
 				titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
 				titulo('Planes de financiación', 2, undefined, 'precios'),
@@ -1016,11 +1007,11 @@ export const formaciones: Formacion[] = [
 				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
 				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
 			),
-			// 11. Inserción Laboral (el título vive en el bloque)
+			// 10. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 12. Certificación
+			// 11. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -1033,7 +1024,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 13. Admisión
+			// 12. Admisión
 			seccion(
 				admision(
 						'/admision_fondo.webp',
@@ -1054,7 +1045,7 @@ export const formaciones: Formacion[] = [
 						'El ingreso al diplomado se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 				),
 			),
-			// 14. Preguntas Frecuentes
+			// 13. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -1092,12 +1083,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 				c('FAQ-ENTREVISTA-ADMISION'),
 			),
-			// 15. Otras formaciones + instituciones
+			// 14. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 16. CTA final
+			// 15. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),
@@ -1114,24 +1105,20 @@ export const formaciones: Formacion[] = [
 		categoria: 'Diplomatura',
 		descripcion:
 			'Para quienes desean aprender a acompañar desde una perspectiva psicoanalítica contemporánea.',
+		intro: [
+			'Este diplomado propone un recorrido formativo de 1 año, con posibilidad de cursada express en 6 o 3 meses, orientado a quienes desean formarse en las **bases de la teoría psicoanalítica** articulada con técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
+			'A lo largo del recorrido se estudian los **fundamentos del aparato psíquico**, las estructuras clínicas, la sexualidad, la intervención y las diversas voces del psicoanálisis. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
+		],
 		duracion: '1 año, con cursada express de 6 o 3 meses',
 		modalidad: '100% online',
 		dirigidoA: 'Profesionales de la salud, educación o acompañamiento',
 		secciones: [
-			// 1. Tapa institucional: insignias + intro
-			seccion(
-				c('INSIGNIAS-INSTITUCIONALES'),
-				texto([
-						'Este diplomado propone un recorrido formativo de 1 año, con posibilidad de cursada express en 6 o 3 meses, orientado a quienes desean formarse en las **bases de la teoría psicoanalítica** articulada con técnica y práctica clínica. El programa integra los fundamentos psicoanalíticos con herramientas contemporáneas para abordar los malestares psíquicos del siglo XXI.',
-						'A lo largo del recorrido se estudian los **fundamentos del aparato psíquico**, las estructuras clínicas, la sexualidad, la intervención y las diversas voces del psicoanálisis. La formación combina clases teóricas, espacios clínicos y supervisión, con el objetivo de desarrollar una práctica ética y rigurosa.',
-				]),
-			),
-			// 2. Metodología y contadores
+			// 1. Metodología y contadores
 			seccion(
 				metodologia('Metodología', MODALIDAD_A),
 				c('METODOLOGIA-CONTADORES'),
 			),
-			// 3. Es para ti si / No es para ti si
+			// 2. Es para ti si / No es para ti si
 			seccion(
 				paraTi(
 						[
@@ -1147,7 +1134,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 4. La Facultad
+			// 3. La Facultad
 			seccion(
 				titulo('La Facultad'),
 				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
@@ -1156,7 +1143,7 @@ export const formaciones: Formacion[] = [
 						'**Facultad Lalangue** escucha los *murmullos de la época* y propone un espacio de formación que articula pensamiento, clínica y comunidad.',
 				]),
 			),
-			// 5. Qué articula
+			// 4. Qué articula
 			seccion(
 				articula(
 						'La Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica articula:',
@@ -1170,7 +1157,7 @@ export const formaciones: Formacion[] = [
 						],
 				),
 			),
-			// 6. Profesores
+			// 5. Profesores
 			seccion(
 				profesores('Profesores de la diplomatura', [
 						{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
@@ -1179,7 +1166,7 @@ export const formaciones: Formacion[] = [
 						{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
 				]),
 			),
-			// 7. Módulos de Clases
+			// 6. Módulos de Clases
 			seccion(
 				modulos(
 						'Módulos de Clases',
@@ -1198,24 +1185,24 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 8. Beneficios (CTA plegado en la tarjeta €650)
+			// 7. Beneficios (CTA plegado en la tarjeta €650)
 			seccion(
 				c('BENEFICIOS-INTRO'),
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 9. Planes de financiación
+			// 8. Planes de financiación
 			seccion(
 				titulo('Planes de financiación', 2, undefined, 'precios'),
 				...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
 				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
 				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
 			),
-			// 10. Inserción Laboral (el título vive en el bloque)
+			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 11. Certificación
+			// 10. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -1234,7 +1221,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 12. Admisión
+			// 11. Admisión
 			seccion(
 				admision(
 						'/admision_fondo.webp',
@@ -1255,7 +1242,7 @@ export const formaciones: Formacion[] = [
 						'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 				),
 			),
-			// 13. Preguntas Frecuentes
+			// 12. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -1293,12 +1280,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 				c('FAQ-ENTREVISTA-ADMISION'),
 			),
-			// 14. Otras formaciones + instituciones
+			// 13. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 15. CTA final
+			// 14. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),

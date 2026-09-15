@@ -1,0 +1,112 @@
+---
+/**
+ * HeroFormacion — encabezado de las páginas de formación.
+ *
+ * Misma tipografía y contenedor que el hero del home (mismos márgenes y
+ * tamaños de h/p). NO tiene botón "Volver al inicio".
+ *
+ * Variantes:
+ *  - 'dos-columnas' (formaciones con campo `intro`): columna 2/3 con
+ *    categoria + kicker en un renglón, h1, subtítulo (descripcion), párrafo(s)
+ *    `intro` (renderizados con Rico para preservar **negrita** / *itálica*) y
+ *    las insignias institucionales centradas al pie; columna 1/3 con las
+ *    cards Duración / Modalidad / Dirigido a apiladas en vertical.
+ *  - 'simple' (sin campo `intro`): misma tipografía, contenido en una columna
+ *    y las cards de meta en grilla de 3.
+ */
+import type { Formacion } from '../../data/formaciones';
+import { INSIGNIAS_INSTITUCIONALES } from '../../data/componentes';
+import Rico from './Rico.astro';
+
+interface Props {
+	formacion: Formacion;
+}
+
+const { formacion } = Astro.props;
+
+// intro puede ser string único o array de párrafos — normalizar a array.
+const parrafosIntro: string[] = Array.isArray(formacion.intro)
+	? formacion.intro
+	: formacion.intro
+		? [formacion.intro]
+		: [];
+
+const usarDosColumnas = parrafosIntro.length > 0;
+
+const metaCards = [
+	{ etiqueta: 'Duración', valor: formacion.duracion },
+	{ etiqueta: 'Modalidad', valor: formacion.modalidad },
+	{ etiqueta: 'Dirigido a', valor: formacion.dirigidoA },
+];
+---
+
+<section class="bg-background">
+	<div class="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+		{usarDosColumnas ? (
+			/* Dos columnas (2/3 + 1/3): contenido a la izquierda, cards a la derecha. */
+			<div class="grid items-start gap-10 lg:grid-cols-3 lg:gap-12">
+				<div class="lg:col-span-2">
+					<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+						<p class="text-sm font-semibold uppercase tracking-widest text-accent">
+							{formacion.categoria}
+						</p>
+						{formacion.kicker && (
+							<p class="text-sm font-medium uppercase tracking-widest text-muted">
+								{formacion.kicker}
+							</p>
+						)}
+					</div>
+					<h1 class="mt-4 max-w-5xl font-semibold leading-[1.05] text-ink text-7xl">
+						{formacion.titulo}
+					</h1>
+					<h3 class="mt-6 max-w-2xl text-2xl font-medium leading-snug text-ink sm:text-3xl">
+						{formacion.descripcion}
+					</h3>
+					{parrafosIntro.map((p) => (
+						<Rico
+							texto={p}
+							class="mt-6 max-w-2xl text-lg leading-relaxed text-ink/85 sm:text-xl"
+						/>
+					))}
+					<ul class="mt-10 flex list-none flex-wrap justify-center gap-2 p-0">
+						{INSIGNIAS_INSTITUCIONALES.map((insignia) => (
+							<li
+								class="rounded-full border border-divider/60 bg-surface px-4 py-1.5 text-sm font-medium text-ink"
+							>
+								{insignia}
+							</li>
+						))}
+					</ul>
+				</div>
+				<div class="space-y-4 lg:col-span-1">
+					{metaCards.map((c) => (
+						<div class="rounded-lg border border-divider/30 bg-surface p-5">
+							<p class="text-xs font-semibold uppercase tracking-widest text-muted">{c.etiqueta}</p>
+							<p class="mt-2 text-sm font-medium text-night">{c.valor}</p>
+						</div>
+					))}
+				</div>
+			</div>
+		) : (
+			/* Columna única: misma tipografía que el home, cards en grilla. */
+			<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+				<p class="text-sm font-semibold uppercase tracking-widest text-accent">{formacion.categoria}</p>
+				{formacion.kicker && (
+					<p class="text-sm font-medium uppercase tracking-widest text-muted">{formacion.kicker}</p>
+				)}
+			</div>
+			<h1 class="mt-4 max-w-5xl font-semibold leading-[1.05] text-ink text-7xl">{formacion.titulo}</h1>
+			<h3 class="mt-6 max-w-2xl text-2xl font-medium leading-snug text-ink sm:text-3xl">
+				{formacion.descripcion}
+			</h3>
+			<div class="mt-10 grid gap-4 sm:grid-cols-3">
+				{metaCards.map((c) => (
+					<div class="rounded-lg border border-divider/30 bg-surface p-5">
+						<p class="text-xs font-semibold uppercase tracking-widest text-muted">{c.etiqueta}</p>
+						<p class="mt-2 text-sm font-medium text-night">{c.valor}</p>
+					</div>
+				))}
+			</div>
+		)}
+	</div>
+</section>
