@@ -1,0 +1,60 @@
+---
+/**
+ * SeccionFormacion — un grupo de bloques del layout 'secciones' (piloto Máster).
+ *
+ * Cada entrada de `formacion.secciones` (tipo SeccionPagina = { bloques }) se
+ * renderiza como UN SOLO <section> apilado. Las secciones NO llevan márgenes
+ * entre sí: cada una paga su propio padding vertical (y su fondo cuando
+ * corresponde) y los bloques internos solo guardan ritmo entre ellos (el
+ * contenedor anula el margen superior del primer bloque con
+ * `[&>:first-child]:mt-0`).
+ *
+ * Regla de oro: si el grupo resuelve a UN SOLO bloque full-bleed (stats, cta,
+ * articula, modulos, certificacion o admision — bandas de ancho completo que
+ * ya poseen su propia sección con fondo y padding), ese bloque se renderiza
+ * DIRECTAMENTE para que él mismo sea el <section>. En el layout 'secciones'
+ * esos bloques pierden el full-bleed (el <main> ya es full-width) pero
+ * conservan su fondo y su padding.
+ */
+import {
+	componentePorId,
+	type BloquePagina,
+	type Bloque,
+	type SeccionPagina,
+} from '../../data/componentes';
+import BloqueRender from './BloqueRender.astro';
+
+interface Props {
+	entrada: SeccionPagina;
+}
+
+const { entrada } = Astro.props;
+
+/** Bloques de banda ancha que poseen su propia sección (fondo + padding). */
+const FULLBLEED = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision']);
+
+/** Expande cada cita a un componente común (c('NOMBRE')) a sus bloques reales,
+ *  para decidir el envoltorio sobre la lista ya aplanada. */
+const bloques = entrada.bloques.flatMap((b): Bloque[] => {
+	if (b.tipo === 'componente') {
+		const cc = componentePorId[b.nombre];
+		return cc ? cc.bloques : [];
+	}
+	return [b];
+});
+
+const unico = bloques.length === 1 ? bloques[0] : undefined;
+const solo = !!unico && FULLBLEED.has(unico.tipo);
+---
+
+{solo && unico ? (
+	<BloqueRender bloque={unico} layout="secciones" />
+) : (
+	<section class="py-14 sm:py-16">
+		<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 [&>:first-child]:mt-0">
+			{bloques.map((b) => (
+				<BloqueRender bloque={b} layout="secciones" />
+			))}
+		</div>
+	</section>
+)}

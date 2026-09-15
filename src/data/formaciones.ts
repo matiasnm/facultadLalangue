@@ -23,8 +23,8 @@
  *   10. Certificación        → certificacion()
  *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
  *   12. Preguntas Frecuentes → titulo + FAQ-*
- *   13. Listo para inscribirte → CTA-INSCRIBIRTE
- *   14. Nuestras formaciones   → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   13. Nuestras formaciones   → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   14. Listo para inscribirte → CTA-INSCRIBIRTE
  *   15. Footer
  * Los bloques intersticiales (intro, «Es para ti si…», planes de financiación,
  * CTA de entrevista, clase abierta) se intercalan sin romper ese orden.
@@ -44,11 +44,13 @@ import {
 	profesores,
 	modulos,
 	certificacion,
+	seccion,
 	MODALIDAD_A,
 	MODALIDAD_B,
 	LOGO_FACULTAD,
 	ESLOGAN_FACULTAD,
 	type BloquePagina,
+	type SeccionPagina,
 } from './componentes';
 
 /** Intro institucional compartida de la sección Certificación (era el componente común 'CERTIFICACION-INTRO'). */
@@ -66,7 +68,13 @@ export interface Formacion {
 	duracion: string;
 	modalidad: string;
 	dirigidoA: string;
-	secciones: BloquePagina[];
+	/**
+	 * Layout de página. 'clasico' (por defecto) es el actual: bloques sueltos
+	 * dentro del main. 'secciones' es el piloto del Máster: cada grupo de
+	 * bloques se renderiza dentro de un <section> apilado sin márgenes.
+	 */
+	layout?: 'clasico' | 'secciones';
+	secciones: BloquePagina[] | SeccionPagina[];
 }
 
 const ENTREVISTA = 'https://go.facultadlalangue.com/entrevista-directa';
@@ -109,164 +117,212 @@ export const formaciones: Formacion[] = [
 		duracion: '2 años (72 semanas)',
 		modalidad: '100% online',
 		dirigidoA: 'Profesionales con formación previa en psicología, psicoterapia u otras disciplinas afines',
+		layout: 'secciones',
 		secciones: [
-			c('INSIGNIAS-INSTITUCIONALES'),
-			texto(
-				'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
+			// 1. Tapa institucional: insignias + intro
+			seccion(
+				c('INSIGNIAS-INSTITUCIONALES'),
+				texto(
+					'Este Máster propone un recorrido formativo de 2 años para quienes desean profundizar su práctica psicoanalítica en diálogo con la época y asumir una posición ética frente al sufrimiento contemporáneo, articulando teoría, clínica y práctica aplicada.',
+				),
 			),
-			// Metodología
-			metodologia('Metodología', MODALIDAD_A),
-			c('METODOLOGIA-CONTADORES'),
-			// Es para ti si / No es para ti si — tarjeta "dirigido-a"
-			// (Máster: no tiene sección de planes → la beca va a la entrevista).
-			paraTi(
-				[
-					'Eres un profesional con formación previa.',
-					'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
-					'Te interesa expandir tu práctica internacional.',
-					'Quieres construir una identidad profesional, no acumular cursos.',
-					'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
-				],
-				[
-					'Buscas cursos rápidos.',
-					'Esperas recetas cerradas.',
-					'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
-				],
-				ENTREVISTA,
-			),
-			// La Facultad
-			titulo('La Facultad'),
-			facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
-				'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
-				'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
-				'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
-			]),
-			articula('El Máster en Psicoanálisis Aplicado articula:', [
-				'Estudio profundo y riguroso del psicoanálisis.',
-				'Trabajo con estructuras clínicas y síntomas contemporáneos.',
-				'Neurociencia y epigenética en diálogo con el psicoanálisis.',
-				'Supervisión clínica real durante la formación.',
-				'Espacios de elaboración colectiva internacional.',
-				'Articulación entre teoría, caso y práctica.',
-			]),
 
-			// Profesores
-			profesores('Profesores del máster', [
-				{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
-				{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
-				{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
-				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
-			]),
-			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
-			modulos(
-				'Módulos de Clases',
-				[
-					{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
-					{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
-					{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
-					{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
-					{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
-				],
-				'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
-				{
-					etiqueta: 'Programa académico',
-					href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
-				},
+			// 2. Metodología
+			seccion(
+				metodologia('Metodología', MODALIDAD_A),
+				c('METODOLOGIA-CONTADORES'),
 			),
-			// Beneficios
-			c('BENEFICIOS-INTRO'),
-			c('BENEFICIOS-GRID-COMPLETO'),
-			c('BENEFICIOS-TOTAL-COMPLETO'),
-			// CTA entrevista
-			titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
-			texto('Agenda una entrevista gratuita y sin compromiso.'),
-			enlace('Solicitar entrevista de admisión', ENTREVISTA),
-			// Salida Laboral
-			titulo('Salida Laboral Internacional'),
-			c('FREUD-CITA-TERAPIA-PUEBLO'),
-			c('DIRECTORIOS-INSERCION'),
-			c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
-			// Supervisión
-			c('SUPERVISION-CLINICA-COMPLETA'),
-			texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-			enlace('Solicitar entrevista de admisión', ENTREVISTA),
-			// Inserción
-			titulo('Inserción Laboral'),
-			c('INSERCION-ESTADISTICAS'),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/master.png',
-				{
-					enlace: {
-						etiqueta: 'Programa Académico',
+
+			// 3. "Es para ti si / No es para ti si" — tarjeta "dirigido-a"
+			// (Máster: no tiene sección de planes → la beca va a la entrevista).
+			seccion(
+				paraTi(
+					[
+						'Eres un profesional con formación previa.',
+						'Atiendes o deseas consolidar una práctica clínica con orientación psicoanalítica.',
+						'Te interesa expandir tu práctica internacional.',
+						'Quieres construir una identidad profesional, no acumular cursos.',
+						'Te interesa pensar la clínica en diálogo con los desafíos actuales de la subjetividad.',
+					],
+					[
+						'Buscas cursos rápidos.',
+						'Esperas recetas cerradas.',
+						'Buscas certificaciones automáticas sin considerar legislaciones vigentes.',
+					],
+					ENTREVISTA,
+				),
+			),
+
+			// 4. La Facultad
+			seccion(
+				titulo('La Facultad'),
+				facultad(LOGO_FACULTAD, ESLOGAN_FACULTAD, [
+					'El psicoanálisis no se transmite como un conjunto de herramientas ni como un **saber estandarizado**.',
+					'**Se construye en el tiempo**, en la lectura rigurosa, en la práctica clínica y en el trabajo con otros.',
+					'**Facultad Lalangue** escucha los *murmullos de la época* y transmite el psicoanálisis como práctica viva y ética, trazando puentes desde los cuales emerge un nuevo modelo educativo sin fronteras.',
+				]),
+			),
+
+			// 5. Qué articula
+			seccion(
+				articula('El Máster en Psicoanálisis Aplicado articula:', [
+					'Estudio profundo y riguroso del psicoanálisis.',
+					'Trabajo con estructuras clínicas y síntomas contemporáneos.',
+					'Neurociencia y epigenética en diálogo con el psicoanálisis.',
+					'Supervisión clínica real durante la formación.',
+					'Espacios de elaboración colectiva internacional.',
+					'Articulación entre teoría, caso y práctica.',
+				]),
+			),
+
+			// 6. Profesores
+			seccion(
+				profesores('Profesores del máster', [
+					{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
+					{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+					{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
+					{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
+					{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
+					{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+				]),
+			),
+
+			// 7. Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
+			seccion(
+				modulos(
+					'Módulos de Clases',
+					[
+						{ foto: '/modulos_clases/modulo1_el_inconsciente_y_sus_precursores.webp', nombre: 'Módulo 1 | El inconsciente y sus precursores' },
+						{ foto: '/modulos_clases/modulo2_el_nudo_y_los_tres_registros.webp', nombre: 'Módulo 2 | El nudo y los tres registros' },
+						{ foto: '/modulos_clases/modulo3_escuela_inglesa.webp', nombre: 'Módulo 3 | Escuela Inglesa' },
+						{ foto: '/modulos_clases/modulo4_la_subjetividad_en_tiempos_de_algoritmos.webp', nombre: 'Módulo 4 | La subjetividad en tiempos de algoritmos' },
+						{ foto: '/modulos_clases/modulo5_psicopatologia_del_diagnostico_diferencial.webp', nombre: 'Módulo 5 | Psicopatología del diagnóstico diferencial' },
+					],
+					'Más de 100 clases, encuentros y grupos de estudio por distinguidos **[profesores](#profesores)** de *Universidad de Buenos Aires, Universidad Católica Argentina, Universidad de Granada, Universidad de Aconcagua* y otras grandes instituciones.',
+					{
+						etiqueta: 'Programa académico',
 						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
 					},
-					notaDiploma: '*Diploma de muestra.',
-				},
+				),
 			),
-			// Admisión
-			admision(
-				'/admision_fondo.webp',
-				'Admisión',
-				[
-					'Entrevista de admisión obligatoria.',
-					'Entrevista gratuita.',
-					'Orientación para regulaciones locales.',
-					'Becas parciales para perfiles seleccionados.',
-					'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
-				],
-				'Matrícula anual',
-				[
-					'€3990 → €1596 (-60%)',
-					'25% adicional OFF en 1 pago',
-					'€1197',
-					'+ Planes de financiación',
-				],
-				'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+
+			// 8. Beneficios
+			seccion(
+				c('BENEFICIOS-INTRO'),
+				c('BENEFICIOS-GRID-COMPLETO'),
+				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
-			// FAQ
-			titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
-			c('FAQ-LISTA-FORMACIONES'),
-			faq(
-				'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
-				['No necesariamente.'],
-				[
-					'El Máster en Psicoanálisis Aplicado (2 años) funciona como un posgrado y requiere formación previa en psicología, psicoterapia u otras disciplinas afines.',
-				],
-				[
-					'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
-				],
+
+			// 9. CTA entrevista
+			seccion(
+				titulo('Convierte tu deseo de saber en una práctica clínica ética y actual'),
+				texto('Agenda una entrevista gratuita y sin compromiso.'),
+				enlace('Solicitar entrevista de admisión', ENTREVISTA),
 			),
-			c('FAQ-TITULO-OFICIAL'),
-			faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
-				'El **Máster en Psicoanálisis** es una formación de **2 años (72 semanas)** que se cursa en modalidad **100% online**.',
-				'La propuesta combina clases grabadas semanales, encuentros en vivo (también disponibles en diferido), lecturas y materiales complementarios, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
-				'El sistema de evaluación incluye cuestionarios tipo múltiple choice al finalizar cada clase grabada, evaluaciones parciales y un trabajo final integrador de un mínimo de 50 páginas, que debe ser defendido ante la Dirección Académica.',
-				'Además, la Facultad prevé dos reagrupamientos presenciales anuales en diferentes países, abiertos a toda la comunidad estudiantil. Estos encuentros permiten a estudiantes, profesores y equipo académico conocerse personalmente y compartir una jornada intensiva de formación en torno a un tema específico, desarrollado a través de conferencias y espacios de diálogo con docentes invitados.',
-				'📍 El primer reagrupamiento tuvo lugar el 28 de junio del 2025 en Buenos Aires, Argentina, y marcó el inicio de una tradición que valoramos profundamente: el encuentro entre saber, cuerpo y comunidad. Puedes verlo en nuestro canal de **[YouTube @facultadlalangue](https://www.youtube.com/@facultadlalangue)**.',
-			]),
-			c('FAQ-MEMBRESIA-GRATUITA'),
-			faq('¿Cómo me inscribo y cuándo comienza la formación?', [
-				'Puedes inscribirte al **Máster de Psicoanálisis Aplicado** a través de nuestra **Entrevista de Admisión**.',
-				'**Esta instancia no es comercial:** tiene como objetivo conocer tu recorrido, disponibilidad y deseo de formación, para evaluar juntos si este programa es adecuado para tu momento profesional.',
-			]),
-			c('FAQ-DOCENTES'),
-			c('FAQ-ENFOQUE-LACANIANO'),
-			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
-			c('FAQ-ENTREVISTA-ADMISION'),
-			enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
-			// Cierre
-			c('CTA-INSCRIBIRTE'),
-			c('OTRAS-FORMACIONES-LISTADO'),
-			c('INSTITUCIONES-ASOCIADAS'),
+
+			// 10. Salida Laboral
+			seccion(
+				titulo('Salida Laboral Internacional'),
+				c('FREUD-CITA-TERAPIA-PUEBLO'),
+				c('DIRECTORIOS-INSERCION'),
+				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
+			),
+
+			// 11. Supervisión clínica
+			seccion(
+				c('SUPERVISION-CLINICA-COMPLETA'),
+				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
+				enlace('Solicitar entrevista de admisión', ENTREVISTA),
+			),
+
+			// 12. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
+			seccion(c('INSERCION-ESTADISTICAS')),
+
+			// 13. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
+			seccion(
+				certificacion(
+					'Certificación',
+					CERTIFICACION_INTRO,
+					[
+						'Certificación internacional con reconocimiento académico y clínico.',
+						'El ejercicio profesional depende de la normativa vigente en cada país.',
+					],
+					'/diplomas/master.png',
+					{
+						enlace: {
+							etiqueta: 'Programa Académico',
+							href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+						},
+						notaDiploma: '*Diploma de muestra.',
+					},
+				),
+			),
+
+			// 14. Admisión
+			seccion(
+				admision(
+					'/admision_fondo.webp',
+					'Admisión',
+					[
+						'Entrevista de admisión obligatoria.',
+						'Entrevista gratuita.',
+						'Orientación para regulaciones locales.',
+						'Becas parciales para perfiles seleccionados.',
+						'Se evalúa el recorrido, la disponibilidad y el deseo de formación.',
+					],
+					'Matrícula anual',
+					[
+						'€3990 → €1596 (-60%)',
+						'25% adicional OFF en 1 pago',
+						'€1197',
+						'+ Planes de financiación',
+					],
+					'El ingreso al Máster se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
+				),
+			),
+
+			// 15. Preguntas Frecuentes
+			seccion(
+				titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
+				c('FAQ-LISTA-FORMACIONES'),
+				faq(
+					'¿Necesito ser psicólogo/a para inscribirme en las formaciones?',
+					['No necesariamente.'],
+					[
+						'El Máster en Psicoanálisis Aplicado (2 años) funciona como un posgrado y requiere formación previa en psicología, psicoterapia u otras disciplinas afines.',
+					],
+					[
+						'Sin embargo, debes tener en cuenta que la **habilitación legal para ejercer como psicoterapeuta depende de las normativas vigentes en tu país**.',
+					],
+				),
+				c('FAQ-TITULO-OFICIAL'),
+				faq('¿Cuál es la duración de las formaciones y cuál es la modalidad?', [
+					'El **Máster en Psicoanálisis** es una formación de **2 años (72 semanas)** que se cursa en modalidad **100% online**.',
+					'La propuesta combina clases grabadas semanales, encuentros en vivo (también disponibles en diferido), lecturas y materiales complementarios, lo que permite una cursada flexible y accesible desde cualquier parte del mundo.',
+					'El sistema de evaluación incluye cuestionarios tipo múltiple choice al finalizar cada clase grabada, evaluaciones parciales y un trabajo final integrador de un mínimo de 50 páginas, que debe ser defendido ante la Dirección Académica.',
+					'Además, la Facultad prevé dos reagrupamientos presenciales anuales en diferentes países, abiertos a toda la comunidad estudiantil. Estos encuentros permiten a estudiantes, profesores y equipo académico conocerse personalmente y compartir una jornada intensiva de formación en torno a un tema específico, desarrollado a través de conferencias y espacios de diálogo con docentes invitados.',
+					'📍 El primer reagrupamiento tuvo lugar el 28 de junio del 2025 en Buenos Aires, Argentina, y marcó el inicio de una tradición que valoramos profundamente: el encuentro entre saber, cuerpo y comunidad. Puedes verlo en nuestro canal de **[YouTube @facultadlalangue](https://www.youtube.com/@facultadlalangue)**.',
+				]),
+				c('FAQ-MEMBRESIA-GRATUITA'),
+				faq('¿Cómo me inscribo y cuándo comienza la formación?', [
+					'Puedes inscribirte al **Máster de Psicoanálisis Aplicado** a través de nuestra **Entrevista de Admisión**.',
+					'**Esta instancia no es comercial:** tiene como objetivo conocer tu recorrido, disponibilidad y deseo de formación, para evaluar juntos si este programa es adecuado para tu momento profesional.',
+				]),
+				c('FAQ-DOCENTES'),
+				c('FAQ-ENFOQUE-LACANIANO'),
+				c('FAQ-ESTUDIANTE-PSICOLOGIA'),
+				c('FAQ-ENTREVISTA-ADMISION'),
+				enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
+			),
+
+			// 16. Nuestras formaciones
+			seccion(
+				c('OTRAS-FORMACIONES-LISTADO'),
+				c('INSTITUCIONES-ASOCIADAS'),
+			),
+
+			// 17. CTA final
+			seccion(c('CTA-INSCRIBIRTE')),
 		],
 	},
 
@@ -445,9 +501,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ENTREVISTA-ADMISION'),
 			enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
 			// Cierre
-			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -598,9 +654,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
-			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -749,9 +805,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
-			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -913,9 +969,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
-			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			c('CTA-INSCRIBIRTE'),
 		],
 	},
 
@@ -1083,9 +1139,9 @@ export const formaciones: Formacion[] = [
 			c('FAQ-ESTUDIANTE-PSICOLOGIA'),
 			c('FAQ-ENTREVISTA-ADMISION'),
 			// Cierre
-			c('CTA-INSCRIBIRTE'),
 			c('OTRAS-FORMACIONES-LISTADO'),
 			c('INSTITUCIONES-ASOCIADAS'),
+			c('CTA-INSCRIBIRTE'),
 		],
 	},
 ];

@@ -107,11 +107,12 @@ const { title } = Astro.props;
 			})();
 		</script>
 	</head>
-	{/* body como columna flex: el contenido crece (flex-1) para anclar el
-	     footer al fondo cuando la página es corta (p. ej. el 404). */}
+	{/* body como columna flex: el contenido crece (el <main> de cada página
+	     lleva flex-1) para anclar el footer al fondo cuando la página es
+	     corta (p. ej. el 404, que se auto-ancla con su min-h). */}
 	<body class="flex min-h-screen flex-col bg-background text-ink">
 		<Header />
-		<div class="flex-1"><slot /></div>
+		<slot />
 		<Footer />
 	</body>
 </html>

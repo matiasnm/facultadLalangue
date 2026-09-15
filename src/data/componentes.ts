@@ -63,6 +63,11 @@ export type BloqueBeneficios = {
 export type BloqueCita = { tipo: 'cita'; lineas: string[]; autor: string };
 export type BloqueStats = {
 	tipo: 'stats';
+	/** Título opcional que se renderiza DENTRO de la sección full-bleed
+	 *  cuando la página usa el layout 'secciones' (reemplaza al bloque
+	 *  `titulo` suelto del layout clásico). Combinado le dan el encabezado
+	 *  blanco a la banda oscura, igual que en el original. */
+	titulo?: string;
 	filas: { region: string; pct: string }[];
 	frases: string[];
 	referencia: string;
@@ -303,6 +308,17 @@ export type Bloque =
 /** Un bloque de página: o cita un componente común o es un bloque directo. */
 export type BloquePagina = { tipo: 'componente'; nombre: ComponenteId } | Bloque;
 
+/**
+ * Sección de una formación con layout 'secciones' (Máster): un grupo de
+ * bloques que se renderiza dentro de UN SOLO <section> apilado. Las secciones
+ * NO llevan márgenes entre sí: cada una paga su propio padding vertical (y su
+ * fondo cuando corresponde) y los bloques internos solo guardan ritmo entre
+ * ellos. El orden canónico de los bloques se mantiene al agrupar.
+ */
+export type SeccionPagina = {
+	bloques: BloquePagina[];
+};
+
 export interface ComponenteComun {
 	id: ComponenteId;
 	/** Referencia al doc (solo para auditoría, no se renderiza). */
@@ -328,8 +344,8 @@ export const carruselLogos = (logos) =>
 export const totalBeneficios = (titulo, valor, nota) =>
 	({ tipo: 'total-beneficios', titulo, valor, nota }) as BloqueTotalBeneficios;
 export const cita = (lineas, autor) => ({ tipo: 'cita', lineas, autor }) as BloqueCita;
-export const stats = ({ filas, frases, referencia }) =>
-	({ tipo: 'stats', filas, frases, referencia }) as BloqueStats;
+export const stats = ({ titulo, filas, frases, referencia }) =>
+	({ tipo: 'stats', titulo, filas, frases, referencia }) as BloqueStats;
 export const faq = (pregunta, respuesta, lista, cierre) =>
 	({
 		tipo: 'faq',
@@ -829,9 +845,10 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'INSERCION-ESTADISTICAS',
-		nota: 'Doc §21 — Estadísticas de inserción (todas las formaciones).',
+		nota: 'Doc §21 — Estadísticas de inserción (todas las formaciones). El `titulo` vive en el bloque para que el layout "secciones" del Máster lo renderice dentro de la banda oscura.',
 		bloques: [
 			stats({
+				titulo: 'Inserción Laboral',
 				filas: [
 					{ region: 'América del sur', pct: '51%' },
 					{ region: 'América del norte', pct: '35%' },
@@ -1081,3 +1098,6 @@ export const componentePorId: Record<ComponenteId, ComponenteComun> = Object.fro
 
 /** Cita el componente `nombre` dentro de las `secciones` de una formación. */
 export const c = (nombre: ComponenteId): BloquePagina => ({ tipo: 'componente', nombre });
+
+/** Agrupa bloques en una sección del layout 'secciones' (Máster). */
+export const seccion = (...bloques: BloquePagina[]): SeccionPagina => ({ bloques });

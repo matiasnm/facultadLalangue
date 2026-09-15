@@ -7,7 +7,7 @@
  * markdown ligero: se limpian **negrita**, *cursiva* y [etiqueta](url)).
  */
 import { componentePorId } from './componentes';
-import type { Bloque, BloquePagina } from './componentes';
+import type { Bloque, BloquePagina, SeccionPagina } from './componentes';
 
 export interface ItemInventario {
 	/** Etiqueta del elemento en la página real: h1, h2, h3, h4, p, li, … */
@@ -48,8 +48,16 @@ const item = (etiqueta: string, texto: string): ItemInventario => ({
  * Los bloques con tipo 'componente' se despliegan resolviendo el componente
  * común correspondiente (recursivamente, por si un bloque cita otro).
  */
-export function bloquesAItems(bloques: BloquePagina[], out: ItemInventario[] = []): ItemInventario[] {
+export function bloquesAItems(
+	bloques: (BloquePagina | SeccionPagina)[],
+	out: ItemInventario[] = [],
+): ItemInventario[] {
 	for (const b of bloques) {
+		if ('bloques' in b) {
+			// Sección agrupada (layout 'secciones' del Máster): se aplanan sus bloques.
+			bloquesAItems(b.bloques, out);
+			continue;
+		}
 		if (b.tipo === 'componente') {
 			const cc = componentePorId[b.nombre];
 			if (cc) bloquesAItems(cc.bloques as BloquePagina[], out);
@@ -102,6 +110,7 @@ function desplegar(b: Bloque, out: ItemInventario[]) {
 			out.push(item('p (autor)', b.autor));
 			break;
 		case 'stats':
+			if (b.titulo) out.push(item('h2', b.titulo));
 			out.push(item('p (stats)', b.filas.map((f) => `${f.region} ${f.pct}`).join(' · ')));
 			for (const f of b.frases) out.push(item('p (stats)', f));
 			out.push(item('p (referencia)', b.referencia));
