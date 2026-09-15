@@ -14,13 +14,13 @@
  *    1. Metodología          → metodologia() + METODOLOGIA-CONTADORES
  *    2. La Facultad          → titulo('La Facultad') + facultad()
  *    3. articula             → articula()
- *    4. Certificación        → certificacion()
+ *    4. Profesores           → profesores()
  *    5. Módulos de Clases    → modulos()
- *    6. Profesores           → profesores()
- *    7. Beneficios           → BENEFICIOS-*
- *    8. Salida Laboral       → (solo Máster y Psicoterapia)
- *    9. Supervisión Clínica  → (solo Máster y Psicoterapia)
- *   10. Inserción Laboral    → titulo + INSERCION-ESTADISTICAS
+ *    6. Beneficios           → BENEFICIOS-*
+ *    7. Salida Laboral       → (solo Máster y Psicoterapia)
+ *    8. Supervisión Clínica  → (solo Máster y Psicoterapia)
+ *    9. Inserción Laboral    → titulo + INSERCION-ESTADISTICAS
+ *   10. Certificación        → certificacion()
  *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
  *   12. Preguntas Frecuentes → titulo + FAQ-*
  *   13. Listo para inscribirte → CTA-INSCRIBIRTE
@@ -149,23 +149,16 @@ export const formaciones: Formacion[] = [
 				'Espacios de elaboración colectiva internacional.',
 				'Articulación entre teoría, caso y práctica.',
 			]),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/master.png',
-				{
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores del máster', [
+				{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
+				{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
+				{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
+				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -182,15 +175,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
 				},
 			),
-			// Profesores
-			profesores('Profesores del máster', [
-				{ foto: '/conocenos/marta_gerez_ambertin.webp', nombre: 'Dra. Marta Gerez Ambertín' },
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/lara_lizenberg.webp', nombre: 'Lic. Lara Lizenberg' },
-				{ foto: '/conocenos/silvia_kargodorian.webp', nombre: 'Lic. Silvia Kargodorian' },
-				{ foto: '/conocenos/veronica_molina_gerstner.webp', nombre: 'Lic. Verónica Gerstner' },
-				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
@@ -211,6 +195,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/master.png',
+				{
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/15PtWksUp4L22bBNRbNxmXZMOUyZsh4KE/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// Admisión
 			admision(
 				'/admision_fondo.webp',
@@ -324,23 +325,17 @@ export const formaciones: Formacion[] = [
 				'Comunidad académica internacional.',
 				'Articulación entre teoría, caso y práctica.',
 			]),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/psicoterapia.png',
-				{
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
+				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
+				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -361,16 +356,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/1EkTXHhSseIqKv9i89vhVx8S_QGq7MPsf/view?usp=sharing',
 				},
 			),
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/lucas_vazquez_topssian.webp', nombre: 'Lic. Lucas Vázquez Topssian' },
-				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
-				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-COMPLETO'),
@@ -391,6 +376,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/psicoterapia.png',
+				{
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Vl_pcb4DAwBHmRKu7RInPPBvNuKn3DiU/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// Admisión
 			admision(
 				'/admision_fondo.webp',
@@ -505,21 +507,15 @@ export const formaciones: Formacion[] = [
 					'Perspectivas interdisciplinarias para investigación e intervención.',
 				],
 			),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/subjetividad.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+				{ foto: '/conocenos/yamila_coronel.webp', nombre: 'Lic. Yamila Coronel' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -539,14 +535,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
 				},
 			),
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
-				{ foto: '/conocenos/yamila_coronel.webp', nombre: 'Lic. Yamila Coronel' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/vanesa_carpaneto.webp', nombre: 'Lic. Vanesa Carpaneto' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -560,6 +548,21 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/subjetividad.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/1kcf2B2QEBrwKXblNo1JrqxsKv7ddv4hm/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -651,21 +654,15 @@ export const formaciones: Formacion[] = [
 				'Perspectiva de género, diversidad sexual y derechos en la práctica clínica.',
 				'Articulación entre teoría, intervención clínica y análisis de casos.',
 			]),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/parejas.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					enlace: {
-						etiqueta: 'Programa académico',
-						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
+				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
+				{ foto: '/conocenos/alejandra_giudice.webp', nombre: 'Lic. Alejandra Giudice' },
+				{ foto: '/conocenos/sebastian_mosquera.webp', nombre: 'Lic. Sebastián Mosquera' },
+				{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -689,14 +686,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
 				},
 			),
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/gabriela_artaza_toro.webp', nombre: 'Lic. Gabriela Artaza Toro' },
-				{ foto: '/conocenos/diego_nunez.webp', nombre: 'Lic. Diego Núñez' },
-				{ foto: '/conocenos/alejandra_giudice.webp', nombre: 'Lic. Alejandra Giudice' },
-				{ foto: '/conocenos/sebastian_mosquera.webp', nombre: 'Lic. Sebastián Mosquera' },
-				{ foto: '/conocenos/noelia_benedetto.webp', nombre: 'Lic. Noelia Benedetto' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -710,6 +699,21 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/parejas.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					enlace: {
+						etiqueta: 'Programa académico',
+						href: 'https://drive.google.com/file/d/1Fgr1rFgMnVFESmeq2v-i7_CyhzcloIR-/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// FAQ
 			titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 			c('FAQ-LISTA-FORMACIONES'),
@@ -806,17 +810,15 @@ export const formaciones: Formacion[] = [
 				'Perspectiva de derechos, diversidad y ética en la práctica con NNyA.',
 				'Articulación entre teoría, clínica, trabajo con familias y análisis de casos.',
 			]),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				['Certificación internacional.', 'Formación online con alcance global.'],
-				'/diplomas/infanto.png',
-				{
-					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
+				{ foto: '/conocenos/julian_porri.webp', nombre: 'Lic. Julián Porri' },
+				{ foto: '/conocenos/irina_poletti.webp', nombre: 'Lic. Irina Poletti' },
+				{ foto: '/conocenos/juan_augusto_laplacette.webp', nombre: 'Lic. Juan Augusto Laplacette' },
+				{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -831,14 +833,6 @@ export const formaciones: Formacion[] = [
 				],
 				'El programa está organizado en módulos que abordan los principales desafíos de la clínica infantojuvenil contemporánea.',
 			),
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/macarena_cao_gene.webp', nombre: 'Lic. Macarena Cao Gene' },
-				{ foto: '/conocenos/julian_porri.webp', nombre: 'Lic. Julián Porri' },
-				{ foto: '/conocenos/irina_poletti.webp', nombre: 'Lic. Irina Poletti' },
-				{ foto: '/conocenos/juan_augusto_laplacette.webp', nombre: 'Lic. Juan Augusto Laplacette' },
-				{ foto: '/conocenos/viviana_estanga.webp', nombre: 'Lic. Viviana Estanga' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -852,6 +846,17 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				['Certificación internacional.', 'Formación online con alcance global.'],
+				'/diplomas/infanto.png',
+				{
+					nota: '*El ejercicio profesional en territorio depende de la normativa vigente en cada país.',
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// Admisión
 			admision(
 				'/admision_fondo.webp',
@@ -967,23 +972,14 @@ export const formaciones: Formacion[] = [
 					'Articulación entre teoría, caso y práctica.',
 				],
 			),
-			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
-			certificacion(
-				'Certificación',
-				CERTIFICACION_INTRO,
-				[
-					'Certificación internacional con reconocimiento académico y clínico.',
-					'El ejercicio profesional depende de la normativa vigente en cada país.',
-				],
-				'/diplomas/metapsicologia.png',
-				{
-					enlace: {
-						etiqueta: 'Programa Académico',
-						href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
-					},
-					notaDiploma: '*Diploma de muestra.',
-				},
-			),
+
+			// Profesores
+			profesores('Profesores de la diplomatura', [
+				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
+				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
+				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
+				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
+			]),
 			// Módulos de Clases (carrusel full-bleed con las cards de cada módulo)
 			modulos(
 				'Módulos de Clases',
@@ -1001,13 +997,6 @@ export const formaciones: Formacion[] = [
 					href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
 				},
 			),
-			// Profesores
-			profesores('Profesores de la diplomatura', [
-				{ foto: '/conocenos/juan_manuel_martinez.webp', nombre: 'Lic. Juan Manuel Martínez' },
-				{ foto: '/conocenos/daniel_camps.webp', nombre: 'Lic. Daniel Camps' },
-				{ foto: '/conocenos/pia_martina.webp', nombre: 'Lic. Pía Martina' },
-				{ foto: '/conocenos/ester_migrabi.webp', nombre: 'Lic. Ester Migrabi' },
-			]),
 			// Beneficios
 			c('BENEFICIOS-INTRO'),
 			c('BENEFICIOS-GRID-BASE'),
@@ -1021,6 +1010,23 @@ export const formaciones: Formacion[] = [
 			// Inserción
 			titulo('Inserción Laboral'),
 			c('INSERCION-ESTADISTICAS'),
+			// Certificación (2 columnas: texto a la izquierda + diploma de muestra a la derecha)
+			certificacion(
+				'Certificación',
+				CERTIFICACION_INTRO,
+				[
+					'Certificación internacional con reconocimiento académico y clínico.',
+					'El ejercicio profesional depende de la normativa vigente en cada país.',
+				],
+				'/diplomas/metapsicologia.png',
+				{
+					enlace: {
+						etiqueta: 'Programa Académico',
+						href: 'https://drive.google.com/file/d/1BB9wfFESwhoiBhcvOpADKjERVSXgJH7v/view?usp=sharing',
+					},
+					notaDiploma: '*Diploma de muestra.',
+				},
+			),
 			// Admisión
 			admision(
 				'/admision_fondo.webp',
