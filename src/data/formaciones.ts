@@ -233,12 +233,10 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
 
-			// 8. Salida Laboral
+			// 8. Salida Laboral Internacional (cita de Freud + imagen → solo en /facultad)
 			seccion(
 				titulo('Salida Laboral Internacional'),
-				c('FREUD-CITA-TERAPIA-PUEBLO'),
-				c('DIRECTORIOS-INSERCION'),
-				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
+				c('SALIDA-LABORAL-INTERNACIONAL'),
 			),
 
 			// 9. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
@@ -434,12 +432,10 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-COMPLETO'),
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
-			// 8. Salida Laboral Internacional
+			// 8. Salida Laboral Internacional (cita de Freud + imagen → solo en /facultad)
 			seccion(
 				titulo('Salida Laboral Internacional'),
-				c('FREUD-CITA-TERAPIA-PUEBLO'),
-				c('DIRECTORIOS-INSERCION'),
-				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
+				c('SALIDA-LABORAL-INTERNACIONAL'),
 			),
 			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(

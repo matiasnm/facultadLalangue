@@ -4,7 +4,7 @@ import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
-import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, certificacion, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
+import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, certificacion, componentes, titulo, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
 const lastUpdated = '2026-09-14';
 
@@ -254,6 +254,15 @@ const certificacionEjemplo = certificacion(
 		notaDiploma: '*Diploma de muestra.',
 	},
 );
+
+// Salida Laboral Internacional — componente SALIDA-LABORAL-INTERNACIONAL
+// (Máster y Psicoterapia). Renderiza TAL CUAL aparece en las páginas: el h2
+// de la sección (que en formaciones.ts se declara suelto antes del componente)
+// y los bloques reales del catálogo, los mismos que renderizan las páginas.
+const salidaLaboralEjemplo = [
+	titulo('Salida Laboral Internacional'),
+	...(componentes.find((c) => c.id === 'SALIDA-LABORAL-INTERNACIONAL')?.bloques ?? []),
+];
 
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
@@ -1750,6 +1759,47 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={dirigidoAEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Salida Laboral Internacional ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Salida Laboral Internacional</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Réplica de la sección <strong>«Salida Laboral Internacional»</strong>
+				de la landing del Máster, <strong>sin</strong> la primera parte (la
+				cita de Freud con la imagen a la derecha): arranca directo en el
+				párrafo introductorio y sigue con <strong>2 tarjetas de texto</strong>
+				(prácticas del <strong>segundo año</strong> y
+				<strong>Comunidad Lalangue</strong>) — cards sin título, solo
+				descripción — gracias al parámetro <code class="text-brand">columnas: 2</code>
+				del bloque <code class="text-brand">tarjetas</code>. Le sigue el
+				botón <strong>«Más información»</strong> (la variante
+				<code class="text-brand">boton: true</code> del bloque
+				<code class="text-brand">enlace</code>, que en vez de link subrayado
+				renderiza un botón sólido <strong>brand</strong>, estilo CTA, hacia
+				<code class="text-brand">go.facultadlalangue.com/supervisiones</code>)
+				y cierra con el h3
+				<strong>«Un aprendizaje práctico y supervisado»</strong> (texto +
+				lista). Componente <code class="text-brand">SALIDA-LABORAL-INTERNACIONAL</code>,
+				aplicado en <strong>Máster y Psicoterapia</strong> (las únicas que
+				llevan esta sección). El h2 se declara suelto en
+				<code class="text-brand">formaciones.ts</code> antes del componente,
+				igual que en las otras secciones. Este componente <strong>reemplaza
+				el trío</strong> <code class="text-brand">FREUD-CITA-TERAPIA-PUEBLO</code>
+				+ <code class="text-brand">DIRECTORIOS-INSERCION</code> +
+				<code class="text-brand">APRENDIZAJE-PRACTICO-SUPERVISADO</code>;
+				el primero y el último se eliminaron del catálogo y
+				<code class="text-brand">DIRECTORIOS-INSERCION</code> se conserva
+				porque la página <strong>/facultad</strong> aún lo cita. El ejemplo
+				de abajo renderiza los bloques reales del catálogo, es decir, los
+				mismos que muestran las páginas.
+			</p>
+			<div class="mt-8">
+				{salidaLaboralEjemplo.map((bloque) => (
+					<BloqueRender bloque={bloque} />
+				))}
 			</div>
 		</section>
 

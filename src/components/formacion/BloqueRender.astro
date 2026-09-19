@@ -340,16 +340,27 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
-{/* Enlace — link destacado del cuerpo (programa, checkout, entrevista…) */}
+{/* Enlace — link destacado del cuerpo (programa, checkout, entrevista…).
+     Con boton: true se renderiza como botón sólido (brand), estilo CTA. */}
 {b.tipo === 'enlace' && (
 	<p class="mt-6">
-		<a
-			href={link(b.href)}
-			class="font-semibold text-brand underline underline-offset-4 transition-colors hover:text-accent"
-			{...(/^https?:\/\//.test(b.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-		>
-			{b.etiqueta}
-		</a>
+		{b.boton ? (
+			<a
+				href={link(b.href)}
+				class="inline-block rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:text-white hover:no-underline"
+				{...(/^https?:\/\//.test(b.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+			>
+				{b.etiqueta}
+			</a>
+		) : (
+			<a
+				href={link(b.href)}
+				class="font-semibold text-brand underline underline-offset-4 transition-colors hover:text-accent"
+				{...(/^https?:\/\//.test(b.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+			>
+				{b.etiqueta}
+			</a>
+		)}
 	</p>
 )}
 
@@ -511,28 +522,38 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</ul>
 )}
 
-{/* Tarjetas — cards con imagen, título, descripción y link (formaciones, etc.).
-     La grilla se acota a max-w-5xl centrada para replicar los márgenes
-     izquierdo/derecho que el sitio de Facultad da por fuera (su <main> ya es
-     max-w-5xl); allí la suma queda igual y en las páginas de formación (sección
-     max-w-7xl) la grilla gana el mismo margen lateral en total. El padding
-     vertical (py-6) separa la grilla del párrafo previo y del título posterior. */}
+{/* Tarjetas — cards con imagen opcional, título (opcional), descripción y link.
+     columnas: 2 → dos cards de texto (max-w-5xl), 3 (default) → grilla de formación.
+     El título crece (flex-1) cuando no hay descripción: empuja el "Conocé más"
+     siempre al fondo de la card. Con descripción, esa ya cumple el flex-1. */}
 {b.tipo === 'tarjetas' && (
-	<ul class="mx-auto mt-6 grid list-none gap-6 py-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl">
+	<ul
+		class={`mx-auto mt-6 grid list-none gap-6 py-6 sm:grid-cols-2 max-w-5xl ${
+			b.columnas === 2 ? '' : 'lg:grid-cols-3'
+		}`}
+	>
 		{b.items.map((t) => (
 			<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
 				{t.imagen && (
-					<img src={t.imagen} alt={t.titulo} class="h-40 w-full object-cover" loading="lazy" />
+					<img
+						src={t.imagen}
+						alt={t.titulo ?? t.descripcion ?? ''}
+						class="h-40 w-full object-cover"
+						loading="lazy"
+					/>
 				)}
 				<div class="flex flex-1 flex-col p-5">
-					{/* El título crece (flex-1) cuando no hay descripción: empuja el
-					     "Conocé más" siempre al fondo de la card, sin importar el
-					     largo del texto. Con descripción, esa ya cumple el flex-1. */}
-					<p class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}>
-						{t.titulo}
-					</p>
+					{t.titulo && (
+						<p class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}>
+							{t.titulo}
+						</p>
+					)}
 					{t.descripcion && (
-						<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{t.descripcion}</p>
+						<p
+							class={`${t.titulo ? 'mt-2 ' : ''}flex-1 text-sm text-ink/75 leading-relaxed`}
+						>
+							{t.descripcion}
+						</p>
 					)}
 					{t.href && (
 						<a
