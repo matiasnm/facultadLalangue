@@ -15,6 +15,9 @@ export type PersonaPlantel = {
 	nombre: string;
 	titulo?: string;
 	bio?: string[];
+	/** Foto de perfil (carpeta /conocenos). Se resuelve automáticamente desde
+	 *  el nombre normalizado; ver fotoDe(). */
+	foto?: string;
 };
 
 /** Sin títulos, sin acentos, lowercase, un solo espacio. */
@@ -32,6 +35,23 @@ export function normalizarNombre(nombre: string): string {
 export function siglasDe(nombre: string): string {
 	const palabras = normalizarNombre(nombre).split(/\s+/).filter(Boolean);
 	return palabras.slice(0, 2).map((p) => p.charAt(0).toUpperCase()).join('');
+}
+
+/** Fotos de perfil donde el archivo de /conocenos NO coincide 1:1 con el
+ *  nombre normalizado del plantel (nombre sin título, guiando el archivo). */
+const FOTO_EXCEPCIONES: Record<string, string> = {
+	// El archivo conserva el segundo apellido.
+	'veronica gerstner': '/conocenos/veronica_molina_gerstner.webp',
+	// Los archivos omiten un apellido del nombre listado.
+	'vanesa carpaneto sueldo': '/conocenos/vanesa_carpaneto.webp',
+	'ester noemi migrabi': '/conocenos/ester_migrabi.webp',
+};
+
+/** Foto de perfil del plantel: salvo excepción, el nombre normalizado con
+ *  guiones bajos + `.webp` dentro de la carpeta /conocenos. */
+export function fotoDe(nombre: string): string {
+	const key = normalizarNombre(nombre);
+	return FOTO_EXCEPCIONES[key] ?? `/conocenos/${key.replace(/ /g, '_')}.webp`;
 }
 
 const bios: Record<string, string[]> = {
@@ -134,10 +154,11 @@ const bios: Record<string, string[]> = {
 	],
 };
 
-/** Retorna la persona con su bio de docs si existe (si no, queda sin bio). */
+/** Retorna la persona con su bio de docs si existe (si no, queda sin bio).
+ *  La foto se resuelve siempre desde /conocenos con fotoDe(). */
 function conBio(nombre: string, titulo?: string): PersonaPlantel {
 	const bio = bios[normalizarNombre(nombre)];
-	return bio ? { nombre, titulo, bio } : { nombre, titulo };
+	return { nombre, titulo, ...(bio ? { bio } : {}), foto: fotoDe(nombre) };
 }
 
 /* Orden de render: documentado en docs/docentes.md; primero quienes tienen

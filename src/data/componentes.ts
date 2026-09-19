@@ -107,6 +107,8 @@ export type BloqueEquipo = {
 	columnas?: 2 | 3 | 4;
 	/** true → cada card abre un popup de perfil (ModalPersona). */
 	modal?: boolean;
+	/** true → las cards se muestran con retrato grande (~300px) en vez de círculo chico. */
+	fotoGrande?: boolean;
 };
 export type BloqueTarjetas = {
 	tipo: 'tarjetas';
@@ -373,8 +375,8 @@ export const persona = (nombre, titulo, bio, foto?, boton?) =>
 		foto,
 		boton,
 	}) as BloquePersona;
-export const equipo = (personas, columnas = 3, modal = false) =>
-	({ tipo: 'equipo', personas, columnas, modal: modal || undefined }) as BloqueEquipo;
+export const equipo = (personas, columnas = 3, modal = false, fotoGrande = false) =>
+	({ tipo: 'equipo', personas, columnas, modal: modal || undefined, fotoGrande: fotoGrande || undefined }) as BloqueEquipo;
 export const tarjetas = (items) => ({ tipo: 'tarjetas', items }) as BloqueTarjetas;
 export const dirigidoA = (positivos, negativos, pie) =>
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
@@ -796,72 +798,6 @@ export const componentes: ComponenteComun[] = [
 		],
 	},
 	{
-		id: 'SUPERVISION-CLINICA-COMPLETA',
-		nota: 'Doc §20 — Máster y Psicoterapia (texto casi idéntico).',
-		bloques: [
-			titulo('Supervisión Clínica para Psicoterapeutas y Psicoanalistas'),
-			texto('El lugar fundamental de la supervisión en la formación del analista.'),
-			cita(
-				[
-					'«No basta que el analista haya sido educado como médico y psicólogo, o que conozca las teorías del psicoanálisis; tiene que haber sido él mismo analizado.»',
-				],
-				'Sigmund Freud; Análisis terminable e interminable (1937)',
-			),
-			titulo('¿Cómo son las supervisiones clínicas?', 3),
-			texto(
-				'Las supervisiones consisten en encuentros grupales con un profesional experimentado, donde el terapeuta puede presentar un caso clínico para:',
-			),
-			lista([
-				'Revisar y esclarecer situaciones transferenciales.',
-				'Abordar los momentos de impasse o desconcierto en el tratamiento.',
-				'Sostener su lugar de analista frente a las dificultades propias de la práctica.',
-				'Recibir orientación técnica y ética, respetando la singularidad de cada caso y de cada psicoterapeuta.',
-			]),
-			texto(
-				'Supervisar no es signo de debilidad ni de inexperiencia: es un acto de responsabilidad clínica y de cuidado hacia los pacientes y hacia uno mismo.',
-			),
-			texto(
-				'Los espacios de supervisión son lugares privilegiados de aprendizaje donde la teoría psicoanalítica se implementa y se interroga en la práctica real.',
-			),
-			texto(
-				'Supervisar permite abrir preguntas, revisar maniobras clínicas, y enriquecer la escucha a través del intercambio con colegas y con un supervisor de mayor experiencia.',
-			),
-			cita(
-				[
-					'«Un analista jamás debe considerarse terminado en su formación. El psicoanálisis es un trabajo interminable.»',
-				],
-				'Sigmund Freud; Análisis terminable e interminable (1937)',
-			),
-			titulo('Modalidades de Supervisión', 3),
-			titulo('Supervisiones Grupales', 4),
-			texto('Espacios con diferentes profesionales y enfoques.'),
-			titulo('Supervisiones para alumnos', 4),
-			texto('Espacios exclusivos para los alumnos de Lalangue.'),
-			texto(
-				'En Facultad Internacional de Psicología y Psicoanálisis Lalangue, ofrecemos supervisiones a psicoterapeutas y psicoanalistas formados o en ejercicio, con el objetivo de:',
-			),
-			lista(['Acompañar su práctica clínica.', 'Sostener su deseo de analista.', 'Promover la formación permanente y el crecimiento ético-profesional.']),
-			texto(
-				'Contamos con supervisores de amplia experiencia clínica y académica, formados en la tradición freudiana y lacaniana, disponibles para acompañarlo en su recorrido.',
-			),
-			cita(
-				[
-					'«La formación de un analista consiste en tres elementos: la formación teórica, el análisis personal y el control de su práctica.»',
-				],
-				'Sigmund Freud; La cuestión de un análisis leal (1926)',
-			),
-			titulo('¿Te gustaría fortalecer tu práctica clínica?', 3),
-			texto('**Contáctanos** para conocer las condiciones, modalidades y supervisores disponibles.'),
-			texto('**Grupos de Supervisión Gratuitos — Cupos Limitados**'),
-			texto(
-				'**¡Importante!** Actualmente disponemos de **cupos limitados** para supervisiones **gratuitas.**',
-			),
-			texto(
-				'No dejes pasar esta oportunidad única de seguir construyendo tu práctica de la mano de colegas y supervisores experimentados.',
-			),
-		],
-	},
-	{
 		id: 'INSERCION-ESTADISTICAS',
 		nota: 'Doc §21 — Estadísticas de inserción (todas las formaciones). El `titulo` vive en el bloque para que el layout "secciones" lo renderice dentro de la banda oscura.',
 		bloques: [
@@ -973,19 +909,19 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'OTRAS-FORMACIONES-LISTADO',
-		nota: 'Doc §28 — Sección "Nuestras formaciones" (enlaces internos).',
+		nota: 'Sección "Nuestras formaciones" — réplica exacta del mismo bloque de la página Facultad: titulo + texto + tarjetas con nombres cortos y botón "Conocé más" (sin isologos).',
 		bloques: [
 			titulo('Nuestras formaciones'),
-			texto(
+			texto([
 				'La facultad ofrece **formaciones en psicología y psicoanálisis online** que integran teoría y clínica para profundizar en el estudio del inconsciente y la comprensión de la subjetividad contemporánea.',
-			),
-			lista([
-				'[Máster en Psicoanálisis Aplicado](/master-en-psicoanalisis/)',
-				'[Diplomatura en Psicoterapia Psicoanalítica](/psicoterapia-psicoanalitica/)',
-				'[Diplomatura en Subjetividad Digital, Daño Algorítmico y Nuevas Formas de Sufrimiento Online](/subjetividad-digital/)',
-				'[Diplomatura en Clínica de Parejas y Erotismo Relacional](/clinica-de-parejas/)',
-				'[Diplomatura en Psicopatología Infanto-Juvenil](/psicopatologia-infanto-juvenil/)',
-				'[Diplomatura en Metapsicología: Introducción a la lógica psicoanalítica](/metapsicologia/)',
+			]),
+			tarjetas([
+				{ titulo: 'Máster en Psicoanálisis Aplicado', href: '/master-en-psicoanalisis/' },
+				{ titulo: 'Diplomatura en Psicoterapia Psicoanalítica', href: '/psicoterapia-psicoanalitica/' },
+				{ titulo: 'Diplomatura en Subjetividad Digital', href: '/subjetividad-digital/' },
+				{ titulo: 'Diplomatura en Clínica de Parejas y Erotismo Relacional', href: '/clinica-de-parejas/' },
+				{ titulo: 'Diplomatura en Psicopatología Infanto-Juvenil', href: '/psicopatologia-infanto-juvenil/' },
+				{ titulo: 'Diplomatura en Metapsicología', href: '/metapsicologia/' },
 			]),
 		],
 	},

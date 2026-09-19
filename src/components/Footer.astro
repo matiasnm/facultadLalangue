@@ -72,8 +72,10 @@ const year = new Date().getFullYear();
 					</span>
 				</span>
 			</a>
-			<p class="text-xs text-muted">
-				© {year} Facultad Internacional de Psicología y Psicoanálisis Lalangue
+<p class="text-xs text-muted">
+				© {year} Facultad Internacional de
+				<br />
+				Psicología y Psicoanálisis Lalangue
 			</p>
 		</div>
 
@@ -82,7 +84,7 @@ const year = new Date().getFullYear();
 			<p class="font-display text-xs font-semibold uppercase tracking-widest text-muted">
 				Seguinos
 			</p>
-			<ul class="mt-3 flex flex-wrap gap-2">
+			<ul class="mt-3 flex flex-wrap items-center gap-2">
 				{
 					socials.map((s) => (
 						<li>
@@ -91,13 +93,13 @@ const year = new Date().getFullYear();
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label={s.name}
-								class="flex size-10 items-center justify-center rounded-full border border-divider/60 bg-white text-muted transition-colors hover:border-brand/40 hover:text-brand hover:no-underline"
+								class="text-muted hover:no-underline"
 							>
 								<svg
 									viewBox="0 0 24 24"
 									fill="currentColor"
 									aria-hidden="true"
-									class="size-5"
+									class="size-4"
 								>
 									<path d={s.path} />
 								</svg>
@@ -113,10 +115,11 @@ const year = new Date().getFullYear();
 			<p class="font-display text-xs font-semibold uppercase tracking-widest text-muted">
 				Legal
 			</p>
-			<ul class="mt-3 space-y-2">
+			<ul class="mt-3 flex flex-nowrap items-center gap-x-2 whitespace-nowrap">
 				{
-					legalLinks.map((l) => (
-						<li>
+					legalLinks.map((l, i) => (
+						<li class="flex items-center gap-x-2">
+							{i > 0 && <span aria-hidden="true" class="text-muted">•</span>}
 							<a
 								href={link(l.href)}
 								class="text-sm text-muted transition-colors hover:text-brand hover:no-underline"

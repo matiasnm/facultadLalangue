@@ -353,15 +353,25 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</p>
 )}
 
-{/* Persona — perfil de docente/comité con foto (o avatar), nombre, título y bio */}
+{/* Persona — perfil de docente/comité con foto (o avatar), título y bio.
+     Con foto: retrato vertical grande (~450px) a la izquierda, texto a la derecha. */}
 {b.tipo === 'persona' && (
-	<article class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-start">
+	<article
+		class={`mt-6 flex flex-col gap-6 ${
+			b.foto ? 'lg:flex-row lg:items-start' : 'sm:flex-row sm:items-start'
+		}`}
+	>
 		{b.foto ? (
-			<img src={b.foto} alt={b.nombre} class="h-24 w-24 shrink-0 rounded-full object-cover" loading="lazy" />
+			<img
+				src={b.foto}
+				alt={b.nombre}
+				class="mx-auto aspect-[4/5] w-[min(450px,100%)] shrink-0 rounded-2xl object-cover shadow-sm lg:mx-0"
+				loading="lazy"
+			/>
 		) : (
 			<Avatar name={b.nombre} class="h-24 w-24 text-2xl" />
 		)}
-		<div>
+		<div class="min-w-0 flex-1">
 			<h4 class="text-lg font-semibold text-ink-strong">{b.nombre}</h4>
 			{b.titulo && <p class="text-sm font-medium text-muted">{b.titulo}</p>}
 			<div class="mt-2 space-y-2">
@@ -399,49 +409,94 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						data-persona-nombre={p.nombre}
 						data-persona-titulo={p.titulo ?? ''}
 						data-persona-siglas={siglasDe(p.nombre)}
+						data-persona-foto={p.foto ?? ''}
 						data-persona-bio={JSON.stringify(Array.isArray(p.bio) ? p.bio : p.bio ? [p.bio] : [])}
 						class="flex h-full w-full flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5 text-left transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
 					>
-						<span class="flex w-full items-center gap-4">
-							{p.foto ? (
-								<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
-							) : (
-								<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
-							)}
-							<span class="min-w-0">
-								<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
-								{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
-							</span>
-						</span>
-						<span class="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-							Ver perfil
-							<svg
-								viewBox="0 0 24 24"
-								class="h-3.5 w-3.5"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								aria-hidden="true"
-							>
-								<path d="M7 17 17 7M8 7h9v9" />
-							</svg>
-						</span>
+						{b.fotoGrande ? (
+							<Fragment>
+								{p.foto ? (
+									<img
+										src={p.foto}
+										alt={p.nombre}
+										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
+										loading="lazy"
+									/>
+								) : (
+									<span class="flex justify-center">
+										<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
+									</span>
+								)}
+								<span class="mt-1 block text-center">
+									<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
+									{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
+								</span>
+							</Fragment>
+						) : (
+							<Fragment>
+								<span class="flex w-full items-center gap-4">
+									{p.foto ? (
+										<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
+									) : (
+										<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
+									)}
+									<span class="min-w-0">
+										<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
+										{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
+									</span>
+								</span>
+								<span class="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
+									Ver perfil
+									<svg
+										viewBox="0 0 24 24"
+										class="h-3.5 w-3.5"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										aria-hidden="true"
+									>
+										<path d="M7 17 17 7M8 7h9v9" />
+									</svg>
+								</span>
+							</Fragment>
+						)}
 					</button>
 				) : (
 					<div class="flex h-full flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5">
-						<div class="flex items-center gap-4">
-							{p.foto ? (
-								<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
-							) : (
-								<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
-							)}
-							<div>
-								<p class="font-semibold text-ink-strong">{p.nombre}</p>
-								{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+						{b.fotoGrande ? (
+							<Fragment>
+								{p.foto ? (
+									<img
+										src={p.foto}
+										alt={p.nombre}
+										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
+										loading="lazy"
+									/>
+								) : (
+									<span class="flex justify-center">
+										<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
+									</span>
+								)}
+								<div class="text-center">
+									<p class="font-semibold text-ink-strong">{p.nombre}</p>
+									{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+								</div>
+							</Fragment>
+						) : (
+							<div class="flex items-center gap-4">
+								{p.foto ? (
+									<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
+								) : (
+									<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
+								)}
+								<div>
+									<p class="font-semibold text-ink-strong">{p.nombre}</p>
+									{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+								</div>
 							</div>
-						</div>
+						)}
 						{p.bio && (
 							<div class="space-y-2">
 								{p.bio.map((linea) => (
@@ -456,16 +511,26 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</ul>
 )}
 
-{/* Tarjetas — cards con imagen, título, descripción y link (formaciones, etc.) */}
+{/* Tarjetas — cards con imagen, título, descripción y link (formaciones, etc.).
+     La grilla se acota a max-w-5xl centrada para replicar los márgenes
+     izquierdo/derecho que el sitio de Facultad da por fuera (su <main> ya es
+     max-w-5xl); allí la suma queda igual y en las páginas de formación (sección
+     max-w-7xl) la grilla gana el mismo margen lateral en total. El padding
+     vertical (py-6) separa la grilla del párrafo previo y del título posterior. */}
 {b.tipo === 'tarjetas' && (
-	<ul class="mt-6 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
+	<ul class="mx-auto mt-6 grid list-none gap-6 py-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl">
 		{b.items.map((t) => (
 			<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
 				{t.imagen && (
 					<img src={t.imagen} alt={t.titulo} class="h-40 w-full object-cover" loading="lazy" />
 				)}
 				<div class="flex flex-1 flex-col p-5">
-					<p class="font-semibold text-ink-strong">{t.titulo}</p>
+					{/* El título crece (flex-1) cuando no hay descripción: empuja el
+					     "Conocé más" siempre al fondo de la card, sin importar el
+					     largo del texto. Con descripción, esa ya cumple el flex-1. */}
+					<p class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}>
+						{t.titulo}
+					</p>
 					{t.descripcion && (
 						<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{t.descripcion}</p>
 					)}

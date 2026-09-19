@@ -32,14 +32,13 @@
  *    7. Beneficios           → BENEFICIOS-* (el CTA de la tarjeta total se
  *                              pliega dentro de ella y NO se declara suelto)
  *    8. Salida Laboral       → (solo Máster y Psicoterapia)
- *    9. Supervisión Clínica  → (solo Máster y Psicoterapia)
- *   10. Inserción Laboral    → INSERCION-ESTADISTICAS (su título vive DENTRO
+ *    9. Inserción Laboral    → INSERCION-ESTADISTICAS (su título vive DENTRO
  *                              del bloque; no se declara un titulo suelto)
- *   11. Certificación        → certificacion()
- *   12. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
- *   13. Preguntas Frecuentes → titulo + FAQ-*
- *   14. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
- *   15. Listo para inscribirte → CTA-INSCRIBIRTE
+ *   10. Certificación        → certificacion()
+ *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
+ *   12. Preguntas Frecuentes → titulo + FAQ-*
+ *   13. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
+ *   14. Listo para inscribirte → CTA-INSCRIBIRTE
  * Los bloques intersticiales (planes de financiación, clase abierta) se
  * intercalan sin romper ese orden. El CTA de entrevista y el título de la
  * Inserción NO se declaran como bloques sueltos: viven como componente único
@@ -242,17 +241,10 @@ export const formaciones: Formacion[] = [
 				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
 			),
 
-			// 9. Supervisión clínica
-			seccion(
-				c('SUPERVISION-CLINICA-COMPLETA'),
-				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-				enlace('Agendar entrevista de admisión', ENTREVISTA),
-			),
-
-			// 10. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
+			// 9. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
 			seccion(c('INSERCION-ESTADISTICAS')),
 
-			// 11. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
+			// 10. Certificación (2 columnas: texto a la izquierda + diploma a la derecha)
 			seccion(
 				certificacion(
 					'Certificación',
@@ -272,7 +264,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 12. Admisión
+			// 11. Admisión
 			seccion(
 				admision(
 					'/admision_fondo.webp',
@@ -295,7 +287,7 @@ export const formaciones: Formacion[] = [
 				),
 			),
 
-			// 13. Preguntas Frecuentes
+			// 12. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre el máster / sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -329,13 +321,13 @@ export const formaciones: Formacion[] = [
 				enlace('Hablar con un asesor', 'https://wa.link/7dtfge'),
 			),
 
-			// 14. Nuestras formaciones
+			// 13. Nuestras formaciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
 
-			// 15. CTA final
+			// 14. CTA final
 			seccion(c('CTA-INSCRIBIRTE')),
 		],
 	},
@@ -449,17 +441,11 @@ export const formaciones: Formacion[] = [
 				c('DIRECTORIOS-INSERCION'),
 				c('APRENDIZAJE-PRACTICO-SUPERVISADO'),
 			),
-			// 9. Supervisión clínica
-			seccion(
-				c('SUPERVISION-CLINICA-COMPLETA'),
-				texto('Convierte tu deseo de saber en una práctica clínica ética y actual.'),
-				enlace('Agendar entrevista de admisión', ENTREVISTA),
-			),
-			// 10. Inserción Laboral (el título vive en el bloque)
+			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 11. Certificación
+			// 10. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -478,7 +464,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 12. Admisión
+			// 11. Admisión
 			seccion(
 				admision(
 						'/admision_fondo.webp',
@@ -500,7 +486,7 @@ export const formaciones: Formacion[] = [
 						'El ingreso a la diplomatura se realiza mediante una Entrevista de Orientación y Admisión con la Dirección Académica. Esta instancia no es comercial: tiene como objetivo conocer el recorrido, la disponibilidad y tu deseo de formación, para evaluar juntos si este programa es adecuado para tu momento clínico y profesional.',
 				),
 			),
-			// 13. Preguntas Frecuentes
+			// 12. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -533,12 +519,12 @@ export const formaciones: Formacion[] = [
 				c('FAQ-ENTREVISTA-ADMISION'),
 				enlace('Hablar con un asesor', 'https://wa.link/pdk61i'),
 			),
-			// 14. Otras formaciones + instituciones
+			// 13. Otras formaciones + instituciones
 			seccion(
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 15. CTA final
+			// 14. CTA final
 			seccion(
 				c('CTA-INSCRIBIRTE'),
 			),

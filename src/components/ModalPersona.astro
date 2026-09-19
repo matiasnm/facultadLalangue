@@ -4,7 +4,7 @@
  *
  * Se monta UNA vez por página (por ahora solo /plantel-academico). Las cards
  * con [data-persona-card] que genera BloqueRender (bloques tipo 'equipo' con
- * `modal`) exponen nombre, título, siglas y bio en atributos data-*. Este
+ * `modal`) exponen nombre, título, foto, siglas y bio en atributos data-*. Este
  * componente los lee al abrir, los pinta y se cierra con la X, tocando fuera
  * del panel (backdrop/padding) o presionando Escape. En teléfonos el overlay
  * ocupa toda la pantalla y el panel se centra con scroll interno.
@@ -72,8 +72,16 @@
 	const closeBtn = root.querySelector('[data-persona-close]');
 	let ultimaCard = null;
 
-	const pintarAvatar = (siglas) => {
+	const pintarAvatar = (siglas, foto) => {
 		avatar.replaceChildren();
+		if (foto) {
+			const img = document.createElement('img');
+			img.src = foto;
+			img.alt = '';
+			img.className = 'mx-auto w-[200px] rounded-2xl object-contain';
+			avatar.appendChild(img);
+			return;
+		}
 		const d = document.createElement('div');
 		d.className =
 			'flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-brand/15 via-accent/10 to-indigo/15 text-2xl font-semibold text-brand ring-1 ring-brand/20';
@@ -85,9 +93,10 @@
 
 	const abrir = (card) => {
 		const siglas = card.dataset.personaSiglas || '';
+		const foto = card.dataset.personaFoto || '';
 		const parrafos = JSON.parse(card.dataset.personaBio || '[]');
 
-		pintarAvatar(siglas);
+		pintarAvatar(siglas, foto);
 		titulo.textContent = card.dataset.personaTitulo || '';
 		titulo.hidden = !titulo.textContent;
 		nombre.textContent = card.dataset.personaNombre || '';

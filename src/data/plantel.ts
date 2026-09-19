@@ -28,11 +28,12 @@ export const plantelSecciones: BloquePagina[] = [
 			'Docente, conferencista y autora de artículos especializados, desarrolla su actividad profesional en español, francés e inglés, promoviendo una transmisión rigurosa y abierta del psicoanálisis como instrumento privilegiado de lectura clínica del sujeto y del malestar contemporáneo.',
 			'Es miembro de la *National Counselling and Psychotherapy Society* (Reino Unido) y de la *National Psychoanalysis Association* (NPSA). Fundadora de **PSY.S.O.S.**, una iniciativa de atención global gratuita en situaciones de urgencia psicológica.',
 		],
+		'/conocenos/lorena_salthu.webp',
 	),
 
 	/* ── Directores académicos ─────────────────────────────────────────── */
 	titulo('Directores Académicos'),
-	equipo(directores, 2, true),
+	equipo(directores, 2, true, true),
 
 	/* ── Comité Científico ─────────────────────────────────────────────── */
 	titulo('Comité Científico'),
@@ -40,17 +41,17 @@ export const plantelSecciones: BloquePagina[] = [
 		'Reconociendo la excelencia de nuestros estándares y métodos de enseñanza, destacadas personalidades del mundo Psy se han sumado a nuestro **comité científico, ético y humanista**.',
 	]),
 	equipo([
-		{ nombre: 'Dr. Juan David Nasio' },
-		{ nombre: 'Bernard Granger' },
-		{ nombre: 'Lic. Edwige Antier' },
-		{ nombre: 'Eric Malbos' },
-		{ nombre: 'Cynthia Fleury' },
-		{ nombre: 'Serge Tisseron' },
-		{ nombre: 'Stéphane Gaudry' },
-		{ nombre: 'Rodophe Oppenheimer' },
-		{ nombre: 'Lic. Flora Bernard' },
-		{ nombre: 'Edgar Morin' },
-		{ nombre: 'Bruno Millet' },
+		{ nombre: 'Dr. Juan David Nasio', foto: '/conocenos/juan_david_nasio.webp' },
+		{ nombre: 'Bernard Granger', foto: '/conocenos/bernard_granger.webp' },
+		{ nombre: 'Lic. Edwige Antier', foto: '/conocenos/edwige_antier.webp' },
+		{ nombre: 'Eric Malbos', foto: '/conocenos/eric_malbos.webp' },
+		{ nombre: 'Cynthia Fleury', foto: '/conocenos/cynthia_fleury.webp' },
+		{ nombre: 'Serge Tisseron', foto: '/conocenos/serge_tisseron.webp' },
+		{ nombre: 'Stéphane Gaudry', foto: '/conocenos/stephane_gaudry.webp' },
+		{ nombre: 'Rodophe Oppenheimer', foto: '/conocenos/rodophe_oppenheimer.webp' },
+		{ nombre: 'Lic. Flora Bernard', foto: '/conocenos/flora_bernard.webp' },
+		{ nombre: 'Edgar Morin', foto: '/conocenos/edgar_morin.webp' },
+		{ nombre: 'Bruno Millet', foto: '/conocenos/bruno_millet.webp' },
 	]),
 
 	/* ── Plantel Docente ───────────────────────────────────────────────── */
