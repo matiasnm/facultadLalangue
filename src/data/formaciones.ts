@@ -233,11 +233,10 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
 
-			// 8. Salida Laboral Internacional (cita de Freud + imagen → solo en /facultad)
-			seccion(
-				titulo('Salida Laboral Internacional'),
-				c('SALIDA-LABORAL-INTERNACIONAL'),
-			),
+			// 8. Salida Laboral Internacional — el h2 vive DENTRO del componente
+			//    (primer bloque de la columna 2/3 del `columnas`, alineado con el
+			//    h3 del 1/3). La cita de Freud + imagen → solo en /facultad.
+			seccion(c('SALIDA-LABORAL-INTERNACIONAL')),
 
 			// 9. Inserción Laboral (el título vive dentro de INSERCION-ESTADISTICAS)
 			seccion(c('INSERCION-ESTADISTICAS')),
@@ -432,11 +431,10 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-COMPLETO'),
 				c('BENEFICIOS-TOTAL-COMPLETO'),
 			),
-			// 8. Salida Laboral Internacional (cita de Freud + imagen → solo en /facultad)
-			seccion(
-				titulo('Salida Laboral Internacional'),
-				c('SALIDA-LABORAL-INTERNACIONAL'),
-			),
+			// 8. Salida Laboral Internacional — el h2 vive DENTRO del componente
+			//    (primer bloque de la columna 2/3 del `columnas`, alineado con el
+			//    h3 del 1/3). La cita de Freud + imagen → solo en /facultad.
+			seccion(c('SALIDA-LABORAL-INTERNACIONAL')),
 			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),

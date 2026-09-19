@@ -817,11 +817,14 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'SALIDA-LABORAL-INTERNACIONAL',
-		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de la sección "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen: intro + bloque `columnas` 2/3-1/3 — a la izquierda las 2 tarjetas con IMAGEN DE FONDO COLOREADA (vino #8c1c3f + foto multiplicada ~40% + texto claro, como las cards de la landing), `columnas` SIN `fondoPrimera` (el contenedor no lleva color de fondo), a la derecha el h3 "Un aprendizaje práctico y supervisado" + texto + lista con check — + botón "Más información" centrado. Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
+		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen. El h2 vive DENTRO del componente (las formaciones solo citan c(\'SALIDA-LABORAL-INTERNACIONAL\')): en la columna 2/3 del `columnas` van el h2 "Salida Laboral Internacional" + intro + las 2 tarjetas con IMAGEN DE FONDO COLOREADA (vino #8c1c3f + foto multiplicada ~40% + texto claro, como las cards de la landing); en la 1/3 el h3 "Un aprendizaje práctico y supervisado" + texto + lista con check, ALINEADO arriba con el h2. `columnas` SIN `fondoPrimera` (el contenedor no lleva color de fondo). Botón "Más información" centrado al pie. Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
 		bloques: [
-			texto('Lalangue no solo favorece la transmisión del saber, sino también la inserción profesional en redes clínicas y espacios de trabajo a nivel internacional.'),
 			columnas(
 				[
+					titulo('Salida Laboral Internacional'),
+					texto(
+						'Lalangue no solo favorece la transmisión del saber, sino también la inserción profesional en redes clínicas y espacios de trabajo a nivel internacional.',
+					),
 					tarjetas(
 						[
 							{
