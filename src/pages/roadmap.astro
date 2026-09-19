@@ -1772,15 +1772,24 @@ const samples: Record<string, string> = {
 				cita de Freud con la imagen a la derecha): arranca directo en el
 				párrafo introductorio y sigue con un bloque
 				<code class="text-brand">columnas</code> <strong>2/3 – 1/3</strong>:
-				a la izquierda (2/3) van las <strong>2 tarjetas de texto</strong>
-				(prácticas del <strong>segundo año</strong> y
-				<strong>Comunidad Lalangue</strong>) — cards sin título, solo
-				descripción, con <strong>negritas renderizadas</strong> vía
-				<code class="text-brand">Rico</code> (no asteriscos literales) —
-				sobre un <strong>panel con fondo tintado</strong>
-				(<code class="text-brand">fondoPrimera: 'brand'</code> →
-				<code class="text-brand">bg-brand/5</code> + borde) que genera
-				contraste; a la derecha (1/3) va el h3
+				a la izquierda (2/3) van las <strong>2 tarjetas con imagen de
+				fondo coloreada</strong> (prácticas del <strong>segundo año</strong>
+				y <strong>Comunidad Lalangue</strong>), igual que en la landing:
+				fondo <strong>vino</strong> sólido
+				(<code class="text-brand">bg-brand</code> → <code class="text-brand">#8c1c3f</code>)
+				con la <strong>foto multiplicada</strong> encima
+				(<code class="text-brand">mix-blend-multiply</code> a ~40% de
+				opacidad, imágenes locales en
+				<code class="text-brand">public/salida-laboral/</code>) y el
+				<strong>texto en claro</strong> encima
+				(<code class="text-brand">imagen</code> por card del bloque
+				<code class="text-brand">tarjetas</code> →
+				modalidad «fondo coloreado», misma que la landing; las negritas
+				renderizadas vía <code class="text-brand">Rico</code>, no
+				asteriscos literales). El <strong>contenedor padre no lleva
+				color de fondo</strong>: el bloque <code class="text-brand">columnas</code>
+				se usa <strong>sin</strong> <code class="text-brand">fondoPrimera</code>;
+				a la derecha (1/3) va el h3
 				<strong>«Un aprendizaje práctico y supervisado»</strong> + texto +
 				lista con el <strong>check en círculo</strong> ya establecido en el
 				sitio (mismo <code class="text-brand">checkIcon</code> de

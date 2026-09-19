@@ -536,8 +536,14 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</ul>
 )}
 
-{/* Tarjetas — cards con imagen opcional, título (opcional), descripción y link.
+{/* Tarjetas — cards con imagen de fondo opcional, título (opcional), descripción
+     y link.
      columnas: 2 → dos cards de texto (max-w-5xl), 3 (default) → grilla de formación.
+     `imagen` → modalidad «fondo coloreado» (idéntica a las cards de la landing
+     del Máster): la card va sobre vino sólido (`bg-brand`) con la foto encima
+     multiplicada (`mix-blend-multiply`, opacity ~0.4) y el texto en claro;
+     el contenedor padre no aporta fondo. Sin `imagen`: la card clásica de
+     texto sobre surface con la imagen como banda superior.
      El título crece (flex-1) cuando no hay descripción: empuja el "Conocé más"
      siempre al fondo de la card. Con descripción, esa ya cumple el flex-1. */}
 {b.tipo === 'tarjetas' && (
@@ -546,48 +552,83 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 			b.columnas === 2 ? '' : 'lg:grid-cols-3'
 		}`}
 	>
-		{b.items.map((t) => (
-			<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
-				{t.imagen && (
+		{b.items.map((t) =>
+			t.imagen ? (
+				<li class="relative flex flex-col overflow-hidden rounded-2xl p-6 sm:p-8">
+					<span class="absolute inset-0 bg-brand" aria-hidden="true" />
 					<img
 						src={t.imagen}
-						alt={t.titulo ?? t.descripcion ?? ''}
-						class="h-40 w-full object-cover"
+						alt=""
+						class="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+						style="opacity: 0.4"
 						loading="lazy"
 					/>
-				)}
-				<div class="flex flex-1 flex-col p-5">
-					{t.titulo && (
-						<Rico
-							texto={t.titulo}
-							class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}
+					<div class="relative flex flex-1 flex-col">
+						{t.titulo && (
+							<Rico
+								texto={t.titulo}
+								class={t.descripcion ? 'font-semibold text-white' : 'flex-1 font-semibold text-white'}
+							/>
+						)}
+						{t.descripcion && (
+							<Rico
+								texto={t.descripcion}
+								class={`${t.titulo ? 'mt-2 ' : ''}flex-1 text-sm leading-relaxed text-white/90`}
+							/>
+						)}
+						{t.href && (
+							<a
+								href={link(t.href)}
+								class="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-white hover:text-white/85 hover:no-underline"
+							>
+								Conocé más <span aria-hidden="true">→</span>
+							</a>
+						)}
+					</div>
+				</li>
+			) : (
+				<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
+					{t.imagen && (
+						<img
+							src={t.imagen}
+							alt={t.titulo ?? t.descripcion ?? ''}
+							class="h-40 w-full object-cover"
+							loading="lazy"
 						/>
 					)}
-					{t.descripcion && (
-						<Rico
-							texto={t.descripcion}
-							class={`${t.titulo ? 'mt-2 ' : ''}flex-1 text-sm text-ink/75 leading-relaxed`}
-						/>
-					)}
-					{t.href && (
-						<a
-							href={link(t.href)}
-							class="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
-						>
-							Conocé más <span aria-hidden="true">→</span>
-						</a>
-					)}
-				</div>
-			</li>
-		))}
+					<div class="flex flex-1 flex-col p-5">
+						{t.titulo && (
+							<Rico
+								texto={t.titulo}
+								class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}
+							/>
+						)}
+						{t.descripcion && (
+							<Rico
+								texto={t.descripcion}
+								class={`${t.titulo ? 'mt-2 ' : ''}flex-1 text-sm text-ink/75 leading-relaxed`}
+							/>
+						)}
+						{t.href && (
+							<a
+								href={link(t.href)}
+								class="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
+							>
+								Conocé más <span aria-hidden="true">→</span>
+							</a>
+						)}
+					</div>
+				</li>
+			),
+		)}
 	</ul>
 )}
 
 {/* Columnas — dos columnas 2/3 + 1/3 (o 1/3 + 2/3) que anidan bloques.
-     `fondoPrimera` tiñe el panel de la primera columna para contrastar la zona
-     de cards. Los bloques anidados pierden el margen/padding superior cuando
-     abren cada columna ([&>*:first-child]:mt-0 py-0) para no duplicar el
-     espaciado del panel y alinear ambas columnas arriba. */}
+     `fondoPrimera` tiñe el panel de la primera columna (contraste opcional;
+     "Salida laboral" ya no lo usa). Los bloques anidados pierden el margen
+     superior cuando abren cada columna ([&>*:first-child]:mt-0) para alinear
+     ambas columnas arriba. */}
 {b.tipo === 'columnas' && (
 	<div class="mt-6 grid gap-6 lg:grid-cols-3 lg:gap-8">
 		<div
@@ -595,7 +636,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 				b.split === '1-2' ? 'lg:col-span-1' : 'lg:col-span-2',
 				b.fondoPrimera === 'brand' && 'rounded-2xl border border-brand/10 bg-brand/5 p-6 sm:p-8',
 				b.fondoPrimera === 'muted' && 'rounded-2xl border border-divider/40 bg-muted p-6 sm:p-8',
-				'[&>*:first-child]:mt-0 [&>*:first-child]:py-0',
+				'[&>*:first-child]:mt-0',
 			]}
 		>
 			{b.primera.map((bloque) => (

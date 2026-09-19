@@ -124,7 +124,16 @@ export type BloqueEquipo = {
 };
 export type BloqueTarjetas = {
 	tipo: 'tarjetas';
-	items: { titulo?: string; descripcion?: string; href?: string; imagen?: string }[];
+	items: {
+		titulo?: string;
+		descripcion?: string;
+		href?: string;
+		/** Imagen de fondo «coloreada» (cards de la landing del Máster): cuando se
+		 *  setea, la card se renderiza sobre vino (`bg-brand`) con la foto
+		 *  multiplicada encima (`mix-blend-multiply` ~40%) y el texto en claro.
+		 *  Sin `imagen`, la card queda como la clásica de texto sobre surface. */
+		imagen?: string;
+	}[];
 	/** Columnas en desktop: 2 (pares de cards de texto, p. ej. "Salida laboral") o 3 (por defecto, grilla de formaciones). */
 	columnas?: 2 | 3;
 };
@@ -304,8 +313,8 @@ export type BloqueCertificacion = {
 /**
  * Columnas — layout de dos columnas (2/3 + 1/3 en desktop) que anida bloques.
  * `primera` es la columna ancha por defecto ('2-1'); `fondoPrimera` tiñe su
- * panel para contrastar (p. ej. la zona de cards de "Salida laboral
- * internacional"). En mobile las columnas se apilan.
+ * panel para contrastar (uso opcional; "Salida laboral internacional" ya no lo
+ * usa: las cards llevan su propia imagen de fondo). En mobile se apilan.
  */
 export type BloqueColumna = {
 	tipo: 'columnas';
@@ -808,7 +817,7 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'SALIDA-LABORAL-INTERNACIONAL',
-		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de la sección "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen: intro + bloque `columnas` 2/3-1/3 (las 2 tarjetas con fondo de contraste a la izquierda, el h3 "Un aprendizaje práctico y supervisado" + texto + lista con check a la derecha) + botón "Más información" centrado. Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
+		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de la sección "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen: intro + bloque `columnas` 2/3-1/3 — a la izquierda las 2 tarjetas con IMAGEN DE FONDO COLOREADA (vino #8c1c3f + foto multiplicada ~40% + texto claro, como las cards de la landing), `columnas` SIN `fondoPrimera` (el contenedor no lleva color de fondo), a la derecha el h3 "Un aprendizaje práctico y supervisado" + texto + lista con check — + botón "Más información" centrado. Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
 		bloques: [
 			texto('Lalangue no solo favorece la transmisión del saber, sino también la inserción profesional en redes clínicas y espacios de trabajo a nivel internacional.'),
 			columnas(
@@ -816,9 +825,11 @@ export const componentes: ComponenteComun[] = [
 					tarjetas(
 						[
 							{
+								imagen: '/salida-laboral/supervision-2.jpg',
 								descripcion: 'Las prácticas en el **segundo año** de la Diplomatura en Psicoterapia con enfoque psicoanalítico y las del Máster en Psicoanálisis Aplicado pueden realizarse a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
 							},
 							{
+								imagen: '/salida-laboral/psicoterapeuta.jpg',
 								descripcion: 'Los psicoterapeutas de la **Comunidad Lalangue** pueden iniciar o ampliar su práctica clínica online a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
 							},
 						],
@@ -841,7 +852,6 @@ export const componentes: ComponenteComun[] = [
 					),
 				],
 				'2-1',
-				'brand',
 			),
 			enlace('Más información', 'https://go.facultadlalangue.com/supervisiones', true),
 		],
