@@ -21,7 +21,13 @@ export type BloqueTitulo = {
 	id?: string;
 };
 export type BloqueTexto = { tipo: 'texto'; parrafos: string[] };
-export type BloqueLista = { tipo: 'lista'; items: string[]; ordenada?: boolean };
+export type BloqueLista = {
+	tipo: 'lista';
+	items: string[];
+	ordenada?: boolean;
+	/** true → cada ítem lleva el check en círculo (ícono establecido del sitio). */
+	conIconos?: boolean;
+};
 export type BloqueChips = {
 	tipo: 'chips';
 	items: string[];
@@ -349,7 +355,8 @@ export interface ComponenteComun {
 export const titulo = (texto, nivel = 2, kicker?, id?) => ({ tipo: 'titulo', texto, nivel, kicker, id });
 export const texto = (parrafos) =>
 	({ tipo: 'texto', parrafos: Array.isArray(parrafos) ? parrafos : [parrafos] }) as BloqueTexto;
-export const lista = (items, ordenada = false) => ({ tipo: 'lista', items, ordenada }) as BloqueLista;
+export const lista = (items, ordenada = false, conIconos = false) =>
+	({ tipo: 'lista', items, ordenada, conIconos: conIconos || undefined }) as BloqueLista;
 export const chips = (items, variante = 'sello') => ({ tipo: 'chips', items, variante }) as BloqueChips;
 export const contadores = (items) => ({ tipo: 'contadores', items }) as BloqueContadores;
 export const beneficio = ({ titulo, subtitulo, descripcion, precio }) =>
@@ -800,11 +807,15 @@ export const componentes: ComponenteComun[] = [
 			texto(
 				'Las prácticas se desarrollan bajo la **supervisión de profesores experimentados**, permitiendo que los alumnos:',
 			),
-			lista([
-				'Apliquen sus conocimientos en pacientes reales.',
-				'Participen como oyentes en grupos de supervisión donde se discuten casos clínicos.',
-				'Aprendan en un entorno de colaboración y análisis práctico.',
-			]),
+			lista(
+				[
+					'Apliquen sus conocimientos en pacientes reales.',
+					'Participen como oyentes en grupos de supervisión donde se discuten casos clínicos.',
+					'Aprendan en un entorno de colaboración y análisis práctico.',
+				],
+				false,
+				true,
+			),
 		],
 	},
 	{

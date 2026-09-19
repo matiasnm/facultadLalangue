@@ -1773,16 +1773,22 @@ const samples: Record<string, string> = {
 				párrafo introductorio y sigue con <strong>2 tarjetas de texto</strong>
 				(prácticas del <strong>segundo año</strong> y
 				<strong>Comunidad Lalangue</strong>) — cards sin título, solo
-				descripción — gracias al parámetro <code class="text-brand">columnas: 2</code>
+				descripción (con <strong>negritas renderizadas</strong> vía
+				<code class="text-brand">Rico</code>, no asteriscos literales) —
+				gracias al parámetro <code class="text-brand">columnas: 2</code>
 				del bloque <code class="text-brand">tarjetas</code>. Le sigue el
-				botón <strong>«Más información»</strong> (la variante
-				<code class="text-brand">boton: true</code> del bloque
+				botón <strong>«Más información»</strong> <strong>centrado</strong> (la
+				variante <code class="text-brand">boton: true</code> del bloque
 				<code class="text-brand">enlace</code>, que en vez de link subrayado
 				renderiza un botón sólido <strong>brand</strong>, estilo CTA, hacia
 				<code class="text-brand">go.facultadlalangue.com/supervisiones</code>)
 				y cierra con el h3
-				<strong>«Un aprendizaje práctico y supervisado»</strong> (texto +
-				lista). Componente <code class="text-brand">SALIDA-LABORAL-INTERNACIONAL</code>,
+				<strong>«Un aprendizaje práctico y supervisado»</strong>: texto +
+				lista con el <strong>check en círculo</strong> ya establecido en el
+				sitio (mismo <code class="text-brand">checkIcon</code> de
+				dirigido-a y admisión, vía
+				<code class="text-brand">conIconos: true</code> del bloque
+				<code class="text-brand">lista</code>). Componente <code class="text-brand">SALIDA-LABORAL-INTERNACIONAL</code>,
 				aplicado en <strong>Máster y Psicoterapia</strong> (las únicas que
 				llevan esta sección). El h2 se declara suelto en
 				<code class="text-brand">formaciones.ts</code> antes del componente,

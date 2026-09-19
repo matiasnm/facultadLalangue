@@ -107,7 +107,9 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</div>
 )}
 
-{/* Lista — numerada o con bullets */}
+{/* Lista — numerada, con bullets o con el check en círculo del sitio.
+     conIconos solo aplica a las no numeradas (los ítems de "prácticas
+     supervisadas" llevan el mismo check que dirigido-a y admisión). */}
 {b.tipo === 'lista' &&
 	(b.ordenada ? (
 		<ol class="mt-6 max-w-3xl space-y-2 text-[0.9375rem] leading-relaxed text-ink/85">
@@ -117,6 +119,15 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 				</li>
 			))}
 		</ol>
+	) : b.conIconos ? (
+		<ul class="mt-6 flex max-w-3xl list-none flex-col gap-3 p-0 text-[0.9375rem] leading-relaxed text-ink/85">
+			{b.items.map((it) => (
+				<li class="flex items-start gap-3">
+					<span set:html={checkIcon} />
+					<Rico texto={it} />
+				</li>
+			))}
+		</ul>
 	) : (
 		<ul class="mt-6 max-w-3xl space-y-2 text-[0.9375rem] leading-relaxed text-ink/85">
 			{b.items.map((it) => (
@@ -343,7 +354,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 {/* Enlace — link destacado del cuerpo (programa, checkout, entrevista…).
      Con boton: true se renderiza como botón sólido (brand), estilo CTA. */}
 {b.tipo === 'enlace' && (
-	<p class="mt-6">
+	<p class={b.boton ? 'mt-6 text-center' : 'mt-6'}>
 		{b.boton ? (
 			<a
 				href={link(b.href)}
@@ -544,16 +555,16 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 				)}
 				<div class="flex flex-1 flex-col p-5">
 					{t.titulo && (
-						<p class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}>
-							{t.titulo}
-						</p>
+						<Rico
+							texto={t.titulo}
+							class={t.descripcion ? 'font-semibold text-ink-strong' : 'flex-1 font-semibold text-ink-strong'}
+						/>
 					)}
 					{t.descripcion && (
-						<p
+						<Rico
+							texto={t.descripcion}
 							class={`${t.titulo ? 'mt-2 ' : ''}flex-1 text-sm text-ink/75 leading-relaxed`}
-						>
-							{t.descripcion}
-						</p>
+						/>
 					)}
 					{t.href && (
 						<a
