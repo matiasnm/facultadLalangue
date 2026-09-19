@@ -301,6 +301,22 @@ export type BloqueCertificacion = {
 	notaDiploma?: string;
 };
 
+/**
+ * Columnas — layout de dos columnas (2/3 + 1/3 en desktop) que anida bloques.
+ * `primera` es la columna ancha por defecto ('2-1'); `fondoPrimera` tiñe su
+ * panel para contrastar (p. ej. la zona de cards de "Salida laboral
+ * internacional"). En mobile las columnas se apilan.
+ */
+export type BloqueColumna = {
+	tipo: 'columnas';
+	primera: Bloque[];
+	segunda: Bloque[];
+	/** Reparto en desktop: '2-1' (default) o '1-2'. */
+	split?: '2-1' | '1-2';
+	/** Fondo del panel de la primera columna (contraste). */
+	fondoPrimera?: 'brand' | 'muted';
+};
+
 export type Bloque =
 	| BloqueTitulo
 	| BloqueTexto
@@ -318,6 +334,7 @@ export type Bloque =
 	| BloquePersona
 	| BloqueEquipo
 	| BloqueTarjetas
+	| BloqueColumna
 	| BloqueDirigidoA
 	| BloqueCarruselLogos
 	| BloqueAdmision
@@ -395,6 +412,9 @@ export const equipo = (personas, columnas = 3, modal = false, fotoGrande = false
 	({ tipo: 'equipo', personas, columnas, modal: modal || undefined, fotoGrande: fotoGrande || undefined }) as BloqueEquipo;
 export const tarjetas = (items, columnas = 3) =>
 	({ tipo: 'tarjetas', items, columnas }) as BloqueTarjetas;
+/** Dos columnas (2/3 + 1/3 por defecto) con bloques anidados en cada una. */
+export const columnas = (primera, segunda, split = '2-1', fondoPrimera) =>
+	({ tipo: 'columnas', primera, segunda, split, fondoPrimera }) as BloqueColumna;
 export const dirigidoA = (positivos, negativos, pie) =>
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido, izqTexto?) =>
@@ -788,34 +808,42 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'SALIDA-LABORAL-INTERNACIONAL',
-		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de la sección "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen: intro + 2 tarjetas (prácticas 2.º año / Comunidad Lalangue) + botón "Más información" + h3 "Un aprendizaje práctico y supervisado". Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
+		nota: 'Doc §17-19 — Máster y Psicoterapia. Réplica de la sección "Salida Laboral Internacional" de la landing del Máster SIN la cita de Freud + imagen: intro + bloque `columnas` 2/3-1/3 (las 2 tarjetas con fondo de contraste a la izquierda, el h3 "Un aprendizaje práctico y supervisado" + texto + lista con check a la derecha) + botón "Más información" centrado. Reemplaza el trío FREUD-CITA-TERAPIA-PUEBLO + DIRECTORIOS-INSERCION + APRENDIZAJE-PRACTICO-SUPERVISADO.',
 		bloques: [
 			texto('Lalangue no solo favorece la transmisión del saber, sino también la inserción profesional en redes clínicas y espacios de trabajo a nivel internacional.'),
-			tarjetas(
+			columnas(
 				[
-					{
-						descripcion: 'Las prácticas en el **segundo año** de la Diplomatura en Psicoterapia con enfoque psicoanalítico y las del Máster en Psicoanálisis Aplicado pueden realizarse a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
-					},
-					{
-						descripcion: 'Los psicoterapeutas de la **Comunidad Lalangue** pueden iniciar o ampliar su práctica clínica online a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
-					},
+					tarjetas(
+						[
+							{
+								descripcion: 'Las prácticas en el **segundo año** de la Diplomatura en Psicoterapia con enfoque psicoanalítico y las del Máster en Psicoanálisis Aplicado pueden realizarse a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
+							},
+							{
+								descripcion: 'Los psicoterapeutas de la **Comunidad Lalangue** pueden iniciar o ampliar su práctica clínica online a través de los Directorios con los que Lalangue tiene acuerdos, como TimeToBetter, PsySOS y otros.',
+							},
+						],
+						2,
+					),
 				],
-				2,
+				[
+					titulo('Un aprendizaje práctico y supervisado', 3),
+					texto(
+						'Las prácticas se desarrollan bajo la **supervisión de profesores experimentados**, permitiendo que los alumnos:',
+					),
+					lista(
+						[
+							'Apliquen sus conocimientos en pacientes reales.',
+							'Participen como oyentes en grupos de supervisión donde se discuten casos clínicos.',
+							'Aprendan en un entorno de colaboración y análisis práctico.',
+						],
+						false,
+						true,
+					),
+				],
+				'2-1',
+				'brand',
 			),
 			enlace('Más información', 'https://go.facultadlalangue.com/supervisiones', true),
-			titulo('Un aprendizaje práctico y supervisado', 3),
-			texto(
-				'Las prácticas se desarrollan bajo la **supervisión de profesores experimentados**, permitiendo que los alumnos:',
-			),
-			lista(
-				[
-					'Apliquen sus conocimientos en pacientes reales.',
-					'Participen como oyentes en grupos de supervisión donde se discuten casos clínicos.',
-					'Aprendan en un entorno de colaboración y análisis práctico.',
-				],
-				false,
-				true,
-			),
 		],
 	},
 	{

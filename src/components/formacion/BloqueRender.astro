@@ -12,6 +12,9 @@ import Rico from './Rico.astro';
 import Contador from './Contador.astro';
 import Avatar from '../Avatar.astro';
 import LogoCarrusel from './LogoCarrusel.astro';
+// Auto-import para el bloque `columnas`: dibuja bloques anidados reutilizando
+// este mismo render (2/3 + 1/3, tarjetas en panel con fondo, etc.).
+import BloqueRender from './BloqueRender.astro';
 import { siglasDe } from '../../data/docentes';
 import type { Bloque, IconoFacultad, IconoMetodologia } from '../../data/componentes';
 
@@ -580,6 +583,37 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</ul>
 )}
 
+{/* Columnas — dos columnas 2/3 + 1/3 (o 1/3 + 2/3) que anidan bloques.
+     `fondoPrimera` tiñe el panel de la primera columna para contrastar la zona
+     de cards. Los bloques anidados pierden el margen/padding superior cuando
+     abren cada columna ([&>*:first-child]:mt-0 py-0) para no duplicar el
+     espaciado del panel y alinear ambas columnas arriba. */}
+{b.tipo === 'columnas' && (
+	<div class="mt-6 grid gap-6 lg:grid-cols-3 lg:gap-8">
+		<div
+			class:list={[
+				b.split === '1-2' ? 'lg:col-span-1' : 'lg:col-span-2',
+				b.fondoPrimera === 'brand' && 'rounded-2xl border border-brand/10 bg-brand/5 p-6 sm:p-8',
+				b.fondoPrimera === 'muted' && 'rounded-2xl border border-divider/40 bg-muted p-6 sm:p-8',
+				'[&>*:first-child]:mt-0 [&>*:first-child]:py-0',
+			]}
+		>
+			{b.primera.map((bloque) => (
+				<BloqueRender bloque={bloque} layout={layout} />
+			))}
+		</div>
+		<div
+			class:list={[
+				b.split === '1-2' ? 'lg:col-span-2' : 'lg:col-span-1',
+				'[&>*:first-child]:mt-0',
+			]}
+		>
+			{b.segunda.map((bloque) => (
+				<BloqueRender bloque={bloque} layout={layout} />
+			))}
+		</div>
+	</div>
+)}
 {/* Dirigido-a — dos tarjetas claras sobre la banda vino SÓLIDA de su sección
      (SeccionFormacion aplica bg-brand-dark). Estructura plana: <article> por
      columna (nada de <section> dentro de <section>), mismos radios simples

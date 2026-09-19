@@ -153,6 +153,10 @@ function desplegar(b: Bloque, out: ItemInventario[], secciones: boolean) {
 				out.push(item('li (tarjeta)', [t.titulo, t.descripcion].filter(Boolean).join(' — ')));
 			}
 			break;
+		case 'columnas':
+			// Layout 2/3-1/3: se despliegan los bloques de ambas columnas en orden.
+			bloquesAItems([...b.primera, ...b.segunda], out, secciones);
+			break;
 		case 'carrusel-logos':
 			out.push(item('ul (carrusel-logos)', b.logos.map((l) => l.alt).join(' · ')));
 			break;

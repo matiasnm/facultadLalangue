@@ -1770,25 +1770,30 @@ const samples: Record<string, string> = {
 				Réplica de la sección <strong>«Salida Laboral Internacional»</strong>
 				de la landing del Máster, <strong>sin</strong> la primera parte (la
 				cita de Freud con la imagen a la derecha): arranca directo en el
-				párrafo introductorio y sigue con <strong>2 tarjetas de texto</strong>
+				párrafo introductorio y sigue con un bloque
+				<code class="text-brand">columnas</code> <strong>2/3 – 1/3</strong>:
+				a la izquierda (2/3) van las <strong>2 tarjetas de texto</strong>
 				(prácticas del <strong>segundo año</strong> y
 				<strong>Comunidad Lalangue</strong>) — cards sin título, solo
-				descripción (con <strong>negritas renderizadas</strong> vía
-				<code class="text-brand">Rico</code>, no asteriscos literales) —
-				gracias al parámetro <code class="text-brand">columnas: 2</code>
-				del bloque <code class="text-brand">tarjetas</code>. Le sigue el
-				botón <strong>«Más información»</strong> <strong>centrado</strong> (la
-				variante <code class="text-brand">boton: true</code> del bloque
-				<code class="text-brand">enlace</code>, que en vez de link subrayado
-				renderiza un botón sólido <strong>brand</strong>, estilo CTA, hacia
-				<code class="text-brand">go.facultadlalangue.com/supervisiones</code>)
-				y cierra con el h3
-				<strong>«Un aprendizaje práctico y supervisado»</strong>: texto +
+				descripción, con <strong>negritas renderizadas</strong> vía
+				<code class="text-brand">Rico</code> (no asteriscos literales) —
+				sobre un <strong>panel con fondo tintado</strong>
+				(<code class="text-brand">fondoPrimera: 'brand'</code> →
+				<code class="text-brand">bg-brand/5</code> + borde) que genera
+				contraste; a la derecha (1/3) va el h3
+				<strong>«Un aprendizaje práctico y supervisado»</strong> + texto +
 				lista con el <strong>check en círculo</strong> ya establecido en el
 				sitio (mismo <code class="text-brand">checkIcon</code> de
 				dirigido-a y admisión, vía
 				<code class="text-brand">conIconos: true</code> del bloque
-				<code class="text-brand">lista</code>). Componente <code class="text-brand">SALIDA-LABORAL-INTERNACIONAL</code>,
+				<code class="text-brand">lista</code>). El bloque
+				<code class="text-brand">columnas</code> anida bloques en cada
+				columna (recursión del propio render) y las apila en mobile. Al pie,
+				el botón <strong>«Más información»</strong> <strong>centrado</strong>
+				(<code class="text-brand">enlace(…, boton: true)</code>: botón
+				sólido <strong>brand</strong> estilo CTA hacia
+				<code class="text-brand">go.facultadlalangue.com/supervisiones</code>).
+				Componente <code class="text-brand">SALIDA-LABORAL-INTERNACIONAL</code>,
 				aplicado en <strong>Máster y Psicoterapia</strong> (las únicas que
 				llevan esta sección). El h2 se declara suelto en
 				<code class="text-brand">formaciones.ts</code> antes del componente,
