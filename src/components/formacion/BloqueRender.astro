@@ -1255,6 +1255,99 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
+{/* Planes de financiación — banda full-bleed de tarjetas de precio con fondo
+     coloreado (gradiente vino + imagen, una sola capa como admisión). Mínimos
+     anidados: section → contenedor → h2 + ul de tarjetas. Tarjeta blanca:
+     título en Roboto Condensed, precio anterior tachado, precio grande y
+     período (Roboto Serif), features separadas por líneas y botón "Inscribirme"
+     al checkout del campus. id (p. ej. "precios") es el ancla del CTA. */}
+{b.tipo === 'planes' && (
+	<section
+		id={b.id ?? undefined}
+		class={`scroll-mt-24 overflow-hidden bg-night bg-cover bg-center py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] w-screen'}`}
+		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
+		aria-label={b.titulo}
+	>
+		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+			<h2 class="text-center text-white">{b.titulo}</h2>
+			<ul class="mt-10 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-3">
+				{b.planes.map((p) => (
+					<li class="flex flex-col rounded-2xl bg-white p-7 text-center">
+						<h3 class="font-display text-xl font-bold uppercase tracking-wide text-ink-strong">{p.titulo}</h3>
+						<div class="mt-4">
+							{p.original && <s class="block text-sm font-semibold text-ink/40">{p.original}</s>}
+							<p class="mb-0 font-display text-5xl font-bold leading-none text-brand">
+								<span aria-hidden="true">{p.moneda ?? '€'}</span>{p.precio}
+							</p>
+							<span class="mt-1 block font-serif text-xs font-medium uppercase tracking-widest text-muted">{p.periodo}</span>
+						</div>
+						<ul class="mt-5 flex-1 list-none divide-y divide-divider/40 p-0 text-sm text-ink/80">
+							{p.features.map((f) => (
+								<li class="py-2.5">{f}</li>
+							))}
+						</ul>
+						<a
+							href={link(p.href)}
+							class="mt-6 inline-block self-center rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:no-underline"
+							{...(p.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+						>
+							Inscribirme
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	</section>
+)}
+
+{/* Clase abierta — anuncio "Vive la experiencia: Clase abierta sin costo"
+     (réplica del bloque e-con-full de la landing de Infanto-Juvenil): dos
+     columnas (grid md:grid-cols-2). Izquierda: h2 con la frase de marca en
+     vino y el título debajo, más la descripción con formato enriquecido.
+     Derecha: thumbnail del video en vivo de YouTube (enlace externo en
+     pestaña nueva, hover grow) y debajo el botón "ver clase" con el ícono de
+     play. No es full-bleed: vive dentro del contenedor de la página. */}
+{b.tipo === 'clase-abierta' && (
+	<div class={secciones ? '' : 'mt-14'}>
+		<div class="grid items-center gap-10 md:grid-cols-2 md:gap-14">
+			<div>
+				<h2>
+					<span class="text-brand">{b.kicker}</span>
+					<br />
+					{b.titulo}
+				</h2>
+				<Rico texto={b.descripcion} class="mt-4 text-[0.9375rem] leading-relaxed text-ink/85" />
+			</div>
+			<div class="flex flex-col items-center gap-5">
+				<a
+					href={link(b.video.href)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="group relative block w-full max-w-[560px] overflow-hidden rounded-2xl transition-transform duration-300 hover:scale-[1.02]"
+				>
+					<img
+						src={link(b.video.imagen)}
+						alt={b.video.alt ?? b.titulo}
+						class="aspect-video w-full object-cover"
+						loading="lazy"
+					/>
+				</a>
+				<a
+					href={link(b.video.href)}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center gap-2 rounded-md bg-brand px-6 py-2.5 font-display text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-brand-dark hover:no-underline"
+				>
+					<svg viewBox="0 0 24 24" fill="currentColor" class="size-4" aria-hidden="true">
+						<path d="M8 5.5v13l11-6.5z" />
+					</svg>
+					{b.etiqueta}
+				</a>
+			</div>
+		</div>
+	</div>
+)}
+
 {/* Slider de PROFESORES: autoplay sin puntitos. Soporta varios sliders por
      página; cada uno avanza de a una tarjeta y vuelve al inicio al llegar al
      final. Las flechas son opcionales. Pausa al hover y al foco (para que las

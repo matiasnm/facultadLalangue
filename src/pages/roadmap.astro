@@ -264,6 +264,16 @@ const salidaLaboralEjemplo = [
 	...(componentes.find((c) => c.id === 'SALIDA-LABORAL-INTERNACIONAL')?.bloques ?? []),
 ];
 
+// Planes de financiación — componente PLANES-FINANCIACION. El ejemplo
+// renderiza el bloque real del catálogo (la banda con las 3 tarjetas).
+const planesEjemplo =
+	componentes.find((c) => c.id === 'PLANES-FINANCIACION')?.bloques ?? [];
+
+// Clase abierta — componente CLASE-ABIERTA ("Vive la experiencia: Clase
+// abierta sin costo"). El ejemplo renderiza el bloque real del catálogo.
+const claseAbiertaEjemplo =
+	componentes.find((c) => c.id === 'CLASE-ABIERTA')?.bloques ?? [];
+
 /**
  * Isotipo — src/components/Isotipo.astro (docs/logo_indigo.svg).
  * Los 3 slots permiten recolorear el logo; las opciones de cada slot se
@@ -2154,6 +2164,121 @@ const samples: Record<string, string> = {
 			</p>
 			<div class="mt-8">
 				<BloqueRender bloque={certificacionEjemplo} />
+			</div>
+		</section>
+
+		<!-- ================= Planes de financiación ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Planes de financiación</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Réplica de la sección <strong>#precios</strong> de la landing
+				<strong>Subjetividad Digital</strong> (Elementor
+				<code class="text-brand">price-table</code>): banda
+				<strong>full-bleed</strong> que rompe el contenedor
+				<code class="text-brand">max-w-5xl</code> con la misma técnica de
+				<code class="text-brand">w-screen</code> +
+				<code class="text-brand">-ml-[50vw]</code> +
+				<code class="text-brand">left-1/2</code> que
+				<code class="text-brand">stats</code> y
+				<code class="text-brand">admision</code>, y fondo
+				<strong>coloreado</strong> en una sola capa
+				(<code class="text-brand">linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('…')</code>):
+				tinte vino sobre la imagen de la propia landing
+				(<code class="text-brand">bg_cta2.webp</code>, descargada a
+				<code class="text-brand">public/fondos/</code>). Estructura de
+				<strong>mínimos anidados</strong>, como el resto del sitio:
+				<code class="text-brand">section</code> → contenedor →
+				<code class="text-brand">h2</code> blanco centrado
+				(«Planes de financiación», sin mayúsculas como en la original) +
+				<code class="text-brand">ul</code> de las 3 tarjetas
+				(grid <code class="text-brand">md:grid-cols-3</code>, apiladas en
+				mobile). Cada tarjeta blanca replica el
+				<code class="text-brand">price-table</code>: título en
+				<strong>Roboto Condensed</strong> uppercase, precio anterior
+				<strong>tachado</strong> (<code class="text-brand">€1660</code>),
+				precio grande en Roboto Condensed con la <strong>moneda en
+				tamaño reducido</strong> (<code class="text-brand">€498</code> /
+				<code class="text-brand">€99,6</code> / <code class="text-brand">€66,5</code>),
+				período en Roboto Serif (mix, con
+				<code class="text-brand">font-serif</code>;
+				<code class="text-brand">PRECIO FINAL</code> /
+				<code class="text-brand">EUROS / Mensual</code>), las
+				<strong>features separadas por línea</strong>
+				(<code class="text-brand">divide-y divide-divider/40</code>) y el
+				botón <strong>«Inscribirme»</strong> (estilo CTA) hacia el
+				<strong>checkout del campus</strong>
+				(<code class="text-brand">campus.facultadlalangue.com/checkout/?add-to-cart=…</code>,
+				<code class="text-brand">10058</code> / <code class="text-brand">10057</code> /
+				<code class="text-brand">10059</code>), que se abre en pestaña nueva
+				por ser externo. El bloque lleva
+				<code class="text-brand">id="precios"</code>: es el ancla real del
+				CTA <strong>«Inscribirme ahora»</strong>
+				(<code class="text-brand">CTA-INSCRIBIRTE</code> → <code class="text-brand">#precios</code>)
+				y de los enlaces de beca de «dirigido-a». En el layout
+				<code class="text-brand">'secciones'</code> es sección propia
+				(<code class="text-brand">SECCION_PROPA</code>): banda full-width
+				que paga su fondo. Bloque
+				<code class="text-brand">planes(titulo, fondo, planes, id?)</code>
+				con tarjetas <code class="text-brand">planPago(&#123; titulo, original, precio, periodo, features, href &#125;)</code>.
+				Está aplicado a las 4 formaciones con landing de precios:
+				Subjetividad (vía el componente
+				<code class="text-brand">PLANES-FINANCIACION</code>); Parejas,
+				Infanto-Juvenil y Metapsicología (vía <code class="text-brand">planes(…)</code>
+				con sus precios y checkouts propios, verificados contra las
+				landings en vivo; Infanto: <code class="text-brand">10050</code> /
+				<code class="text-brand">10049</code> / <code class="text-brand">10051</code>).
+				Máster y Psicoterapia no tienen <code class="text-brand">#precios</code>:
+				su CTA final usa la variante
+				<code class="text-brand">CTA-INSCRIBIRTE-ENTREVISTA</code> (Doc §30b),
+				que apunta a la entrevista directa. Ejemplo (el de la landing):
+			</p>
+			<div class="mt-8">
+				{planesEjemplo.map((bloque) => (
+					<BloqueRender bloque={bloque} />
+				))}
+			</div>
+		</section>
+
+		<!-- ================= Clase abierta ================= -->
+		<section class="mt-16">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
+			<h2>Vive la experiencia: Clase abierta sin costo</h2>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				Anuncio de la <strong>clase abierta</strong>, réplica del bloque
+				<code class="text-brand">e-con-full</code> de la landing de
+				<strong>Infanto-Juvenil</strong> (Elementor heading + text-editor +
+				image + button). Dos columnas
+				(<code class="text-brand">grid md:grid-cols-2</code>, apiladas en
+				mobile). A la <strong>izquierda</strong>: el
+				<code class="text-brand">h2</code> con la frase de marca
+				«Vive la experiencia:» en <strong>vino</strong> y, debajo,
+				«Clase abierta sin costo», más la <strong>descripción</strong> con
+				formato enriquecido (Rico) que presenta la clase
+				(«La asombrosa capacidad de imaginar», con
+				<code class="text-brand">**negrita**</code> /
+				<code class="text-brand">*cursiva*</code>). A la
+				<strong>derecha</strong>: el <strong>thumbnail</strong> del video en
+				vivo de YouTube (imagen externa de la landing, 1024×576,
+				<code class="text-brand">aspect-video</code>) enlazado al live con
+				<code class="text-brand">target="_blank"</code> y un
+				<strong>hover grow</strong>; debajo, el botón
+				<strong>«ver clase»</strong> centrado con el ícono de play
+				(<code class="text-brand">etiqueta</code> por defecto). El bloque
+				<strong>no es full-bleed</strong>: vive dentro del contenedor de la
+				página, igual que el original. Bloque
+				<code class="text-brand">claseAbierta(&#123; kicker, titulo, descripcion, video, etiqueta? &#125;)</code>
+				con <code class="text-brand">video = &#123; imagen, href, alt? &#125;</code>.
+				El componente <code class="text-brand">CLASE-ABIERTA</code> (Doc §36)
+				carga el contenido de la landing; está aplicado en
+				<strong>psicopatologia-infanto-juvenil</strong> (única landing con el
+				bloque, verificado en vivo; la home del Máster y las landings de
+				Subjetividad y Parejas no lo tienen). Ejemplo (el del catálogo):
+			</p>
+			<div class="mt-8">
+				{claseAbiertaEjemplo.map((bloque) => (
+					<BloqueRender bloque={bloque} />
+				))}
 			</div>
 		</section>
 	</main>

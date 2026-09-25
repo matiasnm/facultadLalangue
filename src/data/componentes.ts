@@ -179,6 +179,74 @@ export type BloqueAdmision = {
 	derContenido: string[];
 };
 
+/** Tarjeta de plan de pago de la banda `planes` (réplica del price-table de Elementor). */
+export type BloquePlanPago = {
+	/** Título corto del plan (p. ej. "Único pago"). */
+	titulo: string;
+	/** Precio anterior tachado sobre el precio final (p. ej. "€1660"). */
+	original?: string;
+	/** Parte principal del precio (p. ej. "498", "99,6"). */
+	precio: string;
+	/** Símbolo de moneda (default "€"). */
+	moneda?: string;
+	/** Unidad del período (p. ej. "PRECIO FINAL", "EUROS / Mensual"). */
+	periodo: string;
+	/** Ventajas del plan (p. ej. "PLAN 1 -25% MENOS"). */
+	features: string[];
+	/** Enlace de inscripción (checkout del campus, pestaña nueva). */
+	href: string;
+};
+
+/**
+ * Planes de financiación — banda full-bleed de tarjetas de precio, réplica de
+ * la sección #precios de la landing (Subjetividad Digital): fondo coloreado
+ * (gradiente vino sobre imagen, misma capa que `admision`) y texto en claro;
+ * estructura mínima de anidados (section → contenedor → h2 + ul de tarjetas).
+ * `id` (p. ej. "precios") es el ancla del CTA "Inscribirme ahora" (#precios)
+ * y de los enlaces de beca.
+ */
+export type BloquePlanes = {
+	tipo: 'planes';
+	/** Título de la banda (h2 blanco centrado). */
+	titulo: string;
+	/** Imagen de fondo de la banda (local en public/fondos/). */
+	fondo: string;
+	/** Planes (grid de 3 tarjetas en desktop, apiladas en mobile). */
+	planes: BloquePlanPago[];
+	/** Ancla opcional de la sección (p. ej. id="precios"). */
+	id?: string;
+};
+
+/**
+ * Clase abierta — anuncio "Vive la experiencia: Clase abierta sin costo"
+ * (réplica del bloque de la landing de Infanto-Juvenil, contenedor
+ * e-con-full de Elementor): dos columnas. A la izquierda el h2 (frase de
+ * marca en vino + título) y la descripción con formato enriquecido (Rico);
+ * a la derecha el thumbnail del video en vivo de YouTube (enlace en pestaña
+ * nueva con hover grow) y debajo el botón "ver clase" con el ícono de play.
+ * No es full-bleed: vive dentro del contenedor de la página.
+ */
+export type BloqueClaseAbierta = {
+	tipo: 'clase-abierta';
+	/** Frase de marca dentro del h2 (p. ej. "Vive la experiencia:") — vino. */
+	kicker: string;
+	/** Título (p. ej. "Clase abierta sin costo"). */
+	titulo: string;
+	/** Descripción con formato enriquecido (Rico). */
+	descripcion: string;
+	/** Video en vivo (YouTube live): thumbnail + enlace de reproducción. */
+	video: {
+		/** URL de la imagen (externa de WP o local en public/). */
+		imagen: string;
+		/** Enlace de reproducción (p. ej. https://www.youtube.com/live/…). */
+		href: string;
+		/** Texto alternativo del thumbnail. */
+		alt?: string;
+	};
+	/** Etiqueta del botón (default "ver clase"). */
+	etiqueta?: string;
+};
+
 /**
  * Articula — sección "… articula:" que presenta los ejes de la formación.
  * Copia simplificada del bloque de articulación del landing original (Elementor):
@@ -347,6 +415,8 @@ export type Bloque =
 	| BloqueDirigidoA
 	| BloqueCarruselLogos
 	| BloqueAdmision
+	| BloquePlanes
+	| BloqueClaseAbierta
 	| BloqueArticula
 	| BloqueFacultad
 	| BloqueMetodologia
@@ -428,6 +498,15 @@ export const dirigidoA = (positivos, negativos, pie) =>
 	({ tipo: 'dirigido-a', positivos, negativos, pie }) as BloqueDirigidoA;
 export const admision = (fondo, izqTitulo, izqBullets, derTitulo, derContenido, izqTexto?) =>
 	({ tipo: 'admision', fondo, izqTitulo, izqTexto, izqBullets, derTitulo, derContenido }) as BloqueAdmision;
+/** Tarjeta de plan de pago de la banda `planes`. */
+export const planPago = ({ titulo, original, precio, moneda, periodo, features, href }) =>
+	({ titulo, original, precio, moneda, periodo, features, href }) as BloquePlanPago;
+/** Banda full-bleed de tarjetas de precio con fondo coloreado (ver BloquePlanes). */
+export const planes = (titulo, fondo, planes, id?) =>
+	({ tipo: 'planes', titulo, fondo, planes, id }) as BloquePlanes;
+/** Anuncio "Vive la experiencia: Clase abierta sin costo" (ver BloqueClaseAbierta). */
+export const claseAbierta = ({ kicker, titulo, descripcion, video, etiqueta = 'ver clase' }) =>
+	({ tipo: 'clase-abierta', kicker, titulo, descripcion, video, etiqueta }) as BloqueClaseAbierta;
 /** Lema institucional de la sección "articula:" (mismo en las 6 formaciones). */
 export const LEMA_ARTICULACION = [
 	'Abriendo grietas en lo **Establecido**',
@@ -1048,6 +1127,17 @@ export const componentes: ComponenteComun[] = [
 		],
 	},
 	{
+		id: 'CTA-INSCRIBIRTE-ENTREVISTA',
+		nota: 'Doc §30b — Variante de CTA-INSCRIBIRTE que apunta a la entrevista directa (Máster y Psicoterapia: no tienen ancla #precios).',
+		bloques: [
+			cta({
+				titulo: '¿Listo para inscribirte?',
+				subtitulo: '100% Online · Certificación Internacional',
+				acciones: [{ etiqueta: 'Inscribirme ahora', href: 'https://go.facultadlalangue.com/entrevista-directa' }],
+			}),
+		],
+	},
+	{
 		id: 'FACULTAD-TEXTO-INSTITUCIONAL',
 		nota: 'Doc §31 — Máster y Psicoterapia; Metapsicología con variante en la última frase.',
 		bloques: [
@@ -1103,6 +1193,60 @@ export const componentes: ComponenteComun[] = [
 				),
 			],
 		},
+	{
+		id: 'PLANES-FINANCIACION',
+		nota: 'Doc §35 — Banda de tarjetas de precio, réplica de la sección #precios de la landing Subjetividad Digital. El id="precios" es el ancla del CTA "Inscribirme ahora" y de los enlaces de beca.',
+		bloques: [
+			planes(
+				'Planes de financiación',
+				'/fondos/bg_cta2.webp',
+				[
+					planPago({
+						titulo: 'Único pago',
+						original: '€1660',
+						precio: '498',
+						periodo: 'PRECIO FINAL',
+						features: ['PLAN 1 -25% MENOS', 'Elige cuándo terminar'],
+						href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10058',
+					}),
+					planPago({
+						titulo: '6 pagos',
+						original: '€1660',
+						precio: '99,6',
+						periodo: 'EUROS / Mensual',
+						features: ['PLAN 6 -10% MENOS', '€597 EN TOTAL'],
+						href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10057',
+					}),
+					planPago({
+						titulo: '10 pagos',
+						original: '€1660',
+						precio: '66,5',
+						periodo: 'EUROS / Mensual',
+						features: ['Beca 60% para profesionales', '€664 EN TOTAL'],
+						href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10059',
+					}),
+				],
+				'precios',
+			),
+		],
+	},
+	{
+		id: 'CLASE-ABIERTA',
+		nota: 'Doc §36 — "Vive la experiencia: Clase abierta sin costo". Anuncio de la clase abierta en vivo: frase de marca + título + descripción a la izquierda; thumbnail del video de YouTube y botón "ver clase" a la derecha. Toma el bloque de la landing de Infanto-Juvenil (clase «La asombrosa capacidad de imaginar»)',
+		bloques: [
+			claseAbierta({
+				kicker: 'Vive la experiencia:',
+				titulo: 'Clase abierta sin costo',
+				descripcion:
+					'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
+				video: {
+					imagen: 'https://facultadlalangue.com/wp-content/uploads/2026/04/ThumbnailYouTubePsicopato-1024x576.webp',
+					href: 'https://www.youtube.com/live/K_YOvMd4Ejo',
+					alt: 'La asombrosa capacidad de Imaginar',
+				},
+			}),
+		],
+	},
 ] as const;
 
 export type ComponenteId = (typeof componentes)[number]['id'];

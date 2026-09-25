@@ -37,10 +37,10 @@ const { entrada } = Astro.props;
 
 /** Bloques que renderizan SU PROPIA <section> en el layout 'secciones' y por
  *  eso, cuando son el único bloque del grupo, se renderizan directos sin
- *  envolver: bandas full-width (stats, cta, articula, modulos, admision) y
- *  Certificación. Solo existen dos anchos: la banda full-width (que paga su
+ *  envolver: bandas full-width (stats, cta, articula, modulos, admision,
+ *  planes) y Certificación. Solo existen dos anchos: la banda full-width (que paga su
  *  propio fondo) o la sección con el margen del hero (max-w-7xl). */
-const SECCION_PROPA = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision']);
+const SECCION_PROPA = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision', 'planes']);
 
 /** Expande cada cita a un componente común (c('NOMBRE')) a sus bloques reales,
  *  para decidir el envoltorio sobre la lista ya aplanada. */

@@ -16,7 +16,7 @@
  * bloques se envuelve en seccion(...) y vive en su propio <section> apilado.
  * Solo existen DOS medidas de ancho:
  *   - banda de color FULL-WIDTH (renderiza SU PROPIA <section>): los bloques
- *     stats, cta, articula, modulos y admision (ver SECCION_PROPA en
+ *     stats, cta, articula, modulos, admision y planes (ver SECCION_PROPA en
  *     SeccionFormacion.astro);
  *   - sección CON EL MISMO MARGEN QUE EL HERO (max-w-7xl): todo lo demás,
  *     incluida la banda de "Es para ti…" (vino sólido profundo, bg-brand-dark).
@@ -38,12 +38,16 @@
  *   11. Admisión             → admision() (Máster, Psicoterapia, Infanto, Metapsicología)
  *   12. Preguntas Frecuentes → titulo + FAQ-*
  *   13. Nuestras formaciones → OTRAS-FORMACIONES-LISTADO + INSTITUCIONES-ASOCIADAS
- *   14. Listo para inscribirte → CTA-INSCRIBIRTE
+ *   14. Listo para inscribirte → CTA-INSCRIBIRTE (Máster y Psicoterapia usan la
+ *       variante CTA-INSCRIBIRTE-ENTREVISTA: sin #precios, apunta a la entrevista)
  * Los bloques intersticiales (planes de financiación, clase abierta) se
- * intercalan sin romper ese orden. El CTA de entrevista y el título de la
- * Inserción NO se declaran como bloques sueltos: viven como componente único
- * (el cierre de la tarjeta de beneficios y el título de INSERCION-ESTADISTICAS);
- * se modifican UNA sola vez y se propagan a todas las páginas.
+ * intercalan sin romper ese orden. Los planes de financiación viven como banda
+ * full-width propia (`planes`, réplica en tarjetas de precio de la landing:
+ * componente PLANES-FINANCIACION o el constructor planes()). El CTA de
+ * entrevista y el título de la Inserción NO se declaran como bloques sueltos:
+ * viven como componente único (el cierre de la tarjeta de beneficios y el
+ * título de INSERCION-ESTADISTICAS); se modifican UNA sola vez y se propagan a
+ * todas las páginas.
  */
 import {
 	c,
@@ -60,6 +64,8 @@ import {
 	profesores,
 	modulos,
 	certificacion,
+	planes,
+	planPago,
 	seccion,
 	MODALIDAD_A,
 	MODALIDAD_B,
@@ -119,14 +125,6 @@ const paraTi = (positivos: string[], negativos: string[], becaHref: string = '#p
 			boton: { etiqueta: 'Beca 60% para profesionales', href: becaHref },
 		},
 	);
-
-/** Grupo "Plan de financiación": título + línea de precio + notas + botón checkout. */
-const plan = (paso: string, precioLinea: string, notas: string[], cart: number): BloquePagina[] => [
-	titulo(paso, 3),
-	texto(precioLinea),
-	lista(notas),
-	enlace('Inscribirme', `https://campus.facultadlalangue.com/checkout/?add-to-cart=${cart}`),
-];
 
 export const formaciones: Formacion[] = [
 	/* ------------------------------------------------------------------ */
@@ -324,8 +322,8 @@ export const formaciones: Formacion[] = [
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
 
-			// 14. CTA final
-			seccion(c('CTA-INSCRIBIRTE')),
+			// 14. CTA final (sin #precios → la entrevista)
+			seccion(c('CTA-INSCRIBIRTE-ENTREVISTA')),
 		],
 	},
 
@@ -518,9 +516,9 @@ export const formaciones: Formacion[] = [
 				c('OTRAS-FORMACIONES-LISTADO'),
 				c('INSTITUCIONES-ASOCIADAS'),
 			),
-			// 14. CTA final
+			// 14. CTA final (sin #precios → la entrevista)
 			seccion(
-				c('CTA-INSCRIBIRTE'),
+				c('CTA-INSCRIBIRTE-ENTREVISTA'),
 			),
 
 		],
@@ -627,19 +625,20 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 8. Planes de financiación
+			// 8. CTA "Comprende las nuevas formas…" (título de la banda de Subjetividad Digital)
 			seccion(
 				titulo('Comprende las nuevas formas de sufrimiento en la era digital'),
-				titulo('Planes de financiación', 2, undefined, 'precios'),
-				...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Elige cuándo terminar'], 10058),
-				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 10057),
-				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 10059),
 			),
-			// 9. Inserción Laboral (el título vive en el bloque)
+			// 9. Planes de financiación — banda full-bleed (componente
+			// PLANES-FINANCIACION: la misma data de la landing, id="precios")
+			seccion(
+				c('PLANES-FINANCIACION'),
+			),
+			// 10. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 10. Certificación
+			// 11. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -656,7 +655,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 11. Preguntas Frecuentes
+			// 12. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -804,19 +803,50 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 8. Planes de financiación
+			// 8. CTA "Amplía tu práctica clínica…" (título de la banda de Parejas)
 			seccion(
 				titulo('Amplía tu práctica clínica con parejas y erotismo relacional'),
-				titulo('Planes de financiación', 2, undefined, 'precios'),
-				...plan('Único pago', '€1660 → €498 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9544),
-				...plan('6 pagos', '€1660 → **€99,6 euros/mensual**', ['PLAN 6: -10% menos', '€597 en total'], 9545),
-				...plan('10 pagos', '€1660 → **€66,5 euros/mensual**', ['Beca 60% para profesionales', '€664 en total'], 9546),
 			),
-			// 9. Inserción Laboral (el título vive en el bloque)
+			// 9. Planes de financiación — banda full-bleed (misma estructura que
+			// PLANES-FINANCIACION, con los precios y checkouts de Parejas)
+			seccion(
+				planes(
+					'Planes de financiación',
+					'/fondos/bg_cta2.webp',
+					[
+						planPago({
+							titulo: 'Único pago',
+							original: '€1660',
+							precio: '498',
+							periodo: 'PRECIO FINAL',
+							features: ['PLAN 1: -25% menos', 'Cursa a tu ritmo'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=9544',
+						}),
+						planPago({
+							titulo: '6 pagos',
+							original: '€1660',
+							precio: '99,6',
+							periodo: 'EUROS / Mensual',
+							features: ['PLAN 6: -10% menos', '€597 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=9545',
+						}),
+						planPago({
+							titulo: '10 pagos',
+							original: '€1660',
+							precio: '66,5',
+							periodo: 'EUROS / Mensual',
+							features: ['Beca 60% para profesionales', '€664 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=9546',
+						}),
+					],
+					'precios',
+				),
+			),
+			// 10. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 10. Certificación
+			// 11. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -833,7 +863,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 11. Preguntas Frecuentes
+			// 12. Preguntas Frecuentes
 			seccion(
 				titulo('Preguntas Frecuentes', 2, 'sobre la diplomatura | sobre la entrevista'),
 				c('FAQ-LISTA-FORMACIONES'),
@@ -900,12 +930,11 @@ export const formaciones: Formacion[] = [
 		dirigidoA:
 			'Profesionales del campo de la salud mental, la educación y el acompañamiento de infancias y adolescencias',
 		secciones: [
-			// 1. Clase abierta
+			// 1. Clase abierta — c('CLASE-ABIERTA') (Doc §36). Es la única formación
+			// cuya landing en vivo tiene el bloque "Vive la experiencia: Clase abierta
+			// sin costo" (verificado contra /psicopatologia-infanto-juvenil/).
 			seccion(
-				titulo('Vive la experiencia: Clase abierta sin costo'),
-				texto(
-						'**¿Cómo trabajamos el mundo interno en la niñez?** Descúbrelo en nuestra clase **«La asombrosa capacidad de imaginar»**. De la mano de *Lorena Salthu* (Decana de la facultad) y *Augusto Laplacette*, te invitamos a explorar los fundamentos de nuestra formación.',
-				),
+				c('CLASE-ABIERTA'),
 			),
 			// 2. Metodología y contadores
 			seccion(
@@ -979,19 +1008,52 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 9. Planes de financiación
+			// 9. CTA "Amplía tu práctica clínica…" (título de la banda de Infanto-Juvenil)
 			seccion(
 				titulo('Amplía tu práctica clínica con conocimientos de psicopatología infantojuvenil'),
-				titulo('Planes de financiación', 2, undefined, 'precios'),
-				...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 9546),
-				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 9546),
-				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
 			),
-			// 10. Inserción Laboral (el título vive en el bloque)
+			// 10. Planes de financiación — banda full-bleed (misma estructura que
+			// PLANES-FINANCIACION, con los precios y checkouts de Infanto-Juvenil;
+			// carts verificados contra la landing en vivo (/psicopatologia-infanto-juvenil/):
+			// Único 10050 · 6 pagos 10049 · 10 pagos 10051)
+			seccion(
+				planes(
+					'Planes de financiación',
+					'/fondos/bg_cta2.webp',
+					[
+						planPago({
+							titulo: 'Único pago',
+							original: '€1800',
+							precio: '540',
+							periodo: 'PRECIO FINAL',
+							features: ['PLAN 1: -25% menos', 'Cursa a tu ritmo'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10050',
+						}),
+						planPago({
+							titulo: '6 pagos',
+							original: '€1800',
+							precio: '108',
+							periodo: 'EUROS / Mensual',
+							features: ['PLAN 6: -10% menos', '€648 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10049',
+						}),
+						planPago({
+							titulo: '10 pagos',
+							original: '€1800',
+							precio: '72',
+							periodo: 'EUROS / Mensual',
+							features: ['Beca 60% para profesionales', '€720 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10051',
+						}),
+					],
+					'precios',
+				),
+			),
+			// 11. Inserción Laboral (el título vive en el bloque)
 			seccion(
 				c('INSERCION-ESTADISTICAS'),
 			),
-			// 11. Certificación
+			// 12. Certificación
 			seccion(
 				certificacion(
 						'Certificación',
@@ -1004,7 +1066,7 @@ export const formaciones: Formacion[] = [
 						},
 				),
 			),
-			// 12. Admisión
+			// 13. Admisión
 			seccion(
 				admision(
 						'/admision_fondo.webp',
@@ -1171,12 +1233,40 @@ export const formaciones: Formacion[] = [
 				c('BENEFICIOS-GRID-BASE'),
 				c('BENEFICIOS-TOTAL-BASE'),
 			),
-			// 8. Planes de financiación
+			// 8. Planes de financiación — banda full-bleed (misma estructura que
+			// PLANES-FINANCIACION, con los precios y checkouts de Metapsicología)
 			seccion(
-				titulo('Planes de financiación', 2, undefined, 'precios'),
-				...plan('Único pago', '€1800 → €540 **PRECIO FINAL**', ['PLAN 1: -25% menos', 'Cursa a tu ritmo'], 10054),
-				...plan('6 pagos', '€1800 → **€108 euros/mensual**', ['PLAN 6: -10% menos', '€648 en total'], 10053),
-				...plan('10 pagos', '€1800 → **€72 euros/mensual**', ['Beca 60% para profesionales', '€720 en total'], 9546),
+				planes(
+					'Planes de financiación',
+					'/fondos/bg_cta2.webp',
+					[
+						planPago({
+							titulo: 'Único pago',
+							original: '€1800',
+							precio: '540',
+							periodo: 'PRECIO FINAL',
+							features: ['PLAN 1: -25% menos', 'Cursa a tu ritmo'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10054',
+						}),
+						planPago({
+							titulo: '6 pagos',
+							original: '€1800',
+							precio: '108',
+							periodo: 'EUROS / Mensual',
+							features: ['PLAN 6: -10% menos', '€648 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=10053',
+						}),
+						planPago({
+							titulo: '10 pagos',
+							original: '€1800',
+							precio: '72',
+							periodo: 'EUROS / Mensual',
+							features: ['Beca 60% para profesionales', '€720 en total'],
+							href: 'https://campus.facultadlalangue.com/checkout/?add-to-cart=9546',
+						}),
+					],
+					'precios',
+				),
 			),
 			// 9. Inserción Laboral (el título vive en el bloque)
 			seccion(
