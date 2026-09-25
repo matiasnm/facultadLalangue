@@ -388,7 +388,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	>
 		{b.foto ? (
 			<img
-				src={b.foto}
+				src={link(b.foto)}
 				alt={b.nombre}
 				class="mx-auto aspect-[4/5] w-[min(450px,100%)] shrink-0 rounded-2xl object-cover shadow-sm lg:mx-0"
 				loading="lazy"
@@ -434,7 +434,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						data-persona-nombre={p.nombre}
 						data-persona-titulo={p.titulo ?? ''}
 						data-persona-siglas={siglasDe(p.nombre)}
-						data-persona-foto={p.foto ?? ''}
+						data-persona-foto={p.foto ? link(p.foto) : ''}
 						data-persona-bio={JSON.stringify(Array.isArray(p.bio) ? p.bio : p.bio ? [p.bio] : [])}
 						class="flex h-full w-full flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5 text-left transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
 					>
@@ -442,7 +442,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 							<Fragment>
 								{p.foto ? (
 									<img
-										src={p.foto}
+										src={link(p.foto)}
 										alt={p.nombre}
 										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
 										loading="lazy"
@@ -461,7 +461,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 							<Fragment>
 								<span class="flex w-full items-center gap-4">
 									{p.foto ? (
-										<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
+										<img src={link(p.foto)} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
 									) : (
 										<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
 									)}
@@ -494,7 +494,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 							<Fragment>
 								{p.foto ? (
 									<img
-										src={p.foto}
+										src={link(p.foto)}
 										alt={p.nombre}
 										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
 										loading="lazy"
@@ -512,7 +512,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 						) : (
 							<div class="flex items-center gap-4">
 								{p.foto ? (
-									<img src={p.foto} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
+									<img src={link(p.foto)} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
 								) : (
 									<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
 								)}
@@ -557,7 +557,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 				<li class="relative flex flex-col overflow-hidden rounded-2xl p-6 sm:p-8">
 					<span class="absolute inset-0 bg-brand" aria-hidden="true" />
 					<img
-						src={t.imagen}
+						src={link(t.imagen)}
 						alt=""
 						class="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
 						style="opacity: 0.4"
@@ -590,7 +590,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 				<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
 					{t.imagen && (
 						<img
-							src={t.imagen}
+							src={link(t.imagen)}
 							alt={t.titulo ?? t.descripcion ?? ''}
 							class="h-40 w-full object-cover"
 							loading="lazy"
