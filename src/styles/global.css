@@ -317,18 +317,18 @@
 }
 
 @layer components {
-  /* Contenedor de página único (estándar del sitio): ancho máximo 80rem
-     (1280px, = Tailwind max-w-7xl), centrado con mx-auto y padding lateral
-     fluido 1rem → 1.5rem → 2rem (convención px-4 sm:px-6 lg:px-8).
-     Header, footer, héroes y el <main> de todas las páginas usan esta
-     clase: así los bordes izquierdo/derecho quedan verticalmente alineados
-     a lo largo de todo el sitio. La medida de lectura (líneas de 65–75
-     caracteres) se resuelve DENTRO con max-w-2xl/3xl, no achicando el
+  /* Contenedor de página único (estándar del sitio): ancho máximo 72rem
+     (1152px, entre Tailwind max-w-6xl y max-w-7xl), centrado con mx-auto y
+     padding lateral fluido 1rem → 1.5rem → 2rem (convención px-4 sm:px-6
+     lg:px-8). Header, footer, héroes y el <main> de todas las páginas usan
+     esta clase: así los bordes izquierdo/derecho quedan verticalmente
+     alineados a lo largo de todo el sitio. La medida de lectura (líneas de
+     65–75 caracteres) se resuelve DENTRO con max-w-2xl/3xl, no achicando el
      contenedor de la página. */
   .contenedor {
     margin-inline: auto;
     width: 100%;
-    max-width: 80rem; /* 1280px */
+    max-width: 72rem; /* 1152px */
     padding-inline: 1rem; /* 16px */
   }
   @media (min-width: 40rem) {
