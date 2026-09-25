@@ -570,6 +570,57 @@ const globalStyles = [
 ];
 
 /**
+ * Criterios de diseño del sitio (fuente de verdad del layout).
+ * Decisiones transversales con nombre propio: referite a estas reglas
+ * con ese nombre en specs, tickets y con otros devs.
+ */
+const designCriteria = [
+	{
+		tag: 'Layout container',
+		desc: 'Contenedor de página único con ancho máximo',
+		specs: [
+			['Regla', 'fluido hasta 72rem (1152px), centrado, nunca full-width'],
+			['Clase', '.contenedor (src/styles/global.css)'],
+			['CSS', 'width:100% · max-width:72rem · margin-inline:auto'],
+			['Gutter lateral', 'padding-inline 1rem → 1.5rem → 2rem (responsivo)'],
+			['Válido en', 'header · footer · héroes · main de todas las páginas'],
+		],
+		sample: '',
+	},
+	{
+		tag: 'Gutter',
+		desc: 'Respiro lateral del contenido',
+		specs: [
+			['Definición', 'espacio en blanco entre el contenedor y el borde del viewport'],
+			['Regla', 'lo define el contenedor único, no cada sección'],
+			['Resultado', 'bordes del sitio alineados verticalmente en toda página'],
+			['Pantallas anchas', 'el tope de 1152px agranda el margen (más aire)'],
+		],
+		sample: '',
+	},
+	{
+		tag: 'Measure',
+		desc: 'Medida tipográfica (largo de línea)',
+		specs: [
+			['Regla', 'líneas de 45–75 caracteres (objetivo ~65)'],
+			['Dónde', 'se resuelve DENTRO del contenedor con max-w-2xl/3xl'],
+			['Por qué', 'nunca achicar el contenedor para acotar el texto'],
+		],
+		sample: '',
+	},
+	{
+		tag: 'Full-bleed',
+		desc: 'Única excepción al contenedor',
+		specs: [
+			['Regla', 'solo las bandas de color propias se escapan del contenedor'],
+			['Bloques', 'stats · cta · articula · modulos · admision · certificacion'],
+			['Implementación', 'cada banda es su propio <section> full-width con su fondo'],
+		],
+		sample: '',
+	},
+];
+
+/**
  * Estilos del menú (src/components/Header.astro).
  */
 const menuStyles = [
@@ -1673,6 +1724,49 @@ const samples: Record<string, string> = {
 								}
 							</div>
 							{ s.sample && <Sample html={samples[s.sample]} /> }
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ================= Criterios de diseño ================= -->
+		<section class="mt-16">
+			<h2>Criterios de diseño</h2>
+			<p class="text-ink/80">
+				Decisiones transversales de layout que rigen todo el sitio.
+				Cada una tiene nombre propio: úsalo al referirte al criterio
+				en specs, tickets y con otros devs.
+			</p>
+			<div class="mt-8 grid gap-6 md:grid-cols-2">
+				{
+					designCriteria.map((s) => (
+						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+							<div class="mb-1 flex items-baseline gap-2">
+								<code class="text-[0.9375rem] font-bold text-brand">{s.tag}</code>
+								<span class="text-xs text-ink/60">{s.desc}</span>
+							</div>
+							<div class="grid grid-cols-[9rem_1fr] gap-x-4 gap-y-0.5 text-sm">
+								{
+									s.specs.map(([k, v]) => (
+										<>
+											<span
+												class:list={[
+													'leading-6',
+													k === 'Regla' ||
+													k === 'Definición' ||
+													k.startsWith('Gutter')
+														? 'font-medium text-brand'
+														: 'text-ink/70',
+												]}
+											>
+												{k}
+											</span>
+											<code class="leading-6">{v}</code>
+										</>
+									))
+								}
+							</div>
 						</article>
 					))
 				}
