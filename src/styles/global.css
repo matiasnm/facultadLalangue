@@ -119,7 +119,18 @@
     display: block;
   }
 
-  /* Base: p, span y textos generales en DM Sans, 14px, line-height 1.6 */
+  /* Base: p, span y textos generales en DM Sans, line-height 1.6.
+     El tamaño (14px) es la medida de UI; el texto de contenido se fija
+     explícitamente en 15px (ver escala tipográfica abajo). */
+  /* ─── Escala tipográfica del sitio (fuente única de verdad) ─────────────
+     Medidas de CONTENIDO (párrafos, descripciones de tarjetas, blockquotes):
+       - texto corrido ............ 0.9375rem (15px)  — text-[0.9375rem]
+       - lead / cierre ............ 1.125rem  (18px)  — text-lg
+     Medidas de UI (navegación, footer, kickers, chips, metas de tarjeta):
+       - auxiliar ................. 0.875rem  (14px)  — text-sm (heredado del body)
+       - micro / kickers .......... 0.75rem   (12px)  — text-xs
+     La home y las páginas de formación usan SIEMPRE text-[0.9375rem] para el
+     texto de contenido (no el 14px del body), así ambas se ven iguales. */
   body {
     margin: 0;
     /* Evita la barra horizontal que genera la sección full-bleed (w-screen).
@@ -127,7 +138,7 @@
        el header sticky y el dropdown siguen funcionando. */
     overflow-x: clip;
     font-family: var(--font-sans);
-    font-size: 0.875rem; /* 14px */
+    font-size: 0.875rem; /* 14px — base UI */
     line-height: 1.6;
     color: var(--color-ink);
     background-color: var(--color-background);

@@ -178,14 +178,20 @@ const programas = [
 ---
 
 <Layout title="Facultad Internacional de Psicología y Psicoanálisis Lalangue">
-	<!-- ==================== Hero vh100 ==================== -->
-	<!-- El header es sticky y ocupa var(--header-h); el hero mide lo que
-	     resta de los 100dvh para que section+navbar calcen exactamente una
-	     pantalla. El contenido queda centrado verticalmente con items-center. -->
-	<section
-		class="relative flex min-h-[calc(100dvh-var(--header-h))] items-center overflow-hidden bg-background"
-	>
-		<div class="contenedor relative z-10 py-16">
+	<!-- El main envuelve TODO el contenido de la home (hero incluido) y es
+	     quien define los gutter: lleva la clase .contenedor (1280px + padding
+	     fluido), el mismo contenedor que header, footer y el resto de las
+	     páginas. Las section internas NO repiten contenedor propio; solo
+	     aplican su padding, separación y medidas de lectura. -->
+	<main class="contenedor flex-1">
+		<!-- ==================== Hero vh100 ==================== -->
+		<!-- El header es sticky y ocupa var(--header-h); el hero mide lo que
+		     resta de los 100dvh para que section+navbar calcen exactamente una
+		     pantalla. El contenido queda centrado verticalmente con items-center
+		     y hereda los gutter del main. -->
+		<section
+			class="relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-16"
+		>
 			<p class="text-sm font-medium uppercase tracking-widest text-accent">
 				Institución académica francesa · formación clínica y psicoanálisis
 			</p>
@@ -223,20 +229,14 @@ const programas = [
 					Conocé Lalangue
 				</a>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<!-- Cuerpo del home: usa el mismo contenedor que todo el sitio (clase
-	     .contenedor, max-w-7xl/1280px + padding fluido), igual que el hero,
-	     el header y las páginas de formación. La legibilidad del texto se
-	     resuelve dentro con max-w-2xl/3xl, no achicando el contenedor. -->
-	<main class="contenedor flex-1">
 		<!-- ==================== Identidad ==================== -->
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Identidad</p>
 			<h2 class="mt-2">Una formación clínica francesa, con alcance global</h2>
 			<div class="mt-6 grid gap-8 lg:grid-cols-2">
-				<div class="space-y-4 text-ink/80 leading-relaxed">
+				<div class="space-y-4 text-[0.9375rem] leading-relaxed text-ink/85">
 					<p>
 						Lalangue es una institución académica francesa dedicada a la
 						formación clínica y al desarrollo del pensamiento contemporáneo
@@ -296,7 +296,7 @@ const programas = [
 							</li>
 						</ul>
 					</div>
-					<blockquote class="text-sm italic text-ink/70 leading-relaxed">
+					<blockquote class="text-[0.9375rem] italic text-ink/70 leading-relaxed">
 						Desarrollamos programas formativos dirigidos a la comunidad
 						hispanohablante global, promoviendo una clínica rigurosa,
 						ética, internacional y plural.
@@ -309,7 +309,7 @@ const programas = [
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Visión</p>
 			<h2 class="mt-2">El modelo educativo francés, en diálogo con la clínica contemporánea</h2>
-			<div class="mt-6 max-w-3xl space-y-4 text-ink/80 leading-relaxed">
+			<div class="mt-6 max-w-3xl space-y-4 text-[0.9375rem] leading-relaxed text-ink/85">
 				<p>
 					Desde su origen, el proyecto académico se ha orientado a construir
 					un espacio de formación global que articule el modelo educativo
@@ -342,7 +342,7 @@ const programas = [
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Modelo</p>
 			<h2 class="mt-2">Formaciones profesionalizantes bajo el régimen francés</h2>
-			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				La propuesta formativa de Lalangue se estructura bajo el régimen
 				francés de formaciones profesionalizantes ({' '}
 				<em class="text-ink">formations professionnalisantes</em> ). El modelo
@@ -356,7 +356,7 @@ const programas = [
 								{i + 1}
 							</span>
 							<p class="mt-3 font-medium text-night">{p.title}</p>
-							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+							<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{p.desc}</p>
 						</article>
 					))
 				}
@@ -372,7 +372,7 @@ const programas = [
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Comunidad</p>
 			<h2 class="mt-2">Una comunidad internacional de más de 15 países</h2>
-			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				Lalangue reúne a docentes, estudiantes y profesionales de Europa y
 				América Latina, promoviendo el intercambio plural como fuente de
 				nuevos espacios académicos.
@@ -382,12 +382,12 @@ const programas = [
 					communitySpaces.map((s) => (
 						<article class="rounded-lg border border-divider/30 bg-surface p-5">
 							<p class="font-medium text-night">{s.title}</p>
-							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{s.desc}</p>
+							<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{s.desc}</p>
 						</article>
 					))
 				}
 			</div>
-			<p class="mt-8 rounded-lg border border-accent/30 bg-accent/10 px-5 py-4 text-sm font-medium text-ink">
+			<p class="mt-8 rounded-lg border border-accent/30 bg-accent/10 px-5 py-4 text-[0.9375rem] font-medium text-ink">
 				En los últimos meses, estas actividades han convocado a más de
 				<strong class="text-night"> 30.000 participantes</strong> en nuestros
 				eventos online.
@@ -398,7 +398,7 @@ const programas = [
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Clínica</p>
 			<h2 class="mt-2">Inserción profesional y redes clínicas internacionales</h2>
-			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				Lalangue promueve la inserción profesional de sus estudiantes
 				mediante la participación en redes clínicas internacionales y
 				plataformas de consulta online.
@@ -424,7 +424,7 @@ const programas = [
 		<section id="Formaciones" class="py-20 border-b border-divider/20 scroll-mt-24">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Formaciones</p>
 			<h2 class="mt-2">Diplomados Internacionales especializados</h2>
-			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				El cuerpo docente de Lalangue está integrado por profesionales con
 				trayectoria académica y clínica en universidades, centros de formación
 				y asociaciones profesionales de diversos marcos teóricos del campo de
@@ -467,7 +467,7 @@ const programas = [
 							<p class="text-base font-semibold leading-snug text-night">
 								{f.name}
 							</p>
-							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{f.desc}</p>
+							<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{f.desc}</p>
 							<ul class="mt-4 space-y-1 text-sm text-ink/80">
 								<li>
 									<span class="text-accent">Duración:</span> {f.duration}
@@ -504,7 +504,7 @@ const programas = [
 		<section class="py-20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Cierre</p>
 			<h2 class="mt-2">Tender puentes</h2>
-			<p class="mt-4 max-w-2xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				Lalangue busca contribuir al desarrollo del pensamiento clínico
 				contemporáneo que aborde los desafíos culturales, sociales y
 				tecnológicos de nuestro tiempo, estableciendo la formación clínica
@@ -547,13 +547,13 @@ const programas = [
 								<span class="font-display font-semibold text-brand/50">IMG</span>
 							</div>
 							<div class="flex flex-1 flex-col p-6">
-								<span class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">
+								<span class="text-xs font-semibold uppercase tracking-widest text-accent">
 									{n.badge}
 								</span>
 								<p class="mt-3 text-lg font-semibold leading-snug text-night">
 									{n.title}
 								</p>
-								<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{n.desc}</p>
+								<p class="mt-2 flex-1 text-[0.9375rem] text-ink/80 leading-relaxed">{n.desc}</p>
 								<a
 									href="#"
 									class="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
@@ -570,9 +570,9 @@ const programas = [
 
 		<!-- ==================== Excelencia ==================== -->
 		<section class="py-20 border-b border-divider/20">
-			<p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">efpp</p>
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">efpp</p>
 			<h2 class="mt-2">Más de 20 años de Excelencia en Psicoterapia y Psicoanálisis</h2>
-			<p class="mt-4 max-w-3xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85">
 				La Facultad Internacional de Psicología y Psicoanálisis Lalangue abre
 				sus puertas e invita a los estudiantes hispanoparlantes, expandiendo
 				su prestigiosa formación en psicoterapia y psicoanálisis a nuevas
@@ -584,7 +584,7 @@ const programas = [
 						<article class="rounded-lg border border-divider/30 bg-surface p-5">
 							<span class="block size-8 rounded-md bg-gradient-to-br from-brand to-accent"></span>
 							<p class="mt-4 font-medium text-night">{p.title}</p>
-							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+							<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{p.desc}</p>
 						</article>
 					))
 				}
@@ -593,7 +593,7 @@ const programas = [
 
 		<!-- ==================== Filosofía ==================== -->
 		<section class="py-20 border-b border-divider/20">
-			<p class="text-[0.6875rem] font-semibold uppercase tracking-widest text-accent">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">
 				Nuestra Filosofía
 			</p>
 			<h2 class="mt-2">Enfoque de Enseñanza Único</h2>
@@ -606,7 +606,7 @@ const programas = [
 									{i + 1}
 								</span>
 								<p class="mt-3 text-lg font-semibold text-night">{f.title}</p>
-								<p class="mt-2 text-sm text-ink/75 leading-relaxed">{f.body}</p>
+								<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{f.body}</p>
 							</article>
 						))
 					}
@@ -639,7 +639,7 @@ const programas = [
 					whyPillars.map((w) => (
 						<article class="rounded-lg border border-divider/30 bg-surface p-6">
 							<p class="font-semibold text-night">{w.label}</p>
-							<p class="mt-2 text-sm text-ink/75 leading-relaxed">{w.body}</p>
+							<p class="mt-2 text-[0.9375rem] text-ink/80 leading-relaxed">{w.body}</p>
 						</article>
 					))
 				}
@@ -652,7 +652,7 @@ const programas = [
 				Programas
 			</p>
 			<h2 class="mt-2">Programas de Formación Certificada</h2>
-			<p class="mt-4 max-w-3xl text-ink/80 leading-relaxed">
+			<p class="mt-4 max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85">
 				Descubrí nuestros programas de formación psicoanalítica online
 				certificados, basados en el pensamiento de Freud y Lacan. Estudiá con
 				docentes internacionales y obtené tu titulación desde cualquier lugar
@@ -669,7 +669,7 @@ const programas = [
 								<p class="text-base font-semibold leading-snug text-night">
 									{p.title}
 								</p>
-								<p class="mt-2 flex-1 text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+								<p class="mt-2 flex-1 text-[0.9375rem] text-ink/80 leading-relaxed">{p.desc}</p>
 								<a
 									href="#"
 									class="mt-5 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
