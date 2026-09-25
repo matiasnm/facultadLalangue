@@ -11,9 +11,9 @@
  * `[&>:first-child]:mt-0`).
  *
  * Medida única: todos los contenedores de contenido usan el MISMO margen
- * izquierdo/derecho que el hero (max-w-7xl). Los únicos bloques que se
- * escapan son los que renderizan su propia banda de color full-width (stats,
- * cta, articula, modulos, admision) y Certificación.
+ * izquierdo/derecho que el hero (clase .contenedor, 1280px). Los únicos
+ * bloques que se escapan son los que renderizan su propia banda de color
+ * full-width (stats, cta, articula, modulos, admision) y Certificación.
  *
  * Regla de oro: si el grupo resuelve a UN SOLO bloque full-bleed (stats, cta,
  * articula, modulos, certificacion o admision — bandas de ancho completo que
@@ -39,7 +39,7 @@ const { entrada } = Astro.props;
  *  eso, cuando son el único bloque del grupo, se renderizan directos sin
  *  envolver: bandas full-width (stats, cta, articula, modulos, admision,
  *  planes) y Certificación. Solo existen dos anchos: la banda full-width (que paga su
- *  propio fondo) o la sección con el margen del hero (max-w-7xl). */
+ *  propio fondo) o la sección con el margen del hero (.contenedor). */
 const SECCION_PROPA = new Set(['stats', 'cta', 'articula', 'modulos', 'certificacion', 'admision', 'planes']);
 
 /** Expande cada cita a un componente común (c('NOMBRE')) a sus bloques reales,
@@ -64,7 +64,7 @@ const conFondoParaTi = bloques.some((b) => b.tipo === 'dirigido-a');
 	<BloqueRender bloque={unico} layout="secciones" />
 ) : (
 	<section class={`py-16 sm:py-20${conFondoParaTi ? ' bg-brand-dark' : ' py-14 sm:py-16'}`}>
-		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 [&>:first-child]:mt-0">
+		<div class="contenedor [&>:first-child]:mt-0">
 			{bloques.map((b) => (
 				<BloqueRender bloque={b} layout="secciones" />
 			))}

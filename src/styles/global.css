@@ -304,3 +304,52 @@
     color: #fff;
   }
 }
+
+@layer components {
+  /* Contenedor de página único (estándar del sitio): ancho máximo 80rem
+     (1280px, = Tailwind max-w-7xl), centrado con mx-auto y padding lateral
+     fluido 1rem → 1.5rem → 2rem (convención px-4 sm:px-6 lg:px-8).
+     Header, footer, héroes y el <main> de todas las páginas usan esta
+     clase: así los bordes izquierdo/derecho quedan verticalmente alineados
+     a lo largo de todo el sitio. La medida de lectura (líneas de 65–75
+     caracteres) se resuelve DENTRO con max-w-2xl/3xl, no achicando el
+     contenedor de la página. */
+  .contenedor {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 80rem; /* 1280px */
+    padding-inline: 1rem; /* 16px */
+  }
+  @media (min-width: 40rem) {
+    /* 640px → equivale a sm:px-6 */
+    .contenedor {
+      padding-inline: 1.5rem; /* 24px */
+    }
+  }
+  @media (min-width: 64rem) {
+    /* 1024px → equivale a lg:px-8 */
+    .contenedor {
+      padding-inline: 2rem; /* 32px */
+    }
+  }
+
+  /* Variante de lectura: ancho máximo 48rem (768px, = Tailwind max-w-3xl).
+     Excepción deliberada del ancho general del sitio, para páginas de
+     prosa/legales (aviso legal, términos, privacidad). */
+  .contenedor-lectura {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 48rem; /* 768px */
+    padding-inline: 1rem; /* 16px */
+  }
+  @media (min-width: 40rem) {
+    .contenedor-lectura {
+      padding-inline: 1.5rem; /* 24px */
+    }
+  }
+  @media (min-width: 64rem) {
+    .contenedor-lectura {
+      padding-inline: 2rem; /* 32px */
+    }
+  }
+}

@@ -185,7 +185,7 @@ const programas = [
 	<section
 		class="relative flex min-h-[calc(100dvh-var(--header-h))] items-center overflow-hidden bg-background"
 	>
-		<div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+		<div class="contenedor relative z-10 py-16">
 			<p class="text-sm font-medium uppercase tracking-widest text-accent">
 				Institución académica francesa · formación clínica y psicoanálisis
 			</p>
@@ -226,10 +226,11 @@ const programas = [
 		</div>
 	</section>
 
-	<!-- Cuerpo del home: mismo margen izquierdo/derecho (max-w-5xl) que usa el
-	     cuerpo de las páginas de formación. El hero queda EXCEPTUADO: mantiene
-	     su contenedor ancho (max-w-7xl). -->
-	<main class="flex-1 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+	<!-- Cuerpo del home: usa el mismo contenedor que todo el sitio (clase
+	     .contenedor, max-w-7xl/1280px + padding fluido), igual que el hero,
+	     el header y las páginas de formación. La legibilidad del texto se
+	     resuelve dentro con max-w-2xl/3xl, no achicando el contenedor. -->
+	<main class="contenedor flex-1">
 		<!-- ==================== Identidad ==================== -->
 		<section class="py-20 border-b border-divider/20">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Identidad</p>

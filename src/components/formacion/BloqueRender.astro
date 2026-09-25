@@ -275,7 +275,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 			style={`background-image:url('${link('/fondos/world_map.webp')}'); background-size:cover; background-position:center;`}
 			aria-hidden="true"
 		></div>
-		<div class={`relative mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+		<div class="contenedor relative">
 			{/* Título: en el layout 'secciones' vive dentro de la banda (h2 blanco). */}
 			{secciones && b.titulo && <h2 class="mb-8 text-white">{b.titulo}</h2>}
 			<div class="grid gap-12 md:grid-cols-2 md:gap-16">
@@ -339,7 +339,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      full-bleed tiene UN contenedor central con el padding para el texto. */}
 {b.tipo === 'cta' && (
 	<section class={`bg-brand py-16 text-center sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-12 w-screen'}`}>
-		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+		<div class="contenedor">
 			<h2 class="text-white">{b.titulo}</h2>
 			{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
 			{b.acciones.map((a) => (
@@ -730,7 +730,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		class={`scroll-mt-24 bg-gradient-to-b from-white to-surface py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-8 w-screen'}`}
 		aria-label={b.titulo}
 	>
-		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+		<div class="contenedor">
 			<h2>{b.titulo}</h2>
 			<div class="mt-8 flex flex-col-reverse gap-10 md:grid md:grid-cols-2 md:gap-14 lg:gap-20">
 				{/* Izquierda: lema institucional, alineado a la izquierda. Cada
@@ -1025,7 +1025,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		aria-label={b.titulo}
 	>
 		{/* Texto — único contenedor con padding (donde vive el texto). */}
-		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+		<div class="contenedor">
 			<h2 class="text-center">{b.titulo}</h2>
 			{b.intro && (
 				<Rico
@@ -1087,7 +1087,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 			</div>
 		</div>
 		{b.enlace && (
-			<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+			<div class="contenedor">
 				<p class="mb-0 mt-12 text-center">
 					<a
 						href={link(b.enlace.href)}
@@ -1135,7 +1135,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		id="certificacion"
 		aria-label={b.titulo}
 	>
-		<div class={`mx-auto px-4 sm:px-6 lg:px-8${secciones ? ' max-w-7xl' : ' max-w-6xl'}`}>
+		<div class="contenedor">
 			<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
 				{/* Columna izquierda: título, intro, puntos con check y botón. */}
 				<div>
@@ -1200,7 +1200,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
 		aria-label={b.izqTitulo}
 	>
-		<div class={`mx-auto grid ${secciones ? 'max-w-7xl' : 'max-w-5xl'} grid-cols-1 gap-10 px-4 sm:px-6 md:gap-14 lg:grid-cols-2 lg:px-8`}>
+		<div class="contenedor grid grid-cols-1 gap-10 md:gap-14 lg:grid-cols-2">
 			{/* Columna izquierda: título y puntos con check (flex para repartir el alto). */}
 			<div class="flex flex-col pt-4 md:pt-5">
 				<h2 class="text-white uppercase">{b.izqTitulo}</h2>
@@ -1268,7 +1268,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
 		aria-label={b.titulo}
 	>
-		<div class={`mx-auto ${secciones ? 'max-w-7xl' : 'max-w-5xl'} px-4 sm:px-6 lg:px-8`}>
+		<div class="contenedor">
 			<h2 class="text-center text-white">{b.titulo}</h2>
 			<ul class="mt-10 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-3">
 				{b.planes.map((p) => (
