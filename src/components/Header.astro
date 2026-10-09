@@ -24,18 +24,19 @@ type NavItem = {
   label: string;
   href: string;
   external?: boolean;
+  right?: boolean;
   children?: NavChild[];
 };
 
+// Modo overlay (solo home): el header es transparente con texto blanco sobre
+// el hero y pasa a fondo blanco/texto oscuro al scrollear (JS togglea la
+// clase .is-scrolled y el CSS de global.css repinta .nav-fg/.nav-fg-dim).
+const { overlay = false } = Astro.props as { overlay?: boolean };
+const fg = overlay ? 'nav-fg' : 'text-night';
+const fgDim = overlay ? 'nav-fg-dim' : 'text-night/70';
+const divider = overlay ? 'nav-divider' : 'bg-divider';
+
 const navItems: NavItem[] = [
-  {
-    label: 'Conócenos',
-    href: '#',
-    children: [
-      { label: 'Facultad', href: '/facultad/' },
-      { label: 'Plantel académico', href: '/plantel-academico/' },
-    ],
-  },
   {
     label: 'Formaciones',
     href: '#',
@@ -49,10 +50,12 @@ const navItems: NavItem[] = [
     ],
   },
   { label: 'Mediateca', href: '/nuestra-biblioteca/' },
+  { label: 'Agenda', href: '/en-construccion/' },
   {
     label: 'Campus',
     href: 'https://campus.facultadlalangue.com/cursos/',
     external: true,
+    right: true,
   },
 ];
 
@@ -65,7 +68,11 @@ const link = (href: string) =>
 	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 ---
 
-<header class="sticky top-0 z-50 bg-white border-b border-divider/40">
+<header
+	class={overlay
+		? 'header-overlay'
+		: 'sticky top-0 z-50 border-b border-divider/40 bg-white'}
+>
 	<div
 		class="contenedor relative flex h-[var(--header-h)] items-center"
 	>
@@ -85,13 +92,13 @@ const link = (href: string) =>
 				     repartido letra por letra para encajar exactamente
 				     con el ancho de "Lalangue" -->
 				<span
-					class="flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none text-night/70"
+					class={`flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none ${fgDim}`}
 				>
 					<span>F</span><span>A</span><span>C</span><span>U</span
 					><span>L</span><span>T</span><span>A</span><span>D</span>
 				</span>
 				<span
-					class="-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none text-night"
+					class={`-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none ${fg}`}
 				>
 					Lalangue
 				</span>
@@ -99,19 +106,19 @@ const link = (href: string) =>
 		</a>
 
 		<!-- Divider vertical de 1px separando el logo del menú -->
-		<div class="ml-[1.4063rem] h-[30px] w-px shrink-0 bg-divider"></div>
+		<div class={`ml-[1.4063rem] h-[30px] w-px shrink-0 ${divider}`}></div>
 
-		<!-- Navegación desktop: alineada a la izquierda (tras el divider),
-		     ya no está centrada respecto del ancho total -->
-		<nav class="ml-[1.4063rem] hidden items-center lg:flex" aria-label="Principal">
-			<ul class="flex items-center gap-[30px] whitespace-nowrap">
+		<!-- Navegación desktop: alineada a la izquierda (tras el divider), con
+		     el último ítem (Campus) empujado a la derecha del contenedor -->
+		<nav class="ml-[1.4063rem] hidden flex-1 items-center lg:flex" aria-label="Principal">
+			<ul class="flex w-full items-center gap-[30px] whitespace-nowrap">
 				{
 					navItems.map((item) =>
 						item.children ? (
 							<li class="relative group">
 								<a
 									href={link(item.href)}
-									class="flex items-center gap-1 py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors group-hover:text-accent hover:no-underline"
+									class={`flex items-center gap-1 py-2 font-display text-[15px] font-normal uppercase tracking-wide transition-colors group-hover:text-accent hover:no-underline ${fg}`}
 								>
 									{item.label}
 									<span set:html={chevron} />
@@ -134,11 +141,11 @@ const link = (href: string) =>
 								</ul>
 							</li>
 						) : (
-							<li>
+							<li class={item.right ? 'ml-auto' : ''}>
 								<a
 									href={link(item.href)}
 									{...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-									class="block py-2 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors hover:text-accent hover:no-underline"
+									class={`block py-2 font-display text-[15px] font-normal uppercase tracking-wide transition-colors hover:text-accent hover:no-underline ${fg}`}
 								>
 									{item.label}
 								</a>
@@ -257,4 +264,14 @@ const link = (href: string) =>
 		toggle.setAttribute('aria-expanded', String(!isOpen));
 		toggle.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
 	});
+
+	// Modo overlay (home): transparente sobre el hero, fondo blanco al scrollear.
+	const overlayHeader = document.querySelector<HTMLElement>('header.header-overlay');
+	if (overlayHeader) {
+		const updateOverlay = () => {
+			overlayHeader.classList.toggle('is-scrolled', window.scrollY > 8);
+		};
+		updateOverlay();
+		window.addEventListener('scroll', updateOverlay, { passive: true });
+	}
 </script>

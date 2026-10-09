@@ -364,3 +364,58 @@
     }
   }
 }
+
+/* ─── Header overlay (solo home) ─────────────────────────────────────────
+   Sobre el hero: header fijo y transparente con texto/logo en blanco. Al
+   scrollear, el JS del Header agrega .is-scrolled → fondo blanco, borde
+   inferior y texto oscuro (como el header normal). Los colores de primer
+   nivel se exponen como .nav-fg / .nav-fg-dim / .nav-divider para que el
+   markup no tenga que conocer el estado de scroll.
+   Va dentro de @layer components a propósito: así los estados de hover
+   (hover:text-accent, capa utilities) siguen ganando. */
+@layer components {
+  .header-overlay {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .header-overlay.is-scrolled {
+    background-color: var(--color-background);
+    border-bottom-color: color-mix(in srgb, var(--color-divider) 40%, transparent);
+  }
+  .header-overlay .nav-fg {
+    color: #ffffff;
+  }
+  .header-overlay .nav-fg-dim {
+    color: rgb(255 255 255 / 0.72);
+  }
+  .header-overlay .nav-divider {
+    background-color: rgb(255 255 255 / 0.28);
+  }
+  .header-overlay.is-scrolled .nav-fg {
+    color: var(--color-night);
+  }
+  .header-overlay.is-scrolled .nav-fg-dim {
+    color: color-mix(in srgb, var(--color-night) 70%, transparent);
+  }
+  .header-overlay.is-scrolled .nav-divider {
+    background-color: var(--color-divider);
+  }
+}
+
+/*
+ * .card — superficie base de tarjeta.
+ *
+ * Fuente única del par `border border-divider/30 bg-surface` que hoy se
+ * repite en el markup (29 ocurrencias). Deliberadamente SIN radio ni
+ * padding: en el repo conviven rounded-lg/rounded-xl y p-5/p-6/px-4 py-3,
+ * así que esas medidas se siguen aportando por separado junto a .card y el
+ * reemplazo resulta en caliente — sin cambio visual ni conflictos de orden
+ * de utilidades de Tailwind.
+ */
+@utility card {
+  @apply border border-divider/30 bg-surface;
+}

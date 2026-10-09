@@ -177,7 +177,7 @@ const programas = [
 ];
 ---
 
-<Layout title="Facultad Internacional de Psicología y Psicoanálisis Lalangue">
+<Layout title="Facultad Internacional de Psicología y Psicoanálisis Lalangue" overlay>
 	<!-- El main envuelve TODO el contenido de la home (hero incluido) y es
 	     quien define los gutter: lleva la clase .contenedor (1152px + padding
 	     fluido), el mismo contenedor que header, footer y el resto de las
@@ -185,50 +185,46 @@ const programas = [
 	     aplican su padding, separación y medidas de lectura. -->
 	<main class="contenedor flex-1">
 		<!-- ==================== Hero vh100 ==================== -->
-		<!-- El header es sticky y ocupa var(--header-h); el hero mide lo que
-		     resta de los 100dvh para que section+navbar calcen exactamente una
-		     pantalla. El contenido queda centrado verticalmente con items-center
-		     y hereda los gutter del main. -->
+		<!-- El header es transparente y fixed (modo overlay): el hero ocupa los
+		     100dvh completos y el fondo se ve por detrás de la navbar. El
+		     full-bleed (w-screen -ml-[50vw] left-1/2) rompe el .contenedor del
+		     main para que el fondo cubra todo el ancho; el contenido se
+		     re-centra con un .contenedor interno. Fondo = placeholder. -->
 		<section
-			class="relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-16"
+			class="relative left-1/2 -ml-[50vw] flex min-h-[100dvh] w-screen flex-col justify-center overflow-hidden bg-gradient-to-br from-brand-dark via-brand to-night py-16"
 		>
-			<p class="text-sm font-medium uppercase tracking-widest text-accent">
-				Institución académica francesa · formación clínica y psicoanálisis
-			</p>
-			<h1
-				class="mt-4 max-w-5xl font-semibold leading-[1.05] text-ink text-7xl"
-			>
-				Facultad Internacional de Psicología y Psicoanálisis Lalangue
-			</h1>
-			<p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink/85 sm:text-xl">
-				Institución académica francesa dedicada a la formación clínica y al
-				desarrollo del pensamiento contemporáneo en psicología y
-				psicoanálisis. Extensión hispanohablante de la{' '}
-				<a
-					href="https://efpp.org/"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="cursor-pointer font-semibold text-ink transition-colors hover:text-accent"
-				>E-Faculté de Psychologie et Psychanalyse (EFPP – Francia)</a
-				>, con más de 25 años de trayectoria en la formación
-				clínica y en la transmisión del psicoanálisis en Europa. Una clínica
-				rigurosa, ética, internacional y plural, para toda la comunidad
-				hispanohablante global.
-			</p>
-			<div class="mt-10 flex flex-wrap gap-4">
-				<a
-					href="#Formaciones"
-					class="rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
+			<div class="contenedor relative">
+				<p class="text-sm font-medium uppercase tracking-widest text-accent">
+					Institución académica francesa · formación clínica y psicoanálisis
+				</p>
+				<h1
+					class="mt-4 max-w-5xl font-semibold leading-[1.05] text-white text-7xl"
 				>
-					Explorar formaciones
-				</a>
-				<a
-					href={link('/facultad/')}
-					class="rounded-md border border-ink/30 px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-ink transition-colors hover:border-ink hover:bg-ink/5 hover:no-underline"
-				>
-					Conocé Lalangue
-				</a>
+					Facultad Internacional de Psicología y Psicoanálisis Lalangue
+				</h1>
+				<p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
+					Institución académica francesa dedicada a la formación clínica y al
+					desarrollo del pensamiento contemporáneo en psicología y
+					psicoanálisis. Construyendo una clínica rigurosa, ética,
+					internacional y plural, para toda la comunidad hispanohablante
+					global.
+				</p>
+				<div class="mt-10 flex flex-wrap gap-4">
+					<a
+						href="#Formaciones"
+						class="rounded-md bg-white px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-brand transition-colors hover:bg-accent hover:text-white hover:no-underline"
+					>
+						Explorar formaciones
+					</a>
+				</div>
 			</div>
+			<!-- Placeholder del fondo del hero (reemplazar por imagen real) -->
+			<span
+				aria-hidden="true"
+				class="absolute bottom-6 right-8 text-xs font-semibold uppercase tracking-widest text-white/40"
+			>
+				IMG · fondo del hero (placeholder)
+			</span>
 		</section>
 
 		<!-- ==================== Identidad ==================== -->
@@ -243,59 +239,11 @@ const programas = [
 						en psicología y psicoanálisis.
 					</p>
 					<p>
-						Constituye la extensión hispanohablante de la E-Faculté de
-						Psychologie et Psychanalyse (
-						<a
-							href="https://efpp.org/"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="font-medium text-brand underline decoration-brand/40 underline-offset-2 transition-colors hover:text-accent hover:decoration-accent/40"
-						>EFPP – Francia</a
-						>), con más de 25 años
-						de trayectoria en formación clínica y transmisión del
-						psicoanálisis en Europa. Está reconocida como organismo de
-						formación profesionalizante por la DREETS (Dirección regional
-						de economía, empleo, trabajo y solidaridades — Gobierno
-						Francés), dentro del régimen francés de formación profesional
-						continua.
-					</p>
-					<p>
 						Nuestra actividad académica cuenta con el aval de instituciones
 						europeas del campo clínico y educativo.
 					</p>
 				</div>
 				<div class="space-y-4">
-					<div class="rounded-lg border border-divider/30 bg-surface p-5">
-						<p class="text-xs font-semibold uppercase tracking-widest text-muted">
-							Avales europeos
-						</p>
-						<ul class="mt-3 space-y-1">
-							<li class="flex items-start gap-2 text-sm text-ink">
-								<span class="mt-1.5 size-2 shrink-0 rounded-full bg-accent"></span>
-								<a
-									href="https://www.ape-psychanalyse.com/"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="hover:no-underline"
-								>
-									<strong class="font-semibold text-night">APE</strong>
-									<span>— Asociación de Psicoanalistas Europeos</span>
-								</a>
-							</li>
-							<li class="flex items-start gap-2 text-sm text-ink">
-								<span class="mt-1.5 size-2 shrink-0 rounded-full bg-brand"></span>
-								<a
-									href="https://www.fede.education/ecoles/esage-paris/"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="hover:no-underline"
-								>
-									<strong class="font-semibold text-night">FEDE</strong>
-									<span>— Federación Europea de Escuelas</span>
-								</a>
-							</li>
-						</ul>
-					</div>
 					<blockquote class="text-[0.9375rem] italic text-ink/70 leading-relaxed">
 						Desarrollamos programas formativos dirigidos a la comunidad
 						hispanohablante global, promoviendo una clínica rigurosa,
@@ -423,7 +371,7 @@ const programas = [
 		<!-- ==================== Formaciones ==================== -->
 		<section id="Formaciones" class="py-20 border-b border-divider/20 scroll-mt-24">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Formaciones</p>
-			<h2 class="mt-2">Diplomados Internacionales especializados</h2>
+			<h2 class="mt-2">Diplomaturas Internacionales especializadas</h2>
 			<p class="mt-4 max-w-2xl text-[0.9375rem] leading-relaxed text-ink/85">
 				El cuerpo docente de Lalangue está integrado por profesionales con
 				trayectoria académica y clínica en universidades, centros de formación

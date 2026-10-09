@@ -44,10 +44,9 @@ export const textos: PaginaInventario[] = [
 			{ etiqueta: 'h1', texto: 'Facultad Internacional de Psicología y Psicoanálisis Lalangue' },
 			{
 				etiqueta: 'p',
-				texto: 'Institución académica francesa dedicada a la formación clínica y al desarrollo del pensamiento contemporáneo en psicología y psicoanálisis. Extensión hispanohablante de la E-Faculté de Psychologie et Psychanalyse (EFPP – Francia), con más de 25 años de trayectoria en la formación clínica y en la transmisión del psicoanálisis en Europa. Una clínica rigurosa, ética, internacional y plural, para toda la comunidad hispanohablante global.',
+				texto: 'Institución académica francesa dedicada a la formación clínica y al desarrollo del pensamiento contemporáneo en psicología y psicoanálisis. Construyendo una clínica rigurosa, ética, internacional y plural, para toda la comunidad hispanohablante global.',
 			},
 			{ etiqueta: 'a (cta)', texto: 'Explorar formaciones' },
-			{ etiqueta: 'a (cta)', texto: 'Conocé Lalangue' },
 
 			{ etiqueta: 'p (kicker)', texto: 'Identidad' },
 			{ etiqueta: 'h2', texto: 'Una formación clínica francesa, con alcance global' },
@@ -57,15 +56,8 @@ export const textos: PaginaInventario[] = [
 			},
 			{
 				etiqueta: 'p',
-				texto: 'Constituye la extensión hispanohablante de la E-Faculté de Psychologie et Psychanalyse (EFPP – Francia), con más de 25 años de trayectoria en formación clínica y transmisión del psicoanálisis en Europa. Está reconocida como organismo de formación profesionalizante por la DREETS (Dirección regional de economía, empleo, trabajo y solidaridades — Gobierno Francés), dentro del régimen francés de formación profesional continua.',
-			},
-			{
-				etiqueta: 'p',
 				texto: 'Nuestra actividad académica cuenta con el aval de instituciones europeas del campo clínico y educativo.',
 			},
-			{ etiqueta: 'p (card)', texto: 'Avales europeos' },
-			{ etiqueta: 'li', texto: 'APE — Asociación de Psicoanalistas Europeos' },
-			{ etiqueta: 'li', texto: 'FEDE — Federación Europea de Escuelas' },
 			{
 				etiqueta: 'blockquote',
 				texto: 'Desarrollamos programas formativos dirigidos a la comunidad hispanohablante global, promoviendo una clínica rigurosa, ética, internacional y plural.',
@@ -133,7 +125,7 @@ export const textos: PaginaInventario[] = [
 			{ etiqueta: 'p (card)', texto: 'Supervisiones Clínicas Lalangue' },
 
 			{ etiqueta: 'p (kicker)', texto: 'Formaciones' },
-			{ etiqueta: 'h2', texto: 'Diplomados Internacionales especializados' },
+			{ etiqueta: 'h2', texto: 'Diplomaturas Internacionales especializadas' },
 			{
 				etiqueta: 'p',
 				texto: 'El cuerpo docente de Lalangue está integrado por profesionales con trayectoria académica y clínica en universidades, centros de formación y asociaciones profesionales de diversos marcos teóricos del campo de la psicología y del psicoanálisis.',

@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="En construcción — Facultad Lalangue">
+	<div
+		class="contenedor flex min-h-[calc(100dvh-var(--header-h))] flex-col items-center justify-center py-20 text-center"
+	>
+		<p class="font-display text-6xl font-semibold text-brand sm:text-7xl">En construcción</p>
+		<h1 class="mt-4 text-3xl font-semibold sm:text-4xl">
+			Estamos preparando esta sección
+		</h1>
+		<p class="mt-4 max-w-xl text-ink/80 leading-relaxed">
+			La Agenda estará disponible próximamente. Muy pronto vas a poder ver
+			aquí las actividades, seminarios y próximos encuentros de la Facultad.
+		</p>
+		<a
+			href={base || '/'}
+			class="mt-8 rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
+		>
+			Volver al inicio
+		</a>
+	</div>
+</Layout>
