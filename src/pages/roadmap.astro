@@ -3,9 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import Sample from '../components/Sample.astro';
 import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
+import LogoTexto from '../components/LogoTexto.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
 import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, certificacion, componentes, titulo, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
 import { paletas, defaultTokens } from '../data/paletas';
+import { base, link } from '../lib/link';
 const lastUpdated = '2026-09-14';
 
 // Ejemplo de la tarjeta "dirigido-a" con texto placeholder (a reemplazar).
@@ -30,11 +32,6 @@ const dirigidoAEjemplo = dirigidoA(
 		boton: { etiqueta: 'Beca 60% para profesionales', href: '#precios' },
 	},
 );
-
-// Base pública (GitHub Pages sub-ruta). Prefija rutas internas con la base.
-const base = import.meta.env.BASE_URL;
-const link = (href: string) =>
-	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 
 // Beneficios exclusivos alumnos — bloque `beneficios` (grid con hover
 // iluminado, igual que la landing del Máster). Componente
@@ -854,7 +851,6 @@ const samples: Record<string, string> = {
 	pre: '<pre><code>const colores = {\n  brand: \'#8c1c3f\',\n  accent: \'#c96f5a\'\n};</code></pre>',
 	form:
 		'<label for="sg-email">Correo</label><input id="sg-email" type="email" placeholder="nombre@ejemplo.com" /><label for="sg-select">Interés</label><select id="sg-select"><option>Psicoanálisis</option><option>Psicoterapia</option></select><textarea rows="2" placeholder="Mensaje…"></textarea>',
-	logo: `<a href="${base || '/'}" class="inline-flex items-center gap-[1.4063rem] hover:no-underline"><img src="${base}isotipo.svg" alt="Logo FIPP Lalangue" class="h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" /><span class="flex flex-col leading-none"><span class="flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none text-night/70"><span>F</span><span>A</span><span>C</span><span>U</span><span>L</span><span>T</span><span>A</span><span>D</span></span><span class="-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none text-night">Lalangue</span></span></a>`,
 	menu:
 		'<ul class="flex w-full items-center gap-[30px] whitespace-nowrap font-display text-[15px] font-normal uppercase tracking-wide"><li class="text-night hover:text-accent">Formaciones</li><li class="text-night hover:text-accent">Mediateca</li><li class="text-night hover:text-accent">Agenda</li><li class="ml-auto text-night hover:text-accent">Campus</li></ul>',
 	menulink:
@@ -1386,7 +1382,7 @@ const samples: Record<string, string> = {
 				Cada tema lleva su propia marca (brand), su acento y su escala de
 				neutros, y repinta todo el sitio (incluido el isotipo del header).
 			</p>
-			<div class="mt-8 rounded-xl border border-divider/30 bg-surface p-6">
+			<div class="mt-8 rounded-xl card p-6">
 				<p class="text-xs font-medium uppercase tracking-widest text-muted" id="palette-deck-name">
 					Tema —
 				</p>
@@ -1412,7 +1408,7 @@ const samples: Record<string, string> = {
 			</p>
 
 			<div
-				class="mt-8 grid gap-8 overflow-hidden rounded-xl border border-divider/30 bg-surface p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
+				class="mt-8 grid gap-8 overflow-hidden rounded-xl card p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
 			>
 				<!-- Preview del isotipo sobre blanco: el clásico + la bandera -->
 				<div
@@ -1534,7 +1530,7 @@ const samples: Record<string, string> = {
 			>
 				<!-- Vista previa: el navbar real a escala (ambos isotipos; el CSS
 				     muestra el que corresponde según data-logo-nav). -->
-				<div class="flex items-center rounded-xl border border-divider/30 bg-surface p-4">
+				<div class="flex items-center rounded-xl card p-4">
 					<a
 						href={base || '/'}
 						class="flex shrink-0 items-center gap-4 hover:no-underline"
@@ -1542,19 +1538,7 @@ const samples: Record<string, string> = {
 					>
 						<Isotipo class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
 						<IsotipoBandera class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
-						<span class="flex flex-col leading-none">
-							<span
-								class="flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none text-night/70"
-							>
-								<span>F</span><span>A</span><span>C</span><span>U</span
-								><span>L</span><span>T</span><span>A</span><span>D</span>
-							</span>
-							<span
-								class="-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none text-night"
-							>
-								Lalangue
-							</span>
-						</span>
+						<LogoTexto scale="mini" />
 					</a>
 				</div>
 
@@ -1696,7 +1680,7 @@ const samples: Record<string, string> = {
 			<div class="mt-8 grid gap-6 md:grid-cols-2">
 				{
 					globalStyles.map((s) => (
-						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+						<article class="rounded-lg card p-5">
 							<div class="mb-1 flex items-baseline gap-2">
 								<code class="text-[0.9375rem] font-bold text-brand">{s.tag}</code>
 								<span class="text-xs text-ink/60">{s.desc}</span>
@@ -1741,7 +1725,7 @@ const samples: Record<string, string> = {
 			<div class="mt-8 grid gap-6 md:grid-cols-2">
 				{
 					designCriteria.map((s) => (
-						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+						<article class="rounded-lg card p-5">
 							<div class="mb-1 flex items-baseline gap-2">
 								<code class="text-[0.9375rem] font-bold text-brand">{s.tag}</code>
 								<span class="text-xs text-ink/60">{s.desc}</span>
@@ -1782,7 +1766,7 @@ const samples: Record<string, string> = {
 			<div class="mt-8 grid gap-6 md:grid-cols-2">
 				{
 					menuStyles.map((s) => (
-						<article class="rounded-lg border border-divider/30 bg-surface p-5">
+						<article class="rounded-lg card p-5">
 							<div class="mb-1 flex items-baseline gap-2">
 								<code class="text-[0.9375rem] font-bold text-brand">{s.tag}</code>
 								<span class="text-xs text-ink/60">{s.desc}</span>
@@ -1808,7 +1792,20 @@ const samples: Record<string, string> = {
 									))
 								}
 							</div>
-							{ s.sample && <Sample html={samples[s.sample]} onLight /> }
+							{ s.sample === 'logo' ? (
+								<Sample onLight>
+									<a href={base || '/'} class="inline-flex items-center gap-[1.4063rem] hover:no-underline">
+										<img
+											src={base + 'isotipo.svg'}
+											alt="Logo FIPP Lalangue"
+											class="h-[calc(var(--spacing)*var(--logo-h,11))] w-auto"
+										/>
+										<LogoTexto scale="mini" />
+									</a>
+								</Sample>
+							) : s.sample ? (
+								<Sample html={samples[s.sample]} onLight />
+							) : null }
 						</article>
 					))
 				}
@@ -1938,10 +1935,8 @@ const samples: Record<string, string> = {
 			<h2>Inserción laboral (estadísticas)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
 				Sección <strong>full-bleed</strong> de ancho completo: rompe el
-				contenedor <code class="text-brand">.contenedor</code> (técnica
-				<code class="text-brand">w-screen</code> +
-				<code class="text-brand">-ml-[50vw]</code> +
-				<code class="text-brand">left-1/2</code>, con
+				contenedor <code class="text-brand">.contenedor</code> (utilidad
+				<code class="text-brand">full-bleed</code>, con
 				<code class="text-brand">overflow-x: clip</code> en body para evitar
 				la barra horizontal). Usa la misma imagen de mapa mundial de la
 				landing original (<code class="text-brand">fondos/world_map.webp</code>,
@@ -1988,9 +1983,8 @@ const samples: Record<string, string> = {
 			<h2>Admisión</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
 				Formulario de entrada a las formaciones. Sección <strong>full-bleed</strong>
-				de ancho completo (misma técnica que <code class="text-brand">stats</code>:
-				<code class="text-brand">w-screen</code> + <code class="text-brand">-ml-[50vw]</code> +
-				<code class="text-brand">left-1/2</code>) para que la imagen
+				de ancho completo (misma utilidad <code class="text-brand">full-bleed</code> que
+				<code class="text-brand">stats</code>) para que la imagen
 				<code class="text-brand">admision_fondo.webp</code> cubra todo el ancho,
 				teñida con el vino de la paleta (<code class="text-brand">bg-brand-dark</code>).
 				Diseño de 2 columnas: a la izquierda, el título <strong>Admisión</strong>,
@@ -2176,7 +2170,7 @@ const samples: Record<string, string> = {
 			<p class="mt-2 max-w-3xl text-ink/80">
 				Copia de la sección "Módulos de Clases" de la landing del Máster, adaptada a los
 				estilos del sitio: <strong>sección full-bleed</strong>
-				(<code class="text-brand">w-screen + -ml-[50vw] + left-1/2</code>, fondo claro
+				(utilidad <code class="text-brand">full-bleed</code>, fondo claro
 				<code class="text-brand">bg-surface</code>) con <strong>título centrado</strong>,
 				intro (formato <strong>Rico</strong>, con enlace a <code class="text-brand">#profesores</code>
 				en el Máster) y un <strong>carrusel a ancho completo</strong>: el track ocupa el
@@ -2270,10 +2264,8 @@ const samples: Record<string, string> = {
 				<strong>Subjetividad Digital</strong> (Elementor
 				<code class="text-brand">price-table</code>): banda
 				<strong>full-bleed</strong> que rompe el contenedor
-				<code class="text-brand">.contenedor</code> con la misma técnica de
-				<code class="text-brand">w-screen</code> +
-				<code class="text-brand">-ml-[50vw]</code> +
-				<code class="text-brand">left-1/2</code> que
+				<code class="text-brand">.contenedor</code> con la misma utilidad
+				<code class="text-brand">full-bleed</code> que
 				<code class="text-brand">stats</code> y
 				<code class="text-brand">admision</code>, y fondo
 				<strong>coloreado</strong> en una sola capa
@@ -2386,6 +2378,154 @@ const samples: Record<string, string> = {
 				referencia (mismo criterio que
 				<a href="#invitacion-supervisiones" class="text-brand">#invitacion-supervisiones</a>).
 			</p>
+
+			<h3 class="mt-8">Home vieja — secciones removidas</h3>
+			<p class="mt-2 max-w-3xl text-ink/80">
+				La home anterior tenía más secciones que las de la estructura actual.
+				Con el rediseño de <code class="text-brand">index.astro</code> (ver
+				<code class="text-brand">docs/home-layout.md</code>)
+				se retiraron las que siguen. Las secciones <strong>Identidad</strong>,
+				<strong>Visión</strong>, <strong>Modelo</strong>,
+				<strong>Comunidad</strong> y <strong>Clínica</strong> <strong>no</strong>
+				se repiten acá: su contenido ya vive en
+				<code class="text-brand">/facultad/</code>. Solo se conserva lo que era
+				<strong>único de la home</strong>.
+			</p>
+
+			<h4 class="mt-6">Formaciones (viejas) — "Diplomaturas Internacionales especializadas"</h4>
+			<p class="mt-1 max-w-3xl text-ink/80">
+				El resto de la sección se solapa con <code class="text-brand">/facultad/</code>;
+				lo único propio eran los chips de <em>Áreas de especialización</em> (dos de
+				ellos sin página dedicada) y las dos tarjetas destacadas con "Incluye".
+			</p>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li>
+					Introducción: «El cuerpo docente de Lalangue está integrado por
+					profesionales con trayectoria académica y clínica en universidades,
+					centros de formación y asociaciones profesionales de diversos marcos
+					teóricos del campo de la psicología y del psicoanálisis.»
+				</li>
+				<li>
+					Áreas de especialización: Psicopatología Infanto-Juvenil
+					(<code class="text-brand">/psicopatologia-infanto-juvenil/</code>) ·
+					Subjetividad Digital (<code class="text-brand">/subjetividad-digital/</code>) ·
+					Terapia de Parejas y Erotismo Relacional
+					(<code class="text-brand">/clinica-de-parejas/</code>) ·
+					Abordaje del Ataque de Pánico (sin enlace) ·
+					Terapias Breves (sin enlace)
+				</li>
+				<li>
+					<strong>Diplomado Internacional en Psicoterapia con Enfoque
+					Psicoanalítico Lalangue</strong> — «Formación orientada al desarrollo de
+					competencias clínicas para el acompañamiento terapéutico.» · Duración:
+					2 años (72 clases) · Modalidad: 100% online con clases grabadas y
+					encuentros sincrónicos ·
+					<code class="text-brand">/psicoterapia-psicoanalitica/</code>
+				</li>
+				<li>
+					<strong>Máster Internacional en Psicoanálisis Aplicado Lalangue</strong>
+					— «Formación avanzada orientada al desarrollo de competencias clínicas
+					para el acompañamiento terapéutico.» · Duración: 2 años (144 clases) ·
+					Modalidad: 100% online con clases grabadas y encuentros sincrónicos ·
+					<code class="text-brand">/master-en-psicoanalisis/</code>
+				</li>
+				<li>
+					Incluye (en ambas tarjetas): Supervisión clínica grupal · Participación
+					en espacios comunitarios · Acceso a directorios profesionales
+					internacionales · Certificación europea bajo régimen francés de
+					formación profesionalizante.
+				</li>
+			</ul>
+
+			<h4 class="mt-6">Últimas Novedades</h4>
+			<p class="mt-1 max-w-3xl text-ink/80">
+				Kicker <strong>Últimas Novedades</strong>; las tarjetas enlazaban a
+				<code class="text-brand">#</code> (sin destino real).
+			</p>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li>
+					<strong>Únete a nuestra comunidad</strong> (badge "Comunidad de WhatsApp",
+					CTA "Súmate aquí"): «Accedé al nuevo grupo de WhatsApp de Facultad
+					Lalangue. Noticias, eventos y oportunidades de formación en psicoanálisis
+					y psicoterapia.»
+				</li>
+				<li>
+					<strong>Solicitá información sobre becas</strong> (badge "Becas en
+					psicoanálisis y psicoterapia", CTA "Quiero información"): «Accedé a
+					orientación personalizada para conocer los requisitos, disponibilidad y
+					beneficios de nuestras becas. Un asesor te guiará paso a paso para que
+					puedas postular sin vueltas.»
+				</li>
+			</ul>
+
+			<h4 class="mt-6">efpp — "Más de 20 años de Excelencia en Psicoterapia y Psicoanálisis"</h4>
+			<p class="mt-1 max-w-3xl text-ink/80">
+				Kicker <strong>efpp</strong>. Introducción: «La Facultad Internacional de
+				Psicología y Psicoanálisis Lalangue abre sus puertas e invita a los
+				estudiantes hispanoparlantes, expandiendo su prestigiosa formación en
+				psicoterapia y psicoanálisis a nuevas fronteras.» Cuatro pilares:
+			</p>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li><strong>Formaciones Flexibles</strong> — «Estudia desde cualquier lugar con programas adaptados a tu ritmo.»</li>
+				<li><strong>Docentes de Renombre</strong> — «Expertos con una sólida trayectoria en sus respectivas disciplinas.»</li>
+				<li><strong>Certificación Internacional</strong> — «Obtén una titulación reconocida con respaldo académico de excelencia.»</li>
+				<li><strong>Pasantías Rentadas</strong> — «Aplicá conocimientos en entornos clínicos supervisados desde el primer año.»</li>
+			</ul>
+
+			<h4 class="mt-6">Nuestra Filosofía — "Enfoque de Enseñanza Único"</h4>
+			<p class="mt-1 max-w-3xl text-ink/80">
+				Kicker <strong>Nuestra Filosofía</strong>; dos bloques numerados y un
+				grid de 4 imágenes (placeholders).
+			</p>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li>
+					<strong>Excelencia y Flexibilidad</strong> — «En FIPP Lalangue combinamos
+					excelencia académica con flexibilidad para ofrecer formaciones
+					certificadas en psicoterapia y psicoanálisis. Todos nuestros programas
+					están disponibles en modalidad online, adaptándose a las necesidades de
+					cada estudiante. Además, ofrecemos una experiencia única con pasantías
+					rentadas.»
+				</li>
+				<li>
+					<strong>Formadores Expertos y Reconocidos</strong> — «Nuestros
+					formadores, expertos en su campo, brindan seguimiento personalizado,
+					guiando el desarrollo académico y profesional de los estudiantes. Con un
+					enfoque interdisciplinario y ético, promovemos una enseñanza innovadora
+					que responde a las demandas actuales del psicoanálisis.»
+				</li>
+			</ul>
+
+			<h4 class="mt-6">Por qué elegirnos — "¿Por qué elegir nuestros programas de formación?"</h4>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li>
+					<strong>Excelencia Académica</strong> — «Tanto nuestros fundadores como el
+					plantel académico son expertos de reconocido prestigio, con una sólida
+					trayectoria en psicoterapia y psicoanálisis. Se destacan por su capacidad
+					de transmitir conocimientos de manera clara y accesible, sin comprometer
+					la profundidad académica.»
+				</li>
+				<li>
+					<strong>Práctica desde el primer año</strong> — «Nuestro programa de
+					pasantías rentadas permite a los estudiantes aplicar sus conocimientos
+					teóricos en entornos clínicos supervisados, adquiriendo experiencia
+					profesional desde el primer año y garantizando una formación práctica y
+					completa.»
+				</li>
+			</ul>
+
+			<h4 class="mt-6">Programas de Formación Certificada</h4>
+			<p class="mt-1 max-w-3xl text-ink/80">
+				Kicker <strong>Programas</strong>. Introducción: «Descubrí nuestros programas
+				de formación psicoanalítica online certificados, basados en el pensamiento de
+				Freud y Lacan. Estudiá con docentes internacionales y obtené tu titulación
+				desde cualquier lugar del mundo.» Tres tarjetas (CTA "Conocé más", sin
+				destino real):
+			</p>
+			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
+				<li><strong>Diplomatura en Psicoterapia Psicoanalítica</strong> — «Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.»</li>
+				<li><strong>Máster en Psicoanálisis</strong> — «Programa avanzado basado en el pensamiento de Freud y Lacan, con docentes internacionales y titulación desde cualquier lugar del mundo.»</li>
+				<li><strong>Pasantías Rentadas</strong> — «Aplicá tus conocimientos teóricos en entornos clínicos supervisados desde el primer año.»</li>
+			</ul>
 
 			<h3 class="mt-8">Dropdown "Conócenos" (nav)</h3>
 			<p class="mt-2 max-w-3xl text-ink/80">

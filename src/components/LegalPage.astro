@@ -2,9 +2,11 @@
 /**
  * LegalPage — contenedor para páginas legales (aviso legal, privacidad,
  * términos). Encabezado + breadcrumb "volver al inicio" + contenido como
- * slot. Los bloques del contenido se escriben con la clase utilitaria
- * `prose` (ver global.css) para una tipografía legible sin dependencias.
+ * slot. El contenido se renderiza con la tipografía del propio contenedor
+ * (div con text-[0.9375rem] leading-relaxed), sin clases adicionales.
  */
+import VolverInicio from './VolverInicio.astro';
+
 interface Props {
 	title: string;
 	/** Etiqueta corta del tipo de documento (p. ej. "Legal"). */
@@ -13,17 +15,10 @@ interface Props {
 	updated?: string;
 }
 const { title, eyebrow = 'Legal', updated } = Astro.props;
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <main class="contenedor-lectura flex-1 py-12">
-	<a
-		href={base || '/'}
-		class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
-	>
-		<span aria-hidden="true">←</span> Volver al inicio
-	</a>
+	<VolverInicio />
 
 	<header class="mt-6 border-b border-divider/40 pb-6">
 		<p class="text-xs font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>

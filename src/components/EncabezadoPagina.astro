@@ -1,0 +1,37 @@
+---
+/**
+ * EncabezadoPagina — cabecera de las páginas internas: eyebrow + h1 + lead
+ * opcional. Replica el markup de facultad, nuestra-biblioteca, plantel-academico
+ * y textos.
+ *
+ * `size` elige el tamaño del h1:
+ *   - 'lg' (default): text-4xl sm:text-5xl — facultad, biblioteca, plantel.
+ *   - 'md':           text-3xl sm:text-4xl — textos.
+ *
+ * El slot permite agregar contenido bajo el lead (p. ej. la línea de recuento
+ * de /textos o bajadas con markup inline como <code>).
+ */
+interface Props {
+	/** Kicker en uppercase (p. ej. "Institución"). */
+	eyebrow: string;
+	/** Título principal (h1). */
+	title: string;
+	/** Bajada opcional en texto plano. */
+	lead?: string;
+	/** Tamaño del h1: 'lg' (default) o 'md'. */
+	size?: 'lg' | 'md';
+}
+
+const { eyebrow, title, lead, size = 'lg' } = Astro.props;
+const h1Class =
+	size === 'md'
+		? 'mt-2 max-w-4xl text-3xl font-semibold leading-tight sm:text-4xl'
+		: 'mt-2 max-w-4xl text-4xl font-semibold leading-tight sm:text-5xl';
+---
+
+<header class="mt-6">
+	<p class="text-xs font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>
+	<h1 class={h1Class}>{title}</h1>
+	{lead && <p class="mt-4 max-w-3xl text-lg leading-relaxed text-ink/80">{lead}</p>}
+	<slot />
+</header>

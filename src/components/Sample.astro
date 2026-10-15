@@ -14,5 +14,8 @@ const { html = '', onLight = false } = Astro.props;
 			? 'border-divider/30 bg-white'
 			: 'border-divider/30 bg-surface',
 	]}
-	set:html={html}
-></div>
+>
+	<!-- `html` para muestras en string; el slot, para muestras que necesitan
+	     componentes Astro (p. ej. el wordmark del logo, ticket LogoTexto). -->
+	{html ? <Fragment set:html={html} /> : <slot />}
+</div>

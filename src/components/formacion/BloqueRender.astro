@@ -11,17 +11,16 @@
 import Rico from './Rico.astro';
 import Contador from './Contador.astro';
 import Avatar from '../Avatar.astro';
+import IconoChevron from '../IconoChevron.astro';
 import LogoCarrusel from './LogoCarrusel.astro';
+import Lema from './Lema.astro';
+import PersonaCard from './PersonaCard.astro';
 // Auto-import para el bloque `columnas`: dibuja bloques anidados reutilizando
 // este mismo render (2/3 + 1/3, tarjetas en panel con fondo, etc.).
 import BloqueRender from './BloqueRender.astro';
 import { siglasDe } from '../../data/docentes';
 import type { Bloque, IconoFacultad, IconoMetodologia } from '../../data/componentes';
-
-const base = import.meta.env.BASE_URL;
-// Prefija rutas internas con la base; deja intactas "#", anclas y URLs absolutas.
-const link = (href: string) =>
-	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
+import { link } from '../../lib/link';
 
 interface Props {
 	bloque: Bloque;
@@ -39,7 +38,6 @@ const { bloque: b, layout = 'clasico' } = Astro.props;
 
 const secciones = layout === 'secciones';
 
-const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-accent transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"/></svg>`;
 // Íconos de la tarjeta "dirigido-a" (check / cruz en círculo), heredan el color.
 // La cruz va en la paleta "accent" (terracota) para distinguirla del check (brand/vino).
 const checkIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 text-brand"><circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>`;
@@ -58,18 +56,6 @@ const iconosMetodologia: Record<IconoMetodologia, string> = {
 	comunidad: `<circle cx="12" cy="12" r="9"/><path d="M3.5 12h17"/><path d="M12 3a14.5 14.5 0 0 1 0 18 14.5 14.5 0 0 1 0-18"/>`,
 	investigacion: `<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>`,
 };
-
-// Lema de articula: "frase **Palabra clave**". La frase va arriba y la palabra
-// clave abajo, sola, grande y en vino. Separa ambos para renderizarlas aparte.
-function lemaPartes(linea: string): { antes: string; palabra: string; despues: string } {
-	const m = linea.match(/\*\*(.+?)\*\*/);
-	if (!m) return { antes: linea.trim(), palabra: '', despues: '' };
-	return {
-		antes: linea.slice(0, m.index ?? 0).trim(),
-		palabra: m[1],
-		despues: linea.slice((m.index ?? 0) + m[0].length).trim(),
-	};
-}
 
 // Iconos minimalistas (trazo fino, sin relleno) de los pilares institucionales.
 // Representan la misma idea que los iconos FontAwesome del original (globo,
@@ -163,7 +149,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 {b.tipo === 'contadores' && (
 	<ul class="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
 		{b.items.map((c) => (
-			<li class="rounded-xl border border-divider/30 bg-surface p-5 text-center">
+			<li class="rounded-xl card p-5 text-center">
 				<span class="block font-display text-3xl font-semibold text-brand">
 					<Contador valor={c.valor} />
 				</span>
@@ -175,7 +161,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 
 {/* Beneficio — tarjeta de valor con precio */}
 {b.tipo === 'beneficio' && (
-	<article class="mt-6 rounded-2xl border border-divider/30 bg-surface p-6">
+	<article class="mt-6 rounded-2xl card p-6">
 		<div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
 			<h4 class="text-lg font-semibold text-ink-strong">{b.titulo}</h4>
 			<span class="font-display text-2xl font-semibold text-brand">{b.precio}</span>
@@ -260,15 +246,17 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 )}
 
 {/* Estadísticas de inserción — sección full-bleed con mapa mundial de fondo.
-     El ancho es del 100vw rompiendo el contenedor del contenido (técnica
-     w-screen + -ml-[50vw] + left-1/2). Fondo muted (bg-muted) con el
+     El ancho es del 100vw rompiendo el contenedor del contenido (utilidad
+     full-bleed). Fondo muted (bg-muted) con el
      world_map a 40% de opacidad para dar menos contraste que el antiguo
      bg-night. */}
 {b.tipo === 'stats' && (
 	<section
-		class={`relative scroll-mt-24 bg-muted py-16 sm:py-20${secciones ? '' : ' left-1/2 -ml-[50vw] mt-8 w-screen'}`}
+		id={b.id}
+		class={`relative scroll-mt-24 bg-muted py-16 sm:py-20${secciones ? '' : ' full-bleed mt-8'}`}
 		aria-label="Inserción laboral"
 	>
+
 		{/* Mapa mundial de fondo (opacidad 40%). */}
 		<div
 			class="pointer-events-none absolute inset-0 opacity-40"
@@ -311,7 +299,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	<details class="group mt-4 rounded-xl border border-divider/40 bg-surface">
 		<summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold text-ink-strong [&::-webkit-details-marker]:hidden">
 			<span>{b.pregunta}</span>
-			<span set:html={chevron} />
+			<span><IconoChevron class="size-4 shrink-0 text-accent transition-transform group-open:rotate-180" /></span>
 		</summary>
 		<div class="px-5 pb-5">
 			{b.respuesta.map((p) => (
@@ -338,7 +326,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      el footer va pegado debajo, sin separaciones. Estructura mínima: la section
      full-bleed tiene UN contenedor central con el padding para el texto. */}
 {b.tipo === 'cta' && (
-	<section class={`bg-brand py-16 text-center sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-12 w-screen'}`}>
+	<section class={`bg-brand py-16 text-center sm:py-20${secciones ? '' : ' full-bleed mt-12'}`}>
 		<div class="contenedor">
 			<h2 class="text-white">{b.titulo}</h2>
 			{b.subtitulo && <p class="mt-2 text-white/85">{b.subtitulo}</p>}
@@ -427,110 +415,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	>
 		{b.personas.map((p) => (
 			<li>
-				{b.modal ? (
-					<button
-						type="button"
-						data-persona-card
-						data-persona-nombre={p.nombre}
-						data-persona-titulo={p.titulo ?? ''}
-						data-persona-siglas={siglasDe(p.nombre)}
-						data-persona-foto={p.foto ? link(p.foto) : ''}
-						data-persona-bio={JSON.stringify(Array.isArray(p.bio) ? p.bio : p.bio ? [p.bio] : [])}
-						class="flex h-full w-full flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5 text-left transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-					>
-						{b.fotoGrande ? (
-							<Fragment>
-								{p.foto ? (
-									<img
-										src={link(p.foto)}
-										alt={p.nombre}
-										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
-										loading="lazy"
-									/>
-								) : (
-									<span class="flex justify-center">
-										<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
-									</span>
-								)}
-								<span class="mt-1 block text-center">
-									<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
-									{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
-								</span>
-							</Fragment>
-						) : (
-							<Fragment>
-								<span class="flex w-full items-center gap-4">
-									{p.foto ? (
-										<img src={link(p.foto)} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
-									) : (
-										<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
-									)}
-									<span class="min-w-0">
-										<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
-										{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
-									</span>
-								</span>
-								<span class="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-									Ver perfil
-									<svg
-										viewBox="0 0 24 24"
-										class="h-3.5 w-3.5"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										aria-hidden="true"
-									>
-										<path d="M7 17 17 7M8 7h9v9" />
-									</svg>
-								</span>
-							</Fragment>
-						)}
-					</button>
-				) : (
-					<div class="flex h-full flex-col gap-3 rounded-xl border border-divider/30 bg-surface p-5">
-						{b.fotoGrande ? (
-							<Fragment>
-								{p.foto ? (
-									<img
-										src={link(p.foto)}
-										alt={p.nombre}
-										class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
-										loading="lazy"
-									/>
-								) : (
-									<span class="flex justify-center">
-										<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
-									</span>
-								)}
-								<div class="text-center">
-									<p class="font-semibold text-ink-strong">{p.nombre}</p>
-									{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
-								</div>
-							</Fragment>
-						) : (
-							<div class="flex items-center gap-4">
-								{p.foto ? (
-									<img src={link(p.foto)} alt={p.nombre} class="h-16 w-16 shrink-0 rounded-full object-cover" loading="lazy" />
-								) : (
-									<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
-								)}
-								<div>
-									<p class="font-semibold text-ink-strong">{p.nombre}</p>
-									{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
-								</div>
-							</div>
-						)}
-						{p.bio && (
-							<div class="space-y-2">
-								{p.bio.map((linea) => (
-									<Rico texto={linea} class="text-sm leading-relaxed text-ink/75" />
-								))}
-							</div>
-						)}
-					</div>
-				)}
+				<PersonaCard persona={p} modal={b.modal} fotoGrande={b.fotoGrande} />
 			</li>
 		))}
 	</ul>
@@ -587,7 +472,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 					</div>
 				</li>
 			) : (
-				<li class="flex flex-col overflow-hidden rounded-xl border border-divider/30 bg-surface">
+				<li class="flex flex-col overflow-hidden rounded-xl card">
 					{t.imagen && (
 						<img
 							src={link(t.imagen)}
@@ -665,7 +550,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 {b.tipo === 'dirigido-a' && (
 	<div>
 		<div class="mx-auto grid max-w-5xl gap-5 md:grid-cols-3 md:gap-8 lg:gap-10">
-			<article class="flex flex-col rounded-2xl border border-divider/30 bg-surface p-6 md:col-span-2 md:p-8">
+			<article class="flex flex-col rounded-2xl card p-6 md:col-span-2 md:p-8">
 				<h3 class="font-subheading text-2xl font-semibold text-ink-strong">{b.positivos.titulo}</h3>
 				<div class="mt-3 h-px w-12 bg-brand" aria-hidden="true"></div>
 				<ul class="mt-5 flex flex-1 list-none flex-col justify-between gap-4 p-0">
@@ -677,7 +562,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 					))}
 				</ul>
 			</article>
-			<article class="flex flex-col rounded-2xl border border-divider/30 bg-surface p-6 md:p-8">
+			<article class="flex flex-col rounded-2xl card p-6 md:p-8">
 				<h3 class="font-subheading text-2xl font-semibold text-ink-strong">{b.negativos.titulo}</h3>
 				<div class="mt-3 h-px w-12 bg-accent" aria-hidden="true"></div>
 				<ul class="mt-5 flex flex-1 list-none flex-col justify-between gap-4 p-0">
@@ -714,6 +599,162 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 {b.tipo === 'carrusel-logos' && (
 	<LogoCarrusel logos={b.logos} label="Instituciones asociadas" />
 )}
+{/* Carrusel — slider horizontal con flechas y automovimiento. Reutiliza el
+     script del slider de `profesores` (mismos data-*). Variante 'personas':
+     retratos (aspect 4/5) con nombre + rol; con `modal` cada tarjeta abre el
+     popup de perfil (ModalPersona). Variante 'tarjetas': tarjetas de texto con
+     "Conocé más →". */}
+{b.tipo === 'carrusel' && (
+	<div class:list={[secciones ? '' : 'mt-14', 'scroll-mt-24']} id={b.id}>
+		{b.kicker && (
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">{b.kicker}</p>
+		)}
+		{b.titulo && <h2 class="mt-0 first:mt-0">{b.titulo}</h2>}
+		{b.intro && (
+			<div class="mt-6 space-y-3">
+				{(Array.isArray(b.intro) ? b.intro : [b.intro]).map((p) => (
+					<Rico texto={p} class="max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85" />
+				))}
+			</div>
+		)}
+		<div class="relative mt-10" data-profesores-slider>
+			<div
+				class="flex snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+				data-profesores-viewport
+			>
+				<ul class="flex list-none gap-5 p-0">
+					{b.items.map((it) => (
+						<li
+							class={
+								b.variante === 'personas'
+									? 'w-60 shrink-0 snap-start sm:w-64'
+									: 'w-72 shrink-0 snap-start sm:w-80'
+							}
+						>
+							{b.variante === 'personas' ? (
+								b.modal ? (
+									<button
+										type="button"
+										data-persona-card
+										data-persona-nombre={it.titulo}
+										data-persona-titulo={it.subtitulo ?? ''}
+										data-persona-siglas={siglasDe(it.titulo)}
+										data-persona-foto={it.foto ? link(it.foto) : ''}
+										data-persona-bio={JSON.stringify(it.bio ?? [])}
+										class="group flex h-full w-full flex-col gap-3 rounded-xl card p-4 text-left transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+									>
+										{it.foto ? (
+											<img
+												src={link(it.foto)}
+												alt={it.titulo}
+												class="aspect-[4/5] w-full rounded-lg object-cover"
+												loading="lazy"
+											/>
+										) : (
+											<span class="flex justify-center">
+												<Avatar name={it.titulo} class="h-24 w-24 text-2xl" />
+											</span>
+										)}
+										<span class="block leading-snug font-semibold text-ink-strong">{it.titulo}</span>
+										{it.subtitulo && <span class="block text-sm text-muted">{it.subtitulo}</span>}
+										<span class="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
+											Ver perfil
+											<svg
+												viewBox="0 0 24 24"
+												class="h-3.5 w-3.5"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												aria-hidden="true"
+											>
+												<path d="M7 17 17 7M8 7h9v9" />
+											</svg>
+										</span>
+									</button>
+								) : (
+									<figure class="m-0 flex h-full flex-col gap-3 rounded-xl card p-4">
+										{it.foto ? (
+											<img
+												src={link(it.foto)}
+												alt={it.titulo}
+												class="aspect-[4/5] w-full rounded-lg object-cover"
+												loading="lazy"
+											/>
+										) : (
+											<span class="flex justify-center">
+												<Avatar name={it.titulo} class="h-24 w-24 text-2xl" />
+											</span>
+										)}
+										<figcaption>
+											<span class="block leading-snug font-semibold text-ink-strong">{it.titulo}</span>
+											{it.subtitulo && <span class="mt-0.5 block text-sm text-muted">{it.subtitulo}</span>}
+										</figcaption>
+									</figure>
+								)
+							) : (
+								<article class="flex h-full flex-col rounded-xl card p-5">
+									<p class="font-semibold text-ink-strong">{it.titulo}</p>
+									{it.descripcion && (
+										<p class="mt-2 flex-1 text-sm leading-relaxed text-ink/75">{it.descripcion}</p>
+									)}
+									{it.href && (
+										<a
+											href={link(it.href)}
+											class="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand hover:text-accent hover:no-underline"
+										>
+											Conocé más <span aria-hidden="true">→</span>
+										</a>
+									)}
+								</article>
+							)}
+						</li>
+					))}
+				</ul>
+			</div>
+			{/* Flechas prev/next (reutilizan los data-* del slider de profesores). */}
+			<button
+				type="button"
+				data-profesores-prev
+				aria-label="Anterior"
+				class="absolute left-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:left-3"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-4"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="m15 18-6-6 6-6" />
+				</svg>
+			</button>
+			<button
+				type="button"
+				data-profesores-next
+				aria-label="Siguiente"
+				class="absolute right-2 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white/95 text-ink shadow-md transition-colors hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:right-3"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					class="size-4"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="m9 6 6 6-6 6" />
+				</svg>
+			</button>
+		</div>
+	</div>
+)}
 {/* Articula — sección "… articula:" con los ejes de la formación. Copia
      simplificada del bloque de articulación del landing original, adaptada
      a los estilos y la paleta del sitio: fondo full-bleed en gradiente claro
@@ -727,29 +768,15 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      h1 y a tono con el h2 de la sección. */}
 {b.tipo === 'articula' && (
 	<section
-		class={`scroll-mt-24 bg-gradient-to-b from-white to-surface py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-8 w-screen'}`}
+		class={`scroll-mt-24 bg-gradient-to-b from-white to-surface py-16 sm:py-20${secciones ? '' : ' full-bleed mt-8'}`}
 		aria-label={b.titulo}
 	>
 		<div class="contenedor">
 			<h2>{b.titulo}</h2>
 			<div class="mt-8 flex flex-col-reverse gap-10 md:grid md:grid-cols-2 md:gap-14 lg:gap-20">
-				{/* Izquierda: lema institucional, alineado a la izquierda. Cada
-				     lema es frase arriba + palabra clave abajo (grande, vino). */}
-				<div class="flex flex-col items-start gap-8 text-left">
-					{b.lema.map((linea) => {
-						const { antes, palabra, despues } = lemaPartes(linea);
-						return (
-							<div class="flex w-full flex-col items-start gap-4">
-								<p class="mb-0 font-heading text-xl leading-relaxed text-ink sm:text-2xl">
-									{antes}
-									{palabra && <span class="mt-1 block font-serif font-bold leading-none text-brand text-[1.75rem]">{palabra}</span>}
-									{despues}
-								</p>
-								<div class="h-[5px] w-full bg-brand" aria-hidden="true"></div>
-							</div>
-						);
-					})}
-				</div>
+
+				{/* Izquierda: lema institucional, alineado a la izquierda. */}
+				<Lema lema={b.lema} />
 				{/* Derecha: ejes numerados — la lista cubre el alto del contenedor
 				     (la columna del lema es más alta; justify-between reparte los
 				     ejes a lo largo de todo el alto). */}
@@ -836,21 +863,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 		<h2>{b.titulo}</h2>
 		<div class="mt-8 grid items-center gap-10 md:grid-cols-2 md:gap-14">
 			{/* Izquierda: sellos de metodología. */}
-			<div class="flex flex-col items-start gap-8 text-left">
-				{b.lema.map((linea) => {
-					const { antes, palabra, despues } = lemaPartes(linea);
-					return (
-						<div class="flex w-full flex-col items-start gap-4">
-							<p class="mb-0 font-heading text-xl leading-relaxed text-ink sm:text-2xl">
-								{antes}
-								{palabra && <span class="mt-1 block font-serif font-bold leading-none text-brand text-[1.75rem]">{palabra}</span>}
-								{despues}
-							</p>
-							<div class="h-[5px] w-full bg-brand" aria-hidden="true"></div>
-						</div>
-					);
-				})}
-			</div>
+			<Lema lema={b.lema} />
 			{/* Derecha: video (placeholder 16:9, sin src por ahora). */}
 			<div
 				class="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-2xl bg-ink/[0.06]"
@@ -1007,7 +1020,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</div>
 )}
 
-{/* Módulos de Clases — sección full-bleed (w-screen + -ml-[50vw] + left-1/2),
+{/* Módulos de Clases — sección full-bleed (utilidad full-bleed),
      copia de la landing del Máster: fondo claro de ancho total, título centrado,
      intro y un carrusel A ANCHO COMPLETO (el track ocupa todo el viewport, no
      queda encerrado en el contenedor del texto). Las cards se deslizan SOLAS
@@ -1020,7 +1033,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      con su propio margen). */}
 {b.tipo === 'modulos' && (
 	<section
-		class={`scroll-mt-24 bg-surface py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] mt-14 w-screen'}`}
+		class={`scroll-mt-24 bg-surface py-16 sm:py-20${secciones ? '' : ' full-bleed mt-14'}`}
 		id="modulos-clases"
 		aria-label={b.titulo}
 	>
@@ -1123,7 +1136,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	}
 </style>
 
-{/* Certificación — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con
+{/* Certificación — sección full-bleed (utilidad full-bleed) con
      fondo claro, copia de la sección #certificacion de la landing del Máster:
      texto a la izquierda (título, párrafo institucional, puntos con check y
      botón opcional) y el diploma de muestra a la derecha (figura). Estructura
@@ -1131,7 +1144,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      un grid de 2 columnas. Los márgenes viven donde está el texto. */}
 {b.tipo === 'certificacion' && (
 	<section
-		class={`scroll-mt-24${secciones ? ' py-14 sm:py-16' : ' bg-surface py-16 sm:py-20 relative left-1/2 -ml-[50vw] mt-14 w-screen'}`}
+		class={`scroll-mt-24${secciones ? ' py-14 sm:py-16' : ' bg-surface py-16 sm:py-20 full-bleed mt-14'}`}
 		id="certificacion"
 		aria-label={b.titulo}
 	>
@@ -1187,7 +1200,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 	</section>
 )}
 
-{/* Admisión — sección full-bleed (w-screen + -ml-[50vw] + left-1/2) con fondo:
+{/* Admisión — sección full-bleed (utilidad full-bleed) con fondo:
      imagen + tinte vino en una sola capa (gradiente + url). Margen global en la
      section; dentro solo 1 grid de 2 columnas. Ambos títulos son h2
      (tipografía base respetada) y quedan a la misma altura. Columna izquierda
@@ -1196,7 +1209,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
      y botón invertido. */}
 {b.tipo === 'admision' && (
 	<section
-		class={`scroll-mt-24 overflow-hidden bg-night bg-cover bg-center py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] w-screen'}`}
+		class={`scroll-mt-24 overflow-hidden bg-night bg-cover bg-center py-16 sm:py-20${secciones ? '' : ' full-bleed'}`}
 		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
 		aria-label={b.izqTitulo}
 	>
@@ -1264,7 +1277,7 @@ const iconosFacultad: Record<IconoFacultad, string> = {
 {b.tipo === 'planes' && (
 	<section
 		id={b.id ?? undefined}
-		class={`scroll-mt-24 overflow-hidden bg-night bg-cover bg-center py-16 sm:py-20${secciones ? '' : ' relative left-1/2 -ml-[50vw] w-screen'}`}
+		class={`scroll-mt-24 overflow-hidden bg-night bg-cover bg-center py-16 sm:py-20${secciones ? '' : ' full-bleed'}`}
 		style={`background-image: linear-gradient(rgba(91,17,51,.85), rgba(91,17,51,.85)), url('${link(b.fondo)}')`}
 		aria-label={b.titulo}
 	>

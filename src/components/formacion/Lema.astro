@@ -1,0 +1,48 @@
+---
+/**
+ * Lema — columna izquierda de los bloques "articula" y "metodologia".
+ *
+ * Cada línea del lema es "frase **Palabra clave**": la frase va arriba y la
+ * palabra clave abajo, sola, grande y en Roboto Serif vino, con un separador
+ * vino debajo; todo alineado a la izquierda. La frase y la palabra clave se
+ * separan con `lemaPartes` para renderizarlas aparte.
+ */
+interface Props {
+	/** Líneas del lema ("frase **Palabra clave**"). */
+	lema: string[];
+}
+
+const { lema } = Astro.props;
+
+function lemaPartes(linea: string): { antes: string; palabra: string; despues: string } {
+	const m = linea.match(/\*\*(.+?)\*\*/);
+	if (!m) return { antes: linea.trim(), palabra: '', despues: '' };
+	return {
+		antes: linea.slice(0, m.index ?? 0).trim(),
+		palabra: m[1],
+		despues: linea.slice((m.index ?? 0) + m[0].length).trim(),
+	};
+}
+---
+
+<div class="flex flex-col items-start gap-8 text-left">
+	{
+		lema.map((linea) => {
+			const { antes, palabra, despues } = lemaPartes(linea);
+			return (
+				<div class="flex w-full flex-col items-start gap-4">
+					<p class="mb-0 font-heading text-xl leading-relaxed text-ink sm:text-2xl">
+						{antes}
+						{palabra && (
+							<span class="mt-1 block font-serif font-bold leading-none text-brand text-[1.75rem]">
+								{palabra}
+							</span>
+						)}
+						{despues}
+					</p>
+					<div class="h-[5px] w-full bg-brand" aria-hidden="true" />
+				</div>
+			);
+		})
+	}
+</div>

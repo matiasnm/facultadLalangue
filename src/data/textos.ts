@@ -15,6 +15,7 @@ import { facultadSecciones } from './facultad';
 import { plantelSecciones } from './plantel';
 import { bibliotecaSecciones } from './biblioteca';
 import { formaciones } from './formaciones';
+import { homeSecciones } from './home';
 import { bloquesAItems } from './inventario';
 import type { ItemInventario, PaginaInventario } from './inventario';
 
@@ -40,6 +41,7 @@ export const textos: PaginaInventario[] = [
 		ruta: '/',
 		titulo: 'Facultad Internacional de Psicología y Psicoanálisis Lalangue',
 		secciones: [
+			/* Hero (escrito inline en index.astro) */
 			{ etiqueta: 'p (kicker)', texto: 'Institución académica francesa · formación clínica y psicoanálisis' },
 			{ etiqueta: 'h1', texto: 'Facultad Internacional de Psicología y Psicoanálisis Lalangue' },
 			{
@@ -47,197 +49,8 @@ export const textos: PaginaInventario[] = [
 				texto: 'Institución académica francesa dedicada a la formación clínica y al desarrollo del pensamiento contemporáneo en psicología y psicoanálisis. Construyendo una clínica rigurosa, ética, internacional y plural, para toda la comunidad hispanohablante global.',
 			},
 			{ etiqueta: 'a (cta)', texto: 'Explorar formaciones' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Identidad' },
-			{ etiqueta: 'h2', texto: 'Una formación clínica francesa, con alcance global' },
-			{
-				etiqueta: 'p',
-				texto: 'Lalangue es una institución académica francesa dedicada a la formación clínica y al desarrollo del pensamiento contemporáneo en psicología y psicoanálisis.',
-			},
-			{
-				etiqueta: 'p',
-				texto: 'Nuestra actividad académica cuenta con el aval de instituciones europeas del campo clínico y educativo.',
-			},
-			{
-				etiqueta: 'blockquote',
-				texto: 'Desarrollamos programas formativos dirigidos a la comunidad hispanohablante global, promoviendo una clínica rigurosa, ética, internacional y plural.',
-			},
-
-			{ etiqueta: 'p (kicker)', texto: 'Visión' },
-			{ etiqueta: 'h2', texto: 'El modelo educativo francés, en diálogo con la clínica contemporánea' },
-			{
-				etiqueta: 'p',
-				texto: 'Desde su origen, el proyecto académico se ha orientado a construir un espacio de formación global que articule el modelo educativo francés con las realidades clínicas contemporáneas del mundo hispanohablante, impulsando nuevos formatos que prioricen el acceso del deseo vocacional a la calidad educativa.',
-			},
-			{
-				etiqueta: 'p',
-				texto: 'Bajo esta inspiración, Lalangue propone el estudio riguroso de diversos modelos teóricos de la psicología moderna, integrando aportes de las ciencias y favoreciendo el diálogo entre las diversas corrientes de la psicoterapia.',
-			},
-			{ etiqueta: 'p (sub)', texto: 'Problemáticas de la subjetividad contemporánea' },
-			{ etiqueta: 'li', texto: 'Transformaciones en los vínculos sociales' },
-			{ etiqueta: 'li', texto: 'Impacto de los entornos digitales en la subjetividad' },
-			{ etiqueta: 'li', texto: 'Nuevas configuraciones del deseo y del goce' },
-			{ etiqueta: 'li', texto: 'Dinámicas familiares contemporáneas' },
-			{ etiqueta: 'li', texto: 'Procesos psicopatológicos emergentes' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Modelo' },
-			{ etiqueta: 'h2', texto: 'Formaciones profesionalizantes bajo el régimen francés' },
-			{
-				etiqueta: 'p',
-				texto: 'La propuesta formativa de Lalangue se estructura bajo el régimen francés de formaciones profesionalizantes ( formations professionnalisantes ). El modelo pedagógico articula tres pilares.',
-			},
-			{ etiqueta: 'h4', texto: 'Formación teórica sistemática' },
-			{ etiqueta: 'p', texto: 'Estudio riguroso de diversos modelos teóricos de la psicología moderna, integrando aportes de las ciencias.' },
-			{ etiqueta: 'h4', texto: 'Práctica clínica supervisada' },
-			{ etiqueta: 'p', texto: 'Acompañamiento de casos clínicos bajo la orientación de docentes con experiencia.' },
-			{ etiqueta: 'h4', texto: 'Salida laboral internacional' },
-			{ etiqueta: 'p', texto: 'Inserción profesional mediante redes clínicas internacionales y plataformas de consulta online.' },
-			{
-				etiqueta: 'blockquote',
-				texto: 'Sostener el desarrollo de profesionales capaces de osar una práctica clínica ética y rigurosa, en diálogo con los desafíos contemporáneos y en comunidad.',
-			},
-
-			{ etiqueta: 'p (kicker)', texto: 'Comunidad' },
-			{ etiqueta: 'h2', texto: 'Una comunidad internacional de más de 15 países' },
-			{
-				etiqueta: 'p',
-				texto: 'Lalangue reúne a docentes, estudiantes y profesionales de Europa y América Latina, promoviendo el intercambio plural como fuente de nuevos espacios académicos.',
-			},
-			{ etiqueta: 'h4', texto: 'Supervisiones clínicas grupales' },
-			{ etiqueta: 'p', texto: 'Acompañamiento de casos clínicos para profesionales y estudiantes bajo la orientación de docentes con experiencia.' },
-			{ etiqueta: 'h4', texto: 'Aulas Libres' },
-			{ etiqueta: 'p', texto: 'Talleres abiertos a la comunidad sobre contenidos de interés general desde la perspectiva de nuestros docentes.' },
-			{ etiqueta: 'h4', texto: 'Jornadas Internacionales' },
-			{ etiqueta: 'p', texto: 'Congresos académicos especializados vinculados a la psicología, el psicoanálisis y las ciencias humanas.' },
-			{ etiqueta: 'h4', texto: 'Grupos de Estudio' },
-			{ etiqueta: 'p', texto: 'Seminarios de trabajo teórico coordinados por docentes para profundizar la lectura de textos fundamentales.' },
-			{ etiqueta: 'p', texto: 'En los últimos meses, estas actividades han convocado a más de 30.000 participantes en nuestros eventos online.' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Clínica' },
-			{ etiqueta: 'h2', texto: 'Inserción profesional y redes clínicas internacionales' },
-			{
-				etiqueta: 'p',
-				texto: 'Lalangue promueve la inserción profesional de sus estudiantes mediante la participación en redes clínicas internacionales y plataformas de consulta online.',
-			},
-			{ etiqueta: 'li', texto: 'Colaboración con plataformas internacionales de psicoterapia' },
-			{ etiqueta: 'li', texto: 'Participación en directorios profesionales' },
-			{ etiqueta: 'li', texto: 'Desarrollo de redes clínicas supervisadas' },
-			{ etiqueta: 'p (card)', texto: 'Supervisiones Clínicas Lalangue' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Formaciones' },
-			{ etiqueta: 'h2', texto: 'Diplomaturas Internacionales especializadas' },
-			{
-				etiqueta: 'p',
-				texto: 'El cuerpo docente de Lalangue está integrado por profesionales con trayectoria académica y clínica en universidades, centros de formación y asociaciones profesionales de diversos marcos teóricos del campo de la psicología y del psicoanálisis.',
-			},
-			{ etiqueta: 'p (sub)', texto: 'Áreas de especialización' },
-			{ etiqueta: 'li', texto: 'Psicopatología Infanto-Juvenil' },
-			{ etiqueta: 'li', texto: 'Subjetividad Digital' },
-			{ etiqueta: 'li', texto: 'Terapia de Parejas y Erotismo Relacional' },
-			{ etiqueta: 'li', texto: 'Abordaje del Ataque de Pánico' },
-			{ etiqueta: 'li', texto: 'Terapias Breves' },
-			{ etiqueta: 'h3', texto: 'Diplomado Internacional en Psicoterapia con Enfoque Psicoanalítico Lalangue' },
-			{ etiqueta: 'p', texto: 'Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.' },
-			{ etiqueta: 'li', texto: 'Duración: 2 años (72 clases)' },
-			{ etiqueta: 'li', texto: 'Modalidad: 100% online con clases grabadas y encuentros sincrónicos' },
-			{ etiqueta: 'p (sub)', texto: 'Incluye' },
-			{ etiqueta: 'li', texto: 'Supervisión clínica grupal' },
-			{ etiqueta: 'li', texto: 'Participación en espacios comunitarios' },
-			{ etiqueta: 'li', texto: 'Acceso a directorios profesionales internacionales' },
-			{ etiqueta: 'li', texto: 'Certificación europea bajo régimen francés de formación profesionalizante' },
-			{ etiqueta: 'h3', texto: 'Máster Internacional en Psicoanálisis Aplicado Lalangue' },
-			{ etiqueta: 'p', texto: 'Formación avanzada orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.' },
-			{ etiqueta: 'li', texto: 'Duración: 2 años (144 clases)' },
-			{ etiqueta: 'li', texto: 'Modalidad: 100% online con clases grabadas y encuentros sincrónicos' },
-			{ etiqueta: 'p (sub)', texto: 'Incluye' },
-			{ etiqueta: 'li', texto: 'Supervisión clínica grupal' },
-			{ etiqueta: 'li', texto: 'Participación en espacios comunitarios' },
-			{ etiqueta: 'li', texto: 'Acceso a directorios profesionales internacionales' },
-			{ etiqueta: 'li', texto: 'Certificación europea bajo régimen francés de formación profesionalizante' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Cierre' },
-			{ etiqueta: 'h2', texto: 'Tender puentes' },
-			{
-				etiqueta: 'p',
-				texto: 'Lalangue busca contribuir al desarrollo del pensamiento clínico contemporáneo que aborde los desafíos culturales, sociales y tecnológicos de nuestro tiempo, estableciendo la formación clínica como un proceso que combina:',
-			},
-			{ etiqueta: 'li', texto: 'Estudio teórico riguroso' },
-			{ etiqueta: 'li', texto: 'Práctica clínica supervisada' },
-			{ etiqueta: 'li', texto: 'Trabajo colectivo en una comunidad académica internacional' },
-			{
-				etiqueta: 'p',
-				texto: 'Escuchando las inquietudes de la época, optando por desempeñar un papel protagónico en una era profundamente tecnificada e individualizada, para tender puentes.',
-			},
-
-			/* ── Secciones marcadas BORRADOR (copiadas de la web actual) ── */
-			{ etiqueta: 'p (borrador)', texto: 'Borrador — secciones copiadas de la web actual' },
-			{ etiqueta: 'p (kicker)', texto: 'Últimas Novedades' },
-			{ etiqueta: 'h2', texto: 'Lo que está pasando en la comunidad' },
-			{ etiqueta: 'span', texto: 'Comunidad de WhatsApp' },
-			{ etiqueta: 'h4', texto: 'Únete a nuestra comunidad' },
-			{ etiqueta: 'p', texto: 'Accedé al nuevo grupo de WhatsApp de Facultad Lalangue. Noticias, eventos y oportunidades de formación en psicoanálisis y psicoterapia.' },
-			{ etiqueta: 'a (cta)', texto: 'Súmate aquí →' },
-			{ etiqueta: 'span', texto: 'Becas en psicoanálisis y psicoterapia' },
-			{ etiqueta: 'h4', texto: 'Solicitá información sobre becas' },
-			{ etiqueta: 'p', texto: 'Accedé a orientación personalizada para conocer los requisitos, disponibilidad y beneficios de nuestras becas. Un asesor te guiará paso a paso para que puedas postular sin vueltas.' },
-			{ etiqueta: 'a (cta)', texto: 'Quiero información →' },
-
-			{ etiqueta: 'p (kicker)', texto: 'efpp' },
-			{ etiqueta: 'h2', texto: 'Más de 20 años de Excelencia en Psicoterapia y Psicoanálisis' },
-			{
-				etiqueta: 'p',
-				texto: 'La Facultad Internacional de Psicología y Psicoanálisis Lalangue abre sus puertas e invita a los estudiantes hispanoparlantes, expandiendo su prestigiosa formación en psicoterapia y psicoanálisis a nuevas fronteras.',
-			},
-			{ etiqueta: 'h4', texto: 'Formaciones Flexibles' },
-			{ etiqueta: 'p', texto: 'Estudia desde cualquier lugar con programas adaptados a tu ritmo.' },
-			{ etiqueta: 'h4', texto: 'Docentes de Renombre' },
-			{ etiqueta: 'p', texto: 'Expertos con una sólida trayectoria en sus respectivas disciplinas.' },
-			{ etiqueta: 'h4', texto: 'Certificación Internacional' },
-			{ etiqueta: 'p', texto: 'Obtén una titulación reconocida con respaldo académico de excelencia.' },
-			{ etiqueta: 'h4', texto: 'Pasantías Rentadas' },
-			{ etiqueta: 'p', texto: 'Aplicá conocimientos en entornos clínicos supervisados desde el primer año.' },
-
-			{ etiqueta: 'p (kicker)', texto: 'Nuestra Filosofía' },
-			{ etiqueta: 'h2', texto: 'Enfoque de Enseñanza Único' },
-			{ etiqueta: 'h4', texto: 'Excelencia y Flexibilidad' },
-			{
-				etiqueta: 'p',
-				texto: 'En FIPP Lalangue combinamos excelencia académica con flexibilidad para ofrecer formaciones certificadas en psicoterapia y psicoanálisis. Todos nuestros programas están disponibles en modalidad online, adaptándose a las necesidades de cada estudiante. Además, ofrecemos una experiencia única con pasantías rentadas.',
-			},
-			{ etiqueta: 'h4', texto: 'Formadores Expertos y Reconocidos' },
-			{
-				etiqueta: 'p',
-				texto: 'Nuestros formadores, expertos en su campo, brindan seguimiento personalizado, guiando el desarrollo académico y profesional de los estudiantes. Con un enfoque interdisciplinario y ético, promovemos una enseñanza innovadora que responde a las demandas actuales del psicoanálisis.',
-			},
-
-			{ etiqueta: 'p (kicker)', texto: 'Por qué elegirnos' },
-			{ etiqueta: 'h2', texto: '¿Por qué elegir nuestros programas de formación?' },
-			{ etiqueta: 'h4', texto: 'Excelencia Académica' },
-			{
-				etiqueta: 'p',
-				texto: 'Tanto nuestros fundadores como el plantel académico son expertos de reconocido prestigio, con una sólida trayectoria en psicoterapia y psicoanálisis. Se destacan por su capacidad de transmitir conocimientos de manera clara y accesible, sin comprometer la profundidad académica.',
-			},
-			{ etiqueta: 'h4', texto: 'Práctica desde el primer año' },
-			{
-				etiqueta: 'p',
-				texto: 'Nuestro programa de pasantías rentadas permite a los estudiantes aplicar sus conocimientos teóricos en entornos clínicos supervisados, adquiriendo experiencia profesional desde el primer año y garantizando una formación práctica y completa.',
-			},
-
-			{ etiqueta: 'p (kicker)', texto: 'Programas' },
-			{ etiqueta: 'h2', texto: 'Programas de Formación Certificada' },
-			{
-				etiqueta: 'p',
-				texto: 'Descubrí nuestros programas de formación psicoanalítica online certificados, basados en el pensamiento de Freud y Lacan. Estudiá con docentes internacionales y obtené tu titulación desde cualquier lugar del mundo.',
-			},
-			{ etiqueta: 'h4', texto: 'Diplomatura en Psicoterapia Psicoanalítica' },
-			{ etiqueta: 'p', texto: 'Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.' },
-			{ etiqueta: 'a (cta)', texto: 'Conocé más →' },
-			{ etiqueta: 'h4', texto: 'Máster en Psicoanálisis' },
-			{ etiqueta: 'p', texto: 'Programa avanzado basado en el pensamiento de Freud y Lacan, con docentes internacionales y titulación desde cualquier lugar del mundo.' },
-			{ etiqueta: 'a (cta)', texto: 'Conocé más →' },
-			{ etiqueta: 'h4', texto: 'Pasantías Rentadas' },
-			{ etiqueta: 'p', texto: 'Aplicá tus conocimientos teóricos en entornos clínicos supervisados desde el primer año.' },
-			{ etiqueta: 'a (cta)', texto: 'Conocé más →' },
+			/* Resto derivado de home.ts: carruseles + secciones compartidas + cierre. */
+			...bloquesAItems(homeSecciones),
 		],
 	},
 

@@ -160,6 +160,19 @@ function desplegar(b: Bloque, out: ItemInventario[], secciones: boolean) {
 		case 'carrusel-logos':
 			out.push(item('ul (carrusel-logos)', b.logos.map((l) => l.alt).join(' · ')));
 			break;
+		case 'carrusel':
+			if (b.kicker) out.push(item('p', b.kicker));
+			if (b.titulo) out.push(item('h2', b.titulo));
+			if (b.intro) {
+				for (const p of Array.isArray(b.intro) ? b.intro : [b.intro]) out.push(item('p', p));
+			}
+			for (const it of b.items) {
+				out.push(
+					item(b.variante === 'personas' ? 'li (persona)' : 'li (tarjeta)', [it.titulo, it.subtitulo ?? it.descripcion].filter(Boolean).join(' — ')),
+				);
+				if (it.bio) for (const bio of it.bio) out.push(item('p', bio));
+			}
+			break;
 		default: {
 			// Bloque desconocido/futuro: se ignora para no romper el inventario.
 			const _never: never = b;

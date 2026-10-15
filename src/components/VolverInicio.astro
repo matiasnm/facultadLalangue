@@ -1,0 +1,42 @@
+---
+/**
+ * VolverInicio — enlace "← Volver al inicio" de las páginas internas.
+ *
+ * Variantes:
+ *   - 'link'  (default): back-link inline con flecha. Lo usan facultad,
+ *     nuestra-biblioteca, plantel-academico, textos y las legales.
+ *   - 'boton': botón centrado de los estados vacíos (404, en construcción).
+ *
+ * El destino por defecto es la raíz del sitio respetando la base pública.
+ */
+import { base } from '../lib/link';
+
+interface Props {
+	/** 'link' (default) = back-link con flecha; 'boton' = botón del 404. */
+	variant?: 'link' | 'boton';
+	/** Destino. Default: la raíz del sitio (con base pública). */
+	href?: string;
+	/** Texto del enlace. Default: "Volver al inicio". */
+	label?: string;
+}
+
+const { variant = 'link', href = base || '/', label = 'Volver al inicio' } = Astro.props;
+---
+
+{
+	variant === 'boton' ? (
+		<a
+			href={href}
+			class="mt-8 rounded-md bg-accent px-6 py-3 font-display text-base font-semibold uppercase tracking-wide text-night transition-colors hover:bg-brand hover:text-white hover:no-underline"
+		>
+			{label}
+		</a>
+	) : (
+		<a
+			href={href}
+			class="inline-flex items-center gap-2 text-sm font-semibold text-brand transition-colors hover:text-accent hover:no-underline"
+		>
+			<span aria-hidden="true">←</span> {label}
+		</a>
+	)
+}

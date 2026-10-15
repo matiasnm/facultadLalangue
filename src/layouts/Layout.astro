@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { base } from '../lib/link';
+import { defaultTokens as TOKENS } from '../data/paletas';
 
 interface Props {
 	title: string;
@@ -18,14 +20,11 @@ const { title, overlay = false } = Astro.props;
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<!-- Favicons: ICO (legado) → SVG/PNG vectorial → PNG de alta resolución → apple-touch -->
-		<link rel="icon" href={import.meta.env.BASE_URL + 'favicon.ico'} sizes="any" />
-		<link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + 'favicon.svg'} />
-		<link rel="icon" type="image/png" sizes="16x16" href={import.meta.env.BASE_URL + 'favicon-16x16.png'} />
-		<link rel="icon" type="image/png" sizes="32x32" href={import.meta.env.BASE_URL + 'favicon-32x32.png'} />
-		<link
-			rel="apple-touch-icon"
-			href={import.meta.env.BASE_URL + 'apple-touch-icon.png'}
-		/>
+		<link rel="icon" href={base + 'favicon.ico'} sizes="any" />
+		<link rel="icon" type="image/svg+xml" href={base + 'favicon.svg'} />
+		<link rel="icon" type="image/png" sizes="16x16" href={base + 'favicon-16x16.png'} />
+		<link rel="icon" type="image/png" sizes="32x32" href={base + 'favicon-32x32.png'} />
+		<link rel="apple-touch-icon" href={base + 'apple-touch-icon.png'} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 
@@ -41,27 +40,16 @@ const { title, overlay = false } = Astro.props;
 		     Al cargar cualquier página, se leen los colores guardados en
 		     localStorage y se sobreescriben los tokens en :root, de modo que
 		     el sitio entero (incluido el header y el isotipo) se repinta. -->
-		<script is:inline>
+		<script define:vars={{ TOKENS }}>
 			(() => {
 				const KEY = 'lalangue-paleta';
-				// Tokens del tema default (Terracota apagado — los de global.css).
+				// TOKENS = tokens del tema default (Terracota apagado), importados
+				// de src/data/paletas.ts (defaultTokens): la única fuente TS de los
+				// valores por defecto (global.css solo espeja los mismos valores
+				// para el build de Tailwind, no puede importar TS).
 				// (El editor de /roadmap guarda cualquier token en localStorage;
 				//  acá se aplican todos los que haya: la elección de tema repinta
 				//  el sitio entero, incluido el isotipo del header y el footer.)
-				const TOKENS = {
-					brand: '#8c1c3f',
-					'brand-dark': '#5b1133',
-					'accent': '#c96f5a',
-					indigo: '#45426d',
-					night: '#191716',
-					background: '#ffffff',
-					surface: '#f6f5f4',
-					divider: '#e9e2dc',
-					'ink': '#332d2b',
-					'ink-strong': '#1a1614',
-					muted: '#756a64',
-					dim: '#948b85',
-				};
 				window.__LALANGUE_PALETA = { KEY, TOKENS };
 				try {
 					const saved = JSON.parse(localStorage.getItem(KEY) || 'null');

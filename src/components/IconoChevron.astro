@@ -1,0 +1,31 @@
+---
+/**
+ * IconoChevron — el único chevron del sitio (punta hacia abajo).
+ *
+ * Reemplaza las copias que vivían inline en Header y BloqueRender. El grosor
+ * del trazo se elige por prop: 2 (más tenue, el del cuerpo — FAQ) o 2.5 (el
+ * del menú / acordeón). El color sale de `currentColor`; el tamaño, la
+ * rotación (group-open) y el resto del estilo se pasan por `class`.
+ */
+interface Props {
+	/** Grosor del trazo SVG. 2 = cuerpo (default); 2.5 = menú. */
+	stroke?: number | string;
+	/** Clases para el <svg> (tamaño, color, transición…). */
+	class?: string;
+}
+
+const { stroke = 2, class: className } = Astro.props;
+---
+
+<svg
+	aria-hidden="true"
+	viewBox="0 0 24 24"
+	fill="none"
+	stroke="currentColor"
+	stroke-width={stroke}
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	class={className}
+>
+	<path d="m6 9 6 6 6-6"></path>
+</svg>

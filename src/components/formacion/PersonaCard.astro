@@ -1,0 +1,154 @@
+---
+/**
+ * PersonaCard — tarjeta de una persona dentro del bloque "equipo".
+ *
+ * Cubre las 4 variantes del markup actual (modal × foto-grande):
+ *   - fotoGrande: retrato grande (aspect 4/5) centrado con nombre y título;
+ *     sin foto-grande: avatar compacto en fila.
+ *   - modal: la tarjeta es un <button> que abre el popup de perfil (el bio
+ *     viaja en data-persona-bio); sin modal: una tarjeta <div> con el bio
+ *     visible.
+ *
+ * Dentro del <button> (modelo de contenido phrasing) el texto se marca con
+ * <span class="block">; fuera, con <div>/<p>.
+ */
+import Rico from './Rico.astro';
+import Avatar from '../Avatar.astro';
+import { siglasDe } from '../../data/docentes';
+import { link } from '../../lib/link';
+
+interface Persona {
+	nombre: string;
+	titulo?: string;
+	foto?: string;
+	bio?: string[] | string;
+}
+
+interface Props {
+	persona: Persona;
+	/** Abre el popup de perfil (la tarjeta es un <button>). */
+	modal?: boolean;
+	/** Retrato grande (aspect 4/5) en vez de avatar compacto. */
+	fotoGrande?: boolean;
+}
+
+const { persona: p, modal = false, fotoGrande = false } = Astro.props;
+const bio = Array.isArray(p.bio) ? p.bio : p.bio ? [p.bio] : [];
+---
+
+{
+	modal ? (
+		<button
+			type="button"
+			data-persona-card
+			data-persona-nombre={p.nombre}
+			data-persona-titulo={p.titulo ?? ''}
+			data-persona-siglas={siglasDe(p.nombre)}
+			data-persona-foto={p.foto ? link(p.foto) : ''}
+			data-persona-bio={JSON.stringify(bio)}
+			class="flex h-full w-full flex-col gap-3 rounded-xl card p-5 text-left transition-colors hover:border-brand/50 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+		>
+			{fotoGrande ? (
+				<Fragment>
+					{p.foto ? (
+						<img
+							src={link(p.foto)}
+							alt={p.nombre}
+							class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
+							loading="lazy"
+						/>
+					) : (
+						<span class="flex justify-center">
+							<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
+						</span>
+					)}
+					<span class="mt-1 block text-center">
+						<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
+						{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
+					</span>
+				</Fragment>
+			) : (
+				<Fragment>
+					<span class="flex w-full items-center gap-4">
+						{p.foto ? (
+							<img
+								src={link(p.foto)}
+								alt={p.nombre}
+								class="h-16 w-16 shrink-0 rounded-full object-cover"
+								loading="lazy"
+							/>
+						) : (
+							<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
+						)}
+						<span class="min-w-0">
+							<span class="block leading-snug font-semibold text-ink-strong">{p.nombre}</span>
+							{p.titulo && <span class="mt-0.5 block text-sm text-muted">{p.titulo}</span>}
+						</span>
+					</span>
+					<span class="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
+						Ver perfil
+						<svg
+							viewBox="0 0 24 24"
+							class="h-3.5 w-3.5"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="M7 17 17 7M8 7h9v9" />
+						</svg>
+					</span>
+				</Fragment>
+			)}
+		</button>
+	) : (
+		<div class="flex h-full flex-col gap-3 rounded-xl card p-5">
+			{fotoGrande ? (
+				<Fragment>
+					{p.foto ? (
+						<img
+							src={link(p.foto)}
+							alt={p.nombre}
+							class="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-xl object-cover"
+							loading="lazy"
+						/>
+					) : (
+						<span class="flex justify-center">
+							<Avatar name={p.nombre} class="h-24 w-24 text-2xl" />
+						</span>
+					)}
+					<div class="text-center">
+						<p class="font-semibold text-ink-strong">{p.nombre}</p>
+						{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+					</div>
+				</Fragment>
+			) : (
+				<div class="flex items-center gap-4">
+					{p.foto ? (
+						<img
+							src={link(p.foto)}
+							alt={p.nombre}
+							class="h-16 w-16 shrink-0 rounded-full object-cover"
+							loading="lazy"
+						/>
+					) : (
+						<Avatar name={p.nombre} class="h-16 w-16 text-lg" />
+					)}
+					<div>
+						<p class="font-semibold text-ink-strong">{p.nombre}</p>
+						{p.titulo && <p class="text-sm text-muted">{p.titulo}</p>}
+					</div>
+				</div>
+			)}
+			{bio.length > 0 && (
+				<div class="space-y-2">
+					{bio.map((linea) => (
+						<Rico texto={linea} class="text-sm leading-relaxed text-ink/75" />
+					))}
+				</div>
+			)}
+		</div>
+	)
+}

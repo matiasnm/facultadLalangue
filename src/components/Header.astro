@@ -3,7 +3,8 @@
  * Header — navbar minimalista con proporciones estándar de la industria.
  *
  * Estilo conservado del sitio original (colores de marca, menú en Roboto
- * Condensed uppercase, hover #d5673f), pero con HTML limpio y mínimo:
+ * Condensed uppercase, hover en el accent de la paleta), pero con HTML limpio
+ * y mínimo:
  *  - Alto: 3.5rem (56px) móvil / 4rem (64px) desktop.
  *  - Container: max 72rem (1152px), centrado, padding lateral 1rem → 2rem.
  *  - Logo: Isotipo (SVG) + texto HTML — "FACULTAD" (Montserrat, encaja el
@@ -18,6 +19,9 @@
 
 import Isotipo from './Isotipo.astro';
 import IsotipoBandera from './IsotipoBandera.astro';
+import IconoChevron from './IconoChevron.astro';
+import LogoTexto from './LogoTexto.astro';
+import { base, link } from '../lib/link';
 
 type NavChild = { label: string; href: string };
 type NavItem = {
@@ -46,7 +50,7 @@ const navItems: NavItem[] = [
       { label: 'Dip. Subjetividad Digital', href: '/subjetividad-digital/' },
       { label: 'Dip. Clínica Parejas', href: '/clinica-de-parejas/' },
       { label: 'Dip. Psicopatología Infanto-Juvenil', href: '/psicopatologia-infanto-juvenil/' },
-      { label: 'Dip. Metapsicología', href: '/metapsicologia' },
+      { label: 'Dip. Metapsicología', href: '/metapsicologia/' },
     ],
   },
   { label: 'Mediateca', href: '/nuestra-biblioteca/' },
@@ -59,13 +63,6 @@ const navItems: NavItem[] = [
   },
 ];
 
-const chevron = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="size-[13.125px]" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
-
-// Base pública del sitio (GitHub Pages sub-ruta). Vacío localmente.
-const base = import.meta.env.BASE_URL;
-// Prefija una ruta interna con la base; deja intactos "#", anclas y URLs absolutas.
-const link = (href: string) =>
-	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 ---
 
 <header
@@ -76,33 +73,18 @@ const link = (href: string) =>
 	<div
 		class="contenedor relative flex h-[var(--header-h)] items-center"
 	>
-<!-- Logo (flex-start): el clásico o la bandera, según la elección del
+		<!-- Logo (flex-start): el clásico o la bandera, según la elección del
 		     roadmap (lalangue-logo-nav → data-logo-nav en <html>; el CSS de
 		     global.css muestra uno u otro). Ambos se repintan en vivo con
 		     var(--color-brand/accent/indigo). -->
-			<a
-				href={base || '/'}
-				class="flex shrink-0 items-center gap-4 hover:no-underline"
-				aria-label="Inicio — Facultad Lalangue"
-			>
-<Isotipo class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
-<IsotipoBandera class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
-			<span class="flex flex-col leading-none">
-				<!-- "FACULTAD" en Montserrat (sin deformar), con el ancho
-				     repartido letra por letra para encajar exactamente
-				     con el ancho de "Lalangue" -->
-				<span
-					class={`flex w-full justify-between font-heading text-[0.8203rem] font-medium leading-none ${fgDim}`}
-				>
-					<span>F</span><span>A</span><span>C</span><span>U</span
-					><span>L</span><span>T</span><span>A</span><span>D</span>
-				</span>
-				<span
-					class={`-ml-[0.05em] font-heading text-[1.2891rem] font-semibold leading-none ${fg}`}
-				>
-					Lalangue
-				</span>
-			</span>
+		<a
+			href={base || '/'}
+			class="flex shrink-0 items-center gap-4 hover:no-underline"
+			aria-label="Inicio — Facultad Lalangue"
+		>
+			<Isotipo class="logo-nav-plain h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
+			<IsotipoBandera class="logo-nav-bandera h-[calc(var(--spacing)*var(--logo-h,11))] w-auto" />
+			<LogoTexto scale="header" fgDim={fgDim} fg={fg} />
 		</a>
 
 		<!-- Divider vertical de 1px separando el logo del menú -->
@@ -121,7 +103,7 @@ const link = (href: string) =>
 									class={`flex items-center gap-1 py-2 font-display text-[15px] font-normal uppercase tracking-wide transition-colors group-hover:text-accent hover:no-underline ${fg}`}
 								>
 									{item.label}
-									<span set:html={chevron} />
+									<span><IconoChevron stroke={2.5} class="size-[13.125px]" /></span>
 								</a>
 								<ul
 									class="invisible absolute left-0 top-full z-10 min-w-48 rounded-lg border border-divider/30 bg-white py-2 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100"
@@ -153,17 +135,6 @@ const link = (href: string) =>
 						),
 					)
 				}
-				{/* BOTÓN TEMPORAL DE DESARROLLO — quitar en producción.
-				    Acceso al roadmap de estilos. Se muestra en gris para
-				    diferenciarlo de los ítems reales del menú. */}
-				<li>
-					<a
-						href={base + 'roadmap/'}
-						class="block py-2 font-display text-[15px] font-normal uppercase tracking-wide text-muted transition-colors hover:text-ink hover:no-underline"
-					>
-						Roadmap
-					</a>
-				</li>
 			</ul>
 		</nav>
 
@@ -208,10 +179,9 @@ const link = (href: string) =>
 									class="flex cursor-pointer list-none items-center justify-between py-3 font-display text-[15px] font-normal uppercase tracking-wide text-night transition-colors [&::-webkit-details-marker]:hidden"
 								>
 									{item.label}
-									<span
-										class="text-accent transition-transform group-open:rotate-180"
-										set:html={chevron}
-									/>
+									<span class="text-accent transition-transform group-open:rotate-180">
+										<IconoChevron stroke={2.5} class="size-[13.125px]" />
+									</span>
 								</summary>
 								<ul class="pb-2 pl-4">
 									{
@@ -242,15 +212,6 @@ const link = (href: string) =>
 					),
 				)
 			}
-			{/* BOTÓN TEMPORAL DE DESARROLLO — quitar en producción. */}
-			<li>
-				<a
-					href={base + 'roadmap/'}
-					class="block py-3 font-display text-[15px] font-normal uppercase tracking-wide text-muted transition-colors hover:text-ink hover:no-underline"
-				>
-					Roadmap
-				</a>
-			</li>
 		</ul>
 	</nav>
 </header>

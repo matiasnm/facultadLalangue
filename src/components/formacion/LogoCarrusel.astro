@@ -10,6 +10,8 @@
  * Usado por el bloque `carrusel-logos` (INSTITUCIONES-ASOCIADAS) y por los
  * dos carruseles de la sección `profesores` (universidades y medios).
  */
+import { link } from '../../lib/link';
+
 interface Props {
 	logos: { src: string; alt: string; href?: string }[];
 	/** Etiqueta accesible de la región (lectores de pantalla). */
@@ -19,11 +21,6 @@ interface Props {
 }
 
 const { logos, label, class: className } = Astro.props;
-
-const base = import.meta.env.BASE_URL;
-// Prefija rutas internas con la base; deja intactas "#", anclas y URLs absolutas.
-const link = (href: string) =>
-	href.startsWith('/') && href.length > 1 && !href.startsWith('//') ? base + href.slice(1) : href;
 ---
 
 <div class:list={['relative mt-6 overflow-hidden', className]}>

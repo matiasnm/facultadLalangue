@@ -81,6 +81,8 @@ export type BloqueStats = {
 	 *  'secciones' de las páginas de formación). Es parte del componente:
 	 *  las páginas NO declaran un `titulo` suelto para la banda. */
 	titulo?: string;
+	/** Ancla opcional de la banda (p. ej. `id="mapa"` en la home). */
+	id?: string;
 	filas: { region: string; pct: string }[];
 	frases: string[];
 	referencia: string;
@@ -162,6 +164,45 @@ export type BloqueDirigidoA = {
 export type BloqueCarruselLogos = {
 	tipo: 'carrusel-logos';
 	logos: { src: string; alt: string; href?: string }[];
+};
+
+/** Ítem de un carrusel: persona (retrato) o tarjeta (texto con enlace). */
+export type BloqueCarruselItem = {
+	/** Nombre (personas) o título (tarjetas). */
+	titulo: string;
+	/** Rol/cargo de la persona (variante 'personas'). */
+	subtitulo?: string;
+	/** Texto de la tarjeta (variante 'tarjetas'). */
+	descripcion?: string;
+	/** Enlace ("Conocé más →") de la tarjeta (variante 'tarjetas'). */
+	href?: string;
+	/** Foto de perfil (variante 'personas'). */
+	foto?: string;
+	/** Bio para el popup de perfil (variante 'personas' con `modal`). */
+	bio?: string[];
+};
+
+/**
+ * Carrusel — slider horizontal con flechas y automovimiento (scroll-snap,
+ * pausa al hover/foco, off con prefers-reduced-motion). Dos variantes:
+ *  - 'personas': retratos (aspect 4/5) con nombre + rol; con `modal` cada
+ *    tarjeta abre el popup de perfil (ModalPersona).
+ *  - 'tarjetas': tarjetas de texto con "Conocé más →".
+ * Reutiliza el script del slider de `profesores` (mismos data-*).
+ */
+export type BloqueCarrusel = {
+	tipo: 'carrusel';
+	variante: 'personas' | 'tarjetas';
+	titulo?: string;
+	/** Kicker opcional sobre el título. */
+	kicker?: string;
+	/** Intro (uno o varios párrafos, con formato Rico). */
+	intro?: string[] | string;
+	items: BloqueCarruselItem[];
+	/** true → cada tarjeta de persona abre el popup de perfil. */
+	modal?: boolean;
+	/** Ancla opcional de la sección. */
+	id?: string;
 };
 
 /**
@@ -414,6 +455,7 @@ export type Bloque =
 	| BloqueColumna
 	| BloqueDirigidoA
 	| BloqueCarruselLogos
+	| BloqueCarrusel
 	| BloqueAdmision
 	| BloquePlanes
 	| BloqueClaseAbierta
@@ -461,11 +503,38 @@ export const beneficios = (items, columnas = 3) =>
 	({ tipo: 'beneficios', items, columnas }) as BloqueBeneficios;
 export const carruselLogos = (logos) =>
 	({ tipo: 'carrusel-logos', logos }) as BloqueCarruselLogos;
+export const carrusel = ({
+	variante,
+	items,
+	titulo,
+	kicker,
+	intro,
+	modal,
+	id,
+}: {
+	variante: 'personas' | 'tarjetas';
+	items: BloqueCarruselItem[];
+	titulo?: string;
+	kicker?: string;
+	intro?: string[] | string;
+	modal?: boolean;
+	id?: string;
+}) =>
+	({
+		tipo: 'carrusel',
+		variante,
+		items,
+		titulo,
+		kicker,
+		intro: intro === undefined ? undefined : Array.isArray(intro) ? intro : [intro],
+		modal: modal || undefined,
+		id,
+	}) as BloqueCarrusel;
 export const totalBeneficios = (titulo, valor, nota, cierre?) =>
 	({ tipo: 'total-beneficios', titulo, valor, nota, cierre }) as BloqueTotalBeneficios;
 export const cita = (lineas, autor) => ({ tipo: 'cita', lineas, autor }) as BloqueCita;
-export const stats = ({ titulo, filas, frases, referencia }) =>
-	({ tipo: 'stats', titulo, filas, frases, referencia }) as BloqueStats;
+export const stats = ({ titulo, id, filas, frases, referencia }) =>
+	({ tipo: 'stats', titulo, id, filas, frases, referencia }) as BloqueStats;
 export const faq = (pregunta, respuesta, lista, cierre) =>
 	({
 		tipo: 'faq',

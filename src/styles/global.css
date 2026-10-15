@@ -15,7 +15,10 @@
   /* Tema default: Terracota apagado (ver /roadmap → Paleta de colores).
      Base en blanco: fondo y superficies claras con tinta oscura.
      El editor de /roadmap puede guardar otra paleta en localStorage y
-     repintar todo el sitio (--color-* en :root). */
+     repintar todo el sitio (--color-* en :root).
+     NOTA: estos valores son el espejo CSS de `defaultTokens` en
+     src/data/paletas.ts (la única fuente TS de los valores por defecto;
+     CSS no puede importar TS). Mantener ambos sincronizados. */
   --color-brand: #8c1c3f; /* vino — acentos, enlaces, bordes, selección */
   --color-brand-dark: #5b1133; /* vino profundo — variante oscura */
   --color-accent: #c96f5a; /* terracota apagado — hover del menú, highlight */
@@ -133,7 +136,7 @@
      texto de contenido (no el 14px del body), así ambas se ven iguales. */
   body {
     margin: 0;
-    /* Evita la barra horizontal que genera la sección full-bleed (w-screen).
+    /* Evita la barra horizontal que genera la sección full-bleed (100vw).
        `clip` a diferencia de `hidden` NO crea un scroll container, así que
        el header sticky y el dropdown siguen funcionando. */
     overflow-x: clip;
@@ -409,13 +412,35 @@
 /*
  * .card — superficie base de tarjeta.
  *
- * Fuente única del par `border border-divider/30 bg-surface` que hoy se
- * repite en el markup (29 ocurrencias). Deliberadamente SIN radio ni
- * padding: en el repo conviven rounded-lg/rounded-xl y p-5/p-6/px-4 py-3,
- * así que esas medidas se siguen aportando por separado junto a .card y el
- * reemplazo resulta en caliente — sin cambio visual ni conflictos de orden
- * de utilidades de Tailwind.
+ * Fuente única de la superficie de tarjeta (borde divisorio + fondo surface)
+ * que hoy se repite en el markup. Deliberadamente SIN radio ni padding: en el
+ * repo conviven rounded-lg/rounded-xl y p-5/p-6/px-4 py-3, así que esas
+ * medidas se siguen aportando por separado junto a .card y el reemplazo
+ * resulta en caliente — sin cambio visual ni conflictos de orden de
+ * utilidades de Tailwind.
  */
 @utility card {
-  @apply border border-divider/30 bg-surface;
+  @apply border bg-surface;
+  border-color: color-mix(in oklab, var(--color-divider) 30%, transparent);
+}
+
+/*
+ * .full-bleed — banda a todo el ancho del viewport, ignorando el gutter del
+ * .contenedor.
+ *
+ * Centraliza la técnica de ancho de viewport (ancho completo + margen
+ * izquierdo negativo de media pantalla + left 50%, con position: relative)
+ * que hoy se repite, con su condicional `secciones`, en los 7 bloques
+ * full-bleed. La barra horizontal que provoca el `width: 100vw` (incluye el
+ * ancho de la scrollbar) ya la evita el `overflow-x: clip` del body.
+ *
+ * Deliberadamente NO fija márgenes: en estos bloques conviven mt-8 / mt-12 /
+ * mt-14, y py-16 / py-14, así que esas medidas se siguen aportando por
+ * separado junto a .full-bleed (evita conflictos de orden de utilidades).
+ */
+@utility full-bleed {
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  width: 100vw;
 }

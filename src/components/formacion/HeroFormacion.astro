@@ -80,7 +80,7 @@ const metaCards = [
 				</div>
 				<div class="space-y-4 lg:col-span-1">
 					{metaCards.map((c) => (
-						<div class="rounded-lg border border-divider/30 bg-surface p-5">
+						<div class="rounded-lg card p-5">
 							<p class="text-xs font-semibold uppercase tracking-widest text-muted">{c.etiqueta}</p>
 							<p class="mt-2 text-sm font-medium text-night">{c.valor}</p>
 						</div>
@@ -101,7 +101,7 @@ const metaCards = [
 			</h3>
 			<div class="mt-10 grid gap-4 sm:grid-cols-3">
 				{metaCards.map((c) => (
-					<div class="rounded-lg border border-divider/30 bg-surface p-5">
+					<div class="rounded-lg card p-5">
 						<p class="text-xs font-semibold uppercase tracking-widest text-muted">{c.etiqueta}</p>
 						<p class="mt-2 text-sm font-medium text-night">{c.valor}</p>
 					</div>
