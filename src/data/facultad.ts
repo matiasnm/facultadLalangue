@@ -1,5 +1,5 @@
 /**
- * Datos de la página /facultad.
+ * Datos de las secciones de facultad.
  *
  * Secciones extraídas de docs/facultad-contenido.md + sección "origen" de
  * docs/home-content.md (no usada en home). Bloques directos + componentes
@@ -9,7 +9,8 @@
  * (seccionMetodologia, seccionModeloAcademico, seccionEstadisticas,
  * seccionInstitucionParaTiSi, seccionSalidaLaboral, seccionSupervision,
  * seccionFaqs) para reutilizarlas sin duplicar texto. facultadSecciones las
- * recompone en el orden original, de modo que `/facultad` no cambia.
+ * recompone en el orden original de la antigua página `/facultad` (hoy
+ * eliminada; el roadmap las archiva en "componentes sin utilizar").
  */
 import { c, titulo, texto, lista, chips, contadores, stats, faq, cita, enlace, tarjetas } from './componentes';
 import type { BloquePagina } from './componentes';

@@ -668,7 +668,9 @@ export const profesores = (titulo, lista) =>
 		universidades: UNIVERSIDADES_PROFESORES,
 		profesores: lista,
 		medios: MEDIOS_TAMBIEN,
-		masReferentesHref: '/plantel-academico/',
+		// La página /plantel-academico se eliminó: el cierre "otros referentes"
+		// apunta al carrusel de plantel de la home (#plantel).
+		masReferentesHref: '/#plantel',
 	}) as BloqueProfesores;
 
 export const modulos = (titulo, lista, intro?, enlace?) =>
@@ -954,7 +956,7 @@ export const componentes: ComponenteComun[] = [
 	},
 	{
 		id: 'DIRECTORIOS-INSERCION',
-		nota: 'Doc §18 — página /facultad (se conserva acá porque la página Facultad la cita). Las formaciones usan SALIDA-LABORAL-INTERNACIONAL.',
+		nota: 'Las formaciones usan SALIDA-LABORAL-INTERNACIONAL; este texto sigue en uso en la sección de salida laboral de la home (vía facultad.ts).',
 		bloques: [
 			texto([
 				'Lalangue no solo favorece la transmisión del saber, sino también la inserción profesional en redes clínicas y espacios de trabajo a nivel internacional.',

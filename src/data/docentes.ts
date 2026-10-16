@@ -8,7 +8,7 @@
  * aviso "todavía no tenemos publicada su bio".
  *
  * Los arreglos `directores` y `docentes` están en el orden en que se
- * renderizan en /plantel-academico.
+ * renderizaban en la antigua página /plantel-academico (hoy eliminada).
  */
 
 export type PersonaPlantel = {

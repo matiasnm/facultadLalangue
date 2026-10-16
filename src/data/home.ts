@@ -1,7 +1,7 @@
 /**
  * home.ts — datos de la home (`src/pages/index.astro`).
  *
- * Reutiliza las secciones compartidas de `/facultad` (facultad.ts) sin
+ * Reutiliza las secciones compartidas de facultad.ts sin
  * duplicar texto y agrega lo nuevo de la home: los dos carruseles (plantel y
  * formaciones) y el cierre "Tender puentes", que absorbe las Preguntas
  * Frecuentes. El hero vive escrito en index.astro.

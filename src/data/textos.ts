@@ -3,16 +3,16 @@
  * página /textos.
  *
  * Cómo se alimenta:
- *  - Las páginas que viven en el sistema de bloques (facultad, plantel,
- *    biblioteca y cada formación) se derivan automáticamente de sus fuentes
- *    de datos, con bloquesAItems(). Cero duplicación: si cambia el dato,
- *    cambia el inventario.
+ *  - Las páginas que viven en el sistema de bloques (biblioteca y cada
+ *    formación) se derivan automáticamente de sus fuentes de datos, con
+ *    bloquesAItems(). Cero duplicación: si cambia el dato, cambia el
+ *    inventario.
+ *  - Las secciones de las páginas eliminadas (/facultad y /plantel-academico,
+ *    archivadas en /roadmap) ya no entran en el inventario.
  *  - Las páginas cuyo texto está escrito inline en el .astro (home y las
  *    legales) se declaran aquí como items { etiqueta, texto }, en texto
  *    plano y siguiendo el orden de aparición.
  */
-import { facultadSecciones } from './facultad';
-import { plantelSecciones } from './plantel';
 import { bibliotecaSecciones } from './biblioteca';
 import { formaciones } from './formaciones';
 import { homeSecciones } from './home';
@@ -52,24 +52,6 @@ export const textos: PaginaInventario[] = [
 			/* Resto derivado de home.ts: carruseles + secciones compartidas + cierre. */
 			...bloquesAItems(homeSecciones),
 		],
-	},
-
-	/* ================================================================== */
-	/* Facultad (derivada)                                                 */
-	/* ================================================================== */
-	{
-		ruta: '/facultad/',
-		titulo: 'Facultad Internacional de Psicología y Psicoanálisis Lalangue',
-		secciones: bloquesAItems(facultadSecciones),
-	},
-
-	/* ================================================================== */
-	/* Plantel académico (derivada)                                        */
-	/* ================================================================== */
-	{
-		ruta: '/plantel-academico/',
-		titulo: 'Plantel Académico',
-		secciones: bloquesAItems(plantelSecciones),
 	},
 
 	/* ================================================================== */

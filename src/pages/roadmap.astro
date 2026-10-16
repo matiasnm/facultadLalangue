@@ -5,7 +5,11 @@ import Isotipo from '../components/Isotipo.astro';
 import IsotipoBandera from '../components/IsotipoBandera.astro';
 import LogoTexto from '../components/LogoTexto.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
+import ComponenteComun from '../components/formacion/ComponenteComun.astro';
+import ModalPersona from '../components/ModalPersona.astro';
 import { dirigidoA, stats, beneficios, carruselLogos, admision, articula, facultad, metodologia, profesores, modulos, certificacion, componentes, titulo, LOGO_FACULTAD, ESLOGAN_FACULTAD, MODALIDAD_A } from '../data/componentes';
+import { facultadSecciones } from '../data/facultad';
+import { plantelSecciones } from '../data/plantel';
 import { paletas, defaultTokens } from '../data/paletas';
 import { base, link } from '../lib/link';
 const lastUpdated = '2026-09-14';
@@ -685,7 +689,7 @@ const menuStyles = [
 			['Posición', 'estática · en flujo · a la derecha del divider'],
 			['Vertical', 'items-center'],
 			['Visible', '≥ 1024px (lg:flex)'],
-			['Alineación', 'izquierda — ya no centrado respecto del ancho total'],
+			['Alineación', 'izquierda — alineado tras el divider del logo'],
 			['Margen', '1.4063rem (22.5px) tras el divider'],
 			['Padding', '0'],
 		],
@@ -1324,7 +1328,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Color de fondo ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Fondo</p>
 			<h2>Color de fondo</h2>
 			<p class="mt-2 max-w-2xl text-ink/80">
@@ -1374,7 +1378,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Paleta de colores ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<h2>Paleta de colores</h2>
 			<p class="text-ink/80">
 				Este bloque muestra los swatches del <strong>tema activo</strong>:
@@ -1396,7 +1400,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Isotipo ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<h2>Isotipo</h2>
 			<p class="text-ink/80">
 				<code>docs/logo_indigo.svg</code> — el isotipo (solo el símbolo,
@@ -1514,7 +1518,7 @@ const samples: Record<string, string> = {
 		
 
 		<!-- ================= Navbar — Logo y tamaño ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Navbar</p>
 			<h2>Logo del navbar</h2>
 			<p class="mt-2 max-w-2xl text-ink/80">
@@ -1671,7 +1675,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Estilos globales ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<h2>Estilos globales</h2>
 			<p class="text-ink/80">
 				Aplicados desde <code>src/styles/global.css</code>. Margen y
@@ -1715,7 +1719,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Criterios de diseño ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<h2>Criterios de diseño</h2>
 			<p class="text-ink/80">
 				Decisiones transversales de layout que rigen todo el sitio.
@@ -1758,7 +1762,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Estilos del menú ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<h2>Estilos del menú</h2>
 			<p class="text-ink/80">
 				Implementados en <code>src/components/Header.astro</code>.
@@ -1813,7 +1817,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Beneficios exclusivos alumnos ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Beneficios exclusivos alumnos</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -1843,7 +1847,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Tarjeta "dirigido-a" ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Tarjeta «dirigido a»</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -1864,7 +1868,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Salida Laboral Internacional ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Salida Laboral Internacional</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -1873,8 +1877,7 @@ const samples: Record<string, string> = {
 				cita de Freud con la imagen a la derecha). La sección ES un bloque
 				<code class="text-brand">columnas</code> <strong>2/3 – 1/3</strong>:
 				a la izquierda (2/3) van el <strong>h2 «Salida Laboral
-				Internacional»</strong> (primer bloque del componente — ya no se
-				declara suelto en <code class="text-brand">formaciones.ts</code>) +
+				Internacional»</strong> (primer bloque del componente) +
 				el párrafo introductorio + las <strong>2 tarjetas con imagen de
 				fondo coloreada</strong> (prácticas del <strong>segundo año</strong>
 				y <strong>Comunidad Lalangue</strong>), igual que en la landing:
@@ -1912,13 +1915,7 @@ const samples: Record<string, string> = {
 				llevan esta sección); en <code class="text-brand">formaciones.ts</code>
 				la sección 8 solo cita
 				<code class="text-brand">c('SALIDA-LABORAL-INTERNACIONAL')</code>.
-				Este componente <strong>reemplaza el trío</strong>
-				<code class="text-brand">FREUD-CITA-TERAPIA-PUEBLO</code>
-				+ <code class="text-brand">DIRECTORIOS-INSERCION</code> +
-				<code class="text-brand">APRENDIZAJE-PRACTICO-SUPERVISADO</code>;
-				el primero y el último se eliminaron del catálogo y
-				<code class="text-brand">DIRECTORIOS-INSERCION</code> se conserva
-				porque la página <strong>/facultad</strong> aún lo cita. El ejemplo
+				El ejemplo
 				de abajo renderiza los bloques reales del catálogo, es decir, los
 				mismos que muestran las páginas.
 			</p>
@@ -1930,7 +1927,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Inserción Laboral (estadísticas) ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Inserción laboral (estadísticas)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -1952,7 +1949,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Carrusel de logos institucionales ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Instituciones asociadas (carrusel de logos)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -1978,7 +1975,7 @@ const samples: Record<string, string> = {
 			</div>
 		</section>
 		<!-- ================= Admisión (formulario de entrada) ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Admisión</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2005,7 +2002,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Articula ("… articula:") ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Articula («… articula:»)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2032,9 +2029,8 @@ const samples: Record<string, string> = {
 				el lema viene por default (<code class="text-brand">LEMA_ARTICULACION</code>,
 				formato <code class="text-brand">"frase **Palabra clave**"</code>, la palabra
 				clave se separa sola en la línea baja) y
-				cada formación pasa su título y sus ejes. Ya está <strong>aplicado en las 6
-				formaciones</strong> (reemplaza la tripla
-				<code class="text-brand">titulo + FACULTAD-LEMA + lista</code>). El ejemplo de
+				cada formación pasa su título y sus ejes. Está <strong>aplicado en las 6
+				formaciones</strong>. El ejemplo de
 				abajo y las páginas renderizan desde el <strong>mismo</strong>
 				<code class="text-brand">BloqueRender</code>: el roadmap es la especificación y
 				la app no cambia los estilos.
@@ -2045,7 +2041,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Facultad (bloque institucional) ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Facultad (bloque institucional compacto)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2067,9 +2063,8 @@ const samples: Record<string, string> = {
 				maletín y estetoscopio). En mobile el logo queda arriba y los párrafos debajo;
 				los pilares pasan a 1 columna. La <strong>imagen central</strong> del landing no
 				se utiliza. Bloque <code class="text-brand">facultad(logo, eslogan, párrafos,
-				pilares = PILARES_FACULTAD)</code>, ya <strong>aplicado en las 6 formaciones</strong>
-				(reemplaza <code class="text-brand">titulo + FACULTAD-SUPERVISION-GRATUITA +
-				TEXTO + FACULTAD-PILARES</code>; dentro del bloque va el h2 sr-only "La Facultad").
+				pilares = PILARES_FACULTAD)</code>, <strong>aplicado en las 6 formaciones</strong>;
+				dentro del bloque va el h2 sr-only "La Facultad".
 				El ejemplo de abajo y las páginas renderizan desde el <strong>mismo</strong>
 				<code class="text-brand">BloqueRender</code>.
 			</p>
@@ -2079,7 +2074,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Metodología (bloque de modalidad) ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Metodología (bloque de modalidad de cursada)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2122,7 +2117,7 @@ const samples: Record<string, string> = {
 			</div>
 		</section>
 	<!-- ================= Profesores (bloque de docentes) ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Profesores (sección de docentes de cada formación)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2149,13 +2144,13 @@ const samples: Record<string, string> = {
 				y su <strong>nombre</strong> debajo. El slider cierra con la
 				<strong>tarjeta CTA "Y otros referentes del mundo psy"</strong> — réplica de
 				la imagen otrosRef.webp del original: borde dashed vino y enlace al
-				<strong>/plantel-academico/</strong>. Las universidades y los medios vienen
+				<strong>carrusel de plantel de la home</strong>
+				(<code class="text-brand">/#plantel</code>). Las universidades y los medios vienen
 				por default (<code class="text-brand">UNIVERSIDADES_PROFESORES</code> y
 				<code class="text-brand">MEDIOS_TAMBIEN</code>, los mismos en todas las
 				formaciones), así cada formación solo pasa su título y su lista de doctores.
-				Bloque <code class="text-brand">profesores(titulo, lista)</code>, ya
-				<strong>aplicado en las 6 formaciones</strong> (el Máster y Metapsicología,
-				que además tenían el texto de universidades, quedan idénticos al resto).
+				Bloque <code class="text-brand">profesores(titulo, lista)</code>,
+				<strong>aplicado en las 6 formaciones</strong>.
 				El ejemplo de abajo (con la lista real del Máster) y las páginas renderizan
 				desde el <strong>mismo</strong> <code class="text-brand">BloqueRender</code>.
 			</p>
@@ -2164,7 +2159,7 @@ const samples: Record<string, string> = {
 			</div>
 		</section>
 	<!-- ========= Módulos de Clases (carrusel full-bleed de módulos) ========= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Módulos de Clases (carrusel full-bleed de las cards de cada módulo)</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2197,30 +2192,26 @@ const samples: Record<string, string> = {
 		</section>
 
 		{/* ----------- Invitación a grupos de supervisión (#invitacion-supervisiones) ----------- */}
-		<section class="mt-16" id="invitacion-supervisiones">
+		<section class="mt-16 border-t border-divider/40 pt-16" id="invitacion-supervisiones">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Pendiente · fuera de las formaciones</p>
 			<h2>Invitación a grupos de supervisión</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
 				La invitación a los grupos de supervisión — "Supervisión Clínica para
 				Psicoterapeutas y Psicoanalistas", con el texto de los cupos limitados y el
 				CTA <strong>Agendar entrevista de admisión</strong> — <strong>no va dentro de
-				ninguna formación</strong>. Se eliminó por completo de las páginas: la
-				sección 9 que la incluía se quitó del Máster y de la Psicoterapia (los únicos
-				que la llevaban) y el componente
-				<code class="text-brand">SUPERVISION-CLINICA-COMPLETA</code> se borró de
-				<code class="text-brand">componentes.ts</code>. El contenido queda archivado
+				ninguna formación</strong>. Queda archivada
 				acá con este anclaje <code class="text-brand">#invitacion-supervisiones</code>
-				para reutilizarlo cuando tenga un destino propio (por ejemplo, una
+				para reutilizarla cuando tenga un destino propio (por ejemplo, una
 				página/sección dedicada a los grupos de supervisión), con su título, su
 				<strong>CTA "Agendar entrevista de admisión"</strong>
 				(<code class="text-brand">https://go.facultadlalangue.com/entrevista-directa</code>)
-				y los textos copiados de <code class="text-brand">facultad.ts</code> (sección
-				equivalente de la página Facultad, que mantiene la suya).
+				y sus textos (los mismos que la sección de supervisión de la home, vía
+				<code class="text-brand">facultad.ts</code>).
 			</p>
 		</section>
 
 		{/* ------------------------- Certificación ------------------------- */}
-		<section class="mt-20">
+		<section class="mt-20 border-t border-divider/40 pt-16">
 			<h3 class="mb-4 border-b-2 border-brand/30 pb-3 font-display text-2xl text-brand">
 				Certificación
 			</h3>
@@ -2256,7 +2247,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Planes de financiación ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Planes de financiación</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2327,7 +2318,7 @@ const samples: Record<string, string> = {
 		</section>
 
 		<!-- ================= Clase abierta ================= -->
-		<section class="mt-16">
+		<section class="mt-16 border-t border-divider/40 pt-16">
 			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Componente · bloque</p>
 			<h2>Vive la experiencia: Clase abierta sin costo</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
@@ -2358,7 +2349,7 @@ const samples: Record<string, string> = {
 				El componente <code class="text-brand">CLASE-ABIERTA</code> (Doc §36)
 				carga el contenido de la landing; está aplicado en
 				<strong>psicopatologia-infanto-juvenil</strong> (única landing con el
-				bloque, verificado en vivo; la home del Máster y las landings de
+				bloque; la home del Máster y las landings de
 				Subjetividad y Parejas no lo tienen). Ejemplo (el del catálogo):
 			</p>
 			<div class="mt-8">
@@ -2369,221 +2360,98 @@ const samples: Record<string, string> = {
 		</section>
 
 		{/* ----------- Componentes viejos o sin utilizar ----------- */}
-		<section class="mt-16" id="componentes-sin-utilizar">
-			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Archivo · componentes viejos o sin utilizar</p>
-			<h2>Componentes viejos o sin utilizar</h2>
+		<section class="mt-16 border-t border-divider/40 pt-16" id="componentes-sin-utilizar">
+			<p class="text-xs font-semibold uppercase tracking-widest text-accent">Archivo · componentes sin utilizar</p>
+			<h2>Componentes sin utilizar</h2>
 			<p class="mt-2 max-w-3xl text-ink/80">
-				Acá se documentan los componentes, páginas y navegación que se sacaron
-				del sitio en vivo pero cuyo contenido conviene conservar como
-				referencia (mismo criterio que
-				<a href="#invitacion-supervisiones" class="text-brand">#invitacion-supervisiones</a>).
+				Secciones y piezas sin lugar en el sitio actual, conservadas acá
+				como referencia: una debajo de la otra, separadas por una línea, con su
+				explicación.
 			</p>
 
-			<h3 class="mt-8">Home vieja — secciones removidas</h3>
-			<p class="mt-2 max-w-3xl text-ink/80">
-				La home anterior tenía más secciones que las de la estructura actual.
-				Con el rediseño de <code class="text-brand">index.astro</code> (ver
-				<code class="text-brand">docs/home-layout.md</code>)
-				se retiraron las que siguen. Las secciones <strong>Identidad</strong>,
-				<strong>Visión</strong>, <strong>Modelo</strong>,
-				<strong>Comunidad</strong> y <strong>Clínica</strong> <strong>no</strong>
-				se repiten acá: su contenido ya vive en
-				<code class="text-brand">/facultad/</code>. Solo se conserva lo que era
-				<strong>único de la home</strong>.
-			</p>
+			{/* ============ Facultad (página eliminada) ============ */}
+			<article class="mt-12">
+				<h3>Facultad — secciones de la página <code class="text-brand">/facultad</code></h3>
+				<p class="mt-2 max-w-3xl text-ink/80">
+					Contenido de la página <code class="text-brand">/facultad</code>,
+					archivado con el mismo par de render que usaba
+					(<code class="text-brand">BloqueRender</code> y
+					<code class="text-brand">ComponenteComun</code>).
+				</p>
+				<div class="mt-8">
+					{facultadSecciones.map((seccion) =>
+						seccion.tipo === 'componente' ? (
+							<ComponenteComun nombre={seccion.nombre} />
+						) : (
+							<BloqueRender bloque={seccion} />
+						),
+					)}
+				</div>
+			</article>
 
-			<h4 class="mt-6">Formaciones (viejas) — "Diplomaturas Internacionales especializadas"</h4>
-			<p class="mt-1 max-w-3xl text-ink/80">
-				El resto de la sección se solapa con <code class="text-brand">/facultad/</code>;
-				lo único propio eran los chips de <em>Áreas de especialización</em> (dos de
-				ellos sin página dedicada) y las dos tarjetas destacadas con "Incluye".
-			</p>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li>
-					Introducción: «El cuerpo docente de Lalangue está integrado por
-					profesionales con trayectoria académica y clínica en universidades,
-					centros de formación y asociaciones profesionales de diversos marcos
-					teóricos del campo de la psicología y del psicoanálisis.»
-				</li>
-				<li>
-					Áreas de especialización: Psicopatología Infanto-Juvenil
-					(<code class="text-brand">/psicopatologia-infanto-juvenil/</code>) ·
-					Subjetividad Digital (<code class="text-brand">/subjetividad-digital/</code>) ·
-					Terapia de Parejas y Erotismo Relacional
-					(<code class="text-brand">/clinica-de-parejas/</code>) ·
-					Abordaje del Ataque de Pánico (sin enlace) ·
-					Terapias Breves (sin enlace)
-				</li>
-				<li>
-					<strong>Diplomado Internacional en Psicoterapia con Enfoque
-					Psicoanalítico Lalangue</strong> — «Formación orientada al desarrollo de
-					competencias clínicas para el acompañamiento terapéutico.» · Duración:
-					2 años (72 clases) · Modalidad: 100% online con clases grabadas y
-					encuentros sincrónicos ·
-					<code class="text-brand">/psicoterapia-psicoanalitica/</code>
-				</li>
-				<li>
-					<strong>Máster Internacional en Psicoanálisis Aplicado Lalangue</strong>
-					— «Formación avanzada orientada al desarrollo de competencias clínicas
-					para el acompañamiento terapéutico.» · Duración: 2 años (144 clases) ·
-					Modalidad: 100% online con clases grabadas y encuentros sincrónicos ·
-					<code class="text-brand">/master-en-psicoanalisis/</code>
-				</li>
-				<li>
-					Incluye (en ambas tarjetas): Supervisión clínica grupal · Participación
-					en espacios comunitarios · Acceso a directorios profesionales
-					internacionales · Certificación europea bajo régimen francés de
-					formación profesionalizante.
-				</li>
-			</ul>
+			{/* ============ Plantel académico (página eliminada) ============ */}
+			<article class="mt-16 border-t border-divider/40 pt-16">
+				<h3>Plantel académico — secciones de la página <code class="text-brand">/plantel-academico</code></h3>
+				<p class="mt-2 max-w-3xl text-ink/80">
+					Secciones de la página <code class="text-brand">/plantel-academico</code>
+					—decana, directores
+					académicos, comité científico y plantel docente— con los bloques
+					<code class="text-brand">persona</code> y
+					<code class="text-brand">equipo</code>: las fichas abren el popup de
+					perfil (<code class="text-brand">ModalPersona</code>, montado al final
+					de la página).
+				</p>
+				<div class="mt-8">
+					{plantelSecciones.map((seccion) =>
+						seccion.tipo === 'componente' ? (
+							<ComponenteComun nombre={seccion.nombre} />
+						) : (
+							<BloqueRender bloque={seccion} />
+						),
+					)}
+				</div>
+			</article>
 
-			<h4 class="mt-6">Últimas Novedades</h4>
-			<p class="mt-1 max-w-3xl text-ink/80">
-				Kicker <strong>Últimas Novedades</strong>; las tarjetas enlazaban a
-				<code class="text-brand">#</code> (sin destino real).
-			</p>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li>
-					<strong>Únete a nuestra comunidad</strong> (badge "Comunidad de WhatsApp",
-					CTA "Súmate aquí"): «Accedé al nuevo grupo de WhatsApp de Facultad
-					Lalangue. Noticias, eventos y oportunidades de formación en psicoanálisis
-					y psicoterapia.»
-				</li>
-				<li>
-					<strong>Solicitá información sobre becas</strong> (badge "Becas en
-					psicoanálisis y psicoterapia", CTA "Quiero información"): «Accedé a
-					orientación personalizada para conocer los requisitos, disponibilidad y
-					beneficios de nuestras becas. Un asesor te guiará paso a paso para que
-					puedas postular sin vueltas.»
-				</li>
-			</ul>
+			{/* ============ Dropdown «Conócenos» (navegación) ============ */}
+			<article class="mt-16 border-t border-divider/40 pt-16">
+				<h3>Dropdown «Conócenos» (navegación)</h3>
+				<p class="mt-2 max-w-3xl text-ink/80">
+					El dropdown <strong>Conócenos</strong> agrupaba las páginas
+					<strong>Facultad</strong> y <strong>Plantel Académico</strong>. El
+					menú del sitio es
+					<code class="text-brand">Formaciones</code> ·
+					<code class="text-brand">Mediateca</code> ·
+					<code class="text-brand">Agenda</code> ·
+					<code class="text-brand">Campus</code> (Campus alineado a la derecha,
+					<code class="text-brand">ml-auto</code>).
+				</p>
+				<div class="mt-6 max-w-md rounded-lg border border-divider/40 bg-surface p-5">
+					<ul class="flex w-full items-center gap-[30px] whitespace-nowrap font-display text-[15px] font-normal uppercase tracking-wide">
+						<li class="text-night hover:text-accent">Formaciones</li>
+						<li class="text-night hover:text-accent">Mediateca</li>
+						<li class="text-night hover:text-accent">Agenda</li>
+						<li class="ml-auto text-night hover:text-accent">Campus</li>
+					</ul>
+				</div>
+			</article>
 
-			<h4 class="mt-6">efpp — "Más de 20 años de Excelencia en Psicoterapia y Psicoanálisis"</h4>
-			<p class="mt-1 max-w-3xl text-ink/80">
-				Kicker <strong>efpp</strong>. Introducción: «La Facultad Internacional de
-				Psicología y Psicoanálisis Lalangue abre sus puertas e invita a los
-				estudiantes hispanoparlantes, expandiendo su prestigiosa formación en
-				psicoterapia y psicoanálisis a nuevas fronteras.» Cuatro pilares:
-			</p>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li><strong>Formaciones Flexibles</strong> — «Estudia desde cualquier lugar con programas adaptados a tu ritmo.»</li>
-				<li><strong>Docentes de Renombre</strong> — «Expertos con una sólida trayectoria en sus respectivas disciplinas.»</li>
-				<li><strong>Certificación Internacional</strong> — «Obtén una titulación reconocida con respaldo académico de excelencia.»</li>
-				<li><strong>Pasantías Rentadas</strong> — «Aplicá conocimientos en entornos clínicos supervisados desde el primer año.»</li>
-			</ul>
-
-			<h4 class="mt-6">Nuestra Filosofía — "Enfoque de Enseñanza Único"</h4>
-			<p class="mt-1 max-w-3xl text-ink/80">
-				Kicker <strong>Nuestra Filosofía</strong>; dos bloques numerados y un
-				grid de 4 imágenes (placeholders).
-			</p>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li>
-					<strong>Excelencia y Flexibilidad</strong> — «En FIPP Lalangue combinamos
-					excelencia académica con flexibilidad para ofrecer formaciones
-					certificadas en psicoterapia y psicoanálisis. Todos nuestros programas
-					están disponibles en modalidad online, adaptándose a las necesidades de
-					cada estudiante. Además, ofrecemos una experiencia única con pasantías
-					rentadas.»
-				</li>
-				<li>
-					<strong>Formadores Expertos y Reconocidos</strong> — «Nuestros
-					formadores, expertos en su campo, brindan seguimiento personalizado,
-					guiando el desarrollo académico y profesional de los estudiantes. Con un
-					enfoque interdisciplinario y ético, promovemos una enseñanza innovadora
-					que responde a las demandas actuales del psicoanálisis.»
-				</li>
-			</ul>
-
-			<h4 class="mt-6">Por qué elegirnos — "¿Por qué elegir nuestros programas de formación?"</h4>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li>
-					<strong>Excelencia Académica</strong> — «Tanto nuestros fundadores como el
-					plantel académico son expertos de reconocido prestigio, con una sólida
-					trayectoria en psicoterapia y psicoanálisis. Se destacan por su capacidad
-					de transmitir conocimientos de manera clara y accesible, sin comprometer
-					la profundidad académica.»
-				</li>
-				<li>
-					<strong>Práctica desde el primer año</strong> — «Nuestro programa de
-					pasantías rentadas permite a los estudiantes aplicar sus conocimientos
-					teóricos en entornos clínicos supervisados, adquiriendo experiencia
-					profesional desde el primer año y garantizando una formación práctica y
-					completa.»
-				</li>
-			</ul>
-
-			<h4 class="mt-6">Programas de Formación Certificada</h4>
-			<p class="mt-1 max-w-3xl text-ink/80">
-				Kicker <strong>Programas</strong>. Introducción: «Descubrí nuestros programas
-				de formación psicoanalítica online certificados, basados en el pensamiento de
-				Freud y Lacan. Estudiá con docentes internacionales y obtené tu titulación
-				desde cualquier lugar del mundo.» Tres tarjetas (CTA "Conocé más", sin
-				destino real):
-			</p>
-			<ul class="mt-2 max-w-3xl space-y-1 text-ink/80">
-				<li><strong>Diplomatura en Psicoterapia Psicoanalítica</strong> — «Formación orientada al desarrollo de competencias clínicas para el acompañamiento terapéutico.»</li>
-				<li><strong>Máster en Psicoanálisis</strong> — «Programa avanzado basado en el pensamiento de Freud y Lacan, con docentes internacionales y titulación desde cualquier lugar del mundo.»</li>
-				<li><strong>Pasantías Rentadas</strong> — «Aplicá tus conocimientos teóricos en entornos clínicos supervisados desde el primer año.»</li>
-			</ul>
-
-			<h3 class="mt-8">Dropdown "Conócenos" (nav)</h3>
-			<p class="mt-2 max-w-3xl text-ink/80">
-				El dropdown <strong>Conócenos</strong> — con los ítems
-				<strong>Facultad</strong> (<code class="text-brand">/facultad/</code>) y
-				<strong>Plantel académico</strong>
-				(<code class="text-brand">/plantel-academico/</code>) — se
-				<strong>quitó del navbar</strong>. El menú actual es:
-				<code class="text-brand">Formaciones</code> ·
-				<code class="text-brand">Mediateca</code> ·
-				<code class="text-brand">Agenda</code> ·
-				<code class="text-brand">Campus</code> (Campus alineado a la derecha,
-				<code class="text-brand">ml-auto</code>).
-			</p>
-			<div class="mt-8 max-w-md rounded-lg border border-divider/40 bg-surface p-5">
-				<ul class="flex w-full items-center gap-[30px] whitespace-nowrap font-display text-[15px] font-normal uppercase tracking-wide">
-					<li class="text-night hover:text-accent">Formaciones</li>
-					<li class="text-night hover:text-accent">Mediateca</li>
-					<li class="text-night hover:text-accent">Agenda</li>
-					<li class="ml-auto text-night hover:text-accent">Campus</li>
-				</ul>
-			</div>
-			<p class="mt-6 max-w-3xl text-ink/80">
-				Las páginas <code class="text-brand">/facultad/</code>
-				(<code class="text-brand">src/pages/facultad.astro</code> +
-				<code class="text-brand">data/facultad.ts</code>) y
-				<code class="text-brand">/plantel-academico/</code>
-				(<code class="text-brand">src/pages/plantel-academico.astro</code> +
-				<code class="text-brand">data/plantel.ts</code> +
-				<code class="text-brand">data/docentes.ts</code> +
-				<code class="text-brand">ModalPersona.astro</code>)
-				<strong>siguen existiendo en el build</strong> y siguen accesibles por
-				URL directa, pero ya <strong>no se enlazan</strong> desde el menú. Se
-				conservan a propósito para no romper:
-			</p>
-			<ul class="mt-3 max-w-3xl space-y-1 text-ink/80">
-				<li>
-					<code class="text-brand">masReferentesHref: '/plantel-academico/'</code>
-					en el bloque <strong>PROFESORES</strong>, que enlaza al plantel
-					desde las formaciones.
-				</li>
-				<li>
-					el inventario de <code class="text-brand">textos.ts</code>, que
-					deriva esas páginas automáticamente de sus fuentes de datos.
-				</li>
-			</ul>
-
-			<h3 class="mt-8">Agenda → página "en construcción"</h3>
-			<p class="mt-2 max-w-3xl text-ink/80">
-				El ítem <strong>Agenda</strong> apunta a
-				<code class="text-brand">/en-construccion/</code>
-				(<code class="text-brand">src/pages/en-construccion.astro</code>), una
-				página placeholder construida con el molde del
-				<code class="text-brand">404.astro</code> mientras el sitio de Agenda no
-				existe. Cuando esté listo, solo hay que cambiar el
-				<code class="text-brand">href</code> del ítem en
-				<code class="text-brand">Header.astro</code>.
-			</p>
+			{/* ============ Agenda → página «en construcción» ============ */}
+			<article class="mt-16 border-t border-divider/40 pt-16">
+				<h3>Agenda → página «en construcción»</h3>
+				<p class="mt-2 max-w-3xl text-ink/80">
+					El ítem <strong>Agenda</strong> apunta a
+					<code class="text-brand">/en-construccion/</code>
+					(<code class="text-brand">src/pages/en-construccion.astro</code>), una
+					página placeholder construida con el molde del
+					<code class="text-brand">404.astro</code> mientras el sitio de Agenda
+					no existe. Cuando esté listo, solo hay que cambiar el
+					<code class="text-brand">href</code> del ítem en
+					<code class="text-brand">Header.astro</code>.
+				</p>
+			</article>
 		</section>
+
+		<!-- Popup de perfil (para las fichas del plantel archivado) -->
+		<ModalPersona />
 	</main>
 </Layout>
