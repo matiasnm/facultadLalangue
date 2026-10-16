@@ -355,7 +355,7 @@ export type Logo = { src: string; alt: string; href?: string };
  * #profesores de la landing del Máster: carrusel automático de logos de las
  * universidades e instituciones de procedencia (marquee CSS), slider de fotos
  * de profesores con flechas y autoplay (sin puntitos) que cierra con una
- * tarjeta CTA al plantel académico, y el cierre "También los leíste en"
+ * tarjeta CTA "Y otros referentes del mundo psy", y el cierre "También los leíste en"
  * (medios, marquee CSS). Las universidades y los medios vienen por default
  * (UNIVERSIDADES_PROFESORES y MEDIOS_TAMBIEN, los mismos en todas); cada
  * formación solo pasa su título y su lista de docentes.
@@ -369,7 +369,7 @@ export type BloqueProfesores = {
 	/** Docentes con su foto (`/conocenos/<nombre>.webp`). */
 	profesores: { foto: string; nombre: string }[];
 	medios: Logo[];
-	/** Ruta interna del plantel académico (tarjeta "más referentes"). */
+	/** Ruta de la tarjeta "más referentes" (default: carrusel de plantel de la home). */
 	masReferentesHref?: string;
 };
 
@@ -668,8 +668,7 @@ export const profesores = (titulo, lista) =>
 		universidades: UNIVERSIDADES_PROFESORES,
 		profesores: lista,
 		medios: MEDIOS_TAMBIEN,
-		// La página /plantel-academico se eliminó: el cierre "otros referentes"
-		// apunta al carrusel de plantel de la home (#plantel).
+		// El cierre "otros referentes" enlaza al carrusel de plantel de la home.
 		masReferentesHref: '/#plantel',
 	}) as BloqueProfesores;
 

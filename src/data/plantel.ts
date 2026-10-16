@@ -1,8 +1,7 @@
 /**
- * Datos del plantel académico (archivado).
+ * Datos del plantel académico (archivado en el roadmap).
  *
- * Antes alimentaban la página /plantel-academico, hoy eliminada. Secciones
- * extraídas de docs/plantel-academico-contenido.md: decana, directores
+ * Secciones extraídas de docs/plantel-academico-contenido.md: decana, directores
  * académicos, comité científico y plantel docente. Cada persona se modela como
  * bloque `persona` (perfil) o `equipo` (grid). El render se define UNA VEZ en
  * BloqueRender; el roadmap las muestra en su sección "componentes sin utilizar".

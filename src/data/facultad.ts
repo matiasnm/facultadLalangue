@@ -9,8 +9,7 @@
  * (seccionMetodologia, seccionModeloAcademico, seccionEstadisticas,
  * seccionInstitucionParaTiSi, seccionSalidaLaboral, seccionSupervision,
  * seccionFaqs) para reutilizarlas sin duplicar texto. facultadSecciones las
- * recompone en el orden original de la antigua página `/facultad` (hoy
- * eliminada; el roadmap las archiva en "componentes sin utilizar").
+ * recompone en el mismo orden en que se muestran archivadas en el roadmap.
  */
 import { c, titulo, texto, lista, chips, contadores, stats, faq, cita, enlace, tarjetas } from './componentes';
 import type { BloquePagina } from './componentes';
@@ -186,7 +185,7 @@ export const seccionFaqs: BloquePagina[] = [
 	c('FAQ-ENTREVISTA-ADMISION'),
 ];
 
-/* ── Composición de /facultad (mismo orden que antes) ───────────────── */
+/* ── Composición de facultadSecciones (archivadas en el roadmap) ────── */
 
 export const facultadSecciones: BloquePagina[] = [
 	/* ── Identidad ────────────────────────────────────────────────────── */

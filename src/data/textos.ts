@@ -7,8 +7,8 @@
  *    formación) se derivan automáticamente de sus fuentes de datos, con
  *    bloquesAItems(). Cero duplicación: si cambia el dato, cambia el
  *    inventario.
- *  - Las secciones de las páginas eliminadas (/facultad y /plantel-academico,
- *    archivadas en /roadmap) ya no entran en el inventario.
+ *  - Las secciones archivadas en /roadmap (que ya no tienen página propia)
+ *    no entran en el inventario.
  *  - Las páginas cuyo texto está escrito inline en el .astro (home y las
  *    legales) se declaran aquí como items { etiqueta, texto }, en texto
  *    plano y siguiendo el orden de aparición.

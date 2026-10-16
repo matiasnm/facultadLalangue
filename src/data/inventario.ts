@@ -17,7 +17,7 @@ export interface ItemInventario {
 }
 
 export interface PaginaInventario {
-	/** Ruta pública de la página (ej: '/facultad/'). */
+	/** Ruta pública de la página (ej: '/nuestra-biblioteca/'). */
 	ruta: string;
 	/** Título principal de la página (su h1). */
 	titulo: string;

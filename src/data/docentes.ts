@@ -7,8 +7,8 @@
  * se le asocia la bio; si no, la card queda sin bio y el popup muestra el
  * aviso "todavía no tenemos publicada su bio".
  *
- * Los arreglos `directores` y `docentes` están en el orden en que se
- * renderizaban en la antigua página /plantel-academico (hoy eliminada).
+ * Los arreglos `directores` y `docentes` mantienen el orden del plantel
+ * archivado en el roadmap.
  */
 
 export type PersonaPlantel = {
