@@ -145,6 +145,28 @@ export const seccionSupervision: BloquePagina[] = [
 	enlace('Quiero inscribirme', 'https://go.facultadlalangue.com/supervisiones'),
 ];
 
+/* Variante reducida que muestra la home: título, bajada, cita, modalidades,
+   objetivos y cierre. La versión completa (seccionSupervision) queda archivada
+   en el roadmap. */
+export const seccionSupervisionHome: BloquePagina[] = [
+	titulo('Supervisión Clínica para Psicoterapeutas y Psicoanalistas', 2, undefined, 'supervision'),
+	texto('El lugar fundamental de la supervisión en la formación del analista.'),
+	cita(
+		['«No basta que el analista haya sido educado como médico y psicólogo, o que conozca las teorías del psicoanálisis; tiene que haber sido él mismo analizado.»'],
+		'Sigmund Freud; Análisis terminable e interminable (1937)',
+	),
+	titulo('Modalidades de Supervisión', 3),
+	tarjetas([
+		{ titulo: 'Supervisiones Grupales', descripcion: 'Espacios con diferentes profesionales y enfoques.' },
+		{ titulo: 'Supervisiones para alumnos', descripcion: 'Espacios exclusivos para los alumnos de Lalangue.' },
+	]),
+	texto([
+		'En Facultad Internacional de Psicología y Psicoanálisis Lalangue, ofrecemos supervisiones a psicoterapeutas y psicoanalistas formados o en ejercicio, con el objetivo de:',
+	]),
+	lista(['Acompañar su práctica clínica.', 'Sostener su deseo de analista.', 'Promover la formación permanente y el crecimiento ético-profesional.']),
+	texto('Contamos con supervisores de amplia experiencia clínica y académica, formados en la tradición freudiana y lacaniana, disponibles para acompañarlo en su recorrido.'),
+];
+
 export const seccionFaqs: BloquePagina[] = [
 	titulo('Preguntas Frecuentes', 2, 'sobre Lalangue | sobre la entrevista'),
 	c('FAQ-LISTA-FORMACIONES'),

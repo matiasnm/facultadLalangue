@@ -17,7 +17,7 @@ import {
 	seccionEstadisticas,
 	seccionInstitucionParaTiSi,
 	seccionSalidaLaboral,
-	seccionSupervision,
+	seccionSupervisionHome,
 	seccionFaqs,
 } from './facultad';
 
@@ -131,7 +131,7 @@ export const homeSecciones: BloquePagina[] = [
 	...seccionEstadisticas,
 	...seccionInstitucionParaTiSi,
 	...seccionSalidaLaboral,
-	...seccionSupervision,
+	...seccionSupervisionHome,
 	...seccionCierre,
 	...seccionFaqs,
 ];
