@@ -8,7 +8,7 @@
  *
  * El render se define UNA VEZ en BloqueRender.astro.
  */
-import { carrusel, titulo, texto, lista, enlace } from './componentes';
+import { carrusel, titulo, texto, lista } from './componentes';
 import type { BloqueCarruselItem, BloquePagina } from './componentes';
 import { directores, docentes } from './docentes';
 import {
@@ -106,11 +106,6 @@ export const carruselFormaciones: BloquePagina = carrusel({
 	id: 'formaciones',
 });
 
-/** Botón de beca que cierra el carrusel de formaciones. */
-export const botonBeca: BloquePagina[] = [
-	enlace('Postulate para una beca', 'https://go.facultadlalangue.com/entrevista-directa', true),
-];
-
 /* ── Cierre: Tender puentes ─────────────────────────────────────────── */
 
 export const seccionCierre: BloquePagina[] = [
@@ -131,7 +126,6 @@ export const seccionCierre: BloquePagina[] = [
 export const homeSecciones: BloquePagina[] = [
 	carruselPlantel,
 	carruselFormaciones,
-	...botonBeca,
 	...seccionMetodologia,
 	...seccionModeloAcademico,
 	...seccionEstadisticas,
