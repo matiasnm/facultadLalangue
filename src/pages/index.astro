@@ -8,6 +8,7 @@
  * BloqueRender.astro.
  */
 import Layout from '../layouts/Layout.astro';
+import FormacionesCarouselN from '../components/FormacionesCarouselN.astro';
 import BloqueRender from '../components/formacion/BloqueRender.astro';
 import ComponenteComun from '../components/formacion/ComponenteComun.astro';
 import ModalPersona from '../components/ModalPersona.astro';
@@ -73,7 +74,9 @@ import { homeSecciones } from '../data/home';
 		<div class="mt-16">
 			{
 				homeSecciones.map((seccion) =>
-					seccion.tipo === 'componente' ? (
+					seccion.tipo === 'carrusel' && seccion.id === 'formaciones' ? (
+						<FormacionesCarouselN />
+					) : seccion.tipo === 'componente' ? (
 						<ComponenteComun nombre={seccion.nombre} />
 					) : (
 						<BloqueRender bloque={seccion} />
