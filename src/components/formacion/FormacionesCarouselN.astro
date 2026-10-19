@@ -4,68 +4,35 @@ import 'swiper/css/a11y';
 import { link } from '../../lib/link.ts';
 import IconoChevron from '../IconoChevron.astro';
 
-// Original content and images: https://facultadlalangue.com/formaciones-facultad/
-// Course links use the corresponding local pages, including Metapsicología.
-const formaciones = [
-  {
-    "titulo": "Máster en Psicoanálisis Aplicado",
-    "imagen": "/formaciones-carousel-n/Master1080-1024x576.webp",
-    "alt": "Máster en psicoanálisis aplicado",
-    "href": "/master-en-psicoanalisis/"
-  },
-  {
-    "titulo": "Diplomatura en psicoterapia psicoanalítica",
-    "imagen": "/formaciones-carousel-n/diploPsicoterapia-1024x576.webp",
-    "alt": "Diplomatura en Psicoterapia psicoanalítica",
-    "href": "/psicoterapia-psicoanalitica/"
-  },
-  {
-    "titulo": "Diplomatura en Subjetividad Digital, Daño Algorítmico y Nuevas Formas de Sufrimiento Online",
-    "imagen": "/formaciones-carousel-n/SubjetividadDigital-1-1024x576.webp",
-    "alt": "Subjetividad Digital, Daño Algorítmico y Nuevas Formas de Sufrimiento Online",
-    "href": "/subjetividad-digital/"
-  },
-  {
-    "titulo": "Diplomatura en Clínica de Parejas y Erotismo Relacional",
-    "imagen": "/formaciones-carousel-n/Parejas-1024x576.webp",
-    "alt": "Diplomatura en clínica de parejas y erotismo relacional",
-    "href": "/clinica-de-parejas/"
-  },
-  {
-    "titulo": "Diplomatura en Psicopatología infantojuvenil",
-    "imagen": "/formaciones-carousel-n/Psicopatologia1080-1024x576.webp",
-    "alt": "Diplomatura en psicopatología infantojuvenil",
-    "href": "/psicopatologia-infanto-juvenil/"
-  },
-  {
-    "titulo": "Diplomatura en Metapsicología: Introducción a la teoría psicoanalítica",
-    "imagen": "/formaciones-carousel-n/metapsicologia1-1024x576.webp",
-    "alt": "Diplomatura en Metapsicología: Introducción al psicoanálisis",
-    "href": "/metapsicologia/"
-  }
-];
+import { carruselFormaciones } from '../../data/home';
+import Rico from './Rico.astro';
+
+const { items, titulo, kicker, intro, id } = carruselFormaciones;
 
 // Keep full copies on both sides before Swiper starts. The extra loop buffer
 // lets Swiper recycle offscreen slides without exposing either end of the track.
-const slides = [...formaciones, ...formaciones, ...formaciones];
+const slides = [...items, ...items, ...items];
 ---
 
-<section id="formaciones" class="formaciones-carousel-n full-bleed mt-14 overflow-clip bg-[#5b11331a] px-2.5 py-5 font-heading text-base leading-[1.7] text-[#1e1e1e] md:p-[50px] [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-4 [&_:focus-visible]:outline-[#8c1c3f]" aria-labelledby="formaciones-n-titulo">
+<section id={id} class="formaciones-carousel-n full-bleed mt-14 overflow-clip bg-[#5b11331a] px-2.5 py-5 font-heading text-base leading-[1.7] text-[#1e1e1e] md:p-[50px] [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-offset-4 [&_:focus-visible]:outline-[#8c1c3f]" aria-labelledby="formaciones-n-titulo">
   <div class="mx-auto flex max-w-[1140px] flex-col gap-5 max-[1024px]:max-w-[1024px]">
     <header class="p-2.5">
-      <h2 id="formaciones-n-titulo" class="m-0 mb-5 text-center font-display text-[38px] font-bold uppercase leading-[1.2] tracking-[-1px] text-[#8c1c3f] md:text-left md:text-5xl md:leading-[72px]">Nuestras formaciones</h2>
-      <p class="m-0 mb-[33px] w-full leading-[1.8] md:mb-0 md:w-4/5 md:leading-[1.7]">La facultad ofrece <strong>formaciones en psicología y psicoanálisis online</strong> que integran teoría y clínica para profundizar en el estudio del inconsciente y la comprensión de la subjetividad contemporánea.</p>
+      {kicker && <p class="m-0 mb-2 text-center text-xs font-semibold uppercase tracking-widest text-accent md:text-left">{kicker}</p>}
+      <h2 id="formaciones-n-titulo" class="m-0 mb-5 text-center font-display text-[38px] font-bold uppercase leading-[1.2] tracking-[-1px] text-[#8c1c3f] md:text-left md:text-5xl md:leading-[72px]">{titulo}</h2>
+      {(Array.isArray(intro) ? intro : intro ? [intro] : []).map((parrafo) => (
+        <Rico texto={parrafo} class="m-0 mb-[33px] w-full leading-[1.8] md:mb-0 md:w-4/5 md:leading-[1.7]" />
+      ))}
     </header>
-    <formaciones-carousel-n data-course-count={formaciones.length} class="relative block min-w-0 p-2.5">
-      <div class="e-n-carousel swiper offset-both overflow-visible! px-[50px]! [clip-path:inset(0_-200%_0_-200%)] [&:not(.swiper-initialized)_.swiper-wrapper]:gap-2.5 [&:not(.swiper-initialized)_.swiper-slide]:w-full! md:[&:not(.swiper-initialized)_.swiper-slide]:w-[calc((100%_-_10px)/2)]!" role="region" aria-roledescription="carrusel" aria-label="Nuestras formaciones" tabindex="0">
+    <formaciones-carousel-n data-course-count={items.length} class="relative block min-w-0 p-2.5">
+      <div class="e-n-carousel swiper offset-both overflow-visible! px-[50px]! [clip-path:inset(0_-200%_0_-200%)] [&:not(.swiper-initialized)_.swiper-wrapper]:gap-2.5 [&:not(.swiper-initialized)_.swiper-slide]:w-full! md:[&:not(.swiper-initialized)_.swiper-slide]:w-[calc((100%_-_10px)/2)]!" role="region" aria-roledescription="carrusel" aria-label={titulo} tabindex="0">
         <div class="swiper-wrapper">
           {slides.map((formacion, index) => (
-            <article class="swiper-slide h-auto! shrink-0 p-2.5" role="group" aria-roledescription="diapositiva" data-course-index={index % formaciones.length} aria-label={`${index % formaciones.length + 1} de ${formaciones.length}`}>
+            <article class="swiper-slide h-auto! shrink-0 p-2.5" role="group" aria-roledescription="diapositiva" data-course-index={index % items.length} aria-label={`${index % items.length + 1} de ${items.length}`}>
               <div class="flex flex-col gap-5 p-2.5">
-                <a class="group block" href={link(formacion.href)} tabindex="-1" aria-hidden="true">
-                  <img src={link(formacion.imagen)} alt={formacion.alt} width="1024" height="576" loading="eager" decoding="async" class="block rounded-xl aspect-video h-auto w-full transition-transform duration-300 group-hover:scale-110 motion-reduce:transform-none motion-reduce:transition-none" />
+                <a class="group block" href={link(formacion.href ?? '#')} tabindex="-1" aria-hidden="true">
+                  {formacion.imagen && <img src={link(formacion.imagen)} alt={formacion.alt ?? formacion.titulo} width="1024" height="576" loading="eager" decoding="async" class="block rounded-xl aspect-video h-auto w-full transition-transform duration-300 group-hover:scale-110 motion-reduce:transform-none motion-reduce:transition-none" />}
                 </a>
-                <h3 class="m-0 font-display text-lg font-bold uppercase leading-[25px] tracking-[-.5px] md:text-xl"><a class="text-[#5b1133] transition-colors duration-1000 hover:text-[#8c1c3f] hover:no-underline focus:text-[#8c1c3f] focus:no-underline motion-reduce:transition-none" href={link(formacion.href)}>{formacion.titulo}</a></h3>
+                <h3 class="m-0 font-display text-lg font-bold uppercase leading-[25px] tracking-[-.5px] md:text-xl"><a class="text-[#5b1133] transition-colors duration-1000 hover:text-[#8c1c3f] hover:no-underline focus:text-[#8c1c3f] focus:no-underline motion-reduce:transition-none" href={link(formacion.href ?? '#')}>{formacion.titulo}</a></h3>
               </div>
             </article>
           ))}
