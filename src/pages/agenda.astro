@@ -1,0 +1,64 @@
+---
+/**
+ * Página /agenda — vista del calendario de Google (ticket 5).
+ *
+ * El calendario se embebe con AgendaCalendario (iframe oficial de Google;
+ * ver spec en docs/agenda-calendario-google.md). El ítem de menú "Agenda"
+ * apunta acá (antes iba a /en-construccion/).
+ */
+import Layout from '../layouts/Layout.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import AgendaCalendario from '../components/AgendaCalendario.astro';
+import CarruselVivos from '../components/CarruselVivos.astro';
+
+// Link de suscripción (Calendar address en base64): lo abre logueado en Google
+// y agrega el calendario de difusión al que el visitante use.
+const URL_SUSCRIPCION =
+	'https://calendar.google.com/calendar?cid=Y18xNWVmM2IxNjdlM2U0ZjE1ZmZmZmNmNmRlZjhlNjA4MjJlMDMxNGJjZTBkYTVmMWJiNDYxMTlkNTQ0MWEzYjVjQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20=';
+---
+
+<Layout title="Agenda — Facultad Internacional de Psicología y Psicoanálisis Lalangue">
+	<div class="contenedor pb-12 pt-8">
+		<EncabezadoPagina eyebrow="Agenda" title="Actividades, seminarios y eventos." />
+	</div>
+
+	<!-- Banda del calendario: full-bleed. Fondo propio con líneas inclinadas
+	     tenues + un gradiente suave de la paleta (vino → terracota → índigo)
+	     que armoniza con el blanco del embed de Google. El calendario queda
+	     centrado a 72rem (.contenedor). -->
+	<section class="full-bleed relative fondo-agenda pb-16 pt-4">
+		<div class="contenedor">
+			<AgendaCalendario urlSuscripcion={URL_SUSCRIPCION} />
+		</div>
+	</section>
+
+	<!-- Carrusel de últimos vivos de YouTube (ticket 6) -->
+	<CarruselVivos />
+
+	<div class="h-16" aria-hidden="true"></div>
+</Layout>
+
+<style>
+	/* Fondo de la banda del calendario: retícula diagonal tenue + un solo
+	   halo de marca (vino arriba, terracota abajo) para no competir con la
+	   grilla del embed. */
+	.fondo-agenda {
+		background-color: var(--color-background);
+		background-image:
+			radial-gradient(
+				65rem 38rem at 50% -5%,
+				color-mix(in oklab, var(--color-brand) 12%, transparent),
+				transparent 68%
+			),
+			radial-gradient(
+				50rem 34rem at 50% 110%,
+				color-mix(in oklab, var(--color-accent) 12%, transparent),
+				transparent 70%
+			),
+			repeating-linear-gradient(
+				135deg,
+				color-mix(in oklab, var(--color-ink) 4%, transparent) 0 1px,
+				transparent 1px 10px
+			);
+	}
+</style>

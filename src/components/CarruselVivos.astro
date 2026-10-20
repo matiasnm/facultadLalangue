@@ -1,0 +1,236 @@
+---
+/**
+ * CarruselVivos — carrusel horizontal de los últimos vivos del canal de
+ * YouTube (ticket 6), estilo "Netflix": en desktop se ven ~2 cards completas
+ * en el centro y las contiguas recortadas en los extremos (i1 i2 d1 d2).
+ *
+ * Loop infinito real sin huecos: la lista se renderiza 3 veces (copia
+ * izquierda, central "real" y copia derecha, las laterales aria-hidden) y el
+ * carril arranca en la copia central. Cuando el scroll cruza un extremo, se
+ * salta sin animación a la copia equivalente — así el último siempre queda
+ * seguido del primero y nunca aparece un espacio en blanco.
+ *
+ * Auto-desliza de a una card, pausa al hover/foco y respeta
+ * prefers-reduced-motion. En build se traen los videos con getVivos()
+ * (src/lib/youtube.ts); sin API key se muestran datos mock.
+ */
+import { getVivos } from '../lib/youtube';
+
+const { videos, esMock } = await getVivos();
+
+const fmt = (iso: string) => {
+	if (!iso) return '';
+	const d = new Date(iso);
+	if (Number.isNaN(d.getTime())) return '';
+	return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+};
+
+// 3 copias: [izq] [centro real] [der]. El índice central es el 1.
+const copias = [0, 1, 2] as const;
+---
+
+<section class="full-bleed py-14" aria-labelledby="vivos-titulo">
+	<div class="contenedor">
+		<div class="flex flex-wrap items-end justify-between gap-4">
+			<div>
+				<p class="text-xs font-semibold uppercase tracking-widest text-accent">YouTube</p>
+				<h2 id="vivos-titulo" class="mt-2 text-2xl font-semibold sm:text-3xl">
+					Últimos videos
+				</h2>
+			</div>
+			<p class="text-sm text-muted">
+				{esMock ? 'Contenido de ejemplo' : 'Vivos y novedades del canal @facultadlalangue'}
+			</p>
+		</div>
+	</div>
+
+	<!-- Carril a ancho completo. Cards centradas; vecinas recortadas. -->
+	<div class="relative mt-8" data-carrusel-vivos>
+		<ul
+			data-track
+			class="carril flex gap-5 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+		>
+			{
+				copias.map((copia) =>
+					videos.map((v, i) => (
+						<li
+							data-card
+							aria-hidden={copia === 1 ? undefined : 'true'}
+							class="w-[80vw] max-w-[22rem] shrink-0 sm:w-[62vw] md:w-[52vw] lg:w-[46vw] xl:w-[38rem]"
+						>
+							<a
+								href={v.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								tabindex={copia === 1 ? undefined : -1}
+								class="group block overflow-hidden rounded-xl border border-divider bg-white transition-shadow hover:shadow-lg hover:no-underline"
+							>
+								<div class="relative aspect-video w-full overflow-hidden bg-surface">
+									{v.thumbnail ? (
+										<img
+											src={v.thumbnail}
+											alt=""
+											loading={copia === 1 && i < 2 ? 'eager' : 'lazy'}
+											class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+										/>
+									) : (
+										<div class="flex h-full w-full items-center justify-center text-muted">
+											<span class="font-display text-xs uppercase tracking-wide">Video</span>
+										</div>
+									)}
+									<span
+										class="pointer-events-none absolute inset-0 flex items-center justify-center"
+										aria-hidden="true"
+									>
+										<span class="flex size-14 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur-sm transition-colors group-hover:bg-brand">
+											<svg viewBox="0 0 24 24" fill="currentColor" class="ml-1 size-6">
+												<path d="M8 5v14l11-7z" />
+											</svg>
+										</span>
+									</span>
+								</div>
+								<div class="p-4">
+									<p class="line-clamp-2 text-[0.9375rem] font-medium leading-snug text-ink-strong">
+										{v.title}
+									</p>
+									<p class="mt-1.5 text-xs uppercase tracking-wide text-muted">
+										{fmt(v.publishedAt)}
+									</p>
+								</div>
+							</a>
+						</li>
+					)),
+				)
+			}
+		</ul>
+
+	</div>
+
+	<!-- Puntitos: uno por video; indica el activo y permite saltar a él. -->
+	<div class="contenedor mt-5 flex justify-center">
+		<div class="flex items-center gap-2" role="tablist" aria-label="Elegir video">
+			{
+				videos.map((v, i) => (
+					<button
+						type="button"
+						data-dot
+						data-index={i}
+						role="tab"
+						aria-label={`Ir al video ${i + 1}: ${v.title}`}
+						class="size-2.5 rounded-full bg-divider transition-colors hover:bg-accent"
+					/>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Gutter lateral = media pantalla menos media card, para centrar la primera
+	   y la última y dejar las vecinas recortadas en los extremos. */
+	.carril {
+		padding-inline: max(calc(50vw - 19rem), 1rem);
+	}
+	@media (max-width: 1024px) {
+		.carril {
+			padding-inline: max(calc(50vw - 23vw), 1rem);
+		}
+	}
+	@media (max-width: 640px) {
+		.carril {
+			padding-inline: max(calc(50vw - 40vw), 0.5rem);
+		}
+	}
+</style>
+
+<script>
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	const raiz = document.querySelector<HTMLElement>('[data-carrusel-vivos]');
+	if (raiz) {
+		const track = raiz.querySelector<HTMLElement>('[data-track]');
+		const dots = Array.from(raiz.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+		const cards = track ? Array.from(track.querySelectorAll<HTMLElement>('[data-card]')) : [];
+
+		if (track && cards.length > 0) {
+			const n = cards.length / 3; // cantidad real de videos
+			let indice = n; // arranca en la primera card de la copia central
+
+			// Centra la card `i` sin animación (para el salto invisible).
+			const centrarInstante = (i: number) => {
+				const card = cards[i];
+				if (!card) return;
+				track.scrollLeft = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+			};
+
+			const centrar = (i: number) => {
+				const card = cards[i];
+				if (!card) return;
+				const objetivo = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+				track.scrollTo({ left: Math.max(0, objetivo), behavior: 'smooth' });
+			};
+
+			// Pinta el puntito activo (índice dentro de la lista real).
+			const pintarDots = () => {
+				const activo = ((indice % n) + n) % n;
+				dots.forEach((d, i) => {
+					const on = i === activo;
+					d.classList.toggle('bg-brand', on);
+					d.classList.toggle('bg-divider', !on);
+					d.setAttribute('aria-selected', String(on));
+				});
+			};
+
+			// Normaliza el índice a la copia central cuando se cruza un extremo.
+			const normalizar = () => {
+				if (indice >= 2 * n) {
+					indice -= n;
+					centrarInstante(indice);
+				} else if (indice < n) {
+					indice += n;
+					centrarInstante(indice);
+				}
+				pintarDots();
+			};
+
+			const ir = (dir: number) => {
+				indice += dir;
+				centrar(indice);
+				pintarDots();
+				// Deja terminar la animación antes de reubicar si cruzó el borde.
+				window.setTimeout(normalizar, 450);
+			};
+
+			// Click en un puntito: salta a ese video (dentro de la copia central
+			// más cercana al índice actual).
+			dots.forEach((d) =>
+				d.addEventListener('click', () => {
+					const destino = Number(d.dataset.index);
+					indice = n + destino;
+					centrar(indice);
+					pintarDots();
+					window.setTimeout(normalizar, 450);
+				}),
+			);
+
+			let timer = 0;
+			const stop = () => window.clearInterval(timer);
+			const start = () => {
+				stop();
+				if (reduceMotion) return;
+				timer = window.setInterval(() => ir(1), 4000);
+			};
+			raiz.addEventListener('mouseenter', stop);
+			raiz.addEventListener('mouseleave', start);
+			raiz.addEventListener('focusin', stop);
+			raiz.addEventListener('focusout', start);
+
+			// Estado inicial: primera card real centrada, sin animación.
+			requestAnimationFrame(() => {
+				centrarInstante(indice);
+				pintarDots();
+				start();
+			});
+		}
+	}
+</script>
