@@ -4,6 +4,8 @@ import { Image } from 'astro:assets';
 import Avatar from '../Avatar.astro';
 import IconoChevron from '../IconoChevron.astro';
 import { siglasDe } from '../../data/docentes';
+import 'swiper/css';
+import 'swiper/css/a11y';
 
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/docentes/*.{jpeg,jpg,png,webp}', { eager: true });
 
@@ -46,7 +48,6 @@ const docentes = (await Promise.all(entradas
         return a.peso - b.peso;
     });
 
-const slides = docentes;
 ---
 
 <section id="plantel" class="scroll-mt-24 mt-14" aria-labelledby="plantel-titulo">
@@ -76,20 +77,20 @@ const slides = docentes;
             </div>
         </div>
         <div
-                class="plantel-viewport"
+                class="plantel-viewport swiper"
                 data-plantel-viewport
                 role="region"
                 aria-roledescription="carrusel"
                 aria-label="Plantel docente"
                 tabindex="0"
         >
-            <ul class="plantel-track">
-                {slides.map((docente, index) => (
+            <ul class="plantel-track swiper-wrapper">
+                {docentes.map((docente, index) => (
                         <li
-                                class="plantel-slide"
+                                class="plantel-slide swiper-slide"
                                 role="group"
                                 aria-roledescription="diapositiva"
-                                aria-label={`${index % docentes.length + 1} de ${docentes.length}`}
+                                aria-label={`${index + 1} de ${docentes.length}`}
                         >
                             <button
                                     type="button"
@@ -152,10 +153,10 @@ const slides = docentes;
     .plantel-nav { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 10px 16px; border: 1px solid #5b11332b; border-radius: 999px; color: #5b1133; background: transparent; font: inherit; font-size: 12px; cursor: pointer; transition: background .2s, color .2s; }
     .plantel-nav:hover:not(:disabled) { background: #5b1133; color: white; }
     .plantel-nav:disabled { opacity: .3; cursor: default; }
-    .plantel-viewport { --rail-gutter: max(20px, calc((100vw - 100%) / 2)); width: 100vw; margin-inline: calc((100% - 100vw) / 2); padding: 16px var(--rail-gutter) 32px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--rail-gutter); scrollbar-width: none; }
-    .plantel-viewport::-webkit-scrollbar { display: none; }
-    .plantel-track { display: flex; width: max-content; gap: 34px; margin: 0; padding: 0; list-style: none; }
-    .plantel-slide { width: clamp(205px, 18vw, 285px); flex-shrink: 0; scroll-snap-align: start; }
+    .plantel-viewport { width: calc(100% + max(20px, (100vw - 100%) / 2)); margin-inline: 0; padding: 16px 0 32px; overflow: hidden; }
+    .plantel-track { margin: 0; padding: 0; list-style: none; }
+    .plantel-slide { width: clamp(205px, 18vw, 285px); height: auto; flex-shrink: 0; }
+    .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 34px; }
     .plantel-card { display: block; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; font: inherit; }
     .plantel-portrait { display: block; position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 20px; background: #351525; color: white; transition: transform .5s ease, box-shadow .5s ease; }
     .plantel-portrait::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgb(25 8 18 / .35) 55%, rgb(25 8 18 / .95)); pointer-events: none; }
@@ -171,7 +172,7 @@ const slides = docentes;
         .plantel-card:hover .plantel-portrait { transform: scale(1.025); box-shadow: 0 10px 24px #35152533; }
     }
     @media (max-width: 700px) {
-        .plantel-track { gap: 16px; }
+        .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 16px; }
         .plantel-slide { width: min(42vw, 180px); }
         .plantel-toolbar > p { max-width: 15ch; font-size: 11px; }
         .plantel-nav { padding: 10px; }
@@ -187,52 +188,67 @@ const slides = docentes;
 </style>
 
 <script>
+    import Swiper from 'swiper';
+    import { A11y, Navigation } from 'swiper/modules';
+
     class PlantelCarousel extends HTMLElement {
+        private swiper?: Swiper;
         private events?: AbortController;
-        private resizeObserver?: ResizeObserver;
 
         connectedCallback() {
-            this.events?.abort();
-            this.resizeObserver?.disconnect();
+            if (this.swiper) return;
             const viewport = this.querySelector<HTMLElement>('[data-plantel-viewport]');
             const prev = this.querySelector<HTMLButtonElement>('[data-plantel-prev]');
             const next = this.querySelector<HTMLButtonElement>('[data-plantel-next]');
-            const track = this.querySelector<HTMLElement>('.plantel-track');
-            if (!viewport || !prev || !next || !track) return;
+            if (!viewport || !prev || !next) return;
 
             this.events = new AbortController();
             const { signal } = this.events;
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-            const update = () => {
-                prev.disabled = viewport.scrollLeft <= 2;
-                next.disabled = viewport.scrollLeft >= viewport.scrollWidth - viewport.clientWidth - 2;
-            };
-            const go = (direction: number) => {
-                const card = track.querySelector<HTMLElement>('li');
-                if (!card) return;
-                const step = card.offsetWidth + parseFloat(getComputedStyle(track).gap);
-                const page = Math.max(1, Math.floor(viewport.clientWidth / step));
-                viewport.scrollBy({ left: direction * step * page, behavior: reduceMotion.matches ? 'instant' : 'smooth' });
-            };
-            prev.addEventListener('click', () => go(-1), { signal });
-            next.addEventListener('click', () => go(1), { signal });
-            viewport.addEventListener('scroll', update, { signal, passive: true });
+            prev.disabled = next.disabled = false;
+            this.swiper = new Swiper(viewport, {
+                modules: [A11y, Navigation],
+                slidesPerView: 'auto',
+                slidesPerGroup: 1,
+                initialSlide: 0,
+                centeredSlides: false,
+                loop: Number(this.dataset.slideCount) > 1,
+                spaceBetween: 16,
+                breakpoints: {
+                    701: { spaceBetween: 34 },
+                },
+                speed: reduceMotion.matches ? 0 : 400,
+                grabCursor: true,
+                navigation: {
+                    prevEl: prev,
+                    nextEl: next,
+                    addIcons: false,
+                },
+                a11y: {
+                    prevSlideMessage: 'Docente anterior',
+                    nextSlideMessage: 'Docente siguiente',
+                    containerRoleDescriptionMessage: 'carrusel',
+                    itemRoleDescriptionMessage: 'diapositiva',
+                    slideLabelMessage: '{{index}} de {{slidesLength}}',
+                },
+            });
             viewport.addEventListener('keydown', (event) => {
                 if (event.target !== viewport) return;
                 if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
                     event.preventDefault();
-                    go(event.key === 'ArrowLeft' ? -1 : 1);
+                    if (event.key === 'ArrowLeft') this.swiper?.slidePrev();
+                    else this.swiper?.slideNext();
                 }
             }, { signal });
-            this.resizeObserver = new ResizeObserver(update);
-            this.resizeObserver.observe(viewport);
-            this.resizeObserver.observe(track);
-            update();
+            reduceMotion.addEventListener('change', (event) => {
+                if (this.swiper) this.swiper.params.speed = event.matches ? 0 : 400;
+            }, { signal });
         }
 
         disconnectedCallback() {
-            this.resizeObserver?.disconnect();
             this.events?.abort();
+            this.swiper?.destroy(true, true);
+            this.swiper = undefined;
         }
     }
 
