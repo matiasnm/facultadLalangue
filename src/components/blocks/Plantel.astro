@@ -209,6 +209,8 @@ const docentes = (await Promise.all(entradas
             this.swiper = new Swiper(viewport, {
                 modules: [A11y, Navigation],
                 slidesPerView: 'auto',
+                // Returning focus from the modal must not realign a visible card.
+                watchSlidesProgress: true,
                 slidesPerGroup: 1,
                 initialSlide: 0,
                 centeredSlides: false,
