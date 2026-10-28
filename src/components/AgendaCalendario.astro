@@ -1,0 +1,111 @@
+---
+/**
+ * AgendaCalendario — vista embebida del calendario de Google (ticket 5).
+ *
+ * Usa el iframe oficial de Google Calendar (opción A de la spec:
+ * docs/agenda-calendario-google.md). Un solo iframe MONTH; el botón
+ * Mes / Agenda alterna el `mode` de la URL en el cliente.
+ *
+ * El calendario debe estar PUBLICO con "ver todos los detalles del evento"
+ * (Settings → Access permissions), si no el iframe se muestra en blanco.
+ */
+
+const CALENDARIO_ID =
+	'c_15ef3b167e3e4f15ffffcf6def8e60822e0314bce0da5f1bb46119d5441a3b5c@group.calendar.google.com';
+const CTZ = 'America/Argentina/Buenos_Aires';
+
+const url = (mode: string) =>
+	`https://calendar.google.com/calendar/embed?src=${encodeURIComponent(CALENDARIO_ID)}` +
+	`&ctz=${encodeURIComponent(CTZ)}&mode=${mode}&hl=es` +
+	`&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23ffffff`;
+
+const URL_MES = url('MONTH');
+const URL_AGENDA = url('AGENDA');
+
+interface Props {
+	/** Link de suscripción al calendario (botón "Suscribirme"). */
+	urlSuscripcion: string;
+}
+const { urlSuscripcion } = Astro.props;
+---
+
+<div class="w-full" data-agenda-calendario data-url-mes={URL_MES} data-url-agenda={URL_AGENDA}>
+	<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+		<div
+			class="inline-flex overflow-hidden rounded-md border border-divider"
+			role="group"
+			aria-label="Vista del calendario"
+		>
+			<button
+				type="button"
+				data-vista="MONTH"
+				class="px-4 py-2 font-display text-sm uppercase tracking-wide transition-colors"
+			>
+				Mes
+			</button>
+			<button
+				type="button"
+				data-vista="AGENDA"
+				class="px-4 py-2 font-display text-sm uppercase tracking-wide transition-colors"
+			>
+				Agenda
+			</button>
+		</div>
+
+		<a
+			href={urlSuscripcion}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="rounded-md border border-divider bg-white px-4 py-2 font-display text-sm uppercase tracking-wide text-night transition-colors hover:bg-brand/5 hover:text-accent hover:no-underline"
+		>
+			Suscribirme
+		</a>
+	</div>
+
+	<div class="w-full overflow-hidden rounded-xl border border-divider bg-white">
+		<iframe
+			src={URL_AGENDA}
+			title="Calendario de actividades de la Facultad Lalangue"
+			loading="lazy"
+			class="block h-[640px] w-full"
+			frameborder="0"
+			scrolling="no"
+		></iframe>
+	</div>
+</div>
+
+<script>
+	const raiz = document.querySelector<HTMLElement>('[data-agenda-calendario]');
+	if (raiz) {
+		const iframe = raiz.querySelector('iframe');
+		const botones = raiz.querySelectorAll<HTMLButtonElement>('[data-vista]');
+		const urls: Record<string, string | undefined> = {
+			MONTH: raiz.dataset.urlMes,
+			AGENDA: raiz.dataset.urlAgenda,
+		};
+
+		const activo = 'bg-brand text-white';
+		const inactivo = 'bg-white text-night hover:bg-brand/5 hover:text-accent';
+
+		const pintar = (vista: string) => {
+			botones.forEach((b) => {
+				const on = b.dataset.vista === vista;
+				b.classList.remove(...activo.split(' '), ...inactivo.split(' '));
+				b.classList.add(...(on ? activo : inactivo).split(' '));
+				b.setAttribute('aria-pressed', String(on));
+			});
+		};
+
+		const cambiar = (vista: string) => {
+			const nueva = urls[vista];
+			if (iframe && nueva) iframe.src = nueva;
+			pintar(vista);
+		};
+
+		botones.forEach((b) =>
+			b.addEventListener('click', () => cambiar(b.dataset.vista || 'MONTH')),
+		);
+
+		pintar('AGENDA');
+	}
+</script>
