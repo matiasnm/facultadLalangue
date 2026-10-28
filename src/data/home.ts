@@ -9,7 +9,7 @@
  * El render se define UNA VEZ en BloqueRender.astro.
  */
 import { carrusel, titulo, texto, lista } from './componentes';
-import type { BloqueCarruselItem, BloquePagina } from './componentes';
+import type { BloqueCarrusel, BloqueCarruselItem, BloquePagina } from './componentes';
 import { directores, docentes } from './docentes';
 import {
 	seccionMetodologia,
@@ -65,37 +65,49 @@ const itemsFormaciones: BloqueCarruselItem[] = [
 		titulo: 'Máster en Psicoanálisis Aplicado',
 		descripcion: 'Para quienes comparten la pasión por un psicoanálisis actual.',
 		href: '/master-en-psicoanalisis/',
+		imagen: '/formaciones-carousel-n/Master1080-1024x576.webp',
+		alt: 'Máster en psicoanálisis aplicado',
 	},
 	{
 		titulo: 'Diplomatura en Psicoterapia Psicoanalítica',
 		descripcion: 'Para quienes desean aprender a acompañar desde una perspectiva psicoanalítica contemporánea.',
 		href: '/psicoterapia-psicoanalitica/',
+		imagen: '/formaciones-carousel-n/diploPsicoterapia-1024x576.webp',
+		alt: 'Diplomatura en Psicoterapia psicoanalítica',
 	},
 	{
 		titulo: 'Diplomatura en Subjetividad Digital',
 		descripcion:
 			'Comprende cómo las plataformas digitales, los algoritmos y las dinámicas de las redes sociales están transformando la subjetividad y el bienestar psicológico.',
 		href: '/subjetividad-digital/',
+		imagen: '/formaciones-carousel-n/SubjetividadDigital-1-1024x576.webp',
+		alt: 'Subjetividad Digital, Daño Algorítmico y Nuevas Formas de Sufrimiento Online',
 	},
 	{
 		titulo: 'Diplomatura en Clínica de Parejas y Erotismo Relacional',
 		descripcion: 'Herramientas contemporáneas para una clínica de pareja aplicable, en los conflictos, los síntomas y la historia.',
 		href: '/clinica-de-parejas/',
+		imagen: '/formaciones-carousel-n/Parejas-1024x576.webp',
+		alt: 'Diplomatura en clínica de parejas y erotismo relacional',
 	},
 	{
 		titulo: 'Diplomatura en Psicopatología Infanto-Juvenil',
 		descripcion:
 			'Para quienes deseen especializarse en psicopatología y clínica infantojuvenil desde una perspectiva psicoanalítica contemporánea.',
 		href: '/psicopatologia-infanto-juvenil/',
+		imagen: '/formaciones-carousel-n/Psicopatologia1080-1024x576.webp',
+		alt: 'Diplomatura en psicopatología infantojuvenil',
 	},
 	{
 		titulo: 'Diplomatura en Metapsicología',
 		descripcion: 'Introducción a la lógica psicoanalítica: los fundamentos teóricos del psicoanálisis.',
 		href: '/metapsicologia/',
+		imagen: '/formaciones-carousel-n/metapsicologia1-1024x576.webp',
+		alt: 'Diplomatura en Metapsicología: Introducción al psicoanálisis',
 	},
 ];
 
-export const carruselFormaciones: BloquePagina = carrusel({
+export const carruselFormaciones: BloqueCarrusel = carrusel({
 	titulo: 'Nuestras formaciones',
 	kicker: 'Formaciones',
 	intro: [

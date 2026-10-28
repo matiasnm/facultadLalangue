@@ -1,0 +1,260 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Avatar from '../Avatar.astro';
+import IconoChevron from '../IconoChevron.astro';
+import { siglasDe } from '../../data/docentes';
+import 'swiper/css';
+import 'swiper/css/a11y';
+
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/docentes/*.{jpeg,jpg,png,webp}', { eager: true });
+
+const entradas = await getCollection('docentes');
+
+const docentes = (await Promise.all(entradas
+    .map(async (entrada) => {
+        const frontmatter = entrada.data;
+        const { Content } = await render(entrada);
+
+        let resolvedImage = undefined;
+        let imageSrcString = '';
+        if (frontmatter.foto) {
+            const imageName = frontmatter.foto.split('/').pop();
+            const matchedKey = Object.keys(imageFiles).find((path) => path.endsWith(`/${imageName}`));
+            if (matchedKey) {
+                resolvedImage = imageFiles[matchedKey].default;
+                imageSrcString = resolvedImage.src;
+            } else {
+                imageSrcString = frontmatter.foto;
+            }
+        }
+
+        return {
+            nombre: frontmatter.nombre,
+            titulo: frontmatter.puesto,
+            foto: resolvedImage, // Optimized ImageMetadata object for <Image />
+            fotoUrl: imageSrcString, // Raw string URL for data attributes
+            peso: Number.isFinite(frontmatter.peso) ? frontmatter.peso : undefined,
+            Content,
+            sociales: Object.fromEntries((['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok'] as const).map((red) => [red, frontmatter[red]]).filter(([, url]) => url)),
+        };
+    })))
+    .sort((a, b) => {
+        if (a.peso === undefined && b.peso === undefined) {
+            return a.nombre.localeCompare(b.nombre, 'es');
+        }
+        if (a.peso === undefined) return 1;
+        if (b.peso === undefined) return -1;
+        return a.peso - b.peso;
+    });
+
+---
+
+<section id="plantel" class="scroll-mt-24 mt-14" aria-labelledby="plantel-titulo">
+    <p class="text-xs font-semibold uppercase tracking-widest text-accent">Plantel</p>
+    <h2 id="plantel-titulo" class="mt-0 first:mt-0">Un equipo docente de renombre</h2>
+    <div class="mt-6 space-y-3">
+        <p class="max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85">
+            El equipo docente Lalangue está compuesto por <strong>profesionales de renombre</strong>
+            con amplia experiencia en psicoanálisis, psicoterapia e investigación.
+        </p>
+        <p class="max-w-3xl text-[0.9375rem] leading-relaxed text-ink/85">
+            En Lalangue, no solo aprenderás teoría, sino que contarás con el acompañamiento
+            de especialistas que te guiarán en cada etapa de tu formación.
+        </p>
+    </div>
+
+    <plantel-carousel class="relative mt-10 block" data-slide-count={docentes.length}>
+        <div class="plantel-toolbar">
+            <p class="m-0 text-sm font-semibold uppercase tracking-widest text-brand">Conocé a nuestros docentes</p>
+            <div class="plantel-controls">
+                <button type="button" data-plantel-prev aria-label="Docente anterior" class="plantel-nav" disabled>
+                    <IconoChevron class="size-4 rotate-90" /><span class="hidden sm:inline">Anterior</span>
+                </button>
+                <button type="button" data-plantel-next aria-label="Docente siguiente" class="plantel-nav" disabled>
+                    <span class="hidden sm:inline">Siguiente</span><IconoChevron class="size-4 -rotate-90" />
+                </button>
+            </div>
+        </div>
+        <div
+                class="plantel-viewport swiper"
+                data-plantel-viewport
+                role="region"
+                aria-roledescription="carrusel"
+                aria-label="Plantel docente"
+                tabindex="0"
+        >
+            <ul class="plantel-track swiper-wrapper">
+                {docentes.map((docente, index) => (
+                        <li
+                                class="plantel-slide swiper-slide"
+                                role="group"
+                                aria-roledescription="diapositiva"
+                                aria-label={`${index + 1} de ${docentes.length}`}
+                        >
+                            <button
+                                    type="button"
+                                    data-persona-card
+                                    data-persona-nombre={docente.nombre}
+                                    data-persona-titulo={docente.titulo ?? ''}
+                                    data-persona-siglas={siglasDe(docente.nombre)}
+                                    data-persona-foto={docente.fotoUrl}
+                                    data-persona-sociales={JSON.stringify(docente.sociales)}
+                                    class="plantel-card"
+                            >
+                                <span class="plantel-portrait">
+                                {docente.foto ? (
+                                        <Image
+                                                src={docente.foto}
+                                                alt={docente.nombre}
+                                                class="plantel-photo"
+                                                loading="lazy"
+                                        />
+                                ) : (
+                                        <span class="plantel-avatar">
+                                            <Avatar name={docente.nombre} class="h-24 w-24 text-2xl" />
+                                        </span>
+                                )}
+                                <span class="plantel-caption">
+                                    <span class="plantel-name">{docente.nombre}</span>
+                                    {docente.titulo && <span class="plantel-role">{docente.titulo}</span>}
+                                </span>
+                                </span>
+                                <span class="plantel-profile">
+                                    Ver perfil
+                                    <svg
+                                            viewBox="0 0 24 24"
+                                            class="h-3.5 w-3.5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            aria-hidden="true"
+                                    >
+                                        <path d="M7 17 17 7M8 7h9v9" />
+                                    </svg>
+                                </span>
+                            </button>
+                            <template data-persona-bio-template>
+                                <docente.Content />
+                            </template>
+                        </li>
+                ))}
+            </ul>
+        </div>
+
+    </plantel-carousel>
+</section>
+
+<style>
+    .plantel-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .plantel-controls { display: flex; gap: 8px; flex-shrink: 0; }
+    .plantel-nav { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 10px 16px; border: 1px solid #5b11332b; border-radius: 999px; color: #5b1133; background: transparent; font: inherit; font-size: 12px; cursor: pointer; transition: background .2s, color .2s; }
+    .plantel-nav:hover:not(:disabled) { background: #5b1133; color: white; }
+    .plantel-nav:disabled { opacity: .3; cursor: default; }
+    .plantel-viewport { width: calc(100% + max(20px, (100vw - 100%) / 2)); margin-inline: 0; padding: 16px 0 32px; overflow: hidden; }
+    .plantel-track { margin: 0; padding: 0; list-style: none; }
+    .plantel-slide { width: clamp(205px, 18vw, 285px); height: auto; flex-shrink: 0; }
+    .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 34px; }
+    .plantel-card { display: block; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; font: inherit; }
+    .plantel-portrait { display: block; position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 20px; background: #351525; color: white; transition: transform .5s ease, box-shadow .5s ease; }
+    .plantel-portrait::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgb(25 8 18 / .35) 55%, rgb(25 8 18 / .95)); pointer-events: none; }
+    .plantel-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .plantel-avatar { display: flex; height: 65%; align-items: center; justify-content: center; }
+    .plantel-caption { position: absolute; z-index: 1; inset: auto 20px 24px; display: grid; gap: 8px; }
+    .plantel-name { font-family: var(--font-display, Georgia, serif); font-size: clamp(20px, 1.7vw, 26px); font-weight: 600; line-height: 1.15; }
+    .plantel-role { font-size: 12px; line-height: 1.5; color: #ffffffc7; }
+    .plantel-profile { display: flex; align-items: center; gap: 6px; margin-top: 14px; color: #5b1133; font-size: 12px; font-weight: 600; }
+    .plantel-card:focus-visible, .plantel-nav:focus-visible, .plantel-viewport:focus-visible { outline: 2px solid #8c1c3f; outline-offset: 4px; }
+    .plantel-card:focus-visible .plantel-portrait { transform: scale(1.025); box-shadow: 0 10px 24px #35152533; }
+    @media (hover: hover) and (pointer: fine) {
+        .plantel-card:hover .plantel-portrait { transform: scale(1.025); box-shadow: 0 10px 24px #35152533; }
+    }
+    @media (max-width: 700px) {
+        .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 16px; }
+        .plantel-slide { width: min(42vw, 180px); }
+        .plantel-toolbar > p { max-width: 15ch; font-size: 11px; }
+        .plantel-nav { padding: 10px; }
+        .plantel-portrait { border-radius: 14px; }
+        .plantel-caption { inset: auto 12px 16px; gap: 6px; }
+        .plantel-name { font-size: 18px; }
+        .plantel-role { font-size: 11px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .plantel-portrait, .plantel-nav { transition: none; }
+        .plantel-card:is(:hover, :focus-visible) .plantel-portrait { transform: none; }
+    }
+</style>
+
+<script>
+    import Swiper from 'swiper';
+    import { A11y, Navigation } from 'swiper/modules';
+
+    class PlantelCarousel extends HTMLElement {
+        private swiper?: Swiper;
+        private events?: AbortController;
+
+        connectedCallback() {
+            if (this.swiper) return;
+            const viewport = this.querySelector<HTMLElement>('[data-plantel-viewport]');
+            const prev = this.querySelector<HTMLButtonElement>('[data-plantel-prev]');
+            const next = this.querySelector<HTMLButtonElement>('[data-plantel-next]');
+            if (!viewport || !prev || !next) return;
+
+            this.events = new AbortController();
+            const { signal } = this.events;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            prev.disabled = next.disabled = false;
+            this.swiper = new Swiper(viewport, {
+                modules: [A11y, Navigation],
+                slidesPerView: 'auto',
+                // Returning focus from the modal must not realign a visible card.
+                watchSlidesProgress: true,
+                slidesPerGroup: 1,
+                initialSlide: 0,
+                centeredSlides: false,
+                loop: Number(this.dataset.slideCount) > 1,
+                spaceBetween: 16,
+                breakpoints: {
+                    701: { spaceBetween: 34 },
+                },
+                speed: reduceMotion.matches ? 0 : 400,
+                grabCursor: true,
+                navigation: {
+                    prevEl: prev,
+                    nextEl: next,
+                    addIcons: false,
+                },
+                a11y: {
+                    prevSlideMessage: 'Docente anterior',
+                    nextSlideMessage: 'Docente siguiente',
+                    containerRoleDescriptionMessage: 'carrusel',
+                    itemRoleDescriptionMessage: 'diapositiva',
+                    slideLabelMessage: '{{index}} de {{slidesLength}}',
+                },
+            });
+            viewport.addEventListener('keydown', (event) => {
+                if (event.target !== viewport) return;
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    if (event.key === 'ArrowLeft') this.swiper?.slidePrev();
+                    else this.swiper?.slideNext();
+                }
+            }, { signal });
+            reduceMotion.addEventListener('change', (event) => {
+                if (this.swiper) this.swiper.params.speed = event.matches ? 0 : 400;
+            }, { signal });
+        }
+
+        disconnectedCallback() {
+            this.events?.abort();
+            this.swiper?.destroy(true, true);
+            this.swiper = undefined;
+        }
+    }
+
+    if (!customElements.get('plantel-carousel')) {
+        customElements.define('plantel-carousel', PlantelCarousel);
+    }
+</script>

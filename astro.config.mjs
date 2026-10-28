@@ -3,11 +3,6 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
-import { defineConfig } from 'astro/config';
-
-import tailwindcss from '@tailwindcss/vite';
-
 // Base pública del sitio. En GitHub Pages la acción configure-pages expone
 // BASE_PATH (p. ej. /facultadLalangue); lo normalizamos para que termine en
 // "/" (Astro exige que `base` termine con barra). Localmente BASE_PATH es

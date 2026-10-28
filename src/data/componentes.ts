@@ -168,6 +168,9 @@ export type BloqueCarruselLogos = {
 
 /** Ítem de un carrusel: persona (retrato) o tarjeta (texto con enlace). */
 export type BloqueCarruselItem = {
+	/** Imagen de la formación y su texto alternativo. */
+	imagen?: string;
+	alt?: string;
 	/** Nombre (personas) o título (tarjetas). */
 	titulo: string;
 	/** Rol/cargo de la persona (variante 'personas'). */

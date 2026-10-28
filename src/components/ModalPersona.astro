@@ -1,144 +1,158 @@
 ---
-/**
- * ModalPersona — popup de perfil de un integrante del plantel.
- *
- * Se monta UNA vez por página (la home y el roadmap, que archiva el plantel). Las cards
- * con [data-persona-card] que genera BloqueRender (bloques tipo 'equipo' con
- * `modal`) exponen nombre, título, foto, siglas y bio en atributos data-*. Este
- * componente los lee al abrir, los pinta y se cierra con la X, tocando fuera
- * del panel (backdrop/padding) o presionando Escape. En teléfonos el overlay
- * ocupa toda la pantalla y el panel se centra con scroll interno.
- */
+import { link } from '../lib/link';
+
+const redes = [
+    { key: 'facebook', label: 'Facebook' },
+    { key: 'twitter', label: 'X / Twitter' },
+    { key: 'instagram', label: 'Instagram' },
+    { key: 'linkedin', label: 'LinkedIn' },
+    { key: 'youtube', label: 'YouTube' },
+    { key: 'tiktok', label: 'TikTok' },
+];
 ---
 
-<div
-	data-persona-root
-	hidden
-	class="fixed inset-0 z-[60] items-center justify-center overflow-y-auto bg-night/50 p-4 backdrop-blur-[2px] sm:p-6"
->
-	<div
-		role="dialog"
-		aria-modal="true"
-		aria-labelledby="persona-modal-titulo"
-		class="relative m-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-8"
-	>
-		<button
-			type="button"
-			data-persona-close
-			aria-label="Cerrar perfil"
-			class="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-divider/40 text-ink/70 transition-colors hover:bg-divider hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-		>
-			<svg
-				viewBox="0 0 24 24"
-				class="h-5 w-5"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				aria-hidden="true"
-			>
-				<path d="m6 6 12 12M18 6 6 18" />
-			</svg>
-		</button>
+<dialog data-persona-root aria-labelledby="persona-modal-titulo" class="persona-dialog">
+    <button type="button" data-persona-close aria-label="Cerrar perfil" class="persona-close">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+    </button>
+    <div class="persona-content">
+        <div class="persona-header">
+            <div class="persona-identity">
+                <div data-persona-avatar class="persona-avatar"></div>
+                <h2 data-persona-nombre id="persona-modal-titulo" class="persona-name"></h2>
+                <p data-persona-titulo class="persona-role"></p>
+            </div>
+            <nav data-persona-sociales aria-label="Redes sociales del docente" class="persona-socials" hidden>
+                {redes.map(({ key, label }) => (
+                    <a data-persona-red={key} hidden target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
+                        {key === 'twitter' ? (
+                            <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3L12 14.6 5.5 22H2.3l7.8-8.9L.8 2h6.5l4.5 6.8L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" /></svg>
+                        ) : <img src={link(`/images/social/${key}.svg`)} width="28" height="28" alt="" aria-hidden="true" />}
+                    </a>
+                ))}
+            </nav>
+        </div>
+        <div class="persona-biography">
+            <div data-persona-bio></div>
+            <p data-persona-sinbio hidden>Todavía no tenemos publicada su bio. ¡La sumamos pronto!</p>
+        </div>
+    </div>
+</dialog>
 
-		<div data-persona-avatar class="flex justify-center"></div>
-
-		<div class="mt-4 text-center">
-			<p data-persona-titulo class="text-xs font-semibold uppercase tracking-widest text-accent"></p>
-			<h3 data-persona-nombre id="persona-modal-titulo" class="mt-1 text-2xl font-semibold text-ink-strong"></h3>
-		</div>
-
-		<div data-persona-bio class="mt-5 space-y-3 text-[0.9375rem] leading-relaxed text-ink/80"></div>
-
-		<p
-			data-persona-sinbio
-			hidden
-			class="mt-5 rounded-lg card p-4 text-sm text-ink/75"
-		>
-			Todavía no tenemos publicada su bio. ¡La sumamos pronto!
-		</p>
-	</div>
-</div>
+<style>
+    .persona-dialog { width: 1040px; max-width: calc(100% - 48px); max-height: 94dvh; margin: auto; padding: 0; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #d6dadc; border-radius: 24px; background: #e8e8e8; color: #262326; box-shadow: 0 28px 90px #0006; }
+    .persona-dialog::backdrop { background: #0b0b0bd1; }
+    .persona-close { position: sticky; top: 16px; float: right; margin: 16px 16px -60px 0; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #e8e8e8e6; color: #363638; cursor: pointer; }
+    .persona-close:hover { background: #d8d8d8; }
+    .persona-content { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: start; gap: 40px; padding: 64px clamp(24px, 6vw, 80px) 56px; }
+    .persona-header { display: grid; min-width: 0; gap: 24px; }
+    .persona-identity { text-align: center; }
+    .persona-avatar { display: grid; place-items: center; width: min(100%, 200px); aspect-ratio: 1; margin: 0 auto 24px; overflow: hidden; border-radius: 50%; background: #5b11331a; color: #5b1133; font-size: 48px; font-weight: 600; }
+    .persona-avatar :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .persona-name { margin: 0; font-family: var(--font-display, Georgia, serif); font-size: clamp(28px, 4vw, 44px); line-height: 1.15; font-weight: 500; overflow-wrap: anywhere; }
+    .persona-role { margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #62565c; }
+    .persona-socials { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+    .persona-socials[hidden], .persona-socials a[hidden] { display: none; }
+    .persona-socials a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #171717; transition: transform .2s; }
+    .persona-socials a:hover { transform: translateY(-2px); }
+    .persona-socials img { display: block; width: 28px; height: 28px; }
+    .persona-biography { min-width: 0; border-left: 1px solid #26232626; padding-left: 40px; overflow-wrap: anywhere; font-size: 16px; line-height: 1.85; }
+    .persona-biography :global(p) { margin: 0 0 20px; }
+    .persona-biography :global(ul), .persona-biography :global(ol) { margin: 0 0 20px; padding-left: 1.5em; }
+    .persona-biography :global(ul) { list-style: disc; }
+    .persona-biography :global(ol) { list-style: decimal; }
+    .persona-biography :global(li) { margin-block: 6px; }
+    .persona-biography :global(h1), .persona-biography :global(h2), .persona-biography :global(h3), .persona-biography :global(h4), .persona-biography :global(h5), .persona-biography :global(h6) { margin: 28px 0 12px; line-height: 1.3; font-weight: 600; }
+    .persona-biography :global(a) { color: #8c1c3f; text-decoration: underline; }
+    .persona-biography :global(blockquote) { margin: 20px 0; padding-left: 20px; border-left: 3px solid #8c1c3f; }
+    .persona-biography :global(img) { max-width: 100%; height: auto; }
+    .persona-biography :global(:last-child) { margin-bottom: 0; }
+    .persona-dialog :is(a, button):focus-visible { outline: 2px solid #8c1c3f; outline-offset: 4px; }
+    @media (max-width: 700px) {
+        .persona-dialog { width: 100%; max-width: 100%; height: 100dvh; max-height: 100dvh; border: 0; border-radius: 0; }
+        .persona-content { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 76px 20px 32px; }
+        .persona-header { gap: 20px; }
+        .persona-name { font-size: 28px; overflow-wrap: anywhere; }
+        .persona-role { font-size: 13px; }
+        .persona-socials { gap: 8px; }
+        .persona-biography { border-left: 0; border-top: 1px solid #26232626; padding: 24px 0 0; font-size: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .persona-socials a { transition: none; } }
+</style>
 
 <script>
-	const root = document.querySelector('[data-persona-root]');
-	if (!root) throw new Error('ModalPersona: no se encontró [data-persona-root]');
+    const root = document.querySelector<HTMLDialogElement>('[data-persona-root]')!;
+    const titulo = root.querySelector<HTMLElement>('[data-persona-titulo]')!;
+    const nombre = root.querySelector<HTMLElement>('[data-persona-nombre]')!;
+    const avatar = root.querySelector<HTMLElement>('[data-persona-avatar]')!;
+    const bio = root.querySelector<HTMLElement>('[data-persona-bio]')!;
+    const sinBio = root.querySelector<HTMLElement>('[data-persona-sinbio]')!;
+    const sociales = root.querySelector<HTMLElement>('[data-persona-sociales]')!;
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-persona-close]')!;
+    let ultimaCard: HTMLElement | null = null;
+    let previousOverflow = '';
 
-	const titulo = root.querySelector('[data-persona-titulo]');
-	const nombre = root.querySelector('[data-persona-nombre]');
-	const avatar = root.querySelector('[data-persona-avatar]');
-	const bio = root.querySelector('[data-persona-bio]');
-	const sinBio = root.querySelector('[data-persona-sinbio]');
-	const closeBtn = root.querySelector('[data-persona-close]');
-	let ultimaCard = null;
-
-	const pintarAvatar = (siglas, foto) => {
-		avatar.replaceChildren();
-		if (foto) {
-			const img = document.createElement('img');
-			img.src = foto;
-			img.alt = '';
-			img.className = 'mx-auto w-[200px] rounded-2xl object-contain';
-			avatar.appendChild(img);
-			return;
-		}
-		const d = document.createElement('div');
-		d.className =
-			'flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-brand/15 via-accent/10 to-indigo/15 text-2xl font-semibold text-brand ring-1 ring-brand/20';
-		const s = document.createElement('span');
-		s.textContent = siglas || '—';
-		d.appendChild(s);
-		avatar.appendChild(d);
-	};
-
-	const abrir = (card) => {
-		const siglas = card.dataset.personaSiglas || '';
-		const foto = card.dataset.personaFoto || '';
-		const parrafos = JSON.parse(card.dataset.personaBio || '[]');
-
-		pintarAvatar(siglas, foto);
-		titulo.textContent = card.dataset.personaTitulo || '';
-		titulo.hidden = !titulo.textContent;
-		nombre.textContent = card.dataset.personaNombre || '';
-		bio.replaceChildren(
-			...(Array.isArray(parrafos) ? parrafos : [parrafos]).map((p) => {
-				const el = document.createElement('p');
-				el.textContent = p;
-				return el;
-			}),
-		);
-		sinBio.hidden = parrafos.length > 0;
-
-		ultimaCard = card;
-		root.hidden = false;
-		root.style.display = 'flex';
-		document.body.style.overflow = 'hidden';
-		closeBtn.focus();
-	};
-
-	const cerrar = () => {
-		root.hidden = true;
-		root.style.display = '';
-		document.body.style.overflow = '';
-		if (ultimaCard) {
-			ultimaCard.focus();
-			ultimaCard = null;
-		}
-	};
-
-	// Click en una card del plantel con popup → abrir
-	document.querySelectorAll('[data-persona-card]').forEach((card) => {
-		card.addEventListener('click', () => abrir(card));
-	});
-
-	// Click fuera del panel (backdrop o padding) → cerrar
-	root.addEventListener('pointerdown', (e) => {
-		if (e.target === root) cerrar();
-	});
-
-	closeBtn.addEventListener('click', cerrar);
-
-	document.addEventListener('keydown', (e) => {
-		if (e.key === 'Escape' && !root.hidden) cerrar();
-	});
+    const abrir = (card: HTMLElement) => {
+        avatar.replaceChildren();
+        if (card.dataset.personaFoto) {
+            const img = document.createElement('img');
+            img.src = card.dataset.personaFoto;
+            img.alt = '';
+            avatar.append(img);
+        } else avatar.textContent = card.dataset.personaSiglas || '—';
+        nombre.textContent = card.dataset.personaNombre || '';
+        titulo.textContent = card.dataset.personaTitulo || '';
+        titulo.hidden = !titulo.textContent;
+        let paragraphs: unknown = [];
+        let links: Record<string, string> = {};
+        try { paragraphs = JSON.parse(card.dataset.personaBio || '[]'); } catch { /* Empty bio fallback. */ }
+        try { links = JSON.parse(card.dataset.personaSociales || '{}') || {}; } catch { /* No social links. */ }
+        const parrafos = (Array.isArray(paragraphs) ? paragraphs : [paragraphs]).filter((p): p is string => typeof p === 'string' && Boolean(p.trim()));
+        // Plantel biographies are compiled by Astro from the Markdown body.
+        const template = card.parentElement?.querySelector<HTMLTemplateElement>('[data-persona-bio-template]');
+        if (template) {
+            bio.replaceChildren(template.content.cloneNode(true));
+            sinBio.hidden = Boolean(bio.textContent?.trim() || bio.querySelector('img, video, audio, hr'));
+        } else {
+            // Other profile cards still provide plain-text paragraph arrays.
+            bio.replaceChildren(...parrafos.map((text) => {
+                const p = document.createElement('p');
+                p.textContent = text;
+                return p;
+            }));
+            sinBio.hidden = parrafos.length > 0;
+        }
+        let visibleLinks = 0;
+        sociales.querySelectorAll<HTMLAnchorElement>('[data-persona-red]').forEach((anchor) => {
+            const url = links[anchor.dataset.personaRed!];
+            let valid = false;
+            try { valid = ['https:', 'http:'].includes(new URL(url).protocol); } catch { /* Missing or invalid URL. */ }
+            anchor.hidden = !valid;
+            anchor.removeAttribute('href');
+            if (valid) {
+                anchor.href = url;
+                anchor.setAttribute('aria-label', `${anchor.title} de ${nombre.textContent} (abre en otra pestaña)`);
+                visibleLinks++;
+            }
+        });
+        sociales.hidden = visibleLinks === 0;
+        ultimaCard = card;
+        previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        root.showModal();
+        root.scrollTop = 0;
+        closeBtn.focus();
+    };
+    document.querySelectorAll<HTMLElement>('[data-persona-card]').forEach((card) => card.addEventListener('click', () => abrir(card)));
+    closeBtn.addEventListener('click', () => root.close());
+    root.addEventListener('click', (event) => {
+        if (event.target !== root) return;
+        const rect = root.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) root.close();
+    });
+    root.addEventListener('close', () => {
+        document.body.style.overflow = previousOverflow;
+        ultimaCard?.focus({ preventScroll: true });
+        ultimaCard = null;
+    });
 </script>
