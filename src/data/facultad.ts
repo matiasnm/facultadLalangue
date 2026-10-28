@@ -165,6 +165,7 @@ export const seccionSupervisionHome: BloquePagina[] = [
 	]),
 	lista(['Acompañar su práctica clínica.', 'Sostener su deseo de analista.', 'Promover la formación permanente y el crecimiento ético-profesional.']),
 	texto('Contamos con supervisores de amplia experiencia clínica y académica, formados en la tradición freudiana y lacaniana, disponibles para acompañarlo en su recorrido.'),
+	enlace('¿Te gustaría saber más?', 'https://go.facultadlalangue.com/supervisiones', { nuevaPestana: true }),
 ];
 
 export const seccionFaqs: BloquePagina[] = [
