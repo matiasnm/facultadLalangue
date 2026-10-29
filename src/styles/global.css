@@ -43,6 +43,9 @@
   --font-subheading: "Poppins", ui-sans-serif, system-ui, sans-serif; /* h2–h6 */
   --font-display: "Roboto Condensed", ui-sans-serif, system-ui, sans-serif; /* menú y destacados */
   --font-serif: "Roboto Serif", Georgia, serif;
+
+  /* Letra chica — 10px, el tamaño que deja <small>. */
+  --text-xxs: 0.625rem;
 }
 
 @layer base {

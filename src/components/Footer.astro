@@ -44,33 +44,31 @@ const socials = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-divider/40 bg-surface">
-	<div
-		class="contenedor grid gap-8 py-10 lg:grid-cols-3"
-	>
+<footer class="border-t border-divider/40 bg-ink">
+	<div class="contenedor grid items-center gap-6 py-8 lg:grid-cols-[auto_1fr_auto]">
 		<!-- Identidad -->
-		<div class="flex flex-col items-start gap-4">
-			<a
-				href={base || '/'}
-				class="flex items-center gap-4 hover:no-underline"
-				aria-label="Inicio — Facultad Lalangue"
+		<a
+			href={base || '/'}
+			class="flex items-center gap-4 justify-self-start hover:no-underline"
+			aria-label="Inicio — Facultad Lalangue"
+		>
+			<span
+				class="inline-flex"
+				style="--iso-c1:color-mix(in oklab, var(--color-surface) 60%, transparent);--iso-c2:color-mix(in oklab, var(--color-surface) 60%, transparent);--iso-c3:color-mix(in oklab, var(--color-surface) 60%, transparent)"
 			>
-				<Isotipo class="h-9 w-auto" />
-				<LogoTexto scale="footer" />
-			</a>
-			<p class="text-xs text-muted">
-				© {year} Facultad Internacional de
-				<br />
-				Psicología y Psicoanálisis Lalangue
-			</p>
-		</div>
+				<Isotipo class="h-10 w-auto" />
+			</span>
+			<LogoTexto scale="footer" fgDim="text-surface/60" fg="text-surface" />
+		</a>
+
+		<!-- Copyright centrado -->
+		<p class="m-0 text-center text-xs text-surface/70 lg:whitespace-nowrap">
+			© {year} Facultad Internacional de Psicología y Psicoanálisis Lalangue
+		</p>
 
 		<!-- Redes sociales -->
-		<nav aria-label="Redes sociales">
-			<p class="font-display text-xs font-semibold uppercase tracking-widest text-muted">
-				Seguinos
-			</p>
-			<ul class="mt-3 flex flex-wrap items-center gap-2">
+		<nav class="justify-self-center lg:justify-self-end" aria-label="Redes sociales">
+			<ul class="flex flex-wrap items-center gap-4">
 				{
 					socials.map((s) => (
 						<li>
@@ -79,7 +77,7 @@ const year = new Date().getFullYear();
 								target="_blank"
 								rel="noopener noreferrer"
 								aria-label={s.name}
-								class="text-muted hover:no-underline"
+								class="text-surface/70 transition-colors hover:text-accent hover:no-underline"
 							>
 								<svg
 									viewBox="0 0 24 24"
@@ -95,41 +93,42 @@ const year = new Date().getFullYear();
 				}
 			</ul>
 		</nav>
-
-		<!-- Links legales -->
-		<nav aria-label="Legal">
-			<p class="font-display text-xs font-semibold uppercase tracking-widest text-muted">
-				Legal
-			</p>
-			<ul class="mt-3 flex flex-nowrap items-center gap-x-2 whitespace-nowrap">
-				{
-					legalLinks.map((l, i) => (
-						<li class="flex items-center gap-x-2">
-							{i > 0 && <span aria-hidden="true" class="text-muted">•</span>}
-							<a
-								href={link(l.href)}
-								class="text-sm text-muted transition-colors hover:text-brand hover:no-underline"
-							>
-								{l.label}
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</nav>
 	</div>
 
-	<!-- Acreditación institucional (EFPP · DREETS · APE · FEDE).
-	     Texto corrido a todo el ancho, debajo del grid. -->
-	<div class="contenedor border-t border-divider/30 pb-10 pt-6">
-		<p class="max-w-4xl text-xs leading-relaxed text-muted">
-			Extensión hispanohablante de la E-Faculté de Psychologie et Psychanalyse
-			(EFPP – Francia), con más de 25 años de trayectoria en formación clínica
-			y transmisión del psicoanálisis en Europa, reconocida como organismo de
-			formación profesionalizante por la DREETS (Dirección regional de economía,
-			empleo, trabajo y solidaridades — Gobierno Francés), dentro del régimen
-			francés de formación profesional continua. Aval de APE— Asociación de
-			Psicoanalistas Europeos y FEDE— Federación Europea de Escuelas
-		</p>
+	<!-- Acreditación institucional: texto completo en un solo párrafo, sobre
+	     fondo vino. -->
+	<div class="bg-brand">
+		<div class="contenedor py-6">
+			<p class="m-0 mx-auto max-w-5xl text-center text-balance text-xs leading-relaxed text-surface/70">
+				<small class="text-xxs">
+					Extensión hispanohablante de la{' '}
+					<span class="font-medium text-surface/90">E-Faculté de Psychologie et Psychanalyse (EFPP – Francia)</span>,
+					con más de 25 años de trayectoria en formación clínica y transmisión del
+					psicoanálisis en Europa, reconocida como organismo de formación
+					profesionalizante por la <span class="font-medium text-surface/90">DREETS</span>. Aval de{' '}
+					<span class="font-medium text-surface/90">APE</span> — Asociación de Psicoanalistas
+					Europeos y <span class="font-medium text-surface/90">FEDE</span> — Federación Europea
+					de Escuelas.
+				</small>
+			</p>
+
+			<nav aria-label="Legal" class="mt-4">
+				<ul class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xxs leading-relaxed">
+					{
+						legalLinks.map((l, i) => (
+							<li class="flex items-center gap-x-2">
+								{i > 0 && <span aria-hidden="true" class="text-surface/40">•</span>}
+								<a
+									href={link(l.href)}
+									class="text-surface transition-colors hover:no-underline"
+								>
+									{l.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+		</div>
 	</div>
 </footer>
