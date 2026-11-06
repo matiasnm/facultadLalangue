@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import { link } from '../../lib/link';
+import EbookCover from './EbookCover.astro';
+import 'swiper/css';
+import 'swiper/css/a11y';
+import 'swiper/css/pagination';
+
+const ebooks = (await getCollection('content-ebooks')).sort(
+  (a, b) => a.data.peso - b.data.peso || a.data.titulo.localeCompare(b.data.titulo, 'es'),
+);
+---
+
+{ebooks.length > 0 && (
+  <section id="ebooks-destacados" class="featured-ebooks-v1 full-bleed" aria-labelledby="featured-ebooks-titulo">
+    <div class="contenedor">
+      <header>
+        <p class="eyebrow">PLUMA LALANGUE PRESENTA</p>
+        <h2 id="featured-ebooks-titulo">LIBROS DE PROFESIONALES DE LA COMUNIDAD</h2>
+        <span class="heading-rule" aria-hidden="true"></span>
+        <p class=" text-[0.9375rem] leading-relaxed text-ink/85">
+          ¡Descubre los libros de los profesionales que integran nuestra
+          comunidad! <br> Obras que articulan psicología y psicoanálisis con los interrogantes
+          que nos plantea la clínica contemporánea.
+        </p>
+
+      </header>
+      <featured-ebooks-v1>
+        <div class="book-carousel">
+          <button class="book-nav previous" type="button" data-prev aria-label="Ebooks anteriores" hidden><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></button>
+          <div class="swiper books-swiper" role="region" aria-roledescription="carrusel" aria-label="Ebooks destacados">
+            <div class="swiper-wrapper">
+              {ebooks.map((ebook) => (
+                <article class="swiper-slide book-card">
+                  <a class="cover-link" href={link(`/ebooks/${ebook.id}/`)} tabindex="-1" aria-hidden="true"><EbookCover ebook={ebook} /></a>
+                  <h3><a href={link(`/ebooks/${ebook.id}/`)}>{ebook.data.titulo}</a></h3>
+                  {ebook.data.subtitulo && <p class="book-subtitle">{ebook.data.subtitulo}</p>}
+                  <p class="book-author">{ebook.data.autor}</p>
+                  <p class="book-meta">{ebook.data.anio} </p>
+                </article>
+              ))}
+            </div>
+          </div>
+          <button class="book-nav next" type="button" data-next aria-label="Ebooks siguientes" hidden><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></button>
+        </div>
+        <div class="books-pagination" hidden></div>
+      </featured-ebooks-v1>
+    </div>
+  </section>
+)}
+
+<style>
+  .featured-ebooks-v1 { padding-block: 4rem; margin-block: 4rem; background: var(--color-surface); }
+  header { text-align: center; margin-bottom: 3rem; }
+  .eyebrow { margin: 0 0 .5rem; color: var(--color-muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .15em; }
+  h2 { margin: 0; font-family: var(--font-serif); font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 400; }
+  .heading-rule { display: block; width: 3rem; height: 2px; margin: 1.25rem auto 0; background: var(--color-brand); }
+  featured-ebooks-v1 { display: block; min-width: 0; }
+  .book-carousel { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 2rem; align-items: center; gap: .5rem; }
+  .books-swiper { grid-column: 2; grid-row: 1; width: 100%; padding: .5rem; overflow: hidden; }
+  .book-card { height: auto; text-align: center; }
+  .cover-link { display: block; width: 100%; max-width: 13rem; margin: 0 auto 1.5rem; text-decoration: none; transition: transform .25s; }
+  .cover-link:hover { transform: translateY(-.25rem); }
+  h3 { margin: 0 0 .5rem; font-family: var(--font-serif); font-size: 1.125rem; font-weight: 500; line-height: 1.4; }
+  h3 a { color: var(--color-ink-strong); }
+  .book-subtitle { margin: 0 0 .5rem; font-size: .875rem; line-height: 1.5; }
+  .book-author { margin: 0 0 .5rem; font-size: .8125rem; color: var(--color-muted); }
+  .book-meta { margin: 0; font-size: .6875rem; color: var(--color-muted); letter-spacing: .05em; }
+  .book-nav { grid-row: 1; display: grid; place-items: center; width: 2rem; height: 3rem; padding: 0; color: var(--color-brand); }
+  .previous { grid-column: 1; }
+  .next { grid-column: 3; }
+  .book-nav:disabled { opacity: .25; cursor: default; }
+  .book-nav:hover:not(:disabled) { background: var(--color-divider); }
+  .book-nav[hidden], .books-pagination[hidden] { display: none; }
+  .books-pagination { --swiper-pagination-color: var(--color-brand); --swiper-pagination-bullet-inactive-color: var(--color-muted); --swiper-pagination-bullet-inactive-opacity: .3; --swiper-pagination-bullet-horizontal-gap: .375rem; margin-top: 2rem; text-align: center; }
+  .books-pagination :global(.swiper-pagination-bullet) { padding: 0; }
+  a:focus-visible, button:focus-visible, .books-pagination :global(button:focus-visible) { outline: 2px solid var(--color-brand); outline-offset: 4px; }
+  .books-swiper:not(.swiper-initialized) .swiper-wrapper { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+  @media (min-width: 40rem) { .books-swiper:not(.swiper-initialized) .swiper-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) {
+    .book-carousel { gap: 1rem; }
+    .books-swiper:not(.swiper-initialized) .swiper-wrapper { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) { .cover-link { transition: none; } .cover-link:hover { transform: none; } }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
+
+  class FeaturedEbooksCarousel extends HTMLElement {
+    private swiper?: Swiper;
+    private events?: AbortController;
+
+    connectedCallback() {
+      if (this.swiper) return;
+      const carousel = this.querySelector<HTMLElement>('.books-swiper');
+      const previous = this.querySelector<HTMLButtonElement>('[data-prev]');
+      const next = this.querySelector<HTMLButtonElement>('[data-next]');
+      const pagination = this.querySelector<HTMLElement>('.books-pagination');
+      if (!carousel || !previous || !next || !pagination) return;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      this.swiper = new Swiper(carousel, {
+        modules: [A11y, Keyboard, Navigation, Pagination],
+        slidesPerView: 1,
+        spaceBetween: 24,
+        speed: reducedMotion.matches ? 0 : 450,
+        watchOverflow: true,
+        grabCursor: true,
+        breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4, spaceBetween: 32 } },
+        navigation: { prevEl: previous, nextEl: next, addIcons: false },
+        pagination: { el: pagination, clickable: true, bulletElement: 'button' },
+        keyboard: { enabled: true, onlyInViewport: true },
+        a11y: {
+          prevSlideMessage: 'Ebooks anteriores',
+          nextSlideMessage: 'Ebooks siguientes',
+          paginationBulletMessage: 'Ir al grupo de ebooks {{index}}',
+          containerRoleDescriptionMessage: 'carrusel',
+          itemRoleDescriptionMessage: 'diapositiva',
+          slideLabelMessage: '{{index}} de {{slidesLength}}',
+        },
+      });
+      previous.hidden = next.hidden = pagination.hidden = false;
+      this.events = new AbortController();
+      reducedMotion.addEventListener('change', (event) => {
+        if (this.swiper) this.swiper.params.speed = event.matches ? 0 : 450;
+      }, { signal: this.events.signal });
+    }
+
+    disconnectedCallback() {
+      this.events?.abort();
+      this.swiper?.destroy(true, true);
+      this.swiper = undefined;
+      this.querySelectorAll<HTMLElement>('.book-nav, .books-pagination').forEach((element) => { element.hidden = true; });
+    }
+  }
+  if (!customElements.get('featured-ebooks-v1')) customElements.define('featured-ebooks-v1', FeaturedEbooksCarousel);
+</script>

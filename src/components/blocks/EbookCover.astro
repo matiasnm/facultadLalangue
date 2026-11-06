@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { ebook: CollectionEntry<'content-ebooks'>; }
+const { ebook: { data } } = Astro.props;
+---
+
+<div class:list={['ebook-cover', `cover-${data.portada}`]} aria-hidden="true">
+  <span class="publisher">Lalangue <span>Biblioteca académica</span></span>
+  <div class="cover-title"><strong>{data.titulo}</strong>{data.subtitulo && <span>{data.subtitulo}</span>}</div>
+  <span class="cover-mark"></span>
+  <span class="cover-author">{data.autor}</span>
+  <span class="cover-bottom">Cuadernos de lectura <span>{data.anio}</span></span>
+</div>
+
+<style>
+  .ebook-cover { --cover-bg: #5b1133; --cover-fg: #fff6ea; position: relative; isolation: isolate; display: flex; flex-direction: column; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; padding: 9%; background: var(--cover-bg); color: var(--cover-fg); box-shadow: -.2rem .3rem .7rem rgb(0 0 0 / .15), inset .3rem 0 .4rem rgb(0 0 0 / .16); text-align: left; }
+  .ebook-cover::before { content: ''; position: absolute; inset: 0 auto 0 3%; width: 1px; background: rgb(255 255 255 / .2); }
+  .publisher { font-family: var(--font-serif); font-size: 1rem; line-height: 1.3; }
+  .publisher > span { display: block; margin-top: .2rem; font-family: var(--font-sans); font-size: .5rem; text-transform: uppercase; letter-spacing: .12em; }
+  .cover-title { position: relative; z-index: 1; margin-top: 8%; }
+  .cover-title strong { display: block; font-family: var(--font-serif); font-weight: 500; font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.15; overflow-wrap: anywhere; }
+  .cover-title > span { display: block; margin-top: .8rem; font-size: .65rem; line-height: 1.5; }
+  .cover-mark { position: absolute; z-index: -1; width: 95%; aspect-ratio: 1; border: 1.5rem solid currentColor; border-radius: 50%; opacity: .12; right: -40%; bottom: 6%; }
+  .cover-author { margin-top: auto; padding-top: 1.5rem; font-size: .6rem; letter-spacing: .04em; }
+  .cover-bottom { display: flex; justify-content: space-between; gap: .5rem; border-top: 1px solid currentColor; margin-top: .75rem; padding-top: .6rem; font-size: .5rem; text-transform: uppercase; letter-spacing: .08em; }
+  .cover-petroleo { --cover-bg: #2f4858; }
+  .cover-arena { --cover-bg: #e4d7bd; --cover-fg: #3d3431; }
+  .cover-indigo { --cover-bg: #45426d; }
+  .cover-terracota { --cover-bg: #a64e3d; }
+  .cover-ciruela { --cover-bg: #61386a; }
+</style>

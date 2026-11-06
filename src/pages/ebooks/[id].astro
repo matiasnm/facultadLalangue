@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import EbookCover from '../../components/blocks/EbookCover.astro';
+import { link } from '../../lib/link';
+
+export async function getStaticPaths() {
+  return (await getCollection('content-ebooks')).map((ebook) => ({ params: { id: ebook.id }, props: { ebook } }));
+}
+interface Props { ebook: CollectionEntry<'content-ebooks'>; }
+const { ebook } = Astro.props;
+const { data } = ebook;
+const { Content } = await render(ebook);
+---
+
+<Layout title={`${data.titulo} — Biblioteca Lalangue`}>
+  <main class="contenedor-lectura flex-1 py-12">
+    <a href={link('/nuestra-biblioteca/#ebooks-destacados')}>← Volver a los ebooks</a>
+    <article>
+      <header>
+        <div class="cover"><EbookCover ebook={ebook} /></div>
+        <div>
+          <p class="eyebrow">Biblioteca digital · {data.anio}</p>
+          <h1>{data.titulo}</h1>
+          {data.subtitulo && <p class="subtitle">{data.subtitulo}</p>}
+          <p>{data.autor}</p>
+          <p>{data.descripcion}</p>
+          {data.ejemplo && <p class="example">Contenido y portada de ejemplo</p>}
+        </div>
+      </header>
+      <div class="ebook-body"><Content /></div>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  article { margin-top: 2.5rem; }
+  header { display: grid; gap: 2rem; align-items: center; }
+  .cover { width: 12rem; }
+  .eyebrow, .example { font-size: .75rem; color: var(--color-muted); }
+  h1 { margin-top: 0; }
+  .subtitle { font-size: 1.125rem; color: var(--color-brand); }
+  .ebook-body { margin-top: 3rem; font-size: .9375rem; line-height: 1.8; }
+  .ebook-body :global(h2) { margin-top: 2rem; }
+  @media (min-width: 40rem) { header { grid-template-columns: 12rem minmax(0, 1fr); } }
+</style>

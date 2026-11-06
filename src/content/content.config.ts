@@ -33,4 +33,51 @@ const formaciones = defineCollection({
     }),
 });
 
-export const collections = { docentes, formaciones };
+const gruposDeEstudio = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/grupos-de-estudio' }),
+    schema: z.object({
+        slug: z.string(),
+        titulo: z.string(),
+        categoria: z.string(),
+        descripcion: z.string(),
+        imagen: z.string(),
+        peso: z.number().optional(),
+    }),
+});
+
+const articulosInvestigaciones = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/articulos-investigaciones' }),
+    schema: ({ image }) => z.object({
+        titulo: z.string(),
+        descripcion: z.string(),
+        categoria: z.enum(['Artículo', 'Investigación', 'Ensayo']),
+        imagen: image(),
+        imagenAlt: z.string(),
+        fecha: z.coerce.date(),
+        autor: z.string(),
+        ejemplo: z.boolean().default(false),
+        peso: z.number().default(0),
+    }),
+});
+
+const ebooks = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/content-ebooks' }),
+    schema: z.object({
+        titulo: z.string(),
+        subtitulo: z.string().optional(),
+        autor: z.string(),
+        descripcion: z.string(),
+        anio: z.number().int(),
+        portada: z.enum(['vino', 'petroleo', 'arena', 'indigo', 'terracota', 'ciruela']),
+        ejemplo: z.boolean().default(false),
+        peso: z.number().default(0),
+    }),
+});
+
+export const collections = {
+    docentes,
+    formaciones,
+    'grupos-de-estudio': gruposDeEstudio,
+    'articulos-investigaciones': articulosInvestigaciones,
+    'content-ebooks': ebooks,
+};

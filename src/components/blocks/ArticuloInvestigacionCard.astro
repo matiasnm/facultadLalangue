@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { link } from '../../lib/link';
+
+interface Props {
+  articulo: CollectionEntry<'articulos-investigaciones'>;
+  destacado?: boolean;
+}
+const { articulo, destacado = false } = Astro.props;
+const { data } = articulo;
+---
+
+<article class:list={['article-card', { 'article-card--featured': destacado }]}>
+  <div class="card-image">
+    <Image src={data.imagen} alt={data.imagenAlt} widths={[400, 640, 960]} sizes={destacado ? '(min-width: 48rem) 60vw, 100vw' : '(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 90vw'} loading="lazy" />
+    <span class="card-tag">{data.categoria}</span>
+  </div>
+  <div class="card-content">
+    <h3><a href={link(`/articulos-investigaciones/${articulo.id}/`)}>{data.titulo}</a></h3>
+    <p>{data.descripcion}</p>
+    <div class="card-footer">
+      <time datetime={data.fecha.toISOString()}>{data.fecha.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time>
+      {data.ejemplo && <span>Contenido de ejemplo</span>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .article-card { position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; background: #f6f5f8; color: var(--color-ink); transition: background .2s; }
+  .article-card:hover, .article-card:focus-within { background: #eceaec; }
+  .card-image { position: relative; overflow: hidden; aspect-ratio: 5 / 3; }
+  .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .article-card:hover .card-image img { transform: scale(1.035); }
+  .card-tag { position: absolute; top: 0; left: 0; padding: .5rem .875rem; background: var(--color-brand); color: white; font-size: .75rem; }
+  .card-content { display: flex; flex-direction: column; flex: 1; gap: .5rem; padding: 1.5rem 1rem 2rem; }
+  h3 { margin: 0; font-family: var(--font-sans); font-size: 1.25rem; font-weight: 500; line-height: 1.5; }
+  h3 a { color: inherit; text-decoration: none; }
+  h3 a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  h3 a:focus-visible { outline: none; }
+  .article-card:has(a:focus-visible) { outline: 2px solid var(--color-brand); outline-offset: -2px; }
+  p { margin: 0; font-size: .9375rem; line-height: 1.6; }
+  .card-footer { display: flex; flex-wrap: wrap; gap: .25rem .75rem; margin-top: auto; padding-top: 1.5rem; font-size: .75rem; color: var(--color-muted); }
+  .article-card--featured { background: var(--color-azul-petroleo); color: white; }
+  .article-card--featured:hover, .article-card--featured:focus-within { background: var(--color-azul-acero); }
+  .article-card--featured h3 { color: white; font-size: clamp(1.5rem, 2.5vw, 2rem); line-height: 1.2; }
+  .article-card--featured .card-footer { color: rgb(255 255 255 / .8); }
+  @media (min-width: 48rem) {
+    .article-card--featured { min-height: 27rem; }
+    .article-card--featured .card-image { position: absolute; inset: 0; aspect-ratio: auto; }
+    .article-card--featured .card-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(15 24 35 / .97), rgb(15 24 35 / .6) 50%, rgb(15 24 35 / .05)); }
+    .article-card--featured .card-tag { z-index: 1; }
+    .article-card--featured .card-content { position: relative; flex: 0; margin-top: auto; padding: 2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .article-card, .card-image img { transition: none; } .article-card:hover .card-image img { transform: none; } }
+</style>
