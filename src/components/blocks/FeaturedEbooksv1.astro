@@ -1,14 +1,23 @@
 ---
 import { getCollection } from 'astro:content';
-import { link } from '../../lib/link';
-import EbookCover from './EbookCover.astro';
+import EbookPopup from './EbookPopup.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import 'swiper/css';
 import 'swiper/css/a11y';
 import 'swiper/css/pagination';
 
+const pdfs = import.meta.glob<string>('../../assets/ebooks/*.pdf', { eager: true, query: '?url', import: 'default' });
+const covers = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/ebooks-portadas/*.{webp,png,jpg,jpeg}', { eager: true });
 const ebooks = (await getCollection('content-ebooks')).sort(
   (a, b) => a.data.peso - b.data.peso || a.data.titulo.localeCompare(b.data.titulo, 'es'),
-);
+).map((ebook) => {
+  const cover = covers[`../../assets/images/ebooks-portadas/${ebook.data.portada_file}`]?.default;
+  if (!cover) throw new Error(`Ebook cover not found: ${ebook.data.portada_file}`);
+  const pdf = ebook.data.pdf_file ? pdfs[`../../assets/ebooks/${ebook.data.pdf_file}`] : undefined;
+  if (ebook.data.pdf_file && !pdf) throw new Error(`Ebook PDF not found: ${ebook.data.pdf_file}`);
+  return { ...ebook, cover, pdf };
+});
 ---
 
 {ebooks.length > 0 && (
@@ -32,8 +41,8 @@ const ebooks = (await getCollection('content-ebooks')).sort(
             <div class="swiper-wrapper">
               {ebooks.map((ebook) => (
                 <article class="swiper-slide book-card">
-                  <a class="cover-link" href={link(`/ebooks/${ebook.id}/`)} tabindex="-1" aria-hidden="true"><EbookCover ebook={ebook} /></a>
-                  <h3><a href={link(`/ebooks/${ebook.id}/`)}>{ebook.data.titulo}</a></h3>
+                  <button type="button" class="cover-link" data-ebook-open data-title={ebook.data.titulo} data-pdf={ebook.pdf} aria-label={`Leer ${ebook.data.titulo}`} aria-haspopup="dialog"><Image src={ebook.cover} alt="" widths={[208, 416]} sizes="208px" loading="lazy" /></button>
+                  <h3><button type="button" data-ebook-open data-title={ebook.data.titulo} data-pdf={ebook.pdf} aria-haspopup="dialog">{ebook.data.titulo}</button></h3>
                   {ebook.data.subtitulo && <p class="book-subtitle">{ebook.data.subtitulo}</p>}
                   <p class="book-author">{ebook.data.autor}</p>
                   <p class="book-meta">{ebook.data.anio} </p>
@@ -45,6 +54,7 @@ const ebooks = (await getCollection('content-ebooks')).sort(
         </div>
         <div class="books-pagination" hidden></div>
       </featured-ebooks-v1>
+      <EbookPopup />
     </div>
   </section>
 )}
@@ -59,10 +69,11 @@ const ebooks = (await getCollection('content-ebooks')).sort(
   .book-carousel { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 2rem; align-items: center; gap: .5rem; }
   .books-swiper { grid-column: 2; grid-row: 1; width: 100%; padding: .5rem; overflow: hidden; }
   .book-card { height: auto; text-align: center; }
-  .cover-link { display: block; width: 100%; max-width: 13rem; margin: 0 auto 1.5rem; text-decoration: none; transition: transform .25s; }
+  .cover-link { padding: 0; border: 0; background: transparent; cursor: pointer; display: block; width: 100%; max-width: 13rem; margin: 0 auto 1.5rem; text-decoration: none; transition: transform .25s; }
   .cover-link:hover { transform: translateY(-.25rem); }
+  .cover-link img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: contain; }
   h3 { margin: 0 0 .5rem; font-family: var(--font-serif); font-size: 1.125rem; font-weight: 500; line-height: 1.4; }
-  h3 a { color: var(--color-ink-strong); }
+  h3 button { font: inherit; background: transparent; border: 0; padding: 0; cursor: pointer; color: var(--color-ink-strong); }
   .book-subtitle { margin: 0 0 .5rem; font-size: .875rem; line-height: 1.5; }
   .book-author { margin: 0 0 .5rem; font-size: .8125rem; color: var(--color-muted); }
   .book-meta { margin: 0; font-size: .6875rem; color: var(--color-muted); letter-spacing: .05em; }
@@ -79,7 +90,7 @@ const ebooks = (await getCollection('content-ebooks')).sort(
   @media (min-width: 40rem) { .books-swiper:not(.swiper-initialized) .swiper-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 64rem) {
     .book-carousel { gap: 1rem; }
-    .books-swiper:not(.swiper-initialized) .swiper-wrapper { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .books-swiper:not(.swiper-initialized) .swiper-wrapper { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (prefers-reduced-motion: reduce) { .cover-link { transition: none; } .cover-link:hover { transform: none; } }
 </style>
@@ -107,11 +118,12 @@ const ebooks = (await getCollection('content-ebooks')).sort(
         speed: reducedMotion.matches ? 0 : 450,
         watchOverflow: true,
         grabCursor: true,
-        breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4, spaceBetween: 32 } },
+        breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3, spaceBetween: 32 } },
         navigation: { prevEl: previous, nextEl: next, addIcons: false },
         pagination: { el: pagination, clickable: true, bulletElement: 'button' },
         keyboard: { enabled: true, onlyInViewport: true },
         a11y: {
+          scrollOnFocus: false,
           prevSlideMessage: 'Ebooks anteriores',
           nextSlideMessage: 'Ebooks siguientes',
           paginationBulletMessage: 'Ir al grupo de ebooks {{index}}',

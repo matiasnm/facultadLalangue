@@ -8,6 +8,7 @@ portada: vino
 ejemplo: true
 peso: 0
 pdf_file: "Ebook-GE-Psique-Cuerpo-y-Trama-Vincular_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Este ebook de ejemplo muestra cómo se presentarán las publicaciones digitales de la biblioteca. No corresponde a una edición publicada ni contiene casos clínicos reales.
 

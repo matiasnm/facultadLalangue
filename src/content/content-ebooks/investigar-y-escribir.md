@@ -8,6 +8,7 @@ portada: ciruela
 ejemplo: true
 peso: 6
 pdf_file: "Ebook-Psiconutricorp-Activar-mente_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Este ebook de ejemplo propone una estructura de trabajo para la escritura académica.
 

@@ -8,6 +8,7 @@ portada: terracota
 ejemplo: true
 peso: 5
 pdf_file: "Ebook-Psiconutricorp-Activar-mente_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Esta publicación de ejemplo no contiene casos reales ni indicaciones de tratamiento.
 

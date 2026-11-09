@@ -8,6 +8,7 @@ portada: indigo
 ejemplo: true
 peso: 4
 pdf_file: "Ebook-Psiconutricorp-Activar-mente_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Este cuaderno es una muestra editorial. Propone preguntas de lectura y no presenta resultados de investigación.
 

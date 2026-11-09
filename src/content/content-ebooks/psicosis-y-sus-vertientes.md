@@ -8,6 +8,7 @@ portada: terracota
 ejemplo: true
 peso: 1
 pdf_file: "Ebook-GE-Psicosis-y-sus-vertientes_compressed.pdf"
+portada_file: "portada_Psicosis-y-sus-vertientes.webp"
 ---
 Este ebook de ejemplo muestra cómo se presentarán las publicaciones digitales de la biblioteca. No corresponde a una edición publicada ni contiene casos clínicos reales.
 

@@ -1,0 +1,50 @@
+---
+import { link } from '../../lib/link';
+
+interface Props { filename?: string; title: string; }
+const { filename, title } = Astro.props;
+const pdfs = import.meta.glob<string>('../../assets/ebooks/*.pdf', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+const source = filename ? pdfs[`../../assets/ebooks/${filename}`] : undefined;
+if (filename && !source) throw new Error(`Ebook PDF not found in src/assets/ebooks: ${filename}`);
+const library = link('/vendor/dearflip/dflip/');
+
+---
+
+<section class="ebook-reader " aria-label={`Leer ${title}`}>
+  <link rel="stylesheet" href={`${library}css/dflip.min.css`} />
+  <link rel="stylesheet" href={`${library}css/themify-icons.min.css`} />
+  <div class:list={[filename && "_df_book"]} data-flipbook-host source={source} download="false" style="min-height: 480px;"></div>
+  <p class="reader-links">
+    <a href={source} target="_blank" rel="noopener">Abrir PDF</a>
+    <span>Visor: <a href="https://github.com/dearhive/dearflip-js-flipbook">DearFlip</a>
+      · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></span>
+  </p>
+  <script is:inline src={`${library}js/libs/jquery.min.js`}></script>
+  <script is:inline src={`${library}js/dflip.min.js`}></script>
+</section>
+
+<style>
+  .ebook-reader { margin-top: 3rem; min-width: 0; }
+  .reader-links { display: none; }
+  .ebook-reader :global(.df-ui-prev),
+  .ebook-reader :global(.df-ui-next) {
+    color: #8c1c3f;
+    opacity: 1;
+  }
+  .ebook-reader :global(.df-ui-prev::before),
+  .ebook-reader :global(.df-ui-next::before) {
+    -webkit-text-stroke: 1px currentColor;
+  }
+  @media (min-width: 1200px) {
+    .ebook-reader {
+      width: 100%;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+</style>

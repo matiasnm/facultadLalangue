@@ -8,6 +8,7 @@ portada: petroleo
 ejemplo: true
 peso: 8
 pdf_file: "Ebook-Psiconutricorp-Activar-mente_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Esta publicación es una muestra de contenido para la biblioteca digital.
 

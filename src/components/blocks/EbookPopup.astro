@@ -1,0 +1,69 @@
+---
+import EbookFlipbook from './EbookFlipbook.astro';
+---
+
+<dialog class="ebook-popup" aria-labelledby="ebook-popup-title">
+  <div class="popup-heading">
+    <h2 id="ebook-popup-title"></h2>
+    <button type="button" data-ebook-close aria-label="Cerrar ebook" autofocus>✕</button>
+  </div>
+  <EbookFlipbook title="ebook" />
+  <section class="ebook-cta rounded-xl border border-divider bg-surface px-6 py-8 text-center sm:px-10" aria-label="Recibe el PDF por email">
+    <p>Deja un comentario en la pagina del ebook en facultadlalague.com y te enviaremos el pdf a tu email.</p>
+    <a class="inline-block rounded-md bg-brand px-8 py-3 font-display text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark hover:text-white hover:no-underline" href="https://facultadlalague.com" target="_blank" rel="noopener noreferrer">Click aquí</a>
+  </section>
+</dialog>
+
+<style>
+  .ebook-popup { width: 1280px; max-width: calc(100% - 2rem); max-height: 94dvh; margin: auto; padding: 1.5rem; overflow: auto; overscroll-behavior: contain; border: 1px solid var(--color-divider); border-radius: 1rem; background: var(--color-background); color: var(--color-ink); }
+  .ebook-popup::backdrop { background: rgb(0 0 0 / .7); }
+  .popup-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  h2 { margin: 0; font-size: 1.5rem; }
+  [data-ebook-close] { flex-shrink: 0; width: 2.75rem; height: 2.75rem; color: var(--color-brand); cursor: pointer; }
+  .ebook-popup :global(.ebook-reader) { margin-top: 1rem; }
+  .ebook-cta { margin-top: 1.5rem; }
+  .ebook-cta p { max-width: 36rem; margin: 0 auto 1.5rem; font-size: 1.125rem; line-height: 1.7; }
+  .ebook-popup :is(a, button):focus-visible { outline: 2px solid var(--color-brand); outline-offset: 4px; }
+  @media (max-width: 40rem) { .ebook-popup { max-width: 100%; max-height: 100dvh; padding: 1rem; border-radius: 0; } }
+</style>
+
+<script>
+  const popup = document.querySelector<HTMLDialogElement>('.ebook-popup');
+  if (popup) {
+    let viewer: { dispose(): void } | undefined;
+    let trigger: HTMLElement | null = null;
+    let previousOverflow = '';
+    const host = popup.querySelector<HTMLElement>('[data-flipbook-host]')!;
+    const runtime = window as typeof window & {
+      jQuery: (element: HTMLElement) => { flipBook(source: string, options: object): { dispose(): void } };
+    };
+    document.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLElement>('[data-ebook-open]');
+      if (!button) return;
+      trigger = button;
+      popup.querySelector('h2')!.textContent = button.dataset.title || 'Ebook';
+      popup.querySelector('.ebook-reader')!.setAttribute('aria-label', `Leer ${button.dataset.title}`);
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      popup.showModal();
+      if (button.dataset.pdf) {
+        viewer = runtime.jQuery(host).flipBook(button.dataset.pdf, { enableDownload: false, height: Math.max(360, Math.min(640, window.innerHeight * .65)) });
+      } else {
+        host.textContent = 'PDF próximamente disponible.';
+      }
+    });
+    popup.querySelector('[data-ebook-close]')!.addEventListener('click', () => popup.close());
+    popup.addEventListener('click', (event) => {
+      if (event.target !== popup) return;
+      const bounds = popup.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) popup.close();
+    });
+    popup.addEventListener('close', () => {
+      viewer?.dispose();
+      viewer = undefined;
+      host.replaceChildren();
+      document.body.style.overflow = previousOverflow;
+      trigger?.focus({ preventScroll: true });
+    });
+  }
+</script>

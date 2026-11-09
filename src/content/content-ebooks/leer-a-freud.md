@@ -8,6 +8,7 @@ portada: arena
 ejemplo: true
 peso: 3
 pdf_file: "Ebook-Psiconutricorp-Activar-mente_compressed.pdf"
+portada_file: "portada_Psique-cuerpo-y-trama-vincular.webp"
 ---
 Este ebook de ejemplo presenta un posible itinerario de formación. No reproduce textos de Freud ni reemplaza su lectura.
 
