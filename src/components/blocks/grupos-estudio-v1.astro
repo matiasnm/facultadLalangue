@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/images/grupos-estudio/*.{png,jpg,jpeg,webp}',
+  { eager: true },
+);
+
+const entries = (await getCollection('grupos-de-estudio')).sort(
+  (a, b) => (a.data.peso ?? Infinity) - (b.data.peso ?? Infinity)
+    || a.data.titulo.localeCompare(b.data.titulo, 'es'),
+);
+const grupos = await Promise.all(entries.map(async (entry) => {
+  const image = images[`../../assets/images/grupos-estudio/${entry.data.imagen}`]?.default;
+  if (!image) throw new Error(`Imagen no encontrada para el grupo de estudio: ${entry.data.imagen}`);
+  return { entry, image, ...(await render(entry)) };
+}));
+---
+
+{grupos.length > 0 && (
+  <section class="grupos-estudio-v1" aria-labelledby="grupos-estudio-titulo">
+    <header class="section-heading">
+      <p class="text-xs font-semibold uppercase tracking-widest text-accent">Lectura, formación e intercambio</p>
+      <h2 id="grupos-estudio-titulo" class="mt-14 scroll-mt-24 first:mt-0">Descubrí nuestros <span>grupos de estudio</span></h2>
+      <p>
+        ¡Explora la colección que reúne las mejores producciones de
+        nuestros grupos de estudio y contribuye a clarificar y a transmitir el
+        pensamiento clínico
+      </p>
+      <a class="explore" href={`#grupo-estudio-${grupos[0].entry.id}`} aria-label="Explorar los grupos de estudio">
+        <svg viewBox="0 0 70 37" width="36" height="20" aria-hidden="true"><path d="m1 1 34 34L69 1" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+      </a>
+    </header>
+    <div class="blocks-list">
+      {grupos.map(({ entry, image, Content }, index) => (
+        <article id={`grupo-estudio-${entry.id}`} class:list={['study-block', { 'is-right': index % 2 === 1 }]} aria-labelledby={`grupo-titulo-${entry.id}`}>
+          <div class="image-block">
+            <Image src={image} alt={entry.data.titulo} widths={[480, 768, 1024, 1440]} sizes="(min-width: 64rem) 55vw, (min-width: 48rem) 38rem, 100vw" loading="lazy" />
+          </div>
+          <div class="content-block">
+            <div class="title-wrap">
+              <p class="eyebrow">Grupo de estudio · {String(index + 1).padStart(2, '0')}</p>
+              <h3 id={`grupo-titulo-${entry.id}`}>{entry.data.titulo}</h3>
+            </div>
+            <div class="text-wrap">
+              <p class="description">{entry.data.descripcion}</p>
+              <details>
+                <summary>Conocer el grupo <span aria-hidden="true">+</span></summary>
+                <div class="group-body"><Content /></div>
+              </details>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .grupos-estudio-v1 { margin-block: 5rem 4rem; }
+  .section-heading { text-align: center; margin-bottom: 4rem; }
+  .eyebrow { margin: 0 0 .75rem; color: var(--color-muted); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+  .section-heading h2 { margin: 0; font-weight: 500; line-height: 1.4; }
+  .section-heading h2 span { color: var(--color-brand); }
+  .explore { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; margin-top: 1rem; color: var(--color-accent); }
+  .blocks-list { display: grid; gap: 4.5rem; }
+  .study-block { scroll-margin-top: calc(var(--header-h) + 2rem); max-width: 38rem; margin-inline: auto; width: 100%; }
+  .image-block { border-bottom: .3125rem solid var(--color-accent); }
+  .image-block img { width: 100%; height: auto; }
+  .content-block { position: relative; margin: -3rem 1.25rem 0; padding: 2rem 1.5rem 0; background: var(--color-background); }
+  .title-wrap { background: var(--color-background); padding-block: .75rem 1rem; }
+  h3 { margin: 0; font-family: var(--font-serif); font-size: clamp(1.75rem, 3vw, 2.75rem); line-height: 1.15; }
+  .description { margin: 0 0 1.5rem; font-size: .9375rem; line-height: 1.8; }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; border: 1px solid var(--color-brand); padding: .875rem 1.25rem; color: var(--color-brand); font-size: .875rem; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--color-surface); }
+  summary span { font-size: 1.25rem; line-height: 1; }
+  details[open] summary span { transform: rotate(45deg); }
+  .group-body { padding-top: 1rem; font-size: .9375rem; line-height: 1.8; overflow-wrap: anywhere; }
+  .group-body :global(p:first-child) { margin-top: 0; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--color-brand); outline-offset: 4px; }
+  @media (min-width: 64rem) {
+    .section-heading { margin-bottom: 4.5rem; }
+    .explore { display: none; }
+    .blocks-list { gap: 4.5rem; }
+    .study-block { display: flex; align-items: center; max-width: none; }
+    .image-block { flex: 0 0 58%; }
+    .content-block { flex: 1; min-width: 0; margin: 0; padding: 1rem 0 1rem 2.5rem; }
+    .title-wrap { position: relative; margin-left: -7rem; padding: 1.25rem 1.5rem; }
+    .text-wrap { padding-top: .75rem; }
+    .is-right { flex-direction: row-reverse; }
+    .is-right .content-block { padding: 1rem 2.5rem 1rem 0; }
+    .is-right .title-wrap { margin-left: 0; margin-right: -7rem; text-align: right; }
+    .is-right .description { text-align: right; }
+  }
+  @media (max-width: 30rem) {
+    .content-block { margin-inline: .75rem; padding-inline: 1rem; }
+  }
+</style>

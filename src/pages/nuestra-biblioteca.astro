@@ -13,6 +13,9 @@ import BloqueRender from '../components/formacion/BloqueRender.astro';
 import ComponenteComun from '../components/formacion/ComponenteComun.astro';
 import VolverInicio from '../components/VolverInicio.astro';
 import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import GruposEstudioV1 from '../components/blocks/grupos-estudio-v1.astro';
+import ArticulosInvestigacionesv1 from '../components/blocks/ArticulosInvestigacionesv1.astro';
+import FeaturedEbooksv1 from '../components/blocks/FeaturedEbooksv1.astro';
 ---
 
 <Layout title="Nuestra Biblioteca — Facultad Internacional de Psicología y Psicoanálisis Lalangue">
@@ -20,21 +23,30 @@ import EncabezadoPagina from '../components/EncabezadoPagina.astro';
 		<!-- Volver al inicio -->
 		<VolverInicio />
 
-		<!-- Encabezado -->
-		<EncabezadoPagina
-			eyebrow="Nuevo E-Book · Biblioteca Académica Especializada"
-			title="Psicosis y sus vertientes"
-		/>
 
-		<!-- Contenido -->
-		<div class="mt-12">
-			{bibliotecaSecciones.map((seccion) =>
-				seccion.tipo === 'componente' ? (
-					<ComponenteComun nombre={seccion.nombre} />
-				) : (
-					<BloqueRender bloque={seccion} />
-				),
-			)}
-		</div>
+
+		<GruposEstudioV1 />
+		<FeaturedEbooksv1 />
+		<ArticulosInvestigacionesv1 />
+
+		<!--&lt;!&ndash; Encabezado &ndash;&gt;-->
+		<!--<EncabezadoPagina-->
+		<!--	eyebrow="Nuevo E-Book · Biblioteca Académica Especializada"-->
+		<!--	title="Psicosis y sus vertientes"-->
+		<!--/>-->
+
+		<!--&lt;!&ndash; Contenido &ndash;&gt;-->
+		<!--<div class="mt-12">-->
+		<!--	{bibliotecaSecciones.map((seccion) =>-->
+		<!--		seccion.tipo === 'componente' ? (-->
+		<!--			<ComponenteComun nombre={seccion.nombre} />-->
+		<!--		) : (-->
+		<!--			<BloqueRender bloque={seccion} />-->
+		<!--		),-->
+		<!--	)}-->
+		<!--</div>-->
+
+
+
 	</main>
 </Layout>
