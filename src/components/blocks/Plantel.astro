@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Avatar from '../Avatar.astro';
 import IconoChevron from '../IconoChevron.astro';
 import { siglasDe } from '../../data/docentes';
+import { link } from '../../lib/link';
 import 'swiper/css';
 import 'swiper/css/a11y';
 
@@ -14,7 +15,7 @@ const entradas = await getCollection('docentes');
 const docentes = (await Promise.all(entradas
     .map(async (entrada) => {
         const frontmatter = entrada.data;
-        const { Content } = await render(entrada);
+        const { Content } = frontmatter.slug ? {} : await render(entrada);
 
         let resolvedImage = undefined;
         let imageSrcString = '';
@@ -31,6 +32,7 @@ const docentes = (await Promise.all(entradas
 
         return {
             nombre: frontmatter.nombre,
+            slug: frontmatter.slug,
             titulo: frontmatter.puesto,
             foto: resolvedImage, // Optimized ImageMetadata object for <Image />
             fotoUrl: imageSrcString, // Raw string URL for data attributes
@@ -64,17 +66,15 @@ const docentes = (await Promise.all(entradas
         </p>
     </div>
 
-    <plantel-carousel class="relative mt-10 block" data-slide-count={docentes.length}>
-        <div class="plantel-toolbar">
-            <p class="m-0 text-sm font-semibold uppercase tracking-widest text-brand">Conocé a nuestros docentes</p>
-            <div class="plantel-controls">
-                <button type="button" data-plantel-prev aria-label="Docente anterior" class="plantel-nav" disabled>
-                    <IconoChevron class="size-4 rotate-90" /><span class="hidden sm:inline">Anterior</span>
-                </button>
-                <button type="button" data-plantel-next aria-label="Docente siguiente" class="plantel-nav" disabled>
-                    <span class="hidden sm:inline">Siguiente</span><IconoChevron class="size-4 -rotate-90" />
-                </button>
-            </div>
+    <p class="plantel-heading mt-10 mb-5 text-sm font-semibold uppercase tracking-widest text-brand">Conocé a nuestros docentes</p>
+    <plantel-carousel class="full-bleed block" data-slide-count={docentes.length}>
+        <div class="plantel-controls">
+            <button type="button" data-plantel-prev aria-label="Docente anterior" class="plantel-nav" disabled>
+                <IconoChevron class="size-10 rotate-90" stroke={2.5} />
+            </button>
+            <button type="button" data-plantel-next aria-label="Docente siguiente" class="plantel-nav" disabled>
+                <IconoChevron class="size-10 -rotate-90" stroke={2.5} />
+            </button>
         </div>
         <div
                 class="plantel-viewport swiper"
@@ -85,23 +85,27 @@ const docentes = (await Promise.all(entradas
                 tabindex="0"
         >
             <ul class="plantel-track swiper-wrapper">
-                {docentes.map((docente, index) => (
+                {docentes.map((docente, index) => {
+                    const Card = docente.slug ? 'a' : 'button';
+                    const cardAttributes = docente.slug ? {
+                        href: link(`/docentes/${docente.slug}/`),
+                    } : {
+                        type: 'button',
+                        'data-persona-card': true,
+                        'data-persona-nombre': docente.nombre,
+                        'data-persona-titulo': docente.titulo ?? '',
+                        'data-persona-siglas': siglasDe(docente.nombre),
+                        'data-persona-foto': docente.fotoUrl,
+                        'data-persona-sociales': JSON.stringify(docente.sociales),
+                    };
+                    return (
                         <li
                                 class="plantel-slide swiper-slide"
                                 role="group"
                                 aria-roledescription="diapositiva"
                                 aria-label={`${index + 1} de ${docentes.length}`}
                         >
-                            <button
-                                    type="button"
-                                    data-persona-card
-                                    data-persona-nombre={docente.nombre}
-                                    data-persona-titulo={docente.titulo ?? ''}
-                                    data-persona-siglas={siglasDe(docente.nombre)}
-                                    data-persona-foto={docente.fotoUrl}
-                                    data-persona-sociales={JSON.stringify(docente.sociales)}
-                                    class="plantel-card"
-                            >
+                            <Card class="plantel-card" {...cardAttributes}>
                                 <span class="plantel-portrait">
                                 {docente.foto ? (
                                         <Image
@@ -135,12 +139,13 @@ const docentes = (await Promise.all(entradas
                                         <path d="M7 17 17 7M8 7h9v9" />
                                     </svg>
                                 </span>
-                            </button>
-                            <template data-persona-bio-template>
+                            </Card>
+                            {docente.Content && <template data-persona-bio-template>
                                 <docente.Content />
-                            </template>
+                            </template>}
                         </li>
-                ))}
+                    );
+                })}
             </ul>
         </div>
 
@@ -148,17 +153,31 @@ const docentes = (await Promise.all(entradas
 </section>
 
 <style>
-    .plantel-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
-    .plantel-controls { display: flex; gap: 8px; flex-shrink: 0; }
-    .plantel-nav { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 10px 16px; border: 1px solid #5b11332b; border-radius: 999px; color: #5b1133; background: transparent; font: inherit; font-size: 12px; cursor: pointer; transition: background .2s, color .2s; }
-    .plantel-nav:hover:not(:disabled) { background: #5b1133; color: white; }
+    plantel-carousel {
+        --plantel-slide-width: clamp(205px, 18vw, 285px);
+        --plantel-portrait-ratio: 9 / 16;
+        --plantel-viewport-top-padding: 16px;
+    }
+    .plantel-controls {
+        position: absolute;
+        z-index: 2;
+        inset-inline: 8px;
+        top: calc(var(--plantel-viewport-top-padding) + var(--plantel-slide-width) / (var(--plantel-portrait-ratio)) / 2);
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none;
+    }
+    .plantel-nav { display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; color: white; background: black; cursor: pointer; pointer-events: auto; transition: background .2s; }
+    .plantel-nav:hover:not(:disabled) { background: #252525; }
     .plantel-nav:disabled { opacity: .3; cursor: default; }
-    .plantel-viewport { width: calc(100% + max(20px, (100vw - 100%) / 2)); margin-inline: 0; padding: 16px 0 32px; overflow: hidden; }
+    .plantel-viewport { width: 100%; padding: var(--plantel-viewport-top-padding) 0 32px; overflow: hidden; }
     .plantel-track { margin: 0; padding: 0; list-style: none; }
-    .plantel-slide { width: clamp(205px, 18vw, 285px); height: auto; flex-shrink: 0; }
+    .plantel-slide { width: var(--plantel-slide-width); height: auto; flex-shrink: 0; }
     .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 34px; }
     .plantel-card { display: block; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; font: inherit; }
-    .plantel-portrait { display: block; position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 20px; background: #351525; color: white; transition: transform .5s ease, box-shadow .5s ease; }
+    a.plantel-card { text-decoration: none; }
+    .plantel-portrait { display: block; position: relative; aspect-ratio: var(--plantel-portrait-ratio); overflow: hidden; border-radius: 20px; background: #351525; color: white; transition: transform .5s ease, box-shadow .5s ease; }
     .plantel-portrait::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgb(25 8 18 / .35) 55%, rgb(25 8 18 / .95)); pointer-events: none; }
     .plantel-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
     .plantel-avatar { display: flex; height: 65%; align-items: center; justify-content: center; }
@@ -173,9 +192,8 @@ const docentes = (await Promise.all(entradas
     }
     @media (max-width: 700px) {
         .plantel-viewport:not(.swiper-initialized) .plantel-track { gap: 16px; }
-        .plantel-slide { width: min(42vw, 180px); }
-        .plantel-toolbar > p { max-width: 15ch; font-size: 11px; }
-        .plantel-nav { padding: 10px; }
+        plantel-carousel { --plantel-slide-width: min(42vw, 180px); }
+        .plantel-heading { font-size: 11px; }
         .plantel-portrait { border-radius: 14px; }
         .plantel-caption { inset: auto 12px 16px; gap: 6px; }
         .plantel-name { font-size: 18px; }
@@ -213,7 +231,7 @@ const docentes = (await Promise.all(entradas
                 watchSlidesProgress: true,
                 slidesPerGroup: 1,
                 initialSlide: 0,
-                centeredSlides: false,
+                centeredSlides: true,
                 loop: Number(this.dataset.slideCount) > 1,
                 spaceBetween: 16,
                 breakpoints: {

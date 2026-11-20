@@ -5,6 +5,7 @@ const docentes = defineCollection({
     loader: glob({ pattern: '**/*.md', base: './src/content/docentes' }),
     schema: z.object({
         nombre: z.string(),
+        slug: z.string().trim().min(1).optional(),
         foto: z.string().optional(),
         puesto: z.string().optional(),
         facebook: z.string().url().optional(),
