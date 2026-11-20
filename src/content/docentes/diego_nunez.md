@@ -6,6 +6,7 @@ peso: 1
 linkedin: "https://www.linkedin.com/in/diego-n%C3%BA%C3%B1ez-44074419/"
 instagram: "https://www.instagram.com/diegounuez/"
 facebook: "https://www.facebook.com/diegounuez/"
+slug: "diego-nunez"
 ---
 Es presidente de la International Federation of Emergency Psychology y referente regional en la formación de fuerzas de 
 seguridad y equipos de emergencia. Ha coordinado operativos internacionales como el “Regreso Seguro” desde Cancillería 

@@ -6,6 +6,7 @@ peso: 0
 linkedin: "https://www.linkedin.com/in/lorenasalthu/"
 facebook: "https://www.facebook.com/lorenasalthu/"
 instagram: "https://www.instagram.com/lorenasalthu/"
+slug: "lorena-salthu"
 ---
 Psicoanalista con más de 25 años de trayectoria internacional en la práctica clínica, la gestión empresarial y el 
 desarrollo de proyectos internacionales. Cuenta con una formación en psicoanálisis y una vasta experiencia en la 

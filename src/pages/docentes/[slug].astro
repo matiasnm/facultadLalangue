@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { link } from '../../lib/link';
+
+export async function getStaticPaths() {
+    const docentes = await getCollection('docentes');
+    return docentes.flatMap((docente) => docente.data.slug ? [{
+        params: { slug: docente.data.slug },
+        props: { docente },
+    }] : []);
+}
+
+interface Props {
+    docente: CollectionEntry<'docentes'>;
+}
+
+const { docente } = Astro.props;
+const { data } = docente;
+const { Content } = await render(docente);
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../../assets/images/docentes/*.{jpeg,jpg,png,webp}', { eager: true });
+const imageName = data.foto?.split('/').pop();
+const foto = imageFiles[`../../assets/images/docentes/${imageName}`]?.default;
+const redes = [
+    { nombre: 'Facebook', url: data.facebook },
+    { nombre: 'X', url: data.twitter },
+    { nombre: 'Instagram', url: data.instagram },
+    { nombre: 'LinkedIn', url: data.linkedin },
+    { nombre: 'YouTube', url: data.youtube },
+    { nombre: 'TikTok', url: data.tiktok },
+].filter(({ url }) => url && /^https?:\/\//i.test(url));
+---
+
+<Layout title={`${data.nombre} — Facultad Lalangue`}>
+    <main class="contenedor flex-1 py-12 lg:py-16">
+        <a href={link('/#plantel')}>← Volver al plantel</a>
+        <article class="mt-8">
+            <header class:list={['perfil-encabezado', { 'perfil-con-foto': foto || data.foto }]}>
+                {foto ? (
+                    <Image src={foto} alt={data.nombre} width={640} class="perfil-foto" />
+                ) : data.foto && (
+                    <img src={link(data.foto)} alt={data.nombre} class="perfil-foto" />
+                )}
+                <div class="perfil-datos">
+                    <h1 class="m-0">{data.nombre}</h1>
+                    {data.puesto && <p class="mt-3 mb-0 text-muted">{data.puesto}</p>}
+                    {redes.length > 0 && (
+                        <ul class="perfil-redes" aria-label="Redes sociales">
+                            {redes.map(({ nombre, url }) => <li><a href={url}>{nombre}</a></li>)}
+                        </ul>
+                    )}
+                </div>
+            </header>
+            <section class="perfil-biografia" aria-labelledby="biografia-titulo">
+                <h2 id="biografia-titulo">Biografía</h2>
+                <Content />
+            </section>
+        </article>
+    </main>
+</Layout>
+
+<style>
+    .perfil-encabezado {
+        display: grid;
+        align-items: center;
+        gap: clamp(1.5rem, 5vw, 4rem);
+        padding: clamp(1rem, 4vw, 3rem);
+        border-radius: 1.5rem;
+        background: var(--color-surface);
+    }
+
+    .perfil-foto {
+        display: block;
+        width: min(100%, 24rem);
+        height: auto;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        object-position: center top;
+        border-radius: 1rem;
+    }
+
+    .perfil-redes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        margin: 1.5rem 0 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .perfil-redes a {
+        display: inline-block;
+        padding: .5rem .875rem;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        font-size: .875rem;
+    }
+
+    .perfil-biografia {
+        max-width: 72ch;
+        margin-top: clamp(2rem, 5vw, 4rem);
+    }
+
+    @media (min-width: 48rem) {
+        .perfil-con-foto {
+            grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        }
+    }
+</style>

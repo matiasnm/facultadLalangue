@@ -3,6 +3,7 @@ nombre: "Lic. Gabriela Artaza Toro"
 foto: "/docentes/gabriela_artaza_toro.webp"
 puesto: "Directora Académica"
 peso: 2
+slug: "gabriela-artaza-toro"
 ---
 Psicóloga (UBA), profesora universitaria en Psicología y máster en Sexología y Salud Sexual (Universidad Euneiz, España). Se ha especializado en clínica, educación sexual y políticas públicas, con posgrados en sexología clínica (UBA), psicoanálisis (Hospital Alvear), terapia de pareja y terapia de grupos (Escuela Sistémica Argentina).
 
